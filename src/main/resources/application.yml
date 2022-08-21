@@ -1,7 +1,7 @@
 spring:
-  main.banner-mode: 'off'
+  main.banner-mode: off
   jpa.open-in-view: false
   liquibase:
     enabled: true
     drop-first: false
-    change-log: 'classpath:db/changelog/db.changelog-master.xml'
+    change-log: classpath:db/changelog/db.changelog-master.xml

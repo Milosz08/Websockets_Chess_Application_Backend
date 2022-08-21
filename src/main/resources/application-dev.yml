@@ -1,5 +1,9 @@
 server:
-  port: '7575'
+  port: 7575
 
 spring:
-  devtools.livereload.port: '35731'
+  devtools.livereload.port: 35731
+  datasource:
+    url: jdbc:h2:file:/data/dev-file-db
+    username: sa
+    driver-class-name: org.h2.Driver
