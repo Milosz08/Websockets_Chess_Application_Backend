@@ -3,6 +3,7 @@ server:
 
 spring:
   devtools.livereload.port: 35731
+  h2.console.enabled: true
   datasource:
     url: jdbc:h2:file:./h2-db
     username: sa
