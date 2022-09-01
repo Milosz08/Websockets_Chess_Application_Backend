@@ -1,5 +1,6 @@
 spring:
   main.banner-mode: off
+  mvc.log-resolved-exception: false
   jpa:
     open-in-view: false
     hibernate.ddl-auto: none
@@ -7,3 +8,8 @@ spring:
     enabled: true
     drop-first: false
     change-log: classpath:db/changelog/db.changelog-master.xml
+
+logging:
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss} %5level [%15thread] %-50logger{36} : %msg%n"
+    file: "%d{yyyy-MM-dd HH:mm:ss} %5level [%15thread] %-50logger{36} : %msg%n"
