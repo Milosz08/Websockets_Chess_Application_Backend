@@ -1,6 +1,7 @@
 spring:
   main.banner-mode: off
   mvc.log-resolved-exception: false
+  devtools.restart.log-condition-evaluation-delta: false
   jpa:
     open-in-view: false
     hibernate.ddl-auto: none
@@ -13,3 +14,10 @@ logging:
   pattern:
     console: "%d{yyyy-MM-dd HH:mm:ss} %5level [%15thread] %-50logger{36} : %msg%n"
     file: "%d{yyyy-MM-dd HH:mm:ss} %5level [%15thread] %-50logger{36} : %msg%n"
+
+authorization:
+  one-time-access-token:
+    token-expired-minutes: 10
+    token-length: 10
+  bearer-token:
+    token-expired-minutes: 5

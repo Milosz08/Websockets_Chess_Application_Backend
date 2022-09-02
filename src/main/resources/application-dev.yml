@@ -3,6 +3,8 @@ server:
 
 config:
   frontend-cors-url: http://127.0.0.1:4200
+  authorization:
+    jwt-key: daw94289vndq98198nkejfnkaendwef93892fnskjdenfkjeiwefibiu32983fnskjdfn
 
 spring:
   devtools.livereload.port: 35731
