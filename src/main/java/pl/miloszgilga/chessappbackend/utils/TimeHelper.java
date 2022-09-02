@@ -18,23 +18,44 @@
 
 package pl.miloszgilga.chessappbackend.utils;
 
-import org.springframework.context.annotation.Configuration;
+import org.springframework.stereotype.Component;
 
-import java.time.ZoneOffset;
-import java.time.ZonedDateTime;
-import java.time.format.DateTimeFormatter;
+import java.util.Date;
+import java.util.TimeZone;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 
 //----------------------------------------------------------------------------------------------------------------------
 
-@Configuration
+@Component
 public class TimeHelper {
 
-    public String getCurrentUTC() {
-        return getCurrentUTC("yyyy-MM-dd hh:mm:ss");
+    private static final SimpleDateFormat PRE_FORMAT = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+    private static final SimpleDateFormat POST_FORMAT = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
+    TimeHelper() {
+        PRE_FORMAT.setTimeZone(TimeZone.getTimeZone("UTC"));
     }
 
-    public String getCurrentUTC(String pattern) {
-        final ZonedDateTime utc = ZonedDateTime.now(ZoneOffset.UTC);
-        return utc.format(DateTimeFormatter.ofPattern(pattern));
+    public Date addMinutesToCurrentDate(int minutes) {
+        return getCurrentUTC(new Date().getTime() + ((long) minutes * 60 * 1000));
+    }
+
+    public Date addDaysToCurrentDate(int days) {
+        return getCurrentUTC(new Date().getTime() + ((long) days * 24 * 60 * 60 * 1000));
+    }
+
+    public String getCurrentUTC() {
+        return PRE_FORMAT.format(getCurrentUTC(new Date().getTime()));
+    }
+
+    private Date getCurrentUTC(long nanoTime) {
+        Date date = new Date();
+        try {
+            date = POST_FORMAT.parse(PRE_FORMAT.format(new Date(nanoTime)));
+        } catch (ParseException ex) {
+            ex.printStackTrace();
+        }
+        return date;
     }
 }
