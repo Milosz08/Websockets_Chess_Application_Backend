@@ -1,8 +1,8 @@
 /*
  * Copyright (c) 2022 by MILOSZ GILGA <https://miloszgilga.pl>
  *
- * File name: AddNewEmailToNewsletterRequest.java
- * Last modified: 01/09/2022, 18:24
+ * File name: ChessAppBackendApplication.java
+ * Last modified: 21/08/2022, 18:00
  * Project name: chess-app-backend
  *
  * Licensed under the MIT license; you may not use this file except in compliance with the License.
@@ -16,27 +16,18 @@
  * COPIES OR SUBSTANTIAL PORTIONS OF THE SOFTWARE.
  */
 
-package pl.miloszgilga.chessappbackend.domain.newsletter.dto;
+package pl.miloszgilga.chessappbackend;
 
-import lombok.Setter;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.AllArgsConstructor;
-
-import javax.validation.constraints.Size;
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotBlank;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
 
 //----------------------------------------------------------------------------------------------------------------------
 
-@Getter
-@Setter
-@NoArgsConstructor
-@AllArgsConstructor(staticName = "build")
-public class EmailNewsletterReq {
+@SpringBootApplication(exclude = { SecurityAutoConfiguration.class })
+public class ApplicationBootloader {
 
-    @NotBlank(message = "You should provide email address.")
-    @Email(message = "Passed email address is not valid.")
-    @Size(max = 100, message = "Email address must be shorter from 100 characters.")
-    private String emailAddress;
+    public static void main(String[] args) {
+        SpringApplication.run(ApplicationBootloader.class, args);
+    }
 }
