@@ -16,7 +16,7 @@
  * COPIES OR SUBSTANTIAL PORTIONS OF THE SOFTWARE.
  */
 
-package pl.miloszgilga.chessappbackend.domain.newsletter.dto;
+package pl.miloszgilga.chessappbackend.network.newsletter_email.dto;
 
 import lombok.*;
 

@@ -2,7 +2,7 @@
  * Copyright (c) 2022 by MILOSZ GILGA <https://miloszgilga.pl>
  *
  * File name: NewsletterModel.java
- * Last modified: 01/09/2022, 19:43
+ * Last modified: 02/09/2022, 16:42
  * Project name: chess-app-backend
  *
  * Licensed under the MIT license; you may not use this file except in compliance with the License.
@@ -16,7 +16,7 @@
  * COPIES OR SUBSTANTIAL PORTIONS OF THE SOFTWARE.
  */
 
-package pl.miloszgilga.chessappbackend.domain.newsletter;
+package pl.miloszgilga.chessappbackend.network.newsletter_email.domain;
 
 import lombok.NoArgsConstructor;
 
@@ -31,15 +31,15 @@ import pl.miloszgilga.chessappbackend.audit.AuditableEntity;
 @Entity
 @Table(name = "NEWSLETTER_EMAIL")
 @NoArgsConstructor
-class NewsletterModel extends AuditableEntity {
+public class NewsletterEmailModel extends AuditableEntity {
 
     @Column(name = "USER_EMAIL") private String userEmail;
 
-    NewsletterModel(String userEmail) {
+    public NewsletterEmailModel(String userEmail) {
         this.userEmail = userEmail;
     }
 
-    String getUserEmail() {
+    public String getUserEmail() {
         return userEmail;
     }
 

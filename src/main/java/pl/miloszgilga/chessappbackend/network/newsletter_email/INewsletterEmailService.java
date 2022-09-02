@@ -1,8 +1,8 @@
 /*
  * Copyright (c) 2022 by MILOSZ GILGA <https://miloszgilga.pl>
  *
- * File name: NewsletterController.java
- * Last modified: 31/08/2022, 15:05
+ * File name: INewsletterService.java
+ * Last modified: 31/08/2022, 15:21
  * Project name: chess-app-backend
  *
  * Licensed under the MIT license; you may not use this file except in compliance with the License.
@@ -16,33 +16,16 @@
  * COPIES OR SUBSTANTIAL PORTIONS OF THE SOFTWARE.
  */
 
-package pl.miloszgilga.chessappbackend.domain.newsletter;
-
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-
-import javax.validation.Valid;
+package pl.miloszgilga.chessappbackend.network.newsletter_email;
 
 import pl.miloszgilga.chessappbackend.dao.SimpleServerMessage;
-import pl.miloszgilga.chessappbackend.domain.newsletter.dto.EmailNewsletterReq;
-
-import static pl.miloszgilga.chessappbackend.config.ApplicationEndpoints.NEWSLETTER_MAIN_ENDPOINT;
+import pl.miloszgilga.chessappbackend.network.newsletter_email.dto.EmailNewsletterReq;
+import pl.miloszgilga.chessappbackend.network.newsletter_email.dto.UnsubscribeNewsletterReq;
 
 //----------------------------------------------------------------------------------------------------------------------
 
-@RestController
-@RequestMapping(NEWSLETTER_MAIN_ENDPOINT)
-class NewsletterController {
-
-    private final NewsletterService service;
-
-    NewsletterController(NewsletterService service) {
-        this.service = service;
-    }
-
-    @PostMapping
-    ResponseEntity<SimpleServerMessage> addEmailToNewsletter(@RequestBody @Valid EmailNewsletterReq emailValue) {
-        return new ResponseEntity<>(service.addNewEmailToNewsletter(emailValue), HttpStatus.CREATED);
-    }
+interface INewsletterEmailService {
+    SimpleServerMessage subscribeNewsletter(EmailNewsletterReq emailAddress);
+    SimpleServerMessage attemptToUnsubscribeNewsletter(EmailNewsletterReq email);
+    SimpleServerMessage unsubscribeNewsletter(UnsubscribeNewsletterReq token);
 }
