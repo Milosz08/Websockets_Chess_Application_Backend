@@ -33,5 +33,5 @@ public class EnvironmentVars {
     @Value("${config.authorization.jwt-key}")                                   private String jwtSecretKey;
     @Value("${authorization.one-time-access-token.token-length}")               private int otaTokenLenght;
     @Value("${authorization.one-time-access-token.token-expired-minutes}")      private int otaTokenExpiredMinutes;
-    @Value("${spring.profiles.active}")                                         public String applicationMode;
+    @Value("${spring.profiles.active}")                                         private String applicationMode;
 }

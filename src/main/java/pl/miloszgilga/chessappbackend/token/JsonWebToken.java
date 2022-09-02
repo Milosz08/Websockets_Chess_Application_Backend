@@ -45,8 +45,7 @@ public class JsonWebToken {
     public String createUnsubscribeNewsletterToken(String email, String otaToken) {
         return JWT.create()
                 .withSubject("unsubscribe-newsletter-token")
-                .withClaim("email", email)
-                .withClaim("otaToken", otaToken)
+                .withClaim("email", email).withClaim("otaToken", otaToken)
                 .withExpiresAt(timeHelper.addMinutesToCurrentDate(environment.getOtaTokenExpiredMinutes()))
                 .sign(algorithm);
     }
