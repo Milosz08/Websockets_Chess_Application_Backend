@@ -1,8 +1,8 @@
 /*
  * Copyright (c) 2022 by MILOSZ GILGA <https://miloszgilga.pl>
  *
- * File name: INewsletterService.java
- * Last modified: 31/08/2022, 15:21
+ * File name: IUnsubscribeOtaTokenService.java
+ * Last modified: 02/09/2022, 17:05
  * Project name: chess-app-backend
  *
  * Licensed under the MIT license; you may not use this file except in compliance with the License.
@@ -16,13 +16,11 @@
  * COPIES OR SUBSTANTIAL PORTIONS OF THE SOFTWARE.
  */
 
-package pl.miloszgilga.chessappbackend.domain.newsletter;
-
-import pl.miloszgilga.chessappbackend.dao.SimpleServerMessage;
-import pl.miloszgilga.chessappbackend.domain.newsletter.dto.EmailNewsletterReq;
+package pl.miloszgilga.chessappbackend.network.newsletter_email;
 
 //----------------------------------------------------------------------------------------------------------------------
 
-interface INewsletterService {
-    SimpleServerMessage addNewEmailToNewsletter(EmailNewsletterReq emailAddress);
+interface IUnsubscribeOtaTokenService {
+    String generateAndSaveOtaToken(String email);
+    boolean validateOtaToken(String token, String email);
 }

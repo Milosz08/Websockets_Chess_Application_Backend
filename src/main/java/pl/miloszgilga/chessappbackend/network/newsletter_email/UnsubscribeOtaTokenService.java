@@ -1,0 +1,76 @@
+/*
+ * Copyright (c) 2022 by MILOSZ GILGA <https://miloszgilga.pl>
+ *
+ * File name: UnsubscribeOtaTokenService.java
+ * Last modified: 02/09/2022, 17:05
+ * Project name: chess-app-backend
+ *
+ * Licensed under the MIT license; you may not use this file except in compliance with the License.
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated
+ * documentation files (the "Software"), to deal in the Software without restriction, including without limitation the
+ * rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to
+ * permit persons to whom the Software is furnished to do so, subject to the following conditions:
+ *
+ * THE ABOVE COPYRIGHT NOTICE AND THIS PERMISSION NOTICE SHALL BE INCLUDED IN ALL
+ * COPIES OR SUBSTANTIAL PORTIONS OF THE SOFTWARE.
+ */
+
+package pl.miloszgilga.chessappbackend.network.newsletter_email;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import org.springframework.stereotype.Service;
+
+import java.util.Date;
+
+import pl.miloszgilga.chessappbackend.utils.TimeHelper;
+import pl.miloszgilga.chessappbackend.config.EnvironmentVars;
+import pl.miloszgilga.chessappbackend.token.OneTimeAccessToken;
+import pl.miloszgilga.chessappbackend.network.newsletter_email.domain.UnsubscribeOtaTokenModel;
+import pl.miloszgilga.chessappbackend.network.newsletter_email.domain.IUnsubscribeOtaTokenRepository;
+
+//----------------------------------------------------------------------------------------------------------------------
+
+@Service
+class UnsubscribeOtaTokenService implements IUnsubscribeOtaTokenService {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(UnsubscribeOtaTokenService.class);
+
+    private final TimeHelper timeHelper;
+    private final EnvironmentVars environment;
+    private final OneTimeAccessToken otaService;
+    private final IUnsubscribeOtaTokenRepository repository;
+
+    UnsubscribeOtaTokenService(
+            IUnsubscribeOtaTokenRepository repository, OneTimeAccessToken otaService, TimeHelper timeHelper,
+            EnvironmentVars environment
+    ) {
+        this.repository = repository;
+        this.otaService = otaService;
+        this.timeHelper = timeHelper;
+        this.environment = environment;
+    }
+
+    @Override
+    public String generateAndSaveOtaToken(String email) {
+        String token;
+        do {
+            token = otaService.generateToken();
+        } while (repository.findExistingToken(token));
+
+        final Date tokenExpired = timeHelper.addMinutesToCurrentDate(environment.getOtaTokenExpiredMinutes());
+        final var otaToken = new UnsubscribeOtaTokenModel(email, token, tokenExpired);
+        repository.save(otaToken);
+
+        LOGGER.info("Successfully generated OTA ({} min exp) token for unsubscribe newsletter: {}",
+                environment.getOtaTokenExpiredMinutes(), otaToken);
+        return token;
+    }
+
+    @Override
+    public boolean validateOtaToken(String token, String email) {
+        return false;
+    }
+}

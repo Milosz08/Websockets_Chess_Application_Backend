@@ -1,8 +1,8 @@
 /*
  * Copyright (c) 2022 by MILOSZ GILGA <https://miloszgilga.pl>
  *
- * File name: EmailAlreadyExistException.java
- * Last modified: 01/09/2022, 20:55
+ * File name: UnsubscribeNewsletterReq.java
+ * Last modified: 02/09/2022, 15:22
  * Project name: chess-app-backend
  *
  * Licensed under the MIT license; you may not use this file except in compliance with the License.
@@ -16,15 +16,26 @@
  * COPIES OR SUBSTANTIAL PORTIONS OF THE SOFTWARE.
  */
 
-package pl.miloszgilga.chessappbackend.exception.custom;
+package pl.miloszgilga.chessappbackend.network.newsletter_email.dto;
 
-import org.springframework.http.HttpStatus;
+import lombok.Data;
+
+import javax.validation.constraints.Size;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
 
 //----------------------------------------------------------------------------------------------------------------------
 
-public class EmailAlreadyExistException extends BasicServerException {
+@Data
+public class UnsubscribeNewsletterReq {
 
-    public EmailAlreadyExistException(HttpStatus status, String message, Object... args) {
-        super(status, message, args);
-    }
+    @NotBlank(message = "You should provide OTA token or JWT Bearer token.")
+    private String token;
+
+    @NotBlank(message = "You should provide email address.")
+    @Email(message = "Passed email address is not valid.")
+    @Size(max = 100, message = "Email address must be shorter from 100 characters.")
+    private String emailAddress;
+
+    private boolean isBearer;
 }
