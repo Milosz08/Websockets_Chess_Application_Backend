@@ -52,8 +52,8 @@ class NewsletterEmailController {
         return new ResponseEntity<>(service.attemptToUnsubscribeNewsletter(email), HttpStatus.OK);
     }
 
-    @DeleteMapping(NEWSLETTER_UNSUBSCRIBE)
-    ResponseEntity<SimpleServerMessage> unsubscribeNewsletter(@RequestBody @Valid UnsubscribeNewsletterReq token) {
-        return new ResponseEntity<>(service.unsubscribeNewsletter(token), HttpStatus.OK);
+    @PostMapping(NEWSLETTER_UNSUBSCRIBE_VIA_OTA)
+    ResponseEntity<SimpleServerMessage> unsubscribeNewsletterViaOta(@RequestBody @Valid UnsubscribeNewsletterViaOtaReq token) {
+        return new ResponseEntity<>(service.unsubscribeNewsletterViaOta(token), HttpStatus.OK);
     }
 }

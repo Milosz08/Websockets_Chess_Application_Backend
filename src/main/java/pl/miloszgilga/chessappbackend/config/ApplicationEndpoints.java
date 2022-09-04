@@ -28,7 +28,7 @@ public class ApplicationEndpoints {
 
     public static final String NEWSLETTER_EMAIL_ENDPOINT = BASIC_ENDPOINT + "newsletter-email";
     public static final String NEWSLETTER_SUBSCRIBE = "/subscribe";
-    public static final String NEWSLETTER_ATTEMPT_UNSUBSCRIBE = "/attemp-unsubscribe";
-    public static final String NEWSLETTER_UNSUBSCRIBE = "/unsubscribe";
-
+    public static final String NEWSLETTER_ATTEMPT_UNSUBSCRIBE = "/attempt-unsubscribe";
+    public static final String NEWSLETTER_UNSUBSCRIBE_VIA_OTA = "/unsubscribe-via-ota";
+    public static final String NEWSLETTER_UNSUBSCRIBE_VIA_JWT = "/unsubscribe-via-jwt";
 }
