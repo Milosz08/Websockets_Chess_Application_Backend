@@ -26,7 +26,8 @@ import javax.validation.Valid;
 
 import pl.miloszgilga.chessappbackend.dao.SimpleServerMessage;
 import pl.miloszgilga.chessappbackend.network.newsletter_email.dto.EmailNewsletterReq;
-import pl.miloszgilga.chessappbackend.network.newsletter_email.dto.UnsubscribeNewsletterReq;
+import pl.miloszgilga.chessappbackend.network.newsletter_email.dto.UnsubscribeNewsletterViaJwtReq;
+import pl.miloszgilga.chessappbackend.network.newsletter_email.dto.UnsubscribeNewsletterViaOtaReq;
 
 import static pl.miloszgilga.chessappbackend.config.ApplicationEndpoints.*;
 
@@ -55,5 +56,10 @@ class NewsletterEmailController {
     @PostMapping(NEWSLETTER_UNSUBSCRIBE_VIA_OTA)
     ResponseEntity<SimpleServerMessage> unsubscribeNewsletterViaOta(@RequestBody @Valid UnsubscribeNewsletterViaOtaReq token) {
         return new ResponseEntity<>(service.unsubscribeNewsletterViaOta(token), HttpStatus.OK);
+    }
+
+    @PostMapping(NEWSLETTER_UNSUBSCRIBE_VIA_JWT)
+    ResponseEntity<SimpleServerMessage> unsubscribeNewsletterViaJwt(@RequestBody @Valid UnsubscribeNewsletterViaJwtReq token) {
+        return new ResponseEntity<>(service.unsubscribeNewsletterViaJwt(token), HttpStatus.OK);
     }
 }

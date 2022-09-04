@@ -1,8 +1,8 @@
 /*
  * Copyright (c) 2022 by MILOSZ GILGA <https://miloszgilga.pl>
  *
- * File name: INewsletterService.java
- * Last modified: 31/08/2022, 15:21
+ * File name: UnsubscribeNewsletterReq.java
+ * Last modified: 02/09/2022, 15:22
  * Project name: chess-app-backend
  *
  * Licensed under the MIT license; you may not use this file except in compliance with the License.
@@ -16,18 +16,27 @@
  * COPIES OR SUBSTANTIAL PORTIONS OF THE SOFTWARE.
  */
 
-package pl.miloszgilga.chessappbackend.network.newsletter_email;
+package pl.miloszgilga.chessappbackend.network.newsletter_email.dto;
 
-import pl.miloszgilga.chessappbackend.dao.SimpleServerMessage;
-import pl.miloszgilga.chessappbackend.network.newsletter_email.dto.EmailNewsletterReq;
-import pl.miloszgilga.chessappbackend.network.newsletter_email.dto.UnsubscribeNewsletterViaJwtReq;
-import pl.miloszgilga.chessappbackend.network.newsletter_email.dto.UnsubscribeNewsletterViaOtaReq;
+import lombok.Data;
+
+import javax.validation.constraints.Size;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.NotBlank;
 
 //----------------------------------------------------------------------------------------------------------------------
 
-interface INewsletterEmailService {
-    SimpleServerMessage subscribeNewsletter(EmailNewsletterReq emailAddress);
-    SimpleServerMessage attemptToUnsubscribeNewsletter(EmailNewsletterReq email);
-    SimpleServerMessage unsubscribeNewsletterViaOta(UnsubscribeNewsletterViaOtaReq token);
-    SimpleServerMessage unsubscribeNewsletterViaJwt(UnsubscribeNewsletterViaJwtReq token);
+@Data
+public class UnsubscribeNewsletterViaOtaReq {
+
+    @NotBlank(message = "You should provide OTA token.")
+    @Pattern(regexp = "[a-zA-Z0-9]*", message = "You should provide valid OTA token.")
+    @Size(min = 10, max = 10, message = "You should provide valid OTA token.")
+    private String token;
+
+    @NotBlank(message = "You should provide email address.")
+    @Email(message = "Passed email address is not valid.")
+    @Size(max = 100, message = "Email address must be shorter from 100 characters.")
+    private String emailAddress;
 }

@@ -31,8 +31,9 @@ import pl.miloszgilga.chessappbackend.dao.SimpleServerMessage;
 import pl.miloszgilga.chessappbackend.exception.custom.EmailException.*;
 import pl.miloszgilga.chessappbackend.network.newsletter_email.dto.EmailNewsletterReq;
 import pl.miloszgilga.chessappbackend.network.newsletter_email.domain.NewsletterEmailModel;
-import pl.miloszgilga.chessappbackend.network.newsletter_email.dto.UnsubscribeNewsletterReq;
 import pl.miloszgilga.chessappbackend.network.newsletter_email.domain.INewsletterEmailRepository;
+import pl.miloszgilga.chessappbackend.network.newsletter_email.dto.UnsubscribeNewsletterViaOtaReq;
+import pl.miloszgilga.chessappbackend.network.newsletter_email.dto.UnsubscribeNewsletterViaJwtReq;
 
 //----------------------------------------------------------------------------------------------------------------------
 
@@ -84,14 +85,14 @@ class NewsletterEmailService implements INewsletterEmailService {
     }
 
     @Override
-    public SimpleServerMessage unsubscribeNewsletter(final UnsubscribeNewsletterReq token) {
-        if (token.isBearer()) {
-            // unsubscribe via JWT bearer token
-        } else {
-            if (!unsubscribeService.validateOtaToken(token.getToken(), token.getEmailAddress())) {
-                // unsubscribe via OTA token
-            }
-        }
+    public SimpleServerMessage unsubscribeNewsletterViaOta(final UnsubscribeNewsletterViaOtaReq token) {
+        // via ota
+        return new SimpleServerMessage("unsubscribe");
+    }
+
+    @Override
+    public SimpleServerMessage unsubscribeNewsletterViaJwt(final UnsubscribeNewsletterViaJwtReq token) {
+        // via jwt
         return new SimpleServerMessage("unsubscribe");
     }
 

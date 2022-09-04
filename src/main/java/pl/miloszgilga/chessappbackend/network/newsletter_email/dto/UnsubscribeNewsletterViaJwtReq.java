@@ -1,8 +1,8 @@
 /*
  * Copyright (c) 2022 by MILOSZ GILGA <https://miloszgilga.pl>
  *
- * File name: UnsubscribeNewsletterReq.java
- * Last modified: 02/09/2022, 15:22
+ * File name: UnsubscribeNewsletterViaJwtReq.java
+ * Last modified: 04/09/2022, 19:19
  * Project name: chess-app-backend
  *
  * Licensed under the MIT license; you may not use this file except in compliance with the License.
@@ -20,22 +20,13 @@ package pl.miloszgilga.chessappbackend.network.newsletter_email.dto;
 
 import lombok.Data;
 
-import javax.validation.constraints.Size;
-import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 
 //----------------------------------------------------------------------------------------------------------------------
 
 @Data
-public class UnsubscribeNewsletterReq {
+public class UnsubscribeNewsletterViaJwtReq {
 
-    @NotBlank(message = "You should provide OTA token or JWT Bearer token.")
+    @NotBlank(message = "You should provide JWT Bearer token.")
     private String token;
-
-    @NotBlank(message = "You should provide email address.")
-    @Email(message = "Passed email address is not valid.")
-    @Size(max = 100, message = "Email address must be shorter from 100 characters.")
-    private String emailAddress;
-
-    private boolean isBearer;
 }
