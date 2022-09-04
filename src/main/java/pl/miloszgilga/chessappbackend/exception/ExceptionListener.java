@@ -26,8 +26,8 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 
-import java.util.Map;
-import java.util.HashMap;
+import java.util.List;
+import java.util.ArrayList;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -56,9 +56,9 @@ public class ExceptionListener {
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public InvalidDaoExceptionRes handleInvalidArgument(MethodArgumentNotValidException ex, HttpServletRequest req) {
-        final Map<String, String> errors = new HashMap<>();
+        final List<String> errors = new ArrayList<>();
         for (final FieldError error : ex.getBindingResult().getFieldErrors()) {
-            errors.put(error.getField(), error.getDefaultMessage());
+            errors.add(error.getDefaultMessage());
         }
         final ServerExceptionRes res = basicExceptionRes(HttpStatus.BAD_REQUEST, req);
         return new InvalidDaoExceptionRes(res, errors);

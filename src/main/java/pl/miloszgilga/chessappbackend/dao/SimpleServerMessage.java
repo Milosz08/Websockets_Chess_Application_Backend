@@ -25,7 +25,6 @@ import lombok.Getter;
 @Getter
 public class SimpleServerMessage {
     private final String responseMessage;
-    private final boolean responseError = false;
 
     public SimpleServerMessage(String responseMessage) {
         this.responseMessage = responseMessage;

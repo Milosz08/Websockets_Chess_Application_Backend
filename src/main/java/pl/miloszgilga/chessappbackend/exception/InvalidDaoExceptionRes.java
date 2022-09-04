@@ -20,17 +20,17 @@ package pl.miloszgilga.chessappbackend.exception;
 
 import lombok.Getter;
 
-import java.util.Map;
+import java.util.List;
 
 //----------------------------------------------------------------------------------------------------------------------
 
 @Getter
 class InvalidDaoExceptionRes extends ServerExceptionRes {
 
-    private final Map<String, String> fieldErrors;
+    private final List<String> errors;
 
-    InvalidDaoExceptionRes(ServerExceptionRes res, Map<String, String> errors) {
+    InvalidDaoExceptionRes(ServerExceptionRes res, List<String> errors) {
         super(res.getServletTimestampUTC(), res.getStatusCode(), res.getStatusText(), res.getPath(), res.getMethod());
-        this.fieldErrors = errors;
+        this.errors = errors;
     }
 }
