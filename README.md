@@ -80,6 +80,8 @@ instructions below). Also check that both servers provide an SSL encrypted conne
 config:
   # front-end layer address (for CORS policy)
   frontend-cors-url: https://chess.miloszgilga.pl/
+  # front-end browser shorten address (unsing mainly in email templates)
+  frontend-name: chess.miloszgilga.pl
   authorization:
     # bearer salt key
     jwt-key: xxxxx
