@@ -120,7 +120,7 @@ logging:
 
 <a name="author"></a>
 ## Author
-Created by Miłosz Gilga. If you have any questions about the application can be sent to andres 
+Created by Miłosz Gilga. If you have any questions about the application send message:
 [personal@miloszgilga.pl](mailto:personal@miloszgilga.pl).
 
 <a name="project-status"></a>
