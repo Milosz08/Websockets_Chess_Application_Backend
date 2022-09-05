@@ -45,8 +45,18 @@ public class JsonWebToken {
     public String createUnsubscribeNewsletterToken(String email, String otaToken) {
         return JWT.create()
                 .withSubject("unsubscribe-newsletter-token")
-                .withClaim("email", email).withClaim("otaToken", otaToken)
+                .withClaim("email", email)
+                .withClaim("otaToken", otaToken)
+                .withClaim("expired", true)
                 .withExpiresAt(timeHelper.addMinutesToCurrentDate(environment.getOtaTokenExpiredMinutes()))
+                .sign(algorithm);
+    }
+
+    public String createNonExpUnsubscribeNewsletterToken(String email) {
+        return JWT.create()
+                .withSubject("non-expired-unsubscribe-newsletter-token")
+                .withClaim("email", email)
+                .withClaim("expired", false)
                 .sign(algorithm);
     }
 }
