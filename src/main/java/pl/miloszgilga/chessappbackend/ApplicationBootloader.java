@@ -22,6 +22,9 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
 
+import java.util.TimeZone;
+import javax.annotation.PostConstruct;
+
 //----------------------------------------------------------------------------------------------------------------------
 
 @SpringBootApplication(exclude = { SecurityAutoConfiguration.class })
@@ -29,5 +32,10 @@ public class ApplicationBootloader {
 
     public static void main(String[] args) {
         SpringApplication.run(ApplicationBootloader.class, args);
+    }
+
+    @PostConstruct
+    public void init() {
+        TimeZone.setDefault(TimeZone.getTimeZone("UTC"));
     }
 }

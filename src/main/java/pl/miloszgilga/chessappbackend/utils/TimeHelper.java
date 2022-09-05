@@ -21,8 +21,6 @@ package pl.miloszgilga.chessappbackend.utils;
 import org.springframework.stereotype.Component;
 
 import java.util.Date;
-import java.util.TimeZone;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -30,32 +28,17 @@ import java.text.SimpleDateFormat;
 @Component
 public class TimeHelper {
 
-    private static final SimpleDateFormat PRE_FORMAT = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-    private static final SimpleDateFormat POST_FORMAT = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-
-    TimeHelper() {
-        PRE_FORMAT.setTimeZone(TimeZone.getTimeZone("UTC"));
-    }
+    private static final SimpleDateFormat FORMATTER = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
     public Date addMinutesToCurrentDate(int minutes) {
-        return getCurrentUTC(new Date().getTime() + ((long) minutes * 60 * 1000));
+        return new Date(new Date().getTime() + ((long) minutes * 60 * 1000));
     }
 
     public Date addDaysToCurrentDate(int days) {
-        return getCurrentUTC(new Date().getTime() + ((long) days * 24 * 60 * 60 * 1000));
+        return new Date(new Date().getTime() + ((long) days * 24 * 60 * 60 * 1000));
     }
 
     public String getCurrentUTC() {
-        return PRE_FORMAT.format(getCurrentUTC(new Date().getTime()));
-    }
-
-    private Date getCurrentUTC(long nanoTime) {
-        Date date = new Date();
-        try {
-            date = POST_FORMAT.parse(PRE_FORMAT.format(new Date(nanoTime)));
-        } catch (ParseException ex) {
-            ex.printStackTrace();
-        }
-        return date;
+        return FORMATTER.format(new Date());
     }
 }
