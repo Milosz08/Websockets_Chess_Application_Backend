@@ -27,8 +27,10 @@ import static org.springframework.http.HttpStatus.EXPECTATION_FAILED;
 import java.util.Optional;
 
 import pl.miloszgilga.chessappbackend.token.JsonWebToken;
+import pl.miloszgilga.chessappbackend.mail.MailOutService;
 import pl.miloszgilga.chessappbackend.dao.SimpleServerMessage;
 import pl.miloszgilga.chessappbackend.exception.custom.EmailException.*;
+
 import pl.miloszgilga.chessappbackend.network.newsletter_email.dto.EmailNewsletterReq;
 import pl.miloszgilga.chessappbackend.network.newsletter_email.domain.NewsletterEmailModel;
 import pl.miloszgilga.chessappbackend.network.newsletter_email.domain.INewsletterEmailRepository;
@@ -44,15 +46,18 @@ class NewsletterEmailService implements INewsletterEmailService {
 
     private final JsonWebToken jsonWebToken;
     private final INewsletterEmailRepository repository;
+
+    private final MailOutService mailService;
     private final UnsubscribeOtaTokenService unsubscribeService;
 
     NewsletterEmailService(
             INewsletterEmailRepository repository, UnsubscribeOtaTokenService unsubscribeService,
-            JsonWebToken jsonWebToken
+            JsonWebToken jsonWebToken, MailOutService mailService
     ) {
         this.repository = repository;
         this.jsonWebToken = jsonWebToken;
         this.unsubscribeService = unsubscribeService;
+        this.mailService = mailService;
     }
 
     @Override
@@ -78,8 +83,7 @@ class NewsletterEmailService implements INewsletterEmailService {
 
         String otaToken = unsubscribeService.generateAndSaveOtaToken(emailAddress);
         String bearerToken = jsonWebToken.createUnsubscribeNewsletterToken(emailAddress, otaToken);
-
-        // send email message to with tokens
+        mailService.unsubscribeNewsletter(emailAddress, bearerToken, otaToken);
 
         return new SimpleServerMessage(String.format("Message has been send to the email '%s'.", emailAddress));
     }
