@@ -15,6 +15,9 @@ logging:
     console: "%d{yyyy-MM-dd HH:mm:ss} %5level [%15thread] %-50logger{36} : %msg%n"
     file: "%d{yyyy-MM-dd HH:mm:ss} %5level [%15thread] %-50logger{36} : %msg%n"
 
+config:
+  newsletter-unsubscribe-path: /unsubscribe-newsletter/
+
 authorization:
   one-time-access-token:
     token-expired-minutes: 10

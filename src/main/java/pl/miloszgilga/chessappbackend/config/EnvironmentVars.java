@@ -34,4 +34,6 @@ public class EnvironmentVars {
     @Value("${authorization.one-time-access-token.token-length}")               private int otaTokenLenght;
     @Value("${authorization.one-time-access-token.token-expired-minutes}")      private int otaTokenExpiredMinutes;
     @Value("${spring.profiles.active}")                                         private String applicationMode;
+    @Value("${config.newsletter-unsubscribe-path}")                             private String newsletterUnsubscribePath;
+    @Value("${config.frontend-cors-url}")                                       private String frontEndUrl;
 }

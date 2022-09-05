@@ -18,21 +18,25 @@
 
 package pl.miloszgilga.chessappbackend.security;
 
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+
+import pl.miloszgilga.chessappbackend.config.EnvironmentVars;
 
 //----------------------------------------------------------------------------------------------------------------------
 
 @Configuration
 public class WebMvcConfigurerExtender implements WebMvcConfigurer {
 
-    @Value("${config.frontend-cors-url}")
-    private String frontEndUrl;
+    private final EnvironmentVars environment;
+
+    public WebMvcConfigurerExtender(EnvironmentVars environment) {
+        this.environment = environment;
+    }
 
     @Override
     public void addCorsMappings(CorsRegistry registry) {
-        registry.addMapping("/**").allowedOrigins(frontEndUrl);
+        registry.addMapping("/**").allowedOrigins(environment.getFrontEndUrl());
     }
 }
