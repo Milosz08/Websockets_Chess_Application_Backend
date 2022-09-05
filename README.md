@@ -37,7 +37,7 @@ Personal Name: root
 Mail password: admin
 APOP secret: admin
 ```
-and press `OK`.
+and press `OK`.<br>
 6. Create sender account. Go to `Configuration -> Manage local users` and click `Add`. Insert:
 ```
 Username: noreply-dev
@@ -45,7 +45,7 @@ Personal Name: noreply-dev
 Mail password: admin
 APOP secret: admin
 ```
-and press `OK`.
+and press `OK`.<br>
 7. Go to `Configuration -> Mercury Core Module Configuration` and click in `General` and insert in `Internet name for
 this system: localhost`;
 8. Map localhost domain. Go to `Local domains` and click `Add new doman`. Your domain translation table should be like this:
