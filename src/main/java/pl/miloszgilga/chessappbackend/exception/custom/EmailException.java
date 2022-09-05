@@ -35,4 +35,10 @@ public class EmailException {
             super(HttpStatus.NOT_FOUND, message, args);
         }
     }
+
+    public static class EmailSenderException extends BasicServerException {
+        public EmailSenderException(String message, Object... args) {
+            super(HttpStatus.SERVICE_UNAVAILABLE, message, args);
+        }
+    }
 }
