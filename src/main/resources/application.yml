@@ -9,6 +9,10 @@ spring:
     enabled: true
     drop-first: false
     change-log: classpath:db/changelog/db.changelog-master.xml
+  mail:
+    host: localhost
+    default-encoding: UTF-8
+    test-connection: false
 
 logging:
   pattern:
@@ -17,6 +21,7 @@ logging:
 
 config:
   newsletter-unsubscribe-path: /unsubscribe-newsletter/
+  mail-helpdesk-agent: helpdesk
 
 authorization:
   one-time-access-token:

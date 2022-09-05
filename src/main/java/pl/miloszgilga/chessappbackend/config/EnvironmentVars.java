@@ -36,4 +36,7 @@ public class EnvironmentVars {
     @Value("${spring.profiles.active}")                                         private String applicationMode;
     @Value("${config.newsletter-unsubscribe-path}")                             private String newsletterUnsubscribePath;
     @Value("${config.frontend-cors-url}")                                       private String frontEndUrl;
+    @Value("${spring.mail.username}")                                           private String serverMailClient;
+    @Value("${config.frontend-name}")                                           private String frontendName;
+    @Value("${config.mail-helpdesk-agent}")                                     private String mailHelpdeskAgent;
 }
