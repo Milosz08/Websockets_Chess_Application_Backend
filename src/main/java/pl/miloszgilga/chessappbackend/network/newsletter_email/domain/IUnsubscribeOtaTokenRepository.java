@@ -18,9 +18,11 @@
 
 package pl.miloszgilga.chessappbackend.network.newsletter_email.domain;
 
-import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+import java.util.Optional;
 
 //----------------------------------------------------------------------------------------------------------------------
 
@@ -28,4 +30,7 @@ public interface IUnsubscribeOtaTokenRepository extends JpaRepository<Unsubscrib
 
     @Query(value = "SELECT COUNT(m) > 0 FROM UnsubscribeOtaTokenModel m WHERE m.token=:token")
     boolean findExistingToken(@Param("token") String token);
+
+    @Query(value = "SELECT m FROM UnsubscribeOtaTokenModel m WHERE m.token=:token AND m.userEmail=:email AND m.alreadyUsed=false")
+    Optional<UnsubscribeOtaTokenModel> checkIfTokenExist(@Param("token") String token, @Param("email") String email);
 }

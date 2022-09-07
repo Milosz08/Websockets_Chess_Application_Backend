@@ -1,8 +1,8 @@
 /*
  * Copyright (c) 2022 by MILOSZ GILGA <https://miloszgilga.pl>
  *
- * File name: IUnsubscribeOtaTokenService.java
- * Last modified: 02/09/2022, 17:05
+ * File name: JwtClaim.java
+ * Last modified: 07/09/2022, 16:41
  * Project name: chess-app-backend
  *
  * Licensed under the MIT license; you may not use this file except in compliance with the License.
@@ -16,11 +16,19 @@
  * COPIES OR SUBSTANTIAL PORTIONS OF THE SOFTWARE.
  */
 
-package pl.miloszgilga.chessappbackend.network.newsletter_email;
+package pl.miloszgilga.chessappbackend.token;
+
+import lombok.Getter;
+import lombok.AllArgsConstructor;
 
 //----------------------------------------------------------------------------------------------------------------------
 
-interface IUnsubscribeOtaTokenService {
-    String generateAndSaveOtaToken(String email);
-    void validateOtaToken(String token, String email);
+@Getter
+@AllArgsConstructor
+public enum JwtClaim {
+    IS_EXPIRED("isExpired"),
+    OTA_TOKEN("otaToken"),
+    EMAIL("email");
+
+    private final String claimName;
 }

@@ -21,6 +21,7 @@ package pl.miloszgilga.chessappbackend.network.newsletter_email;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.auth0.jwt.interfaces.DecodedJWT;
 import org.springframework.stereotype.Service;
 import static org.springframework.http.HttpStatus.EXPECTATION_FAILED;
 
@@ -36,6 +37,8 @@ import pl.miloszgilga.chessappbackend.network.newsletter_email.domain.Newsletter
 import pl.miloszgilga.chessappbackend.network.newsletter_email.domain.INewsletterEmailRepository;
 import pl.miloszgilga.chessappbackend.network.newsletter_email.dto.UnsubscribeNewsletterViaOtaReq;
 import pl.miloszgilga.chessappbackend.network.newsletter_email.dto.UnsubscribeNewsletterViaJwtReq;
+
+import static pl.miloszgilga.chessappbackend.token.JwtClaim.*;
 
 //----------------------------------------------------------------------------------------------------------------------
 
@@ -63,7 +66,7 @@ class NewsletterEmailService implements INewsletterEmailService {
     @Override
     public SimpleServerMessage subscribeNewsletter(final EmailNewsletterReq email) {
         final String emailAddress = email.getEmailAddress();
-        if (checkIfEmailExist(emailAddress)) {
+        if (getNewsletterEmailModel(emailAddress).isPresent()) {
             LOGGER.error("Attempt to add already exist email: {} to newsletter list", emailAddress);
             throw new EmailAlreadyExistException(EXPECTATION_FAILED, "Email '%s' is already on the newsletter list.",
                     emailAddress);
@@ -76,10 +79,7 @@ class NewsletterEmailService implements INewsletterEmailService {
     @Override
     public SimpleServerMessage attemptToUnsubscribeNewsletter(final EmailNewsletterReq email) {
         final String emailAddress = email.getEmailAddress();
-        if (!checkIfEmailExist(emailAddress)) {
-            LOGGER.error("Attempt to remove not exsiting email: {} from newsletter list", emailAddress);
-            throw new EmailNotFoundException("Email '%s' is not subscribing newsletter.", emailAddress);
-        }
+        checkIfRemovingEmailExist(emailAddress);
 
         String otaToken = unsubscribeService.generateAndSaveOtaToken(emailAddress);
         String bearerToken = jsonWebToken.createUnsubscribeNewsletterToken(emailAddress, otaToken);
@@ -90,18 +90,46 @@ class NewsletterEmailService implements INewsletterEmailService {
 
     @Override
     public SimpleServerMessage unsubscribeNewsletterViaOta(final UnsubscribeNewsletterViaOtaReq token) {
-        // via ota
-        return new SimpleServerMessage("unsubscribe");
+        final String emailAddress = token.getEmailAddress();
+        final NewsletterEmailModel model = checkIfRemovingEmailExist(emailAddress);
+        unsubscribeService.validateOtaToken(token.getToken(), emailAddress);
+
+        repository.delete(model);
+        LOGGER.info("Email address {} was successfully removed from newsletter via OTA form", emailAddress);
+        return new SimpleServerMessage(String.format("The newsletter subscription service from the email " +
+                        "address '%s' has been successfully deleted.", emailAddress));
     }
 
     @Override
     public SimpleServerMessage unsubscribeNewsletterViaJwt(final UnsubscribeNewsletterViaJwtReq token) {
-        // via jwt
-        return new SimpleServerMessage("unsubscribe");
+        final DecodedJWT jwtDecoded = jsonWebToken.verifyJsonWebToken(token.getToken());
+
+        final String emailAddress = jwtDecoded.getClaim(EMAIL.getClaimName()).asString();
+        final NewsletterEmailModel model = checkIfRemovingEmailExist(emailAddress);
+
+        final boolean isExpired = jwtDecoded.getClaim(IS_EXPIRED.getClaimName()).asBoolean();
+        if (isExpired) {
+            final String otaToken = jwtDecoded.getClaim(OTA_TOKEN.getClaimName()).asString();
+            unsubscribeService.validateOtaToken(otaToken, emailAddress);
+        }
+
+        repository.delete(model);
+        LOGGER.info("Email address {} was successfully removed from newsletter via email message", emailAddress);
+        return new SimpleServerMessage(String.format("The newsletter subscription service from the email " +
+                "address '%s' has been successfully deleted. You can return to the start page using the button below.",
+                emailAddress));
     }
 
-    private boolean checkIfEmailExist(String email) {
-        Optional<NewsletterEmailModel> findEmail = repository.findNewsletterModelsByEmail(email);
-        return findEmail.isPresent();
+    private Optional<NewsletterEmailModel> getNewsletterEmailModel(String email) {
+        return repository.findNewsletterModelsByEmail(email);
+    }
+
+    private NewsletterEmailModel checkIfRemovingEmailExist(String emailAddress) {
+        final Optional<NewsletterEmailModel> emailModel = getNewsletterEmailModel(emailAddress);
+        if (emailModel.isPresent()) {
+            return emailModel.get();
+        }
+        LOGGER.error("Attempt to remove not exsiting email: {} from newsletter list", emailAddress);
+        throw new EmailNotFoundException("Email '%s' is not subscribing newsletter.", emailAddress);
     }
 }

@@ -1,8 +1,8 @@
 /*
  * Copyright (c) 2022 by MILOSZ GILGA <https://miloszgilga.pl>
  *
- * File name: IUnsubscribeOtaTokenService.java
- * Last modified: 02/09/2022, 17:05
+ * File name: TokenException.java
+ * Last modified: 07/09/2022, 16:04
  * Project name: chess-app-backend
  *
  * Licensed under the MIT license; you may not use this file except in compliance with the License.
@@ -16,11 +16,23 @@
  * COPIES OR SUBSTANTIAL PORTIONS OF THE SOFTWARE.
  */
 
-package pl.miloszgilga.chessappbackend.network.newsletter_email;
+package pl.miloszgilga.chessappbackend.exception.custom;
+
+import org.springframework.http.HttpStatus;
 
 //----------------------------------------------------------------------------------------------------------------------
 
-interface IUnsubscribeOtaTokenService {
-    String generateAndSaveOtaToken(String email);
-    void validateOtaToken(String token, String email);
+public class TokenException {
+
+    public static class JwtMalformedTokenException extends BasicServerException {
+        public JwtMalformedTokenException(String message, Object... args) {
+            super(HttpStatus.UNAUTHORIZED, message, args);
+        }
+    }
+
+    public static class OtaTokenExpiredException extends BasicServerException {
+        public OtaTokenExpiredException(String message, Object... args) {
+            super(HttpStatus.UNAUTHORIZED, message, args);
+        }
+    }
 }
