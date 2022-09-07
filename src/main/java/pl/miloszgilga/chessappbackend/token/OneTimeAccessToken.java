@@ -34,7 +34,7 @@ public class OneTimeAccessToken {
     private final EnvironmentVars environment;
 
     private static final Random RANDOM = new Random();
-    private static final Pattern PATTERN = Pattern.compile("[a-zA-Z0-9]*");
+    private static final Pattern PATTERN = Pattern.compile("[a-zA-Z0-9]+");
 
     private static final String SIGNS = "abcdefghijklmnoprstquvwxyzABCDEFGHIJKLMNOPRSTQUWXYZ0123456789";
 

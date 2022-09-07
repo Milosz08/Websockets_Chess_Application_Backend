@@ -53,12 +53,12 @@ class NewsletterEmailController {
         return new ResponseEntity<>(service.attemptToUnsubscribeNewsletter(email), HttpStatus.OK);
     }
 
-    @PostMapping(NEWSLETTER_UNSUBSCRIBE_VIA_OTA)
+    @DeleteMapping(NEWSLETTER_UNSUBSCRIBE_VIA_OTA)
     ResponseEntity<SimpleServerMessage> unsubscribeNewsletterViaOta(@RequestBody @Valid UnsubscribeNewsletterViaOtaReq token) {
         return new ResponseEntity<>(service.unsubscribeNewsletterViaOta(token), HttpStatus.OK);
     }
 
-    @PostMapping(NEWSLETTER_UNSUBSCRIBE_VIA_JWT)
+    @DeleteMapping(NEWSLETTER_UNSUBSCRIBE_VIA_JWT)
     ResponseEntity<SimpleServerMessage> unsubscribeNewsletterViaJwt(@RequestBody @Valid UnsubscribeNewsletterViaJwtReq token) {
         return new ResponseEntity<>(service.unsubscribeNewsletterViaJwt(token), HttpStatus.OK);
     }

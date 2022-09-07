@@ -54,7 +54,7 @@ public class UnsubscribeOtaTokenModel extends AuditableEntity {
         this.userEmail = userEmail;
     }
 
-    String getToken() {
+    public String getToken() {
         return token;
     }
 
@@ -62,7 +62,7 @@ public class UnsubscribeOtaTokenModel extends AuditableEntity {
         this.token = token;
     }
 
-    Date getTokenExpired() {
+    public Date getTokenExpired() {
         return tokenExpired;
     }
 
@@ -74,7 +74,7 @@ public class UnsubscribeOtaTokenModel extends AuditableEntity {
         return alreadyUsed;
     }
 
-    void setAlreadyUsed(boolean alreadyUsed) {
+    public void setAlreadyUsed(boolean alreadyUsed) {
         this.alreadyUsed = alreadyUsed;
     }
 

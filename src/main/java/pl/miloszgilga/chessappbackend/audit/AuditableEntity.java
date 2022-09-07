@@ -42,7 +42,7 @@ public abstract class AuditableEntity {
     @UpdateTimestamp
     @Column(name = "UPDATED_AT") private Date updatedAt;
 
-    long getId() {
+    public long getId() {
         return id;
     }
 
@@ -54,7 +54,7 @@ public abstract class AuditableEntity {
         return updatedAt;
     }
 
-    void setId(long id) {
+    public void setId(long id) {
         this.id = id;
     }
 
