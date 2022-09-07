@@ -3,7 +3,7 @@ config:
   frontend-name: localhost
   authorization:
     jwt-key: daw94289vndq98198nkejfnkaendwef93892fnskjdenfkjeiwefibiu32983fnskjdfn
-
+    jwt-issuer: localhost
 server:
   port: 7575
 

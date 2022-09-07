@@ -39,4 +39,5 @@ public class EnvironmentVars {
     @Value("${spring.mail.username}")                                           private String serverMailClient;
     @Value("${config.frontend-name}")                                           private String frontendName;
     @Value("${config.mail-helpdesk-agent}")                                     private String mailHelpdeskAgent;
+    @Value("${config.authorization.jwt-issuer}")                                private String jwtIssuer;
 }
