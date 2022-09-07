@@ -26,7 +26,7 @@ import lombok.AllArgsConstructor;
 @Getter
 @AllArgsConstructor
 enum MailTemplate {
-    UNSUBSCRIBE_NEWSLETTER("unsubscribe-newsletter.freemarker.ftl");
+    UNSUBSCRIBE_NEWSLETTER("unsubscribe-newsletter.template.ftl");
 
     private final String templateName;
 }
