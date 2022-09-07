@@ -66,7 +66,7 @@ class NewsletterEmailService implements INewsletterEmailService {
     @Override
     public SimpleServerMessage subscribeNewsletter(final EmailNewsletterReq email) {
         final String emailAddress = email.getEmailAddress();
-        if (getNewsletterEmailModel(emailAddress).isPresent()) {
+        if (repository.findNewsletterModelsByEmail(emailAddress).isPresent()) {
             LOGGER.error("Attempt to add already exist email: {} to newsletter list", emailAddress);
             throw new EmailAlreadyExistException(EXPECTATION_FAILED, "Email '%s' is already on the newsletter list.",
                     emailAddress);
@@ -120,12 +120,8 @@ class NewsletterEmailService implements INewsletterEmailService {
                 emailAddress));
     }
 
-    private Optional<NewsletterEmailModel> getNewsletterEmailModel(String email) {
-        return repository.findNewsletterModelsByEmail(email);
-    }
-
     private NewsletterEmailModel checkIfRemovingEmailExist(String emailAddress) {
-        final Optional<NewsletterEmailModel> emailModel = getNewsletterEmailModel(emailAddress);
+        final Optional<NewsletterEmailModel> emailModel = repository.findNewsletterModelsByEmail(emailAddress);
         if (emailModel.isPresent()) return emailModel.get();
 
         LOGGER.error("Attempt to remove not exsiting email: {} from newsletter list", emailAddress);

@@ -18,6 +18,7 @@
 
 package pl.miloszgilga.chessappbackend.network.newsletter_email.domain;
 
+import org.springframework.stereotype.Repository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -26,6 +27,7 @@ import java.util.Optional;
 
 //----------------------------------------------------------------------------------------------------------------------
 
+@Repository
 public interface IUnsubscribeOtaTokenRepository extends JpaRepository<UnsubscribeOtaTokenModel, Long> {
 
     @Query(value = "SELECT COUNT(m) > 0 FROM UnsubscribeOtaTokenModel m WHERE m.token=:token")
