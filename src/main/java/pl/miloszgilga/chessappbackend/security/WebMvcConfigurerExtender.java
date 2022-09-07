@@ -37,6 +37,8 @@ public class WebMvcConfigurerExtender implements WebMvcConfigurer {
 
     @Override
     public void addCorsMappings(CorsRegistry registry) {
-        registry.addMapping("/**").allowedOrigins(environment.getFrontEndUrl());
+        registry.addMapping("/**")
+                .allowedOrigins(environment.getFrontEndUrl())
+                .allowedMethods("*");
     }
 }
