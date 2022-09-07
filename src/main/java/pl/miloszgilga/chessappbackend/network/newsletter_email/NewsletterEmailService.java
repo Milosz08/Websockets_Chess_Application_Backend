@@ -71,7 +71,7 @@ class NewsletterEmailService implements INewsletterEmailService {
             throw new EmailAlreadyExistException(EXPECTATION_FAILED, "Email '%s' is already on the newsletter list.",
                     emailAddress);
         }
-        NewsletterEmailModel saved = repository.save(new NewsletterEmailModel(emailAddress));
+        final NewsletterEmailModel saved = repository.save(new NewsletterEmailModel(emailAddress));
         LOGGER.info("Added to newsletter: {}", saved);
         return new SimpleServerMessage(String.format("Email '%s' was succesfully added to newsletter.", emailAddress));
     }
@@ -81,8 +81,8 @@ class NewsletterEmailService implements INewsletterEmailService {
         final String emailAddress = email.getEmailAddress();
         checkIfRemovingEmailExist(emailAddress);
 
-        String otaToken = unsubscribeService.generateAndSaveOtaToken(emailAddress);
-        String bearerToken = jsonWebToken.createUnsubscribeNewsletterToken(emailAddress, otaToken);
+        final String otaToken = unsubscribeService.generateAndSaveOtaToken(emailAddress);
+        final String bearerToken = jsonWebToken.createUnsubscribeNewsletterToken(emailAddress, otaToken);
         mailService.unsubscribeNewsletter(emailAddress, bearerToken, otaToken);
 
         return new SimpleServerMessage(String.format("Message has been send to the email '%s'.", emailAddress));
@@ -126,9 +126,8 @@ class NewsletterEmailService implements INewsletterEmailService {
 
     private NewsletterEmailModel checkIfRemovingEmailExist(String emailAddress) {
         final Optional<NewsletterEmailModel> emailModel = getNewsletterEmailModel(emailAddress);
-        if (emailModel.isPresent()) {
-            return emailModel.get();
-        }
+        if (emailModel.isPresent()) return emailModel.get();
+
         LOGGER.error("Attempt to remove not exsiting email: {} from newsletter list", emailAddress);
         throw new EmailNotFoundException("Email '%s' is not subscribing newsletter.", emailAddress);
     }
