@@ -24,10 +24,12 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
+import java.util.Optional;
 
 import pl.miloszgilga.chessappbackend.utils.TimeHelper;
 import pl.miloszgilga.chessappbackend.config.EnvironmentVars;
 import pl.miloszgilga.chessappbackend.token.OneTimeAccessToken;
+import pl.miloszgilga.chessappbackend.exception.custom.TokenException;
 import pl.miloszgilga.chessappbackend.network.newsletter_email.domain.UnsubscribeOtaTokenModel;
 import pl.miloszgilga.chessappbackend.network.newsletter_email.domain.IUnsubscribeOtaTokenRepository;
 
@@ -70,7 +72,21 @@ class UnsubscribeOtaTokenService implements IUnsubscribeOtaTokenService {
     }
 
     @Override
-    public boolean validateOtaToken(String token, String email) {
-        return false;
+    public void validateOtaToken(String token, String email) {
+        final Optional<UnsubscribeOtaTokenModel> probablyValidToken = repository.checkIfTokenExist(token, email);
+        if (probablyValidToken.isEmpty() || !otaService.checkIsTokenIsValid(probablyValidToken.get().getToken())) {
+            LOGGER.error("OTA token from JWT is not the same as from DB. Token: {}", token);
+            throw new TokenException.JwtMalformedTokenException(
+                    "Data could not be verified due to an incorrect, already used or corrupted token.");
+        }
+
+        final UnsubscribeOtaTokenModel validToken = probablyValidToken.get();
+        if (validToken.getTokenExpired().before(new Date())) {
+            LOGGER.error("OTA token from JWT is expired. Token: {}", token);
+            throw new TokenException.OtaTokenExpiredException("Passed token is valid, but it has already expired.");
+        }
+
+        validToken.setAlreadyUsed(true);
+        repository.save(validToken);
     }
 }
