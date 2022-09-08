@@ -1,7 +1,7 @@
 # Websockets chess application (Backend)
 [![Generic badge](https://img.shields.io/badge/Made%20with-Spring%20Boot%202.7.3-1abc9c.svg)](https://www.java.com/en/)&nbsp;&nbsp;
-[![Generic badge](https://img.shields.io/badge/Build%20with-Gradle-green.svg)](https://maven.apache.org/)&nbsp;&nbsp;
-[![Generic badge](https://img.shields.io/badge/Packaging-War%20-brown.svg)](https://maven.apache.org/)&nbsp;&nbsp;
+[![Generic badge](https://img.shields.io/badge/Build%20with-Gradle-green.svg)](https://gradle.org/)&nbsp;&nbsp;
+[![Generic badge](https://img.shields.io/badge/Packaging-War%20-brown.svg)](https://gradle.org/)&nbsp;&nbsp;
 <br><br>
 Server layer of an application that enables the game of chess and checkers. Written using the Spring Boot framework 
 along with several other dependencies to enable the websocket protocol. The application allows you to create an account, 
