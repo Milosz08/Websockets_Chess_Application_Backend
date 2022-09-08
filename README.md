@@ -37,7 +37,6 @@ Personal Name: root
 Mail password: admin
 APOP secret: admin
 ```
-and press `OK`.<br>
 6. Create sender account. Go to `Configuration -> Manage local users` and click `Add`. Insert:
 ```
 Username: noreply-dev
@@ -45,7 +44,6 @@ Personal Name: noreply-dev
 Mail password: admin
 APOP secret: admin
 ```
-and press `OK`.<br>
 7. Go to `Configuration -> Mercury Core Module Configuration` and click in `General` and insert in `Internet name for
 this system: localhost`.<br>
 8. Map localhost domain. Go to `Local domains` and click `Add new doman`. Your domain translation table should be like this:
@@ -117,7 +115,7 @@ logging:
   # output directory for logging to file by log4j (location: src/prod-logs...)
   file.name: prod-logs/chessappbackend.log
 ```
-3. To run application in production mode, use `--prod` switch.
+4. To run application in production mode, use `--prod` switch.
 > NOTE: If you do not use any switch, the application will not start correctly.
 
 <a name="author"></a>
