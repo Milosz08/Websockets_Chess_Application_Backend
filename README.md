@@ -7,6 +7,9 @@ Server layer of an application that enables the game of chess and checkers. Writ
 along with several other dependencies to enable the websocket protocol. The application allows you to create an account, 
 log in and track statistics of your games.
 
+See live application at: [chess.miloszgilga.pl](https://chess.miloszgilga.pl/)<br>
+See frontend (client layer): [Websockets Chess Application Frontend](https://github.com/Milosz08/Websockets_Chess_Application_Frontend)
+
 ## Table of content
 * [Clone and install](#clone-and-install)
 * [Prepare development configuration](#prepare-development-configuration)
