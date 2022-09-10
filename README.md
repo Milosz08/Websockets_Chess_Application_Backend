@@ -67,7 +67,7 @@ to `127.0.0.1`.
 11. Return to XAMPP control panel, and start Mercury via `Start` button.
 > NOTE: For more info about XAMPP Mercury SMTP server configuration, go 
 > [under this link](https://www.c-sharpcorner.com/UploadFile/c8aa13/send-mail-on-local-host-via-mercury-with-xampp/).
-12. Run Java application with `--dev` switch. Application should be available on `http://127.0.0.1:7575/javabean/v1/app`.
+12. Run Java application with `--dev` switch. Application should be available on `http://127.0.0.1:7575/javabean/app/v1`.
 > NOTE: If you do not use any switch, the application will not start correctly.
 
 <a name="prepare-production-configuration"></a>
