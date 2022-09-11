@@ -31,4 +31,12 @@ public class ApplicationEndpoints {
     public static final String NEWSLETTER_ATTEMPT_UNSUBSCRIBE = "/attempt-unsubscribe";
     public static final String NEWSLETTER_UNSUBSCRIBE_VIA_OTA = "/unsubscribe-via-ota";
     public static final String NEWSLETTER_UNSUBSCRIBE_VIA_JWT = "/unsubscribe-via-jwt";
+
+    public static final String AUTH_LOCAL_ENDPOINT = BASIC_ENDPOINT + "auth-local";
+    public static final String LOGIN_VIA_LOCAL = "/login-via-local";
+    public static final String REGISTER_VIA_LOCAL = "/register-via-local";
+
+    public static final String RENEW_CREDETIALS_LOCAL = BASIC_ENDPOINT + "renew-credentials";
+    public static final String ATTEMPT_TO_CHANGE_PASSWORD = RENEW_CREDETIALS_LOCAL + "/attempt-to-change-password";
+    public static final String CHANGE_PASSWORD_VIA_OTA = RENEW_CREDETIALS_LOCAL + "/change-password-via-ota";
 }
