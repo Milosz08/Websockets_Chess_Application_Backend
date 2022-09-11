@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.4.xsd">
+
+    <changeSet id="3" author="Milosz08">
+        <createTable tableName="LOCAL_USER">
+            <column name="ID" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+
+            <column name="NICKNAME" type="varchar(30)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="NAME" type="varchar(30)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="SURNAME" type="varchar(30)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="EMAIL_ADDRESS" type="varchar(100)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="SECOND_EMAIL_ADDRESS" type="varchar(100)">
+                <constraints nullable="true"/>
+            </column>
+            <column name="PASSWORD" type="varchar(500)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="BIRTH_DATE" type="datetime">
+                <constraints nullable="false"/>
+            </column>
+            <column name="PHONE_NUMBER" type="varchar(20)">
+                <constraints nullable="true"/>
+            </column>
+            <column name="SEX" type="varchar(10)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="HAS_PHOTO" type="boolean" defaultValueBoolean="false">
+                <constraints nullable="false"/>
+            </column>
+            <column name="CREDENTIALS_SUPPLIER" type="varchar(20)" defaultValue="local">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="CREATED_AT" type="datetime">
+                <constraints nullable="false"/>
+            </column>
+            <column name="UPDATED_AT" type="datetime">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="4" author="Milosz08">
+        <createTable tableName="LOCAL_USER_ROLE">
+            <column name="ID" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+
+            <column name="ROLE_NAME" type="varchar(20)" defaultValue="user">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="CREATED_AT" type="datetime">
+                <constraints nullable="false"/>
+            </column>
+            <column name="UPDATED_AT" type="datetime">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="5" author="Milosz08">
+        <createTable tableName="LOCAL_USER_ROLE_BINDING">
+            <column name="ID" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+
+            <column name="LOCAL_USER_ID" type="bigint">
+                <constraints
+                        unique="true"
+                        nullable="false"
+                        referencedColumnNames="ID"
+                        foreignKeyName="FK_LOCAL_USER_BINDING"
+                        referencedTableName="LOCAL_USER"/>
+            </column>
+            <column name="LOCAL_USER_ROLE_ID" type="bigint">
+                <constraints
+                        unique="true"
+                        nullable="false"
+                        referencedColumnNames="ID"
+                        foreignKeyName="FK_LOCAL_USER_ROLE_BINDING"
+                        referencedTableName="LOCAL_USER_ROLE"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="6" author="Milosz08">
+        <createTable tableName="USER_REFRESH_TOKEN">
+            <column name="ID" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+
+            <column name="REFRESH_TOKEN" type="varchar(500)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="EXPIRED_AT" type="datetime">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="LOCAL_USER_ID" type="bigint">
+                <constraints
+                        unique="true"
+                        nullable="false"
+                        referencedColumnNames="ID"
+                        foreignKeyName="FK_LOCAL_USER_USER_REFRESH_TOKEN"
+                        referencedTableName="LOCAL_USER"/>
+            </column>
+
+            <column name="CREATED_AT" type="datetime">
+                <constraints nullable="false"/>
+            </column>
+            <column name="UPDATED_AT" type="datetime">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="7" author="Miłosz08">
+        <createTable tableName="RENEW_CREDENTIALS_OTA_TOKEN">
+            <column name="ID" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+
+            <column name="OTA_TOKEN" type="varchar(10)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="EXPIRATION_DATE" type="datetime">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="LOCAL_USER_ID" type="bigint">
+                <constraints
+                        unique="true"
+                        nullable="false"
+                        referencedColumnNames="ID"
+                        foreignKeyName="FK_LOCAL_USER_RENEW_CREDENTIALS_OTA_TOKEN"
+                        referencedTableName="LOCAL_USER"/>
+            </column>
+
+            <column name="CREATED_AT" type="datetime">
+                <constraints nullable="false"/>
+            </column>
+            <column name="UPDATED_AT" type="datetime">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+</databaseChangeLog>
