@@ -27,7 +27,7 @@
         * { line-height: inherit; }
         a[x-apple-data-detectors='true'] { color: inherit !important; text-decoration: none !important; }
         table, td { color: #3b1302; }
-        #u_body a { color: #0000ee; text-decoration: underline; }
+        #u_body a { text-decoration: underline; }
     </style>
     <!--[if !mso]><!--><link href="https://fonts.googleapis.com/css?family=Rubik:400,700&display=swap" rel="stylesheet" type="text/css"><!--<![endif]-->
 </head>

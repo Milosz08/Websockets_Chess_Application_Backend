@@ -44,22 +44,22 @@ class NewsletterEmailController {
     }
 
     @PostMapping(NEWSLETTER_SUBSCRIBE)
-    ResponseEntity<SimpleServerMessage> subscribeNewsletter(@RequestBody @Valid EmailNewsletterReq email) {
+    ResponseEntity<SimpleServerMessage> subscribeNewsletter(@Valid @RequestBody EmailNewsletterReq email) {
         return new ResponseEntity<>(service.subscribeNewsletter(email), HttpStatus.CREATED);
     }
 
     @PostMapping(NEWSLETTER_ATTEMPT_UNSUBSCRIBE)
-    ResponseEntity<SimpleServerMessage> attemptToUnsubscribeNewsletter(@RequestBody @Valid EmailNewsletterReq email) {
+    ResponseEntity<SimpleServerMessage> attemptToUnsubscribeNewsletter(@Valid @RequestBody EmailNewsletterReq email) {
         return new ResponseEntity<>(service.attemptToUnsubscribeNewsletter(email), HttpStatus.OK);
     }
 
     @DeleteMapping(NEWSLETTER_UNSUBSCRIBE_VIA_OTA)
-    ResponseEntity<SimpleServerMessage> unsubscribeNewsletterViaOta(@RequestBody @Valid UnsubscribeNewsletterViaOtaReq token) {
+    ResponseEntity<SimpleServerMessage> unsubscribeNewsletterViaOta(@Valid @RequestBody UnsubscribeNewsletterViaOtaReq token) {
         return new ResponseEntity<>(service.unsubscribeNewsletterViaOta(token), HttpStatus.OK);
     }
 
     @DeleteMapping(NEWSLETTER_UNSUBSCRIBE_VIA_JWT)
-    ResponseEntity<SimpleServerMessage> unsubscribeNewsletterViaJwt(@RequestBody @Valid UnsubscribeNewsletterViaJwtReq token) {
+    ResponseEntity<SimpleServerMessage> unsubscribeNewsletterViaJwt(@Valid @RequestBody UnsubscribeNewsletterViaJwtReq token) {
         return new ResponseEntity<>(service.unsubscribeNewsletterViaJwt(token), HttpStatus.OK);
     }
 }
