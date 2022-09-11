@@ -18,9 +18,11 @@
 
 package pl.miloszgilga.chessappbackend.security;
 
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+import org.springframework.validation.beanvalidation.MethodValidationPostProcessor;
 
 import pl.miloszgilga.chessappbackend.config.EnvironmentVars;
 
@@ -40,5 +42,10 @@ public class WebMvcConfigurerExtender implements WebMvcConfigurer {
         registry.addMapping("/**")
                 .allowedOrigins(environment.getFrontEndUrl())
                 .allowedMethods("*");
+    }
+
+    @Bean
+    public MethodValidationPostProcessor methodValidationPostProcessor() {
+        return new MethodValidationPostProcessor();
     }
 }
