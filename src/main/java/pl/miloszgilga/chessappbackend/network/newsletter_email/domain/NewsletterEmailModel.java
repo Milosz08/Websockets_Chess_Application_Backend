@@ -24,6 +24,8 @@ import javax.persistence.Table;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 
+import java.io.Serializable;
+
 import pl.miloszgilga.chessappbackend.audit.AuditableEntity;
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -31,7 +33,8 @@ import pl.miloszgilga.chessappbackend.audit.AuditableEntity;
 @Entity
 @Table(name = "NEWSLETTER_EMAIL")
 @NoArgsConstructor
-public class NewsletterEmailModel extends AuditableEntity {
+public class NewsletterEmailModel extends AuditableEntity implements Serializable {
+    private static final long serialVersionUID = 1L;
 
     @Column(name = "USER_EMAIL") private String userEmail;
 

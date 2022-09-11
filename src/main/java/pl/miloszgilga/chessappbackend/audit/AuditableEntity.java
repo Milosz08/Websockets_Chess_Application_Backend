@@ -24,13 +24,16 @@ import org.hibernate.annotations.UpdateTimestamp;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.util.Date;
+import java.io.Serializable;
+
 import javax.persistence.*;
 
 //----------------------------------------------------------------------------------------------------------------------
 
 @MappedSuperclass
 @NoArgsConstructor
-public abstract class AuditableEntity {
+public abstract class AuditableEntity implements Serializable {
+    private static final long serialVersionUID = 1L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -21,9 +21,10 @@ package pl.miloszgilga.chessappbackend.network.newsletter_email.domain;
 import lombok.NoArgsConstructor;
 
 import java.util.Date;
+import java.io.Serializable;
 
-import javax.persistence.Column;
 import javax.persistence.Table;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 
 import pl.miloszgilga.chessappbackend.audit.AuditableEntity;
@@ -33,7 +34,8 @@ import pl.miloszgilga.chessappbackend.audit.AuditableEntity;
 @Entity
 @Table(name = "UNSUBSCRIBE_NEWSLETTER_OTA")
 @NoArgsConstructor
-public class UnsubscribeOtaTokenModel extends AuditableEntity {
+public class UnsubscribeOtaTokenModel extends AuditableEntity implements Serializable {
+    private static final long serialVersionUID = 1L;
 
     @Column(name = "USER_EMAIL")        private String userEmail;
     @Column(name = "TOKEN")             private String token;
