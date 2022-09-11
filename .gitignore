@@ -6,6 +6,7 @@ build/
 src/main/resources/application-prod.yml
 h2-db.mv.db
 h2-db.trace.db
+doc/
 
 .apt_generated
 .classpath
