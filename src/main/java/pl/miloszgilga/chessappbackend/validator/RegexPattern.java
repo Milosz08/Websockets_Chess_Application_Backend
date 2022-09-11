@@ -1,8 +1,8 @@
 /*
  * Copyright (c) 2022 by MILOSZ GILGA <https://miloszgilga.pl>
  *
- * File name: UnsubscribeNewsletterReq.java
- * Last modified: 02/09/2022, 15:22
+ * File name: RegexPattern.java
+ * Last modified: 11/09/2022, 01:13
  * Project name: chess-app-backend
  *
  * Licensed under the MIT license; you may not use this file except in compliance with the License.
@@ -16,28 +16,15 @@
  * COPIES OR SUBSTANTIAL PORTIONS OF THE SOFTWARE.
  */
 
-package pl.miloszgilga.chessappbackend.network.newsletter_email.dto;
-
-import lombok.Data;
-
-import javax.validation.constraints.Size;
-import javax.validation.constraints.Email;
-import javax.validation.constraints.Pattern;
-import javax.validation.constraints.NotBlank;
-
-import static pl.miloszgilga.chessappbackend.validator.RegexPattern.OTA_TOKEN_PATTERN;
+package pl.miloszgilga.chessappbackend.validator;
 
 //----------------------------------------------------------------------------------------------------------------------
 
-@Data
-public class UnsubscribeNewsletterViaOtaReq {
-
-    @NotBlank(message = "You should provide OTA token.")
-    @Pattern(regexp = OTA_TOKEN_PATTERN, message = "You should provide valid OTA token.")
-    private String token;
-
-    @NotBlank(message = "You should provide email address.")
-    @Email(message = "Passed email address is not valid.")
-    @Size(max = 100, message = "Email address must be shorter from 100 characters.")
-    private String emailAddress;
+public class RegexPattern {
+    public static final String NAME_SURNAME_PATTERN = "^[a-zA-Z\\d]{2,30}";
+    public static final String OTA_TOKEN_PATTERN = "^[a-zA-Z\\d]{10}";
+    public static final String NICKNAME_PATTERN = "^[a-zA-Z\\d]{5,30}";
+    public static final String BIRTH_DATE_PATTERN = "^(0[1-9]|[12][0-9]|3[01])/(0[1-9]|1[0-2])/\\d{4}$";
+    public static final String PASSWORD_PATTERN = "^(?=.*\\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#&()–[{}]:;',?/*~$^+=<>]).{10,30}$";
+    public static final String PHONE_NUMBER_PATTERN = "^(\\+\\d{1,3}( )?)?((\\(\\d{1,3}\\))|\\d{1,3})[- .]?\\d{3,4}[- .]?\\d{3,4}$";
 }
