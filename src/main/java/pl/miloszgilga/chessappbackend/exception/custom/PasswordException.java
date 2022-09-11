@@ -1,8 +1,8 @@
 /*
  * Copyright (c) 2022 by MILOSZ GILGA <https://miloszgilga.pl>
  *
- * File name: EmailExeception.java
- * Last modified: 01/09/2022, 20:55
+ * File name: PasswordException.java
+ * Last modified: 11/09/2022, 19:13
  * Project name: chess-app-backend
  *
  * Licensed under the MIT license; you may not use this file except in compliance with the License.
@@ -22,28 +22,10 @@ import org.springframework.http.HttpStatus;
 
 //----------------------------------------------------------------------------------------------------------------------
 
-public class EmailException {
+public class PasswordException {
 
-    public static class EmailAlreadyExistException extends BasicServerException {
-        public EmailAlreadyExistException(HttpStatus status, String message, Object... args) {
-            super(status, message, args);
-        }
-    }
-
-    public static class EmailNotFoundException extends BasicServerException {
-        public EmailNotFoundException(String message, Object... args) {
-            super(HttpStatus.NOT_FOUND, message, args);
-        }
-    }
-
-    public static class EmailSenderException extends BasicServerException {
-        public EmailSenderException(String message, Object... args) {
-            super(HttpStatus.SERVICE_UNAVAILABLE, message, args);
-        }
-    }
-
-    public static class EmailAndSecondEmailIdenticalException extends BasicServerException {
-        public EmailAndSecondEmailIdenticalException(String message, Object... args) {
+    public static class PasswordAndRepeatPassowordNotTheSameException extends BasicServerException {
+        public PasswordAndRepeatPassowordNotTheSameException(String message, Object... args) {
             super(HttpStatus.BAD_REQUEST, message, args);
         }
     }
