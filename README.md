@@ -1,11 +1,14 @@
 # Websockets chess application (Backend)
 [![Generic badge](https://img.shields.io/badge/Made%20with-Spring%20Boot%202.7.3-1abc9c.svg)](https://www.java.com/en/)&nbsp;&nbsp;
-[![Generic badge](https://img.shields.io/badge/Build%20with-Gradle-green.svg)](https://maven.apache.org/)&nbsp;&nbsp;
-[![Generic badge](https://img.shields.io/badge/Packaging-War%20-brown.svg)](https://maven.apache.org/)&nbsp;&nbsp;
+[![Generic badge](https://img.shields.io/badge/Build%20with-Gradle-green.svg)](https://gradle.org/)&nbsp;&nbsp;
+[![Generic badge](https://img.shields.io/badge/Packaging-War%20-brown.svg)](https://gradle.org/)&nbsp;&nbsp;
 <br><br>
 Server layer of an application that enables the game of chess and checkers. Written using the Spring Boot framework 
 along with several other dependencies to enable the websocket protocol. The application allows you to create an account, 
 log in and track statistics of your games.
+
+See live application at: [chess.miloszgilga.pl](https://chess.miloszgilga.pl/)<br>
+See frontend (client layer): [Websockets Chess Application Frontend](https://github.com/Milosz08/Websockets_Chess_Application_Frontend)
 
 ## Table of content
 * [Clone and install](#clone-and-install)
@@ -37,7 +40,6 @@ Personal Name: root
 Mail password: admin
 APOP secret: admin
 ```
-and press `OK`.<br>
 6. Create sender account. Go to `Configuration -> Manage local users` and click `Add`. Insert:
 ```
 Username: noreply-dev
@@ -45,7 +47,6 @@ Personal Name: noreply-dev
 Mail password: admin
 APOP secret: admin
 ```
-and press `OK`.<br>
 7. Go to `Configuration -> Mercury Core Module Configuration` and click in `General` and insert in `Internet name for
 this system: localhost`.<br>
 8. Map localhost domain. Go to `Local domains` and click `Add new doman`. Your domain translation table should be like this:
@@ -66,7 +67,7 @@ to `127.0.0.1`.
 11. Return to XAMPP control panel, and start Mercury via `Start` button.
 > NOTE: For more info about XAMPP Mercury SMTP server configuration, go 
 > [under this link](https://www.c-sharpcorner.com/UploadFile/c8aa13/send-mail-on-local-host-via-mercury-with-xampp/).
-12. Run Java application with `--dev` switch. Application should be available on `http://127.0.0.1:7575/javabean/v1/app`.
+12. Run Java application with `--dev` switch. Application should be available on `http://127.0.0.1:7575/javabean/app/v1`.
 > NOTE: If you do not use any switch, the application will not start correctly.
 
 <a name="prepare-production-configuration"></a>
@@ -117,7 +118,7 @@ logging:
   # output directory for logging to file by log4j (location: src/prod-logs...)
   file.name: prod-logs/chessappbackend.log
 ```
-3. To run application in production mode, use `--prod` switch.
+4. To run application in production mode, use `--prod` switch.
 > NOTE: If you do not use any switch, the application will not start correctly.
 
 <a name="author"></a>
