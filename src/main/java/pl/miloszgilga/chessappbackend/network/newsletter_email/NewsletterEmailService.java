@@ -125,6 +125,7 @@ class NewsletterEmailService implements INewsletterEmailService {
         if (emailModel.isPresent()) return emailModel.get();
 
         LOGGER.error("Attempt to remove not exsiting email: {} from newsletter list", emailAddress);
-        throw new EmailNotFoundException("Email '%s' is not subscribing newsletter.", emailAddress);
+        throw new EmailNotFoundException("The email address provided does not subscribe to the newsletter or has " +
+                "already been unsubscribed from it.", emailAddress);
     }
 }

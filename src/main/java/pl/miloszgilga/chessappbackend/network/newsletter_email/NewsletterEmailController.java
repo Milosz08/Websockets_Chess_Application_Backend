@@ -25,9 +25,10 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 
 import pl.miloszgilga.chessappbackend.dao.SimpleServerMessage;
-import pl.miloszgilga.chessappbackend.network.newsletter_email.dto.EmailNewsletterReq;
-import pl.miloszgilga.chessappbackend.network.newsletter_email.dto.UnsubscribeNewsletterViaJwtReq;
-import pl.miloszgilga.chessappbackend.network.newsletter_email.dto.UnsubscribeNewsletterViaOtaReq;
+import pl.miloszgilga.chessappbackend.network.newsletter_email.dto.EmailNewsletterReqDto;
+import pl.miloszgilga.chessappbackend.network.newsletter_email.dto.AttemptToUnsubscribeReqDto;
+import pl.miloszgilga.chessappbackend.network.newsletter_email.dto.UnsubscribeNewsletterViaJwtReqDto;
+import pl.miloszgilga.chessappbackend.network.newsletter_email.dto.UnsubscribeNewsletterViaOtaReqDto;
 
 import static pl.miloszgilga.chessappbackend.config.ApplicationEndpoints.*;
 
@@ -44,8 +45,8 @@ class NewsletterEmailController {
     }
 
     @PostMapping(NEWSLETTER_SUBSCRIBE)
-    ResponseEntity<SimpleServerMessage> subscribeNewsletter(@Valid @RequestBody EmailNewsletterReq email) {
-        return new ResponseEntity<>(service.subscribeNewsletter(email), HttpStatus.CREATED);
+    ResponseEntity<SimpleServerMessage> subscribeNewsletter(@Valid @RequestBody EmailNewsletterReqDto req) {
+        return new ResponseEntity<>(service.subscribeNewsletter(req), HttpStatus.CREATED);
     }
 
     @PostMapping(NEWSLETTER_ATTEMPT_UNSUBSCRIBE)
@@ -54,12 +55,12 @@ class NewsletterEmailController {
     }
 
     @DeleteMapping(NEWSLETTER_UNSUBSCRIBE_VIA_OTA)
-    ResponseEntity<SimpleServerMessage> unsubscribeNewsletterViaOta(@Valid @RequestBody UnsubscribeNewsletterViaOtaReq token) {
-        return new ResponseEntity<>(service.unsubscribeNewsletterViaOta(token), HttpStatus.OK);
+    ResponseEntity<SimpleServerMessage> unsubscribeNewsletterViaOta(@Valid @RequestBody UnsubscribeNewsletterViaOtaReqDto req) {
+        return new ResponseEntity<>(service.unsubscribeNewsletterViaOta(req), HttpStatus.OK);
     }
 
     @DeleteMapping(NEWSLETTER_UNSUBSCRIBE_VIA_JWT)
-    ResponseEntity<SimpleServerMessage> unsubscribeNewsletterViaJwt(@Valid @RequestBody UnsubscribeNewsletterViaJwtReq token) {
-        return new ResponseEntity<>(service.unsubscribeNewsletterViaJwt(token), HttpStatus.OK);
+    ResponseEntity<SimpleServerMessage> unsubscribeNewsletterViaJwt(@Valid @RequestBody UnsubscribeNewsletterViaJwtReqDto req) {
+        return new ResponseEntity<>(service.unsubscribeNewsletterViaJwt(req), HttpStatus.OK);
     }
 }

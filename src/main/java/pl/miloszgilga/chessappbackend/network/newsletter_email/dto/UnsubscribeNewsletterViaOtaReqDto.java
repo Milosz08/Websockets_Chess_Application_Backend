@@ -1,8 +1,8 @@
 /*
  * Copyright (c) 2022 by MILOSZ GILGA <https://miloszgilga.pl>
  *
- * File name: AddNewEmailToNewsletterRequest.java
- * Last modified: 01/09/2022, 18:24
+ * File name: UnsubscribeNewsletterReq.java
+ * Last modified: 02/09/2022, 15:22
  * Project name: chess-app-backend
  *
  * Licensed under the MIT license; you may not use this file except in compliance with the License.
@@ -18,16 +18,23 @@
 
 package pl.miloszgilga.chessappbackend.network.newsletter_email.dto;
 
-import lombok.*;
+import lombok.Data;
 
 import javax.validation.constraints.Size;
 import javax.validation.constraints.Email;
+import javax.validation.constraints.Pattern;
 import javax.validation.constraints.NotBlank;
+
+import static pl.miloszgilga.chessappbackend.validator.RegexPattern.OTA_TOKEN_PATTERN;
 
 //----------------------------------------------------------------------------------------------------------------------
 
 @Data
-public class EmailNewsletterReq {
+public class UnsubscribeNewsletterViaOtaReqDto {
+
+    @NotBlank(message = "You should provide OTA token.")
+    @Pattern(regexp = OTA_TOKEN_PATTERN, message = "You should provide valid OTA token.")
+    private String token;
 
     @NotBlank(message = "You should provide email address.")
     @Email(message = "Passed email address is not valid.")
