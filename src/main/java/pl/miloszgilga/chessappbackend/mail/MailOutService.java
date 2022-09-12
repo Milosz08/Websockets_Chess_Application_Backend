@@ -48,12 +48,14 @@ public class MailOutService implements IMailOutService {
     }
 
     @Override
-    public void unsubscribeNewsletter(String email, String bearer, String otaToken) {
-        final String messageTitle = "Chess Online: unsubscribe newsletter for " + email;
+    public void unsubscribeNewsletter(long id, String userName, String email, String bearer, String otaToken) {
+        final String messageTitle = String.format("(%s) Chess Online: unsubscribe newsletter for %s", id, userName);
         final var request = new MailRequestDto(List.of(email), environment.getServerMailClient(), messageTitle);
         final Map<String, Object> parameters = new HashMap<>(extendsParametersWithDef(email));
+        parameters.put("userName", userName);
         parameters.put("emailAddress", email);
         parameters.put("otaToken", otaToken);
+        parameters.put("tokensExpiredMinutes", environment.getOtaTokenExpiredMinutes());
         parameters.put("mailHelpdeskAgent", environment.getMailHelpdeskAgent() + "@" + environment.getFrontendName());
         parameters.put("buttonLink", computeBearer(bearer));
         mailService.generalEmailSender(request, parameters, MailTemplate.UNSUBSCRIBE_NEWSLETTER);

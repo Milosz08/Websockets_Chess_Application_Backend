@@ -21,5 +21,5 @@ package pl.miloszgilga.chessappbackend.mail;
 //----------------------------------------------------------------------------------------------------------------------
 
 interface IMailOutService {
-    void unsubscribeNewsletter(String email, String bearer, String otaToken);
+    void unsubscribeNewsletter(long id, String userName, String email, String bearer, String otaToken);
 }

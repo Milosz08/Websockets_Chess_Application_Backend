@@ -57,7 +57,7 @@
                             <table style="font-family:arial,helvetica,sans-serif;" role="presentation" cellpadding="0" cellspacing="0" width="100%" border="0"><tbody><tr>
                                 <td style="overflow-wrap:break-word;word-break:break-word;padding:20px 0px 0px;font-family:arial,helvetica,sans-serif;" align="left">
                                     <div style="line-height: 140%; text-align: left; word-wrap: break-word;">
-                                        <p style="font-size: 14px; line-height: 140%;"><span style="font-size: 14px; line-height: 19.6px; color: #8e8c8c; font-family: Rubik, sans-serif;">Dear <span style="color: #3b1302">${emailAddress}</span>!</span></p>
+                                        <p style="font-size: 14px; line-height: 140%;"><span style="font-size: 14px; line-height: 19.6px; color: #8e8c8c; font-family: Rubik, sans-serif;">Dear <span style="color: #3b1302">${userName}</span>!</span></p>
                                         <p style="font-size: 14px; line-height: 140%;"> </p>
                                         <p style="font-size: 14px; line-height: 140%;"><span style="font-size: 14px; line-height: 19.6px; color: #8e8c8c; font-family: Rubik, sans-serif;">You have received this message because you have sent a request to remove your newsletter subscription. If you still wish to unsubscribe from receiving emails from us please rewrite the code below:</span></p>
                                     </div>
@@ -91,6 +91,8 @@
                             <table style="font-family:arial,helvetica,sans-serif;" role="presentation" cellpadding="0" cellspacing="0" width="100%" border="0"><tbody><tr>
                                 <td style="overflow-wrap:break-word;word-break:break-word;padding:0px;font-family:arial,helvetica,sans-serif;" align="left">
                                     <div style="line-height: 140%; text-align: left; word-wrap: break-word;">
+                                        <p style="font-size: 14px; line-height: 140%;"><span style="font-family: Rubik, sans-serif; font-size: 14px; line-height: 19.6px; color: #8e8c8c;">The token and link is valid for a short period of time (expires after <span style="color: #3b1302">${tokensExpiredMinutes} minutes</span>). If you see an error, generate the token again in the application.</span></p>
+                                        <p style="font-size: 14px; line-height: 140%;"> </p>
                                         <p style="font-size: 14px; line-height: 140%;"><span style="font-family: Rubik, sans-serif; font-size: 14px; line-height: 19.6px; color: #8e8c8c;">If you have not sent such a request, please ignore this message or send information to us at <a href="mailto:${mailHelpdeskAgent}" style="color: #3b1302;text-decoration: none;-webkit-text-size-adjust: none;">${mailHelpdeskAgent}</a>.</span></p>
                                         <p style="font-size: 14px; line-height: 140%;"> </p>
                                         <p style="font-size: 14px; line-height: 140%;"> </p>
