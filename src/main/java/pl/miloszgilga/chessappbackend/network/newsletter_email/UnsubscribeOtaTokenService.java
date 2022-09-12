@@ -23,6 +23,8 @@ import org.slf4j.LoggerFactory;
 
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
+
 import java.util.Date;
 import java.util.Optional;
 
@@ -56,6 +58,7 @@ class UnsubscribeOtaTokenService implements IUnsubscribeOtaTokenService {
     }
 
     @Override
+    @Transactional
     public String generateAndSaveOtaToken(String email) {
         String token;
         do {
@@ -72,6 +75,7 @@ class UnsubscribeOtaTokenService implements IUnsubscribeOtaTokenService {
     }
 
     @Override
+    @Transactional
     public void validateOtaToken(String token, String email) {
         final Optional<UnsubscribeOtaTokenModel> probablyValidToken = repository.checkIfTokenExist(token, email);
         if (probablyValidToken.isEmpty() || !otaService.checkIsTokenIsValid(probablyValidToken.get().getToken())) {

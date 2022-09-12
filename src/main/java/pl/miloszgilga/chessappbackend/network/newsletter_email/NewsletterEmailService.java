@@ -26,6 +26,7 @@ import org.springframework.stereotype.Service;
 import static org.springframework.http.HttpStatus.EXPECTATION_FAILED;
 
 import java.util.Optional;
+import javax.transaction.Transactional;
 
 import pl.miloszgilga.chessappbackend.token.JsonWebToken;
 import pl.miloszgilga.chessappbackend.mail.MailOutService;
@@ -64,8 +65,10 @@ class NewsletterEmailService implements INewsletterEmailService {
     }
 
     @Override
-    public SimpleServerMessage subscribeNewsletter(final EmailNewsletterReq email) {
-        final String emailAddress = email.getEmailAddress();
+    @Transactional
+    public SimpleServerMessage subscribeNewsletter(final EmailNewsletterReqDto req) {
+        final String userName = manipulator.capitalised(req.getUserName());
+        final String emailAddress = req.getEmailAddress();
         if (repository.findNewsletterModelsByEmail(emailAddress).isPresent()) {
             LOGGER.error("Attempt to add already exist email: {} to newsletter list", emailAddress);
             throw new EmailAlreadyExistException(EXPECTATION_FAILED, "Email '%s' is already on the newsletter list.",
@@ -77,9 +80,10 @@ class NewsletterEmailService implements INewsletterEmailService {
     }
 
     @Override
-    public SimpleServerMessage attemptToUnsubscribeNewsletter(final EmailNewsletterReq email) {
-        final String emailAddress = email.getEmailAddress();
-        checkIfRemovingEmailExist(emailAddress);
+    @Transactional
+    public SimpleServerMessage attemptToUnsubscribeNewsletter(final AttemptToUnsubscribeReqDto req) {
+        final NewsletterEmailModel model = checkIfRemovingEmailExist(req.getEmailAddress());
+        final String email = model.getUserEmail();
 
         final String otaToken = unsubscribeService.generateAndSaveOtaToken(emailAddress);
         final String bearerToken = jsonWebToken.createUnsubscribeNewsletterToken(emailAddress, otaToken);
@@ -89,7 +93,8 @@ class NewsletterEmailService implements INewsletterEmailService {
     }
 
     @Override
-    public SimpleServerMessage unsubscribeNewsletterViaOta(final UnsubscribeNewsletterViaOtaReq token) {
+    @Transactional
+    public SimpleServerMessage unsubscribeNewsletterViaOta(final UnsubscribeNewsletterViaOtaReqDto token) {
         final String emailAddress = token.getEmailAddress();
         final NewsletterEmailModel model = checkIfRemovingEmailExist(emailAddress);
         unsubscribeService.validateOtaToken(token.getToken(), emailAddress);
@@ -101,7 +106,8 @@ class NewsletterEmailService implements INewsletterEmailService {
     }
 
     @Override
-    public SimpleServerMessage unsubscribeNewsletterViaJwt(final UnsubscribeNewsletterViaJwtReq token) {
+    @Transactional
+    public SimpleServerMessage unsubscribeNewsletterViaJwt(final UnsubscribeNewsletterViaJwtReqDto token) {
         final DecodedJWT jwtDecoded = jsonWebToken.verifyJsonWebToken(token.getToken());
 
         final String emailAddress = jwtDecoded.getClaim(EMAIL.getClaimName()).asString();
