@@ -7,5 +7,6 @@
     <include file="classpath:db/changelog/2022-09-migrations/V1__2022-09-01__create-newsletter-schema.xml" relativeToChangelogFile="false"/>
     <include file="classpath:db/changelog/2022-09-migrations/V2__2022-09-02__create-unsubscribe-ota-schema.xml" relativeToChangelogFile="false"/>
     <include file="classpath:db/changelog/2022-09-migrations/V3__2022-09-11__create-auth-schemas.xml" relativeToChangelogFile="false"/>
+    <include file="classpath:db/changelog/2022-09-migrations/V4__2022-09-12__add-username-to-newsletter-schema.xml" relativeToChangelogFile="false"/>
 
 </databaseChangeLog>

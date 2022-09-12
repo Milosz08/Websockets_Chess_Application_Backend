@@ -31,13 +31,15 @@ import javax.transaction.Transactional;
 import pl.miloszgilga.chessappbackend.token.JsonWebToken;
 import pl.miloszgilga.chessappbackend.mail.MailOutService;
 import pl.miloszgilga.chessappbackend.dao.SimpleServerMessage;
+import pl.miloszgilga.chessappbackend.utils.StringManipulator;
 import pl.miloszgilga.chessappbackend.exception.custom.EmailException.*;
 
-import pl.miloszgilga.chessappbackend.network.newsletter_email.dto.EmailNewsletterReq;
+import pl.miloszgilga.chessappbackend.network.newsletter_email.dto.EmailNewsletterReqDto;
 import pl.miloszgilga.chessappbackend.network.newsletter_email.domain.NewsletterEmailModel;
+import pl.miloszgilga.chessappbackend.network.newsletter_email.dto.AttemptToUnsubscribeReqDto;
 import pl.miloszgilga.chessappbackend.network.newsletter_email.domain.INewsletterEmailRepository;
-import pl.miloszgilga.chessappbackend.network.newsletter_email.dto.UnsubscribeNewsletterViaOtaReq;
-import pl.miloszgilga.chessappbackend.network.newsletter_email.dto.UnsubscribeNewsletterViaJwtReq;
+import pl.miloszgilga.chessappbackend.network.newsletter_email.dto.UnsubscribeNewsletterViaOtaReqDto;
+import pl.miloszgilga.chessappbackend.network.newsletter_email.dto.UnsubscribeNewsletterViaJwtReqDto;
 
 import static pl.miloszgilga.chessappbackend.token.JwtClaim.*;
 
@@ -52,16 +54,18 @@ class NewsletterEmailService implements INewsletterEmailService {
     private final INewsletterEmailRepository repository;
 
     private final MailOutService mailService;
+    private final StringManipulator manipulator;
     private final UnsubscribeOtaTokenService unsubscribeService;
 
     NewsletterEmailService(
             INewsletterEmailRepository repository, UnsubscribeOtaTokenService unsubscribeService,
-            JsonWebToken jsonWebToken, MailOutService mailService
+            JsonWebToken jsonWebToken, MailOutService mailService, StringManipulator manipulator
     ) {
         this.repository = repository;
         this.jsonWebToken = jsonWebToken;
         this.unsubscribeService = unsubscribeService;
         this.mailService = mailService;
+        this.manipulator = manipulator;
     }
 
     @Override
@@ -74,7 +78,7 @@ class NewsletterEmailService implements INewsletterEmailService {
             throw new EmailAlreadyExistException(EXPECTATION_FAILED, "Email '%s' is already on the newsletter list.",
                     emailAddress);
         }
-        final NewsletterEmailModel saved = repository.save(new NewsletterEmailModel(emailAddress));
+        final NewsletterEmailModel saved = repository.save(new NewsletterEmailModel(userName, emailAddress));
         LOGGER.info("Added to newsletter: {}", saved);
         return new SimpleServerMessage(String.format("Email '%s' was succesfully added to newsletter.", emailAddress));
     }
@@ -85,11 +89,11 @@ class NewsletterEmailService implements INewsletterEmailService {
         final NewsletterEmailModel model = checkIfRemovingEmailExist(req.getEmailAddress());
         final String email = model.getUserEmail();
 
-        final String otaToken = unsubscribeService.generateAndSaveOtaToken(emailAddress);
-        final String bearerToken = jsonWebToken.createUnsubscribeNewsletterToken(emailAddress, otaToken);
-        mailService.unsubscribeNewsletter(emailAddress, bearerToken, otaToken);
+        final String otaToken = unsubscribeService.generateAndSaveOtaToken(email);
+        final String bearerToken = jsonWebToken.createUnsubscribeNewsletterToken(email, otaToken);
+        mailService.unsubscribeNewsletter(model.getId(), model.getUserName(), email, bearerToken, otaToken);
 
-        return new SimpleServerMessage(String.format("Message has been send to the email '%s'.", emailAddress));
+        return new SimpleServerMessage(String.format("Message has been send to the email '%s'.", email));
     }
 
     @Override

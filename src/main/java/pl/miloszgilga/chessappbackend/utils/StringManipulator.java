@@ -1,8 +1,8 @@
 /*
  * Copyright (c) 2022 by MILOSZ GILGA <https://miloszgilga.pl>
  *
- * File name: RegexPattern.java
- * Last modified: 11/09/2022, 01:13
+ * File name: StringManipulator.java
+ * Last modified: 12/09/2022, 02:54
  * Project name: chess-app-backend
  *
  * Licensed under the MIT license; you may not use this file except in compliance with the License.
@@ -16,15 +16,19 @@
  * COPIES OR SUBSTANTIAL PORTIONS OF THE SOFTWARE.
  */
 
-package pl.miloszgilga.chessappbackend.validator;
+package pl.miloszgilga.chessappbackend.utils;
+
+import org.springframework.stereotype.Component;
+
+import java.util.Locale;
 
 //----------------------------------------------------------------------------------------------------------------------
 
-public class RegexPattern {
-    public static final String NAME_SURNAME_PATTERN = "^[a-zA-Z]{2,30}";
-    public static final String OTA_TOKEN_PATTERN = "^[a-zA-Z\\d]{10}";
-    public static final String NICKNAME_PATTERN = "^[a-zA-Z\\d]{5,30}";
-    public static final String BIRTH_DATE_PATTERN = "^(0[1-9]|[12][0-9]|3[01])/(0[1-9]|1[0-2])/\\d{4}$";
-    public static final String PASSWORD_PATTERN = "^(?=.*\\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#&()–[{}]:;',?/*~$^+=<>]).{10,30}$";
-    public static final String PHONE_NUMBER_PATTERN = "^(\\+\\d{1,3}( )?)?((\\(\\d{1,3}\\))|\\d{1,3})[- .]?\\d{3,4}[- .]?\\d{3,4}$";
+@Component
+public class StringManipulator {
+
+    public String capitalised(String textToCapitalised) {
+        final String normalized = textToCapitalised.trim().toLowerCase(Locale.ROOT);
+        return Character.toString(normalized.charAt(0)).toUpperCase(Locale.ROOT) + normalized.substring(1);
+    }
 }

@@ -36,10 +36,20 @@ import pl.miloszgilga.chessappbackend.audit.AuditableEntity;
 public class NewsletterEmailModel extends AuditableEntity implements Serializable {
     private static final long serialVersionUID = 1L;
 
-    @Column(name = "USER_EMAIL") private String userEmail;
+    @Column(name = "USER_NAME")     private String userName;
+    @Column(name = "USER_EMAIL")    private String userEmail;
 
-    public NewsletterEmailModel(String userEmail) {
+    public NewsletterEmailModel(String userName, String userEmail) {
+        this.userName = userName;
         this.userEmail = userEmail;
+    }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    void setUserName(String userName) {
+        this.userName = userName;
     }
 
     public String getUserEmail() {
@@ -52,8 +62,9 @@ public class NewsletterEmailModel extends AuditableEntity implements Serializabl
 
     @Override
     public String toString() {
-        return "NewsletterModel{" +
-                "userEmail='" + userEmail + '\'' +
+        return "NewsletterEmailModel{" +
+                "userName='" + userName + '\'' +
+                ", userEmail='" + userEmail + '\'' +
                 "} " + super.toString();
     }
 }
