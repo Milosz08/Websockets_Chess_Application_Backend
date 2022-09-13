@@ -25,7 +25,7 @@ import lombok.AllArgsConstructor;
 
 @Getter
 @AllArgsConstructor
-public enum UserSexSpecific {
+public enum UserGenderSpecific {
     MALE("male"),
     FEMALE("female"),
     OTHER("other");

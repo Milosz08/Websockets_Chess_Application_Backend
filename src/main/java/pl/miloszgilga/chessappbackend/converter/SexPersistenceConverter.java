@@ -23,23 +23,23 @@ import javax.persistence.AttributeConverter;
 
 import java.util.stream.Stream;
 
-import pl.miloszgilga.chessappbackend.utils.UserSexSpecific;
+import pl.miloszgilga.chessappbackend.utils.UserGenderSpecific;
 
 //----------------------------------------------------------------------------------------------------------------------
 
 @Converter(autoApply = true)
-public class SexPersistenceConverter implements AttributeConverter<UserSexSpecific, String> {
+public class SexPersistenceConverter implements AttributeConverter<UserGenderSpecific, String> {
 
     @Override
-    public String convertToDatabaseColumn(UserSexSpecific attribute) {
+    public String convertToDatabaseColumn(UserGenderSpecific attribute) {
         if (attribute == null) return null;
         return attribute.getSex();
     }
 
     @Override
-    public UserSexSpecific convertToEntityAttribute(String sexValue) {
+    public UserGenderSpecific convertToEntityAttribute(String sexValue) {
         if (sexValue == null) return null;
-        return Stream.of(UserSexSpecific.values())
+        return Stream.of(UserGenderSpecific.values())
                 .filter(s -> s.getSex().equals(sexValue))
                 .findFirst()
                 .orElseThrow(IllegalArgumentException::new);

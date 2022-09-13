@@ -22,7 +22,7 @@ import lombok.Data;
 
 import javax.validation.constraints.*;
 
-import pl.miloszgilga.chessappbackend.utils.UserSexSpecific;
+import pl.miloszgilga.chessappbackend.utils.UserGenderSpecific;
 import pl.miloszgilga.chessappbackend.validator.annotation.ValidateEnum;
 import pl.miloszgilga.chessappbackend.validator.annotation.PasswordMatch;
 import pl.miloszgilga.chessappbackend.validator.annotation.FutureTimeDate;
@@ -68,9 +68,9 @@ public class RegisterViaLocalRequestDto {
     @Pattern(regexp = PHONE_NUMBER_PATTERN, message = "Invalid phone number structure.")
     private String phoneNumber;
 
-    @NotBlank(message = "You should provide sex data.")
-    @ValidateEnum(enumClazz = UserSexSpecific.class, message = "Available sex types: [male, female, other]")
-    private String sex;
+    @NotBlank(message = "You should provide user gender data.")
+    @ValidateEnum(enumClazz = UserGenderSpecific.class, message = "Available gender types: [male, female, other]")
+    private String gender;
 
     @NotBlank(message = "You should provide password.")
     @Pattern(regexp = PASSWORD_PATTERN,
@@ -80,4 +80,7 @@ public class RegisterViaLocalRequestDto {
 
     @NotBlank(message = "You should provide repeat password.")
     private String passwordRepeat;
+
+    @NotNull(message = "Newsletter allows field might be empty but not null.")
+    private boolean newsletterAccept;
 }

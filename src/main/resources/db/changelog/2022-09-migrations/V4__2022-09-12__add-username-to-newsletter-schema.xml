@@ -12,4 +12,19 @@
         </addColumn>
     </changeSet>
 
+    <changeSet id="9" author="Milosz08">
+        <addColumn tableName="LOCAL_USER">
+            <column name="HAS_NEWSLETTER_ACCEPT" type="boolean" defaultValueBoolean="false">
+                <constraints nullable="false"/>
+            </column>
+        </addColumn>
+
+        <dropColumn tableName="LOCAL_USER" columnName="SEX"/>
+        <addColumn tableName="LOCAL_USER">
+            <column name="GENDER" type="varchar(10)">
+                <constraints nullable="false"/>
+            </column>
+        </addColumn>
+    </changeSet>
+
 </databaseChangeLog>

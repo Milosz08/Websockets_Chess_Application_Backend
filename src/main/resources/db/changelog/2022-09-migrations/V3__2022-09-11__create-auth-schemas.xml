@@ -128,7 +128,7 @@
         </createTable>
     </changeSet>
 
-    <changeSet id="7" author="Miłosz08">
+    <changeSet id="7" author="Milosz08">
         <createTable tableName="RENEW_CREDENTIALS_OTA_TOKEN">
             <column name="ID" type="bigint" autoIncrement="true">
                 <constraints primaryKey="true" nullable="false"/>
