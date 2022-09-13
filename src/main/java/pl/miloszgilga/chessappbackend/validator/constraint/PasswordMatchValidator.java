@@ -22,15 +22,15 @@ import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 
 import pl.miloszgilga.chessappbackend.exception.custom.PasswordException;
-import pl.miloszgilga.chessappbackend.network.auth_local.dto.RegisterViaLocalRequestDto;
+import pl.miloszgilga.chessappbackend.network.auth_local.dto.SignupViaLocalRequestDto;
 import pl.miloszgilga.chessappbackend.validator.annotation.PasswordMatch;
 
 //----------------------------------------------------------------------------------------------------------------------
 
-public class PasswordMatchValidator implements ConstraintValidator<PasswordMatch, RegisterViaLocalRequestDto> {
+public class PasswordMatchValidator implements ConstraintValidator<PasswordMatch, SignupViaLocalRequestDto> {
 
     @Override
-    public boolean isValid(final RegisterViaLocalRequestDto req, final ConstraintValidatorContext context) {
+    public boolean isValid(final SignupViaLocalRequestDto req, final ConstraintValidatorContext context) {
         if (!req.getPassword().equals(req.getPasswordRepeat())) {
             throw new PasswordException
                     .PasswordAndRepeatPassowordNotTheSameException("Password and repeated password should be the same.");

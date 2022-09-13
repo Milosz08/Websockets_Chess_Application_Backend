@@ -30,5 +30,5 @@ public enum UserGenderSpecific {
     FEMALE("female"),
     OTHER("other");
 
-    private final String sex;
+    private final String gender;
 }

@@ -35,7 +35,7 @@ import static pl.miloszgilga.chessappbackend.validator.RegexPattern.*;
 @Data
 @PasswordMatch
 @SecondEmailNotRepeat
-public class RegisterViaLocalRequestDto {
+public class SignupViaLocalRequestDto {
 
     @NotBlank(message = "You should provide nickname.")
     @Pattern(regexp = NICKNAME_PATTERN, message = "Illegal characters in nickname form field.")

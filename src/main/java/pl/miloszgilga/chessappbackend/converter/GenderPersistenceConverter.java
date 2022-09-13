@@ -28,19 +28,19 @@ import pl.miloszgilga.chessappbackend.utils.UserGenderSpecific;
 //----------------------------------------------------------------------------------------------------------------------
 
 @Converter(autoApply = true)
-public class SexPersistenceConverter implements AttributeConverter<UserGenderSpecific, String> {
+public class GenderPersistenceConverter implements AttributeConverter<UserGenderSpecific, String> {
 
     @Override
     public String convertToDatabaseColumn(UserGenderSpecific attribute) {
         if (attribute == null) return null;
-        return attribute.getSex();
+        return attribute.getGender();
     }
 
     @Override
     public UserGenderSpecific convertToEntityAttribute(String sexValue) {
         if (sexValue == null) return null;
         return Stream.of(UserGenderSpecific.values())
-                .filter(s -> s.getSex().equals(sexValue))
+                .filter(s -> s.getGender().equals(sexValue))
                 .findFirst()
                 .orElseThrow(IllegalArgumentException::new);
     }

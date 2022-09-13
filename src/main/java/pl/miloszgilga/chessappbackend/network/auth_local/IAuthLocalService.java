@@ -20,12 +20,12 @@ package pl.miloszgilga.chessappbackend.network.auth_local;
 
 import pl.miloszgilga.chessappbackend.dao.SimpleServerMessage;
 import pl.miloszgilga.chessappbackend.network.auth_local.dto.LoginViaLocalRequestDto;
-import pl.miloszgilga.chessappbackend.network.auth_local.dto.RegisterViaLocalRequestDto;
+import pl.miloszgilga.chessappbackend.network.auth_local.dto.SignupViaLocalRequestDto;
 import pl.miloszgilga.chessappbackend.network.auth_local.dto.SuccessedLoginViaLocalResponseDto;
 
 //----------------------------------------------------------------------------------------------------------------------
 
 interface IAuthLocalService {
     SuccessedLoginViaLocalResponseDto loginViaLocal(LoginViaLocalRequestDto req);
-    SimpleServerMessage registerViaLocal(RegisterViaLocalRequestDto req);
+    SimpleServerMessage signupViaLocal(SignupViaLocalRequestDto req);
 }

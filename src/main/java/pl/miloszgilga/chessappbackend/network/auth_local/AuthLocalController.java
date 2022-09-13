@@ -29,7 +29,7 @@ import javax.validation.Valid;
 
 import pl.miloszgilga.chessappbackend.dao.SimpleServerMessage;
 import pl.miloszgilga.chessappbackend.network.auth_local.dto.LoginViaLocalRequestDto;
-import pl.miloszgilga.chessappbackend.network.auth_local.dto.RegisterViaLocalRequestDto;
+import pl.miloszgilga.chessappbackend.network.auth_local.dto.SignupViaLocalRequestDto;
 import pl.miloszgilga.chessappbackend.network.auth_local.dto.SuccessedLoginViaLocalResponseDto;
 
 
@@ -53,7 +53,7 @@ class AuthLocalController {
     }
 
     @PostMapping(REGISTER_VIA_LOCAL)
-    ResponseEntity<SimpleServerMessage> registerViaLocal(@Valid @RequestBody RegisterViaLocalRequestDto req) {
-        return new ResponseEntity<>(service.registerViaLocal(req), HttpStatus.CREATED);
+    ResponseEntity<SimpleServerMessage> signupViaLocal(@Valid @RequestBody SignupViaLocalRequestDto req) {
+        return new ResponseEntity<>(service.signupViaLocal(req), HttpStatus.CREATED);
     }
 }
