@@ -40,8 +40,8 @@ public class LocalUserModel extends AuditableEntity implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @Column(name = "NICKNAME")              private String nickname;
-    @Column(name = "NAME")                  private String name;
-    @Column(name = "SURNAME")               private String surname;
+    @Column(name = "FIRST_NAME")            private String firstName;
+    @Column(name = "LAST_NAME")             private String lastName;
     @Column(name = "EMAIL_ADDRESS")         private String emailAddress;
     @Column(name = "SECOND_EMAIL_ADDRESS")  private String secondEmailAddress;
     @Column(name = "PASSWORD")              private String password;
@@ -62,13 +62,13 @@ public class LocalUserModel extends AuditableEntity implements Serializable {
     private Set<LocalUserRoleModel> roles;
 
     LocalUserModel(
-            String nickname, String name, String surname, String emailAddress, String secondEmailAddress,
+            String nickname, String firstName, String lastName, String emailAddress, String secondEmailAddress,
             String password, Date birthDate, String phoneNumber, UserGenderSpecific gender, boolean hasPhoto,
             CredentialsSupplier credentialsSupplier, boolean hasNewsletterAccept
     ) {
         this.nickname = nickname;
-        this.name = name;
-        this.surname = surname;
+        this.firstName = firstName;
+        this.lastName = lastName;
         this.emailAddress = emailAddress;
         this.secondEmailAddress = secondEmailAddress;
         this.password = password;
@@ -88,20 +88,20 @@ public class LocalUserModel extends AuditableEntity implements Serializable {
         this.nickname = nickname;
     }
 
-    String getName() {
-        return name;
+    String getFirstName() {
+        return firstName;
     }
 
-    void setName(String name) {
-        this.name = name;
+    void setFirstName(String name) {
+        this.firstName = name;
     }
 
-    String getSurname() {
-        return surname;
+    String getLastName() {
+        return lastName;
     }
 
-    void setSurname(String surname) {
-        this.surname = surname;
+    void setLastName(String surname) {
+        this.lastName = surname;
     }
 
     String getEmailAddress() {
@@ -204,8 +204,8 @@ public class LocalUserModel extends AuditableEntity implements Serializable {
     public String toString() {
         return "LocalUserModel{" +
                 "nickname='" + nickname + '\'' +
-                ", name='" + name + '\'' +
-                ", surname='" + surname + '\'' +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
                 ", emailAddress='" + emailAddress + '\'' +
                 ", secondEmailAddress='" + secondEmailAddress + '\'' +
                 ", password='" + password + '\'' +

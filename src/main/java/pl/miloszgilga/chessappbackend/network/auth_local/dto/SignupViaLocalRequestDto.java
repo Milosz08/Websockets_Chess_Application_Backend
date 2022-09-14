@@ -41,13 +41,13 @@ public class SignupViaLocalRequestDto {
     @Pattern(regexp = NICKNAME_PATTERN, message = "Illegal characters in nickname form field.")
     private String nickname;
 
-    @NotBlank(message = "You should provide name.")
-    @Pattern(regexp = NAME_SURNAME_PATTERN, message = "Illegal characters in name form field.")
-    private String name;
+    @NotBlank(message = "You should provide first name.")
+    @Pattern(regexp = NAME_SURNAME_PATTERN, message = "Illegal characters in first name form field.")
+    private String firstName;
 
-    @NotBlank(message = "You should provide surname.")
-    @Pattern(regexp = NAME_SURNAME_PATTERN, message = "Illegal characters in surname form field.")
-    private String surname;
+    @NotBlank(message = "You should provide last name.")
+    @Pattern(regexp = NAME_SURNAME_PATTERN, message = "Illegal characters in last name form field.")
+    private String lastName;
 
     @NotBlank(message = "You should provide email address.")
     @Email(message = "Passed email address is not valid.")
