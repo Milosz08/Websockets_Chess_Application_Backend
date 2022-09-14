@@ -23,8 +23,8 @@ package pl.miloszgilga.chessappbackend.validator;
 public class RegexPattern {
     public static final String NAME_SURNAME_PATTERN = "^[a-zA-Z]{2,30}";
     public static final String OTA_TOKEN_PATTERN = "^[a-zA-Z\\d]{10}";
-    public static final String NICKNAME_PATTERN = "^[a-zA-Z\\d]{5,30}";
+    public static final String NICKNAME_PATTERN = "^[a-zA-Z\\d]{5,20}";
     public static final String BIRTH_DATE_PATTERN = "^(0[1-9]|[12][0-9]|3[01])/(0[1-9]|1[0-2])/\\d{4}$";
-    public static final String PASSWORD_PATTERN = "^(?=.*\\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#&()–[{}]:;',?/*~$^+=<>]).{10,30}$";
+    public static final String PASSWORD_PATTERN = "^[a-zA-Z\\d!@#$%&*]{8,30}$";
     public static final String PHONE_NUMBER_PATTERN = "^(\\+\\d{1,3}( )?)?((\\(\\d{1,3}\\))|\\d{1,3})[- .]?\\d{3,4}[- .]?\\d{3,4}$";
 }
