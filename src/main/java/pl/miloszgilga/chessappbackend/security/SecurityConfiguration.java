@@ -50,6 +50,7 @@ public class SecurityConfiguration {
         http.csrf().disable().authorizeRequests()
                 .antMatchers(NEWSLETTER_EMAIL_ENDPOINT + "/**").permitAll()
                 .antMatchers(AUTH_LOCAL_ENDPOINT + "/**").permitAll()
+                .antMatchers(EXPOSE_STATIC_DATA_ENDPOINT + "/**").permitAll()
                 .anyRequest().authenticated();
 
         return http.build();

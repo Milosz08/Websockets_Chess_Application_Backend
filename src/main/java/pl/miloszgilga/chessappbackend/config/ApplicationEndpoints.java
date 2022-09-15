@@ -37,6 +37,10 @@ public class ApplicationEndpoints {
     public static final String REGISTER_VIA_LOCAL = "/register-via-local";
 
     public static final String RENEW_CREDETIALS_LOCAL = BASIC_ENDPOINT + "renew-credentials";
-    public static final String ATTEMPT_TO_CHANGE_PASSWORD = RENEW_CREDETIALS_LOCAL + "/attempt-to-change-password";
-    public static final String CHANGE_PASSWORD_VIA_OTA = RENEW_CREDETIALS_LOCAL + "/change-password-via-ota";
+    public static final String ATTEMPT_TO_CHANGE_PASSWORD = "/attempt-to-change-password";
+    public static final String CHANGE_PASSWORD_VIA_OTA = "/change-password-via-ota";
+
+    public static final String EXPOSE_STATIC_DATA_ENDPOINT = BASIC_ENDPOINT + "static-data";
+    public static final String REGISTER_CALENDAR_DATA = "/register-calendar-data";
+    public static final String REGISTER_GENDER_DATA = "/register-gender-data";
 }

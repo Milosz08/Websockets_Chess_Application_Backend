@@ -21,6 +21,7 @@ package pl.miloszgilga.chessappbackend.utils;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 
+import java.time.Year;
 import java.util.Date;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -41,6 +42,10 @@ public class TimeHelper {
 
     public Date addDaysToCurrentDate(int days) {
         return new Date(new Date().getTime() + ((long) days * 24 * 60 * 60 * 1000));
+    }
+
+    public int currentYearMinusAcceptableAge() {
+        return Year.now().getValue() - 10;
     }
 
     public Date convertStringDateToDateObject(String date) {
