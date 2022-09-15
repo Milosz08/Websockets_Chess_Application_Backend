@@ -16,17 +16,17 @@
  * COPIES OR SUBSTANTIAL PORTIONS OF THE SOFTWARE.
  */
 
-package pl.miloszgilga.chessappbackend.dao;
+package pl.miloszgilga.chessappbackend.dto;
 
 import lombok.Getter;
 
 //----------------------------------------------------------------------------------------------------------------------
 
 @Getter
-public class SimpleServerMessage {
+public class SimpleServerMessageDto {
     private final String responseMessage;
 
-    public SimpleServerMessage(String responseMessage) {
+    public SimpleServerMessageDto(String responseMessage) {
         this.responseMessage = responseMessage;
     }
 }

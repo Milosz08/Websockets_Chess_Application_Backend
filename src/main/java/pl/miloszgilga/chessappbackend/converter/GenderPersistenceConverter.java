@@ -37,10 +37,10 @@ public class GenderPersistenceConverter implements AttributeConverter<UserGender
     }
 
     @Override
-    public UserGenderSpecific convertToEntityAttribute(String sexValue) {
-        if (sexValue == null) return null;
+    public UserGenderSpecific convertToEntityAttribute(String genderValue) {
+        if (genderValue == null) return null;
         return Stream.of(UserGenderSpecific.values())
-                .filter(s -> s.getGender().equals(sexValue))
+                .filter(g -> g.getGender().equals(genderValue))
                 .findFirst()
                 .orElseThrow(IllegalArgumentException::new);
     }

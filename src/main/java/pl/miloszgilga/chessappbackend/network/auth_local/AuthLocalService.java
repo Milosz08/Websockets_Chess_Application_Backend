@@ -20,7 +20,7 @@ package pl.miloszgilga.chessappbackend.network.auth_local;
 
 import org.springframework.stereotype.Service;
 
-import pl.miloszgilga.chessappbackend.dao.SimpleServerMessage;
+import pl.miloszgilga.chessappbackend.dto.SimpleServerMessageDto;
 import pl.miloszgilga.chessappbackend.network.auth_local.dto.LoginViaLocalRequestDto;
 import pl.miloszgilga.chessappbackend.network.auth_local.dto.SignupViaLocalRequestDto;
 import pl.miloszgilga.chessappbackend.network.auth_local.dto.SuccessedLoginViaLocalResponseDto;
@@ -36,7 +36,7 @@ class AuthLocalService implements IAuthLocalService {
     }
 
     @Override
-    public SimpleServerMessage signupViaLocal(SignupViaLocalRequestDto req) {
+    public SimpleServerMessageDto signupViaLocal(SignupViaLocalRequestDto req) {
         return null;
     }
 }

@@ -30,7 +30,7 @@ import javax.transaction.Transactional;
 
 import pl.miloszgilga.chessappbackend.token.JsonWebToken;
 import pl.miloszgilga.chessappbackend.mail.MailOutService;
-import pl.miloszgilga.chessappbackend.dao.SimpleServerMessage;
+import pl.miloszgilga.chessappbackend.dto.SimpleServerMessageDto;
 import pl.miloszgilga.chessappbackend.utils.StringManipulator;
 import pl.miloszgilga.chessappbackend.exception.custom.EmailException.*;
 
@@ -70,7 +70,7 @@ class NewsletterEmailService implements INewsletterEmailService {
 
     @Override
     @Transactional
-    public SimpleServerMessage subscribeNewsletter(final EmailNewsletterReqDto req) {
+    public SimpleServerMessageDto subscribeNewsletter(final EmailNewsletterReqDto req) {
         final String userName = manipulator.capitalised(req.getUserName());
         final String emailAddress = req.getEmailAddress();
         if (repository.findNewsletterModelsByEmail(emailAddress).isPresent()) {
@@ -80,12 +80,12 @@ class NewsletterEmailService implements INewsletterEmailService {
         }
         final NewsletterEmailModel saved = repository.save(new NewsletterEmailModel(userName, emailAddress));
         LOGGER.info("Added to newsletter: {}", saved);
-        return new SimpleServerMessage(String.format("Email '%s' was succesfully added to newsletter.", emailAddress));
+        return new SimpleServerMessageDto(String.format("Email '%s' was succesfully added to newsletter.", emailAddress));
     }
 
     @Override
     @Transactional
-    public SimpleServerMessage attemptToUnsubscribeNewsletter(final AttemptToUnsubscribeReqDto req) {
+    public SimpleServerMessageDto attemptToUnsubscribeNewsletter(final AttemptToUnsubscribeReqDto req) {
         final NewsletterEmailModel model = checkIfRemovingEmailExist(req.getEmailAddress());
         final String email = model.getUserEmail();
 
@@ -93,25 +93,25 @@ class NewsletterEmailService implements INewsletterEmailService {
         final String bearerToken = jsonWebToken.createUnsubscribeNewsletterToken(email, otaToken);
         mailService.unsubscribeNewsletter(model.getId(), model.getUserName(), email, bearerToken, otaToken);
 
-        return new SimpleServerMessage(String.format("Message has been send to the email '%s'.", email));
+        return new SimpleServerMessageDto(String.format("Message has been send to the email '%s'.", email));
     }
 
     @Override
     @Transactional
-    public SimpleServerMessage unsubscribeNewsletterViaOta(final UnsubscribeNewsletterViaOtaReqDto token) {
+    public SimpleServerMessageDto unsubscribeNewsletterViaOta(final UnsubscribeNewsletterViaOtaReqDto token) {
         final String emailAddress = token.getEmailAddress();
         final NewsletterEmailModel model = checkIfRemovingEmailExist(emailAddress);
         unsubscribeService.validateOtaToken(token.getToken(), emailAddress);
 
         repository.delete(model);
         LOGGER.info("Email address {} was successfully removed from newsletter via OTA form", emailAddress);
-        return new SimpleServerMessage(String.format("The newsletter subscription service from the email " +
+        return new SimpleServerMessageDto(String.format("The newsletter subscription service from the email " +
                         "address '%s' has been successfully deleted.", emailAddress));
     }
 
     @Override
     @Transactional
-    public SimpleServerMessage unsubscribeNewsletterViaJwt(final UnsubscribeNewsletterViaJwtReqDto token) {
+    public SimpleServerMessageDto unsubscribeNewsletterViaJwt(final UnsubscribeNewsletterViaJwtReqDto token) {
         final DecodedJWT jwtDecoded = jsonWebToken.verifyJsonWebToken(token.getToken());
 
         final String emailAddress = jwtDecoded.getClaim(EMAIL.getClaimName()).asString();
@@ -125,7 +125,7 @@ class NewsletterEmailService implements INewsletterEmailService {
 
         repository.delete(model);
         LOGGER.info("Email address {} was successfully removed from newsletter via email message", emailAddress);
-        return new SimpleServerMessage(String.format("The newsletter subscription service from the email " +
+        return new SimpleServerMessageDto(String.format("The newsletter subscription service from the email " +
                 "address '%s' has been successfully deleted. You can return to the start page using the button below.",
                 emailAddress));
     }
