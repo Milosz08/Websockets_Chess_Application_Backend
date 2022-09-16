@@ -27,7 +27,8 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor
 public enum StaticDataLoaderFileName {
     CALENDAR_STATIC_DATA("calendar-static-data.json"),
-    GENDER_STATIC_DATA("gender-static-data.json");
+    GENDER_STATIC_DATA("gender-static-data.json"),
+    COUNTRY_STATIC_DATA("country-static-data.json");
 
     private final String fileName;
 }

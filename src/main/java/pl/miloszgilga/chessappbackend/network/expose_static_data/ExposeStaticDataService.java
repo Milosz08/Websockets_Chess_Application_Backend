@@ -21,18 +21,22 @@ package pl.miloszgilga.chessappbackend.network.expose_static_data;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Locale;
 import java.util.stream.IntStream;
 import java.util.stream.Collectors;
 
 import pl.miloszgilga.chessappbackend.utils.TimeHelper;
 import pl.miloszgilga.chessappbackend.dto.SimpleTupleDto;
-import pl.miloszgilga.chessappbackend.loader.gender_data.GenderPropertiesLoader;
 import pl.miloszgilga.chessappbackend.loader.gender_data.GenderPropertiesModel;
+import pl.miloszgilga.chessappbackend.loader.gender_data.GenderPropertiesLoader;
+import pl.miloszgilga.chessappbackend.loader.country_data.CountryPropertiesModel;
+import pl.miloszgilga.chessappbackend.loader.country_data.CountryPropertiesLoader;
 import pl.miloszgilga.chessappbackend.loader.calendar_data.CalendarPropertiesModel;
 import pl.miloszgilga.chessappbackend.loader.calendar_data.CalendarPropertiesLoader;
 
-import pl.miloszgilga.chessappbackend.network.expose_static_data.dto.RegisterGenderDataResDto;
-import pl.miloszgilga.chessappbackend.network.expose_static_data.dto.RegisterCalendarDataResDto;
+import pl.miloszgilga.chessappbackend.network.expose_static_data.dto.SignupGenderDataResDto;
+import pl.miloszgilga.chessappbackend.network.expose_static_data.dto.SignupCountryDataResDto;
+import pl.miloszgilga.chessappbackend.network.expose_static_data.dto.SignupCalendarDataResDto;
 
 //----------------------------------------------------------------------------------------------------------------------
 
@@ -42,8 +46,12 @@ class ExposeStaticDataService implements IExposeStaticDataService {
     private final TimeHelper timeHelper;
     private final GenderPropertiesLoader genderLoader;
     private final CalendarPropertiesLoader calendarLoader;
+    private final CountryPropertiesLoader countryLoader;
 
-    ExposeStaticDataService(TimeHelper timeHelper, GenderPropertiesLoader genderLoader, CalendarPropertiesLoader loader) {
+    ExposeStaticDataService(
+            TimeHelper timeHelper, GenderPropertiesLoader genderLoader, CalendarPropertiesLoader calendarLoader,
+            CountryPropertiesLoader countryLoader
+    ) {
         this.timeHelper = timeHelper;
         this.genderLoader = genderLoader;
         this.calendarLoader = calendarLoader;
@@ -64,6 +72,16 @@ class ExposeStaticDataService implements IExposeStaticDataService {
     public SignupGenderDataResDto getSignupGenderData() {
         final GenderPropertiesModel loadedData = genderLoader.getLoadedData();
         return new SignupGenderDataResDto(loadedData.getGenders());
+    }
+
+    @Override
+    public SignupCountryDataResDto getSignupCountryData() {
+        final CountryPropertiesModel loadedData = countryLoader.getLoadedData();
+        final List<SimpleTupleDto<String>> allCountryNames = loadedData.getCountries().stream()
+                .map(x -> new SimpleTupleDto<>(x.toLowerCase(Locale.ROOT), x))
+                .sorted()
+                .collect(Collectors.toList());
+        return new SignupCountryDataResDto(allCountryNames);
     }
 
     private List<SimpleTupleDto<Number>> generateData(int start, int end, ICalendarLambdaExpression expression) {

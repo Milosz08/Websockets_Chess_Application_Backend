@@ -1,8 +1,8 @@
 /*
  * Copyright (c) 2022 by MILOSZ GILGA <https://miloszgilga.pl>
  *
- * File name: SimpleIdValueTuple.java
- * Last modified: 15/09/2022, 17:44
+ * File name: RegisterCountryDataResDto.java
+ * Last modified: 16/09/2022, 15:29
  * Project name: chess-app-backend
  *
  * Licensed under the MIT license; you may not use this file except in compliance with the License.
@@ -16,23 +16,19 @@
  * COPIES OR SUBSTANTIAL PORTIONS OF THE SOFTWARE.
  */
 
-package pl.miloszgilga.chessappbackend.dto;
+package pl.miloszgilga.chessappbackend.network.expose_static_data.dto;
 
 import lombok.Data;
-import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;
+
+import java.util.List;
+
+import pl.miloszgilga.chessappbackend.dto.SimpleTupleDto;
 
 //----------------------------------------------------------------------------------------------------------------------
 
 @Data
-@NoArgsConstructor
 @AllArgsConstructor
-public class SimpleTupleDto<T> implements Comparable<SimpleTupleDto<T>> {
-    private T id;
-    private String value;
-
-    @Override
-    public int compareTo(SimpleTupleDto o) {
-        return this.value.compareTo(o.value);
-    }
+public class SignupCountryDataResDto {
+    private List<SimpleTupleDto<String>> countries;
 }
