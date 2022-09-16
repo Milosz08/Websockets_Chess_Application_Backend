@@ -1,8 +1,8 @@
 /*
  * Copyright (c) 2022 by MILOSZ GILGA <https://miloszgilga.pl>
  *
- * File name: RegexPattern.java
- * Last modified: 11/09/2022, 01:13
+ * File name: ValidateCountry.java
+ * Last modified: 16/09/2022, 16:19
  * Project name: chess-app-backend
  *
  * Licensed under the MIT license; you may not use this file except in compliance with the License.
@@ -16,14 +16,26 @@
  * COPIES OR SUBSTANTIAL PORTIONS OF THE SOFTWARE.
  */
 
-package pl.miloszgilga.chessappbackend.validator;
+package pl.miloszgilga.chessappbackend.validator.annotation;
+
+import java.lang.annotation.*;
+
+import javax.validation.Payload;
+import javax.validation.Constraint;
+
+import static java.lang.annotation.ElementType.FIELD;
+import static java.lang.annotation.RetentionPolicy.RUNTIME;
+
+import pl.miloszgilga.chessappbackend.validator.constraint.CountryValidator;
 
 //----------------------------------------------------------------------------------------------------------------------
 
-public class RegexPattern {
-    public static final String NAME_SURNAME_PATTERN = "^[a-zA-Z]{2,30}";
-    public static final String OTA_TOKEN_PATTERN = "^[a-zA-Z\\d]{10}";
-    public static final String NICKNAME_PATTERN = "^[a-zA-Z\\d]{5,20}";
-    public static final String BIRTH_DATE_PATTERN = "^(0[1-9]|[12][0-9]|3[01])/(0[1-9]|1[0-2])/\\d{4}$";
-    public static final String PASSWORD_PATTERN = "^[a-zA-Z\\d!@#$%&*]{8,30}$";
+@Target({ FIELD })
+@Retention(RUNTIME)
+@Constraint(validatedBy = CountryValidator.class)
+@Documented
+public @interface ValidateCountry {
+    String message() default "Passed country name not exist or is invalid!";
+    Class<?>[] groups() default {};
+    Class<? extends Payload>[] payload() default {};
 }

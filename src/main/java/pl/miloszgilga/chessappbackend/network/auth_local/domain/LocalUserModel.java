@@ -26,8 +26,8 @@ import java.io.Serializable;
 
 import javax.persistence.*;
 
-import pl.miloszgilga.chessappbackend.utils.UserGenderSpecific;
 import pl.miloszgilga.chessappbackend.audit.AuditableEntity;
+import pl.miloszgilga.chessappbackend.utils.UserGenderSpecific;
 import pl.miloszgilga.chessappbackend.oauth.CredentialsSupplier;
 import pl.miloszgilga.chessappbackend.network.renew_credentials.domain.RenewCredentialsOtaTokenModel;
 
@@ -46,7 +46,7 @@ public class LocalUserModel extends AuditableEntity implements Serializable {
     @Column(name = "SECOND_EMAIL_ADDRESS")  private String secondEmailAddress;
     @Column(name = "PASSWORD")              private String password;
     @Column(name = "BIRTH_DATE")            private Date birthDate;
-    @Column(name = "PHONE_NUMBER")          private String phoneNumber;
+    @Column(name = "COUNTRY")               private String country;
     @Column(name = "GENDER")                private UserGenderSpecific gender;
     @Column(name = "HAS_PHOTO")             private boolean hasPhoto;
     @Column(name = "CREDENTIALS_SUPPLIER")  private CredentialsSupplier credentialsSupplier;
@@ -63,7 +63,7 @@ public class LocalUserModel extends AuditableEntity implements Serializable {
 
     LocalUserModel(
             String nickname, String firstName, String lastName, String emailAddress, String secondEmailAddress,
-            String password, Date birthDate, String phoneNumber, UserGenderSpecific gender, boolean hasPhoto,
+            String password, Date birthDate, String country, UserGenderSpecific gender, boolean hasPhoto,
             CredentialsSupplier credentialsSupplier, boolean hasNewsletterAccept
     ) {
         this.nickname = nickname;
@@ -73,7 +73,7 @@ public class LocalUserModel extends AuditableEntity implements Serializable {
         this.secondEmailAddress = secondEmailAddress;
         this.password = password;
         this.birthDate = birthDate;
-        this.phoneNumber = phoneNumber;
+        this.country = country;
         this.gender = gender;
         this.hasPhoto = hasPhoto;
         this.credentialsSupplier = credentialsSupplier;
@@ -136,12 +136,12 @@ public class LocalUserModel extends AuditableEntity implements Serializable {
         this.birthDate = birthDate;
     }
 
-    String getPhoneNumber() {
-        return phoneNumber;
+    public String getCountry() {
+        return country;
     }
 
-    void setPhoneNumber(String phoneNumber) {
-        this.phoneNumber = phoneNumber;
+    public void setCountry(String country) {
+        this.country = country;
     }
 
     UserGenderSpecific getGender() {
@@ -210,7 +210,7 @@ public class LocalUserModel extends AuditableEntity implements Serializable {
                 ", secondEmailAddress='" + secondEmailAddress + '\'' +
                 ", password='" + password + '\'' +
                 ", birthDate=" + birthDate +
-                ", phoneNumber='" + phoneNumber + '\'' +
+                ", country='" + country + '\'' +
                 ", gender=" + gender +
                 ", hasPhoto=" + hasPhoto +
                 ", credentialsSupplier=" + credentialsSupplier +

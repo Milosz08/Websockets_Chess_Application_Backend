@@ -61,9 +61,9 @@ public class SignupViaLocalRequestDto {
     @ValidateFutureTimeDate(message = "Provided birth date should be before the current date")
     private String birthDate;
 
-    @NotNull(message = "Phone number might be empty, but not null.")
-    @Pattern(regexp = PHONE_NUMBER_PATTERN, message = "Invalid phone number structure.")
-    private String phoneNumber;
+    @NotBlank(message = "You should provide country name.")
+    @ValidateCountry(message = "Passed country name not exist or is invalid.")
+    private String countryName;
 
     @NotBlank(message = "You should provide user gender data.")
     @ValidateEnum(enumClazz = UserGenderSpecific.class, message = "Available gender types: [male, female, other]")

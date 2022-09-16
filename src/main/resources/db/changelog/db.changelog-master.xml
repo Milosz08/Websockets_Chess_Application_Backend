@@ -9,5 +9,6 @@
     <include file="classpath:db/changelog/2022-09-migrations/V3__2022-09-11__create-auth-schemas.xml" relativeToChangelogFile="false"/>
     <include file="classpath:db/changelog/2022-09-migrations/V4__2022-09-12__add-username-to-newsletter-schema.xml" relativeToChangelogFile="false"/>
     <include file="classpath:db/changelog/2022-09-migrations/V5__2022-09-14__change-some-user-schema-columns-name.xml" relativeToChangelogFile="false"/>
+    <include file="classpath:db/changelog/2022-09-migrations/V6__2022-09-16__remove-user-phone-number-column.xml" relativeToChangelogFile="false"/>
 
 </databaseChangeLog>
