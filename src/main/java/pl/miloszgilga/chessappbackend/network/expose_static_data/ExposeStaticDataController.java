@@ -24,8 +24,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import pl.miloszgilga.chessappbackend.network.expose_static_data.dto.RegisterGenderDataResDto;
-import pl.miloszgilga.chessappbackend.network.expose_static_data.dto.RegisterCalendarDataResDto;
+import pl.miloszgilga.chessappbackend.network.expose_static_data.dto.SignupGenderDataResDto;
+import pl.miloszgilga.chessappbackend.network.expose_static_data.dto.SignupCountryDataResDto;
+import pl.miloszgilga.chessappbackend.network.expose_static_data.dto.SignupCalendarDataResDto;
 
 import static pl.miloszgilga.chessappbackend.config.ApplicationEndpoints.*;
 
@@ -41,13 +42,18 @@ class ExposeStaticDataController {
         this.service = service;
     }
 
-    @GetMapping(REGISTER_CALENDAR_DATA)
-    ResponseEntity<RegisterCalendarDataResDto> getRegisterCalendarData() {
-        return new ResponseEntity<>(service.getRegisterCalendarData(), HttpStatus.OK);
+    @GetMapping(SIGNUP_CALENDAR_DATA)
+    ResponseEntity<SignupCalendarDataResDto> getSignupCalendarData() {
+        return new ResponseEntity<>(service.getSignupCalendarData(), HttpStatus.OK);
     }
 
-    @GetMapping(REGISTER_GENDER_DATA)
-    ResponseEntity<RegisterGenderDataResDto> getRegisterGenderData() {
-        return new ResponseEntity<>(service.getRegisterGenderData(), HttpStatus.OK);
+    @GetMapping(SIGNUP_GENDER_DATA)
+    ResponseEntity<SignupGenderDataResDto> getSignupGenderData() {
+        return new ResponseEntity<>(service.getSignupGenderData(), HttpStatus.OK);
+    }
+
+    @GetMapping(SIGNUP_COUNTRY_DATA)
+    ResponseEntity<SignupCountryDataResDto> getSignupCountryData() {
+        return new ResponseEntity<>(service.getSignupCountryData(), HttpStatus.OK);
     }
 }

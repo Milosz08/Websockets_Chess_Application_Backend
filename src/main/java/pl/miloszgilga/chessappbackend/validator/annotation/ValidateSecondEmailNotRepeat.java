@@ -1,8 +1,8 @@
 /*
  * Copyright (c) 2022 by MILOSZ GILGA <https://miloszgilga.pl>
  *
- * File name: RegisterGenderDataResDto.java
- * Last modified: 15/09/2022, 17:37
+ * File name: SecondEmailNotRepeat.java
+ * Last modified: 11/09/2022, 19:13
  * Project name: chess-app-backend
  *
  * Licensed under the MIT license; you may not use this file except in compliance with the License.
@@ -16,19 +16,28 @@
  * COPIES OR SUBSTANTIAL PORTIONS OF THE SOFTWARE.
  */
 
-package pl.miloszgilga.chessappbackend.network.expose_static_data.dto;
+package pl.miloszgilga.chessappbackend.validator.annotation;
 
-import lombok.Data;
-import lombok.AllArgsConstructor;
+import javax.validation.Payload;
+import javax.validation.Constraint;
 
-import java.util.List;
+import java.lang.annotation.Target;
+import java.lang.annotation.Retention;
+import java.lang.annotation.Documented;
 
-import pl.miloszgilga.chessappbackend.dto.SimpleTupleDto;
+import static java.lang.annotation.ElementType.TYPE;
+import static java.lang.annotation.RetentionPolicy.RUNTIME;
+
+import pl.miloszgilga.chessappbackend.validator.constraint.SecondEmailNotRepeatValidator;
 
 //----------------------------------------------------------------------------------------------------------------------
 
-@Data
-@AllArgsConstructor
-public class RegisterGenderDataResDto {
-    private List<SimpleTupleDto<String>> genders;
+@Target({ TYPE })
+@Retention(RUNTIME)
+@Constraint(validatedBy = SecondEmailNotRepeatValidator.class)
+@Documented
+public @interface ValidateSecondEmailNotRepeat {
+    String message() default "Second email should not be the same as firstly email.";
+    Class<?>[] groups() default {};
+    Class<? extends Payload>[] payload() default {};
 }

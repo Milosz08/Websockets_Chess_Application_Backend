@@ -1,8 +1,8 @@
 /*
  * Copyright (c) 2022 by MILOSZ GILGA <https://miloszgilga.pl>
  *
- * File name: RegisterCalendarDataResDto.java
- * Last modified: 15/09/2022, 17:37
+ * File name: PasswordMatch.java
+ * Last modified: 11/09/2022, 19:03
  * Project name: chess-app-backend
  *
  * Licensed under the MIT license; you may not use this file except in compliance with the License.
@@ -16,21 +16,26 @@
  * COPIES OR SUBSTANTIAL PORTIONS OF THE SOFTWARE.
  */
 
-package pl.miloszgilga.chessappbackend.network.expose_static_data.dto;
+package pl.miloszgilga.chessappbackend.validator.annotation;
 
-import lombok.Data;
-import lombok.AllArgsConstructor;
+import java.lang.annotation.*;
 
-import java.util.List;
+import javax.validation.Payload;
+import javax.validation.Constraint;
 
-import pl.miloszgilga.chessappbackend.dto.SimpleTupleDto;
+import static java.lang.annotation.ElementType.TYPE;
+import static java.lang.annotation.RetentionPolicy.RUNTIME;
+
+import pl.miloszgilga.chessappbackend.validator.constraint.PasswordMatchValidator;
 
 //----------------------------------------------------------------------------------------------------------------------
 
-@Data
-@AllArgsConstructor
-public class RegisterCalendarDataResDto {
-    private List<SimpleTupleDto<Number>> days;
-    private List<SimpleTupleDto<Number>> months;
-    private List<SimpleTupleDto<Number>> years;
+@Target({ TYPE })
+@Retention(RUNTIME)
+@Constraint(validatedBy = PasswordMatchValidator.class)
+@Documented
+public @interface ValidatePasswordMatch {
+    String message() default "Password and repeated password should be the same.";
+    Class<?>[] groups() default {};
+    Class<? extends Payload>[] payload() default {};
 }

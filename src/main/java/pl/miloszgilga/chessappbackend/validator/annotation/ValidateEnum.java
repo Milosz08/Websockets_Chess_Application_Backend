@@ -18,8 +18,6 @@
 
 package pl.miloszgilga.chessappbackend.validator.annotation;
 
-import pl.miloszgilga.chessappbackend.validator.constraint.ValidateEnumValidator;
-
 import javax.validation.Payload;
 import javax.validation.Constraint;
 
@@ -27,6 +25,8 @@ import java.lang.annotation.*;
 
 import static java.lang.annotation.ElementType.FIELD;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
+
+import pl.miloszgilga.chessappbackend.validator.constraint.ValidateEnumValidator;
 
 //----------------------------------------------------------------------------------------------------------------------
 

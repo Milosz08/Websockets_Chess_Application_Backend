@@ -1,8 +1,8 @@
 /*
  * Copyright (c) 2022 by MILOSZ GILGA <https://miloszgilga.pl>
  *
- * File name: FutureTimeDate.java
- * Last modified: 11/09/2022, 18:58
+ * File name: RegisterGenderDataResDto.java
+ * Last modified: 15/09/2022, 17:37
  * Project name: chess-app-backend
  *
  * Licensed under the MIT license; you may not use this file except in compliance with the License.
@@ -16,26 +16,19 @@
  * COPIES OR SUBSTANTIAL PORTIONS OF THE SOFTWARE.
  */
 
-package pl.miloszgilga.chessappbackend.validator.annotation;
+package pl.miloszgilga.chessappbackend.network.expose_static_data.dto;
 
-import pl.miloszgilga.chessappbackend.validator.constraint.FutureTimeDateValidator;
+import lombok.Data;
+import lombok.AllArgsConstructor;
 
-import javax.validation.Payload;
-import javax.validation.Constraint;
+import java.util.List;
 
-import java.lang.annotation.*;
-
-import static java.lang.annotation.ElementType.FIELD;
-import static java.lang.annotation.RetentionPolicy.RUNTIME;
+import pl.miloszgilga.chessappbackend.dto.SimpleTupleDto;
 
 //----------------------------------------------------------------------------------------------------------------------
 
-@Target({ FIELD })
-@Retention(RUNTIME)
-@Constraint(validatedBy = FutureTimeDateValidator.class)
-@Documented
-public @interface FutureTimeDate {
-    String message() default "Passed date should be before the current date.";
-    Class<?>[] groups() default {};
-    Class<? extends Payload>[] payload() default {};
+@Data
+@AllArgsConstructor
+public class SignupGenderDataResDto {
+    private List<SimpleTupleDto<String>> genders;
 }

@@ -23,11 +23,11 @@ import javax.validation.ConstraintValidatorContext;
 
 import pl.miloszgilga.chessappbackend.exception.custom.PasswordException;
 import pl.miloszgilga.chessappbackend.network.auth_local.dto.SignupViaLocalRequestDto;
-import pl.miloszgilga.chessappbackend.validator.annotation.PasswordMatch;
+import pl.miloszgilga.chessappbackend.validator.annotation.ValidatePasswordMatch;
 
 //----------------------------------------------------------------------------------------------------------------------
 
-public class PasswordMatchValidator implements ConstraintValidator<PasswordMatch, SignupViaLocalRequestDto> {
+public class PasswordMatchValidator implements ConstraintValidator<ValidatePasswordMatch, SignupViaLocalRequestDto> {
 
     @Override
     public boolean isValid(final SignupViaLocalRequestDto req, final ConstraintValidatorContext context) {

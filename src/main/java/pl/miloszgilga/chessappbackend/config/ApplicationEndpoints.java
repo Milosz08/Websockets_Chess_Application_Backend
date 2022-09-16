@@ -34,13 +34,14 @@ public class ApplicationEndpoints {
 
     public static final String AUTH_LOCAL_ENDPOINT = BASIC_ENDPOINT + "auth-local";
     public static final String LOGIN_VIA_LOCAL = "/login-via-local";
-    public static final String REGISTER_VIA_LOCAL = "/register-via-local";
+    public static final String SIGNUP_VIA_LOCAL = "/signup-via-local";
 
     public static final String RENEW_CREDETIALS_LOCAL = BASIC_ENDPOINT + "renew-credentials";
     public static final String ATTEMPT_TO_CHANGE_PASSWORD = "/attempt-to-change-password";
     public static final String CHANGE_PASSWORD_VIA_OTA = "/change-password-via-ota";
 
     public static final String EXPOSE_STATIC_DATA_ENDPOINT = BASIC_ENDPOINT + "static-data";
-    public static final String REGISTER_CALENDAR_DATA = "/register-calendar-data";
-    public static final String REGISTER_GENDER_DATA = "/register-gender-data";
+    public static final String SIGNUP_CALENDAR_DATA = "/signup-calendar-data";
+    public static final String SIGNUP_GENDER_DATA = "/signup-gender-data";
+    public static final String SIGNUP_COUNTRY_DATA = "/signup-country-data";
 }

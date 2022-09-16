@@ -37,6 +37,6 @@ class AuthLocalService implements IAuthLocalService {
 
     @Override
     public SimpleServerMessageDto signupViaLocal(SignupViaLocalRequestDto req) {
-        return null;
+        return new SimpleServerMessageDto("this is a signup form test");
     }
 }

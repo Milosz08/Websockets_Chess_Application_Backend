@@ -22,19 +22,16 @@ import lombok.Data;
 
 import javax.validation.constraints.*;
 
+import pl.miloszgilga.chessappbackend.validator.annotation.*;
 import pl.miloszgilga.chessappbackend.utils.UserGenderSpecific;
-import pl.miloszgilga.chessappbackend.validator.annotation.ValidateEnum;
-import pl.miloszgilga.chessappbackend.validator.annotation.PasswordMatch;
-import pl.miloszgilga.chessappbackend.validator.annotation.FutureTimeDate;
-import pl.miloszgilga.chessappbackend.validator.annotation.SecondEmailNotRepeat;
 
 import static pl.miloszgilga.chessappbackend.validator.RegexPattern.*;
 
 //----------------------------------------------------------------------------------------------------------------------
 
 @Data
-@PasswordMatch
-@SecondEmailNotRepeat
+@ValidatePasswordMatch
+@ValidateSecondEmailNotRepeat
 public class SignupViaLocalRequestDto {
 
     @NotBlank(message = "You should provide nickname.")
@@ -61,7 +58,7 @@ public class SignupViaLocalRequestDto {
 
     @NotBlank(message = "You should provide birth date.")
     @Pattern(regexp = BIRTH_DATE_PATTERN, message = "Invalid format. Date format should be: DD/MM/YYYY")
-    @FutureTimeDate(message = "Provided birth date should be before the current date")
+    @ValidateFutureTimeDate(message = "Provided birth date should be before the current date")
     private String birthDate;
 
     @NotNull(message = "Phone number might be empty, but not null.")

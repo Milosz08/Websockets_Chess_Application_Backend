@@ -18,12 +18,14 @@
 
 package pl.miloszgilga.chessappbackend.network.expose_static_data;
 
-import pl.miloszgilga.chessappbackend.network.expose_static_data.dto.RegisterGenderDataResDto;
-import pl.miloszgilga.chessappbackend.network.expose_static_data.dto.RegisterCalendarDataResDto;
+import pl.miloszgilga.chessappbackend.network.expose_static_data.dto.SignupGenderDataResDto;
+import pl.miloszgilga.chessappbackend.network.expose_static_data.dto.SignupCountryDataResDto;
+import pl.miloszgilga.chessappbackend.network.expose_static_data.dto.SignupCalendarDataResDto;
 
 //----------------------------------------------------------------------------------------------------------------------
 
 interface IExposeStaticDataService {
-    RegisterCalendarDataResDto getRegisterCalendarData();
-    RegisterGenderDataResDto getRegisterGenderData();
+    SignupCalendarDataResDto getSignupCalendarData();
+    SignupGenderDataResDto getSignupGenderData();
+    SignupCountryDataResDto getSignupCountryData();
 }

@@ -23,11 +23,11 @@ import javax.validation.ConstraintValidatorContext;
 
 import pl.miloszgilga.chessappbackend.exception.custom.EmailException;
 import pl.miloszgilga.chessappbackend.network.auth_local.dto.SignupViaLocalRequestDto;
-import pl.miloszgilga.chessappbackend.validator.annotation.SecondEmailNotRepeat;
+import pl.miloszgilga.chessappbackend.validator.annotation.ValidateSecondEmailNotRepeat;
 
 //----------------------------------------------------------------------------------------------------------------------
 
-public class SecondEmailNotRepeatValidator implements ConstraintValidator<SecondEmailNotRepeat, SignupViaLocalRequestDto> {
+public class SecondEmailNotRepeatValidator implements ConstraintValidator<ValidateSecondEmailNotRepeat, SignupViaLocalRequestDto> {
 
     @Override
     public boolean isValid(final SignupViaLocalRequestDto req, final ConstraintValidatorContext context) {

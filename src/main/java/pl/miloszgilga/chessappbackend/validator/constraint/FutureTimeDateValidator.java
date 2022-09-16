@@ -24,11 +24,11 @@ import javax.validation.ConstraintValidatorContext;
 import java.util.Date;
 
 import pl.miloszgilga.chessappbackend.utils.TimeHelper;
-import pl.miloszgilga.chessappbackend.validator.annotation.FutureTimeDate;
+import pl.miloszgilga.chessappbackend.validator.annotation.ValidateFutureTimeDate;
 
 //----------------------------------------------------------------------------------------------------------------------
 
-public class FutureTimeDateValidator implements ConstraintValidator<FutureTimeDate, String> {
+public class FutureTimeDateValidator implements ConstraintValidator<ValidateFutureTimeDate, String> {
 
     private final TimeHelper timeHelper;
 

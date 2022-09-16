@@ -46,28 +46,29 @@ class ExposeStaticDataService implements IExposeStaticDataService {
     ExposeStaticDataService(TimeHelper timeHelper, GenderPropertiesLoader genderLoader, CalendarPropertiesLoader loader) {
         this.timeHelper = timeHelper;
         this.genderLoader = genderLoader;
-        this.calendarLoader = loader;
+        this.calendarLoader = calendarLoader;
+        this.countryLoader = countryLoader;
     }
 
     @Override
-    public RegisterCalendarDataResDto getRegisterCalendarData() {
+    public SignupCalendarDataResDto getSignupCalendarData() {
         final CalendarPropertiesModel loadedData = calendarLoader.getLoadedData();
-        return new RegisterCalendarDataResDto(
-                generateData(0, 31, d -> String.format("%01d", d + 1)),
-                generateData(0, loadedData.getMonthsShort().size(), m -> loadedData.getMonthsShort().get(m)),
+        return new SignupCalendarDataResDto(
+                generateData(1, 32, d -> String.format("%01d", d)),
+                generateData(1, loadedData.getMonthsShort().size() + 1, m -> loadedData.getMonthsShort().get(m - 1)),
                 generateData(1900, timeHelper.currentYearMinusAcceptableAge(), Integer::toString)
         );
     }
 
     @Override
-    public RegisterGenderDataResDto getRegisterGenderData() {
+    public SignupGenderDataResDto getSignupGenderData() {
         final GenderPropertiesModel loadedData = genderLoader.getLoadedData();
-        return new RegisterGenderDataResDto(loadedData.getGenders());
+        return new SignupGenderDataResDto(loadedData.getGenders());
     }
 
     private List<SimpleTupleDto<Number>> generateData(int start, int end, ICalendarLambdaExpression expression) {
         return IntStream.range(start, end)
-                .mapToObj(x -> new SimpleTupleDto<Number>(x + 1, expression.filledData(x)))
+                .mapToObj(x -> new SimpleTupleDto<Number>(x, expression.filledData(x)))
                 .collect(Collectors.toList());
     }
 }

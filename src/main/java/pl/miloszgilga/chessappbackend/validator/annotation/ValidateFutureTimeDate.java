@@ -1,8 +1,8 @@
 /*
  * Copyright (c) 2022 by MILOSZ GILGA <https://miloszgilga.pl>
  *
- * File name: PasswordMatch.java
- * Last modified: 11/09/2022, 19:03
+ * File name: FutureTimeDate.java
+ * Last modified: 11/09/2022, 18:58
  * Project name: chess-app-backend
  *
  * Licensed under the MIT license; you may not use this file except in compliance with the License.
@@ -18,24 +18,24 @@
 
 package pl.miloszgilga.chessappbackend.validator.annotation;
 
-import pl.miloszgilga.chessappbackend.validator.constraint.PasswordMatchValidator;
-
-import java.lang.annotation.*;
-
 import javax.validation.Payload;
 import javax.validation.Constraint;
 
-import static java.lang.annotation.ElementType.TYPE;
+import java.lang.annotation.*;
+
+import static java.lang.annotation.ElementType.FIELD;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
+
+import pl.miloszgilga.chessappbackend.validator.constraint.FutureTimeDateValidator;
 
 //----------------------------------------------------------------------------------------------------------------------
 
-@Target({ TYPE })
+@Target({ FIELD })
 @Retention(RUNTIME)
-@Constraint(validatedBy = PasswordMatchValidator.class)
+@Constraint(validatedBy = FutureTimeDateValidator.class)
 @Documented
-public @interface PasswordMatch {
-    String message() default "Password and repeated password should be the same.";
+public @interface ValidateFutureTimeDate {
+    String message() default "Passed date should be before the current date.";
     Class<?>[] groups() default {};
     Class<? extends Payload>[] payload() default {};
 }
