@@ -21,13 +21,11 @@ package pl.miloszgilga.chessappbackend.network.auth_local.domain;
 import lombok.NoArgsConstructor;
 
 import java.util.Set;
-import java.util.Date;
 import java.io.Serializable;
 
 import javax.persistence.*;
 
 import pl.miloszgilga.chessappbackend.audit.AuditableEntity;
-import pl.miloszgilga.chessappbackend.utils.UserGenderSpecific;
 import pl.miloszgilga.chessappbackend.oauth.CredentialsSupplier;
 import pl.miloszgilga.chessappbackend.network.renew_credentials.domain.RenewCredentialsOtaTokenModel;
 
@@ -43,17 +41,13 @@ public class LocalUserModel extends AuditableEntity implements Serializable {
     @Column(name = "FIRST_NAME")            private String firstName;
     @Column(name = "LAST_NAME")             private String lastName;
     @Column(name = "EMAIL_ADDRESS")         private String emailAddress;
-    @Column(name = "SECOND_EMAIL_ADDRESS")  private String secondEmailAddress;
     @Column(name = "PASSWORD")              private String password;
-    @Column(name = "BIRTH_DATE")            private Date birthDate;
-    @Column(name = "COUNTRY")               private String country;
-    @Column(name = "GENDER")                private UserGenderSpecific gender;
-    @Column(name = "HAS_PHOTO")             private boolean hasPhoto;
     @Column(name = "CREDENTIALS_SUPPLIER")  private CredentialsSupplier credentialsSupplier;
-    @Column(name = "HAS_NEWSLETTER_ACCEPT") private boolean hasNewsletterAccept;
+    @Column(name = "IS_ACTIVATED")          private boolean isActivated;
 
     @OneToOne(mappedBy = "localUser")       private RefreshTokenModel refreshToken;
     @OneToOne(mappedBy = "localUser")       private RenewCredentialsOtaTokenModel renewCredentials;
+    @OneToOne(mappedBy = "localUser")       private LocalUserDetailsModel localUserDetails;
 
     @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinTable(name = "LOCAL_USER_ROLE_BINDING",
@@ -62,22 +56,16 @@ public class LocalUserModel extends AuditableEntity implements Serializable {
     private Set<LocalUserRoleModel> roles;
 
     LocalUserModel(
-            String nickname, String firstName, String lastName, String emailAddress, String secondEmailAddress,
-            String password, Date birthDate, String country, UserGenderSpecific gender, boolean hasPhoto,
-            CredentialsSupplier credentialsSupplier, boolean hasNewsletterAccept
+            String nickname, String firstName, String lastName, String emailAddress, String password,
+            CredentialsSupplier credentialsSupplier, boolean isActivated
     ) {
         this.nickname = nickname;
         this.firstName = firstName;
         this.lastName = lastName;
         this.emailAddress = emailAddress;
-        this.secondEmailAddress = secondEmailAddress;
         this.password = password;
-        this.birthDate = birthDate;
-        this.country = country;
-        this.gender = gender;
-        this.hasPhoto = hasPhoto;
         this.credentialsSupplier = credentialsSupplier;
-        this.hasNewsletterAccept = hasNewsletterAccept;
+        this.isActivated = isActivated;
     }
 
     String getNickname() {
@@ -92,16 +80,16 @@ public class LocalUserModel extends AuditableEntity implements Serializable {
         return firstName;
     }
 
-    void setFirstName(String name) {
-        this.firstName = name;
+    void setFirstName(String firstName) {
+        this.firstName = firstName;
     }
 
     String getLastName() {
         return lastName;
     }
 
-    void setLastName(String surname) {
-        this.lastName = surname;
+    void setLastName(String lastName) {
+        this.lastName = lastName;
     }
 
     String getEmailAddress() {
@@ -112,52 +100,12 @@ public class LocalUserModel extends AuditableEntity implements Serializable {
         this.emailAddress = emailAddress;
     }
 
-    String getSecondEmailAddress() {
-        return secondEmailAddress;
-    }
-
-    void setSecondEmailAddress(String secondEmailAddress) {
-        this.secondEmailAddress = secondEmailAddress;
-    }
-
     String getPassword() {
         return password;
     }
 
     void setPassword(String password) {
         this.password = password;
-    }
-
-    Date getBirthDate() {
-        return birthDate;
-    }
-
-    void setBirthDate(Date birthDate) {
-        this.birthDate = birthDate;
-    }
-
-    public String getCountry() {
-        return country;
-    }
-
-    public void setCountry(String country) {
-        this.country = country;
-    }
-
-    UserGenderSpecific getGender() {
-        return gender;
-    }
-
-    void setGender(UserGenderSpecific sex) {
-        this.gender = sex;
-    }
-
-    boolean isHasPhoto() {
-        return hasPhoto;
-    }
-
-    void setHasPhoto(boolean hasPhoto) {
-        this.hasPhoto = hasPhoto;
     }
 
     CredentialsSupplier getCredentialsSupplier() {
@@ -168,20 +116,20 @@ public class LocalUserModel extends AuditableEntity implements Serializable {
         this.credentialsSupplier = credentialsSupplier;
     }
 
+    boolean isActivated() {
+        return isActivated;
+    }
+
+    void setActivated(boolean activated) {
+        isActivated = activated;
+    }
+
     RefreshTokenModel getRefreshToken() {
         return refreshToken;
     }
 
     void setRefreshToken(RefreshTokenModel refreshToken) {
         this.refreshToken = refreshToken;
-    }
-
-    Set<LocalUserRoleModel> getRoles() {
-        return roles;
-    }
-
-    void setRoles(Set<LocalUserRoleModel> roles) {
-        this.roles = roles;
     }
 
     RenewCredentialsOtaTokenModel getRenewCredentials() {
@@ -192,12 +140,20 @@ public class LocalUserModel extends AuditableEntity implements Serializable {
         this.renewCredentials = renewCredentials;
     }
 
-    boolean isHasNewsletterAccept() {
-        return hasNewsletterAccept;
+    LocalUserDetailsModel getLocalUserDetails() {
+        return localUserDetails;
     }
 
-    void setHasNewsletterAccept(boolean hasNewsletterAccept) {
-        this.hasNewsletterAccept = hasNewsletterAccept;
+    void setLocalUserDetails(LocalUserDetailsModel localUserDetails) {
+        this.localUserDetails = localUserDetails;
+    }
+
+    Set<LocalUserRoleModel> getRoles() {
+        return roles;
+    }
+
+    void setRoles(Set<LocalUserRoleModel> roles) {
+        this.roles = roles;
     }
 
     @Override
@@ -207,16 +163,11 @@ public class LocalUserModel extends AuditableEntity implements Serializable {
                 ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
                 ", emailAddress='" + emailAddress + '\'' +
-                ", secondEmailAddress='" + secondEmailAddress + '\'' +
                 ", password='" + password + '\'' +
-                ", birthDate=" + birthDate +
-                ", country='" + country + '\'' +
-                ", gender=" + gender +
-                ", hasPhoto=" + hasPhoto +
                 ", credentialsSupplier=" + credentialsSupplier +
-                ", hasNewsletterAccept=" + hasNewsletterAccept +
+                ", isActivated=" + isActivated +
                 ", refreshToken=" + refreshToken +
-                ", renewCredentials=" + renewCredentials +
+                ", localUserDetails=" + localUserDetails +
                 ", roles=" + roles +
                 "} " + super.toString();
     }
