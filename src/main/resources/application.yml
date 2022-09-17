@@ -5,10 +5,11 @@ spring:
   jpa:
     open-in-view: false
     hibernate.ddl-auto: none
+    hibernate:
+      naming:
+        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
   liquibase:
     enabled: true
-    drop-first: false
-    change-log: classpath:db/changelog/db.changelog-master.xml
   mail:
     host: localhost
     default-encoding: UTF-8
