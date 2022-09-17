@@ -10,6 +10,9 @@ server:
 spring:
   devtools.livereload.port: 35731
   h2.console.enabled: true
+  liquibase:
+    drop-first: true
+    change-log: classpath:db/changelog/db.changelog-dev.xml
   datasource:
     url: jdbc:h2:file:./h2-db
     username: sa
