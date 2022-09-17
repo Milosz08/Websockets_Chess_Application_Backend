@@ -1,0 +1,32 @@
+config:
+  frontend-cors-url: ${env.PROD_FRONTEND_CORS_AGENT}
+  frontend-name: ${env.PROD_FRONTEND_WITH_JWT_ISSUER}
+  authorization:
+    jwt-key: ${env.PROD_JWT_KEY}
+    jwt-issuer: ${env.PROD_FRONTEND_WITH_JWT_ISSUER}
+
+spring:
+  h2.console.enabled: false
+  liquibase:
+    drop-first: false
+    change-log: classpath:db/changelog/db.changelog-prod.xml
+  datasource:
+    url: ${env.PROD_DB_CONNECTION_STRING}
+    username: ${env.PROD_DB_USERNAME}
+    password: ${env.PROD_DB_PASSWORD}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  mail:
+    protocol: smtp
+    port: 465
+    host: ${env.PROD_SMTP_MAIL_AGENT}
+    username: ${env.PROD_SMTP_MAIL_USERNAME}
+    password: ${env.PROD_SMTP_MAIL_PASSWORD}
+    properties:
+      smtp.starttls.required: true
+      mail.smtp:
+        ssl.enable: true
+        auth: true
+        starttls.enable: true
+
+logging:
+  file.name: prod-logs/chessappbackend.log

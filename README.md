@@ -75,48 +75,23 @@ to `127.0.0.1`.
 
 1. Prepare the relational database server and the SMTP mail server (log-in details should be entered according to the 
 instructions below). Also check that both servers provide an SSL encrypted connection.
-2. Create `application-prod.yml`, file for production configuration and place in `/resources` directory.
+2. Create `.env` file or add environment server variables (file must be located in root application directory).
 3. Fill in the content shown below:
-```yaml
-config:
-  # front-end layer address (for CORS policy)
-  frontend-cors-url: https://chess.miloszgilga.pl/
-  # front-end browser shorten address (unsing mainly in email templates)
-  frontend-name: chess.miloszgilga.pl
-  authorization:
-    # bearer salt key
-    jwt-key: xxxxx
+```properties
+# JWT and CORS policy
+PROD_FRONTEND_CORS_AGENT=xxxxx -> ex. [[https://exampledomain.pl/]]
+PROD_JWT_KEY=xxxxx
+PROD_FRONTEND_WITH_JWT_ISSUER=xxxxx -> [[ex. exampledomain.pl]]
 
-spring:
-  # enable/disable h2 console
-  h2.console.enabled: false
-  datasource:
-    # database connection string
-    url: jdbc:[dbType]://[dbHost]:[dbPort]/[dbName]
-    username: xxxxx
-    password: xxxxx
-    # database driver class (example for MySQL database)
-    driver-class-name: com.mysql.cj.jdbc.Driver
-  mail:
-    protocol: smtp
-    # for secure connections 465, for non-secure 587
-    port: 465
-    # email agent host, ex. example.mail.net
-    host: xxxxx
-    username: xxxxx
-    password: xxxxx
-    properties:
-      # true, if your mail agent allows to TLS connection
-      smtp.starttls.required: true
-      mail.smtp:
-        # true, if your mail agent has enable SSL connection
-        ssl.enable: true
-        auth: true
-        starttls.enable: true
+# SMTP email service
+PROD_SMTP_MAIL_AGENT=xxxxx    ex. mail.example.net
+PROD_SMTP_MAIL_USERNAME=xxxxx
+PROD_SMTP_MAIL_PASSWORD=xxxxx
 
-logging:
-  # output directory for logging to file by log4j (location: src/prod-logs...)
-  file.name: prod-logs/chessappbackend.log
+# Database connectivity
+PROD_DB_CONNECTION_STRING=jdbc:[dbProvider]://[dbHost]:[dbPort]/[dbName]
+PROD_DB_USERNAME=xxxxx
+PROD_DB_PASSWORD=xxxxx
 ```
 4. To run application in production mode, use `--prod` switch.
 > NOTE: If you do not use any switch, the application will not start correctly.

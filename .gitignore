@@ -3,10 +3,11 @@ build/
 !gradle/wrapper/gradle-wrapper.jar
 !**/src/main/**/build/
 !**/src/test/**/build/
-src/main/resources/application-prod.yml
 h2-db.mv.db
 h2-db.trace.db
 doc/
+prod-logs/
+.env
 
 .apt_generated
 .classpath
