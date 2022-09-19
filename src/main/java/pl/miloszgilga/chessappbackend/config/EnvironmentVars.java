@@ -31,8 +31,8 @@ import org.springframework.beans.factory.annotation.Value;
 @NoArgsConstructor
 public class EnvironmentVars {
     @Value("${config.authorization.jwt-key}")                                   private String jwtSecretKey;
-    @Value("${authorization.one-time-access-token.token-length}")               private int otaTokenLenght;
-    @Value("${authorization.one-time-access-token.token-expired-minutes}")      private int otaTokenExpiredMinutes;
+    @Value("${authorization.one-time-access-token.token-length}")               private Integer otaTokenLenght;
+    @Value("${authorization.one-time-access-token.token-expired-minutes}")      private Integer otaTokenExpiredMinutes;
     @Value("${spring.profiles.active}")                                         private String applicationMode;
     @Value("${config.newsletter-unsubscribe-path}")                             private String newsletterUnsubscribePath;
     @Value("${config.frontend-cors-url}")                                       private String frontEndUrl;
@@ -40,4 +40,5 @@ public class EnvironmentVars {
     @Value("${config.frontend-name}")                                           private String frontendName;
     @Value("${config.mail-helpdesk-agent}")                                     private String mailHelpdeskAgent;
     @Value("${config.authorization.jwt-issuer}")                                private String jwtIssuer;
+    @Value("${config.cors-max-age-seconds}")                                    private Integer corsMaxAgeSeconds;
 }

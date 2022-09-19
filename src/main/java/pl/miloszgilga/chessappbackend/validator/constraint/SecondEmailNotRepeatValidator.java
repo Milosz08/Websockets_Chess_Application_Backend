@@ -31,7 +31,7 @@ public class SecondEmailNotRepeatValidator implements ConstraintValidator<Valida
 
     @Override
     public boolean isValid(final SignupViaLocalRequestDto req, final ConstraintValidatorContext context) {
-        if (req.getSecondEmailAddress().isBlank()) return true;
+        if (req.getEmailAddress() == null || req.getSecondEmailAddress().isBlank()) return true;
         if (req.getEmailAddress().equalsIgnoreCase(req.getSecondEmailAddress())) {
             throw new EmailException
                     .EmailAndSecondEmailIdenticalException("Second email should not be the same as firstly email.");

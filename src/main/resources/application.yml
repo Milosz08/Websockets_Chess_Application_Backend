@@ -21,10 +21,14 @@ logging:
   pattern:
     console: "%d{yyyy-MM-dd HH:mm:ss} %5level [%15thread] %-50logger{36} : %msg%n"
     file: "%d{yyyy-MM-dd HH:mm:ss} %5level [%15thread] %-50logger{36} : %msg%n"
+  file:
+    max-history: 40
+    max-size: 10MB
 
 config:
   newsletter-unsubscribe-path: /unsubscribe-newsletter/
   mail-helpdesk-agent: helpdesk
+  cors-max-age-seconds: 3600
 
 authorization:
   one-time-access-token:
