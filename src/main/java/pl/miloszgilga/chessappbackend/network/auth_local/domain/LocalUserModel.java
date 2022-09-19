@@ -43,7 +43,7 @@ public class LocalUserModel extends AuditableEntity implements Serializable {
     @Column(name = "EMAIL_ADDRESS")         private String emailAddress;
     @Column(name = "PASSWORD")              private String password;
     @Column(name = "CREDENTIALS_SUPPLIER")  private CredentialsSupplier credentialsSupplier;
-    @Column(name = "IS_ACTIVATED")          private boolean isActivated;
+    @Column(name = "IS_ACTIVATED")          private Boolean isActivated;
 
     @OneToOne(mappedBy = "localUser")       private RefreshTokenModel refreshToken;
     @OneToOne(mappedBy = "localUser")       private RenewCredentialsOtaTokenModel renewCredentials;
@@ -116,11 +116,11 @@ public class LocalUserModel extends AuditableEntity implements Serializable {
         this.credentialsSupplier = credentialsSupplier;
     }
 
-    boolean isActivated() {
+    Boolean isActivated() {
         return isActivated;
     }
 
-    void setActivated(boolean activated) {
+    void setActivated(Boolean activated) {
         isActivated = activated;
     }
 

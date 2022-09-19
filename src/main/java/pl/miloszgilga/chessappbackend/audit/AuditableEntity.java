@@ -37,7 +37,7 @@ public abstract class AuditableEntity implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "ID") private long id;
+    @Column(name = "ID") private Long id;
 
     @CreationTimestamp
     @Column(name = "CREATED_AT") private Date createdAt;
@@ -45,7 +45,7 @@ public abstract class AuditableEntity implements Serializable {
     @UpdateTimestamp
     @Column(name = "UPDATED_AT") private Date updatedAt;
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
@@ -57,7 +57,7 @@ public abstract class AuditableEntity implements Serializable {
         return updatedAt;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

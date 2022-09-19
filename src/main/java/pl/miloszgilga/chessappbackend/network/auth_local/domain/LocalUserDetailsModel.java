@@ -40,8 +40,8 @@ public class LocalUserDetailsModel extends AuditableEntity implements Serializab
     @Column(name = "BIRTH_DATE")            private Date birthDate;
     @Column(name = "COUNTRY")               private String country;
     @Column(name = "GENDER")                private UserGenderSpecific gender;
-    @Column(name = "HAS_PHOTO")             private boolean hasPhoto;
-    @Column(name = "HAS_NEWSLETTER_ACCEPT") private boolean hasNewsletterAccept;
+    @Column(name = "HAS_PHOTO")             private Boolean hasPhoto;
+    @Column(name = "HAS_NEWSLETTER_ACCEPT") private Boolean hasNewsletterAccept;
 
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name = "LOCAL_USER_ID", referencedColumnName = "ID")
@@ -91,19 +91,19 @@ public class LocalUserDetailsModel extends AuditableEntity implements Serializab
         this.gender = gender;
     }
 
-    boolean isHasPhoto() {
+    Boolean isHasPhoto() {
         return hasPhoto;
     }
 
-    void setHasPhoto(boolean hasPhoto) {
+    void setHasPhoto(Boolean hasPhoto) {
         this.hasPhoto = hasPhoto;
     }
 
-    boolean isHasNewsletterAccept() {
+    Boolean isHasNewsletterAccept() {
         return hasNewsletterAccept;
     }
 
-    void setHasNewsletterAccept(boolean hasNewsletterAccept) {
+    void setHasNewsletterAccept(Boolean hasNewsletterAccept) {
         this.hasNewsletterAccept = hasNewsletterAccept;
     }
 
