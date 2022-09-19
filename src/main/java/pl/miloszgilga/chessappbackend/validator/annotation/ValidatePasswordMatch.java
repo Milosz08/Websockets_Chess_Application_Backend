@@ -35,7 +35,7 @@ import pl.miloszgilga.chessappbackend.validator.constraint.PasswordMatchValidato
 @Constraint(validatedBy = PasswordMatchValidator.class)
 @Documented
 public @interface ValidatePasswordMatch {
-    String message() default "Password and repeated password should be the same.";
+    String message();
     Class<?>[] groups() default {};
     Class<? extends Payload>[] payload() default {};
 }

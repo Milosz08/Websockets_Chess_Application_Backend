@@ -37,7 +37,7 @@ import pl.miloszgilga.chessappbackend.validator.constraint.SecondEmailNotRepeatV
 @Constraint(validatedBy = SecondEmailNotRepeatValidator.class)
 @Documented
 public @interface ValidateSecondEmailNotRepeat {
-    String message() default "Second email should not be the same as firstly email.";
+    String message();
     Class<?>[] groups() default {};
     Class<? extends Payload>[] payload() default {};
 }

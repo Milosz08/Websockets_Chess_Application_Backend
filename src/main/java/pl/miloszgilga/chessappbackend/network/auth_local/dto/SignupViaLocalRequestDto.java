@@ -30,54 +30,52 @@ import static pl.miloszgilga.chessappbackend.validator.RegexPattern.*;
 //----------------------------------------------------------------------------------------------------------------------
 
 @Data
-@ValidatePasswordMatch
-@ValidateSecondEmailNotRepeat
+@ValidatePasswordMatch(message = "{jpa.validator.passwordsMismatch.custom}")
+@ValidateSecondEmailNotRepeat(message = "{jpa.validator.emailsAreTheSame.custom}")
 public class SignupViaLocalRequestDto {
 
-    @NotBlank(message = "You should provide nickname.")
-    @Pattern(regexp = NICKNAME_PATTERN, message = "Illegal characters in nickname form field.")
+    @NotBlank(message = "{jpa.validator.nickname.notBlank}")
+    @Pattern(regexp = NICKNAME_PATTERN, message = "{jpa.validator.nickname.regex}")
     private String nickname;
 
-    @NotBlank(message = "You should provide first name.")
-    @Pattern(regexp = NAME_SURNAME_PATTERN, message = "Illegal characters in first name form field.")
+    @NotBlank(message = "{jpa.validator.firstName.notBlank}")
+    @Pattern(regexp = NAME_SURNAME_PATTERN, message = "{jpa.validator.firstName.regex}")
     private String firstName;
 
-    @NotBlank(message = "You should provide last name.")
-    @Pattern(regexp = NAME_SURNAME_PATTERN, message = "Illegal characters in last name form field.")
+    @NotBlank(message = "{jpa.validator.lastName.notBlank}")
+    @Pattern(regexp = NAME_SURNAME_PATTERN, message = "{jpa.validator.lastName.regex}")
     private String lastName;
 
-    @NotBlank(message = "You should provide email address.")
-    @Email(message = "Passed email address is not valid.")
-    @Size(max = 100, message = "Email address must be shorter from 100 characters.")
+    @NotBlank(message = "{jpa.validator.emailAddress.notBlank}")
+    @Email(message = "{jpa.validator.emailAddress.pattern}")
+    @Size(max = 100, message = "{jpa.validator.emailAddress.size}")
     private String emailAddress;
 
-    @NotNull(message = "Second email address might be empty, but not null.")
-    @Email(message = "Passed email address is not valid.")
-    @Size(max = 100, message = "Email address must be shorter from 100 characters.")
+    @NotNull(message = "{jpa.validator.secondEmailAddress.notNull}")
+    @Email(message = "{jpa.validator.secondEmailAddress.pattern}")
+    @Size(max = 100, message = "{jpa.validator.secondEmailAddress.size}")
     private String secondEmailAddress;
 
-    @NotBlank(message = "You should provide birth date.")
-    @Pattern(regexp = BIRTH_DATE_PATTERN, message = "Invalid format. Date format should be: DD/MM/YYYY")
-    @ValidateFutureTimeDate(message = "Provided birth date should be before the current date")
+    @NotBlank(message = "{jpa.validator.birthDate.notBlank}")
+    @Pattern(regexp = BIRTH_DATE_PATTERN, message = "{jpa.validator.birthDate.regex}")
+    @ValidateFutureTimeDate(message = "{jpa.validator.birthDate.futureDate}")
     private String birthDate;
 
-    @NotBlank(message = "You should provide country name.")
-    @ValidateCountry(message = "Passed country name not exist or is invalid.")
+    @NotBlank(message = "{jpa.validator.countryName.notBlank}")
+    @ValidateCountry(message = "{jpa.validator.countryName.notExist}")
     private String countryName;
 
-    @NotBlank(message = "You should provide user gender data.")
-    @ValidateEnum(enumClazz = UserGenderSpecific.class, message = "Available gender types: [male, female, other]")
+    @NotBlank(message = "{jpa.validator.gender.notBlank}")
+    @ValidateEnum(enumClazz = UserGenderSpecific.class, message = "{jpa.validator.gender.notExist}")
     private String gender;
 
-    @NotBlank(message = "You should provide password.")
-    @Pattern(regexp = PASSWORD_PATTERN,
-            message = "Password must have at least one big letter, one digit and one special character."
-    )
+    @NotBlank(message = "{jpa.validator.password.notBlank}")
+    @Pattern(regexp = PASSWORD_PATTERN, message = "{jpa.validator.password.regex}")
     private String password;
 
-    @NotBlank(message = "You should provide repeat password.")
+    @NotBlank(message = "{jpa.validator.passwordRepeat.notBlank}")
     private String passwordRepeat;
 
-    @NotNull(message = "Newsletter allows field might be empty but not null.")
-    private boolean newsletterAccept;
+    @NotNull(message = "{jpa.validator.newsletterAccept.notNull}")
+    private Boolean newsletterAccept;
 }

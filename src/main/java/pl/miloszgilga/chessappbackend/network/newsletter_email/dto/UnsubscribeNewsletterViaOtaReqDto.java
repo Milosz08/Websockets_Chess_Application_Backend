@@ -32,12 +32,12 @@ import static pl.miloszgilga.chessappbackend.validator.RegexPattern.OTA_TOKEN_PA
 @Data
 public class UnsubscribeNewsletterViaOtaReqDto {
 
-    @NotBlank(message = "You should provide OTA token.")
-    @Pattern(regexp = OTA_TOKEN_PATTERN, message = "You should provide valid OTA token.")
+    @NotBlank(message = "{jpa.validator.otaToken.notBlank}")
+    @Pattern(regexp = OTA_TOKEN_PATTERN, message = "{jpa.validator.otaToken.regex}")
     private String token;
 
-    @NotBlank(message = "You should provide email address.")
-    @Email(message = "Passed email address is not valid.")
-    @Size(max = 100, message = "Email address must be shorter from 100 characters.")
+    @NotBlank(message = "{jpa.validator.emailAddress.notBlank}")
+    @Email(message = "{jpa.validator.emailAddress.pattern}")
+    @Size(max = 100, message = "{jpa.validator.emailAddress.size}")
     private String emailAddress;
 }

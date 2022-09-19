@@ -29,8 +29,8 @@ import javax.validation.constraints.NotBlank;
 @Data
 public class AttemptToUnsubscribeReqDto {
 
-    @NotBlank(message = "You should provide email address.")
-    @Email(message = "Passed email address is not valid.")
-    @Size(max = 100, message = "Email address must be shorter from 100 characters.")
+    @NotBlank(message = "{jpa.validator.emailAddress.notBlank}")
+    @Email(message = "{jpa.validator.emailAddress.pattern}")
+    @Size(max = 100, message = "{jpa.validator.emailAddress.size}")
     private String emailAddress;
 }

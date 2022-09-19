@@ -35,7 +35,7 @@ import pl.miloszgilga.chessappbackend.validator.constraint.CountryValidator;
 @Constraint(validatedBy = CountryValidator.class)
 @Documented
 public @interface ValidateCountry {
-    String message() default "Passed country name not exist or is invalid!";
+    String message();
     Class<?>[] groups() default {};
     Class<? extends Payload>[] payload() default {};
 }

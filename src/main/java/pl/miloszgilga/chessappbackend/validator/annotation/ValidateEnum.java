@@ -36,7 +36,7 @@ import pl.miloszgilga.chessappbackend.validator.constraint.ValidateEnumValidator
 @Documented
 public @interface ValidateEnum {
     Class<? extends Enum<?>> enumClazz();
-    String message() default "Invalid enum datatype/datatypes.";
+    String message();
     Class<?>[] groups() default {};
     Class<? extends Payload>[] payload() default {};
 }

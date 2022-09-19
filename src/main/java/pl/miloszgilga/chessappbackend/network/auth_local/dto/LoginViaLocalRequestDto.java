@@ -31,12 +31,11 @@ import static pl.miloszgilga.chessappbackend.validator.RegexPattern.PASSWORD_PAT
 @Data
 public class LoginViaLocalRequestDto {
 
-    @NotBlank(message = "You should provide username or email address.")
-    @Size(max = 100, message = "Email or username must be shorter from 100 characters.")
+    @NotBlank(message = "{jpa.validator.usernameEmail.notBlank}")
+    @Size(max = 100, message = "{jpa.validator.usernameEmail.size}")
     private String usernameEmail;
 
-    @NotBlank(message = "You should provide password.")
-    @Pattern(regexp = PASSWORD_PATTERN,
-            message = "Password must have at least one big letter, one number and one special character.")
+    @NotBlank(message = "{jpa.validator.password.notBlank}")
+    @Pattern(regexp = PASSWORD_PATTERN, message = "{jpa.validator.password.regex}")
     private String password;
 }

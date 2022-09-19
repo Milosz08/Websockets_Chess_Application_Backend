@@ -32,12 +32,12 @@ import static pl.miloszgilga.chessappbackend.validator.RegexPattern.NAME_SURNAME
 @Data
 public class EmailNewsletterReqDto {
 
-    @NotBlank(message = "You should provide username.")
-    @Pattern(regexp = NAME_SURNAME_PATTERN, message = "Illegal, too low or to much characters in username field.")
+    @NotBlank(message = "{jpa.validator.username.notBlank}")
+    @Pattern(regexp = NAME_SURNAME_PATTERN, message = "{jpa.validator.username.regex}")
     private String userName;
 
-    @NotBlank(message = "You should provide email address.")
-    @Email(message = "Passed email address is not valid.")
-    @Size(max = 100, message = "Email address must be shorter from 100 characters.")
+    @NotBlank(message = "{jpa.validator.emailAddress.notBlank}")
+    @Email(message = "{jpa.validator.emailAddress.pattern}")
+    @Size(max = 100, message = "{jpa.validator.emailAddress.size}")
     private String emailAddress;
 }

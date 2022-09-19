@@ -14,6 +14,8 @@ spring:
     host: localhost
     default-encoding: UTF-8
     test-connection: false
+  web:
+    locale: en_US
 
 logging:
   pattern:

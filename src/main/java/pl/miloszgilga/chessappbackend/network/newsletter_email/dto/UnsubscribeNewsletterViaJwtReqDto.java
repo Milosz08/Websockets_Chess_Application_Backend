@@ -27,6 +27,6 @@ import javax.validation.constraints.NotBlank;
 @Data
 public class UnsubscribeNewsletterViaJwtReqDto {
 
-    @NotBlank(message = "You should provide JWT Bearer token.")
+    @NotBlank(message = "{jpa.validator.jwtToken.notBlank}")
     private String token;
 }

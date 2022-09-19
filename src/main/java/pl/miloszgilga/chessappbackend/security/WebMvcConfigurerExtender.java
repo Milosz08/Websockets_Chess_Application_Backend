@@ -18,11 +18,15 @@
 
 package pl.miloszgilga.chessappbackend.security;
 
+import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.support.ResourceBundleMessageSource;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.springframework.validation.beanvalidation.MethodValidationPostProcessor;
+
+import static org.springframework.http.HttpMethod.*;
 
 import pl.miloszgilga.chessappbackend.config.EnvironmentVars;
 
@@ -41,7 +45,16 @@ public class WebMvcConfigurerExtender implements WebMvcConfigurer {
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")
                 .allowedOrigins(environment.getFrontEndUrl())
-                .allowedMethods("*");
+                .allowedMethods(GET.name(), POST.name(), PUT.name(), PATCH.name(), DELETE.name())
+                .maxAge(environment.getCorsMaxAgeSeconds());
+    }
+
+    @Bean("messageSource")
+    public MessageSource messageSource() {
+        ResourceBundleMessageSource messageSource = new ResourceBundleMessageSource();
+        messageSource.setBasenames("locale/messages");
+        messageSource.setDefaultEncoding("UTF-8");
+        return messageSource;
     }
 
     @Bean

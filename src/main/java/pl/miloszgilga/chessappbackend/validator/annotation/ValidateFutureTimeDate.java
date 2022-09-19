@@ -35,7 +35,7 @@ import pl.miloszgilga.chessappbackend.validator.constraint.FutureTimeDateValidat
 @Constraint(validatedBy = FutureTimeDateValidator.class)
 @Documented
 public @interface ValidateFutureTimeDate {
-    String message() default "Passed date should be before the current date.";
+    String message();
     Class<?>[] groups() default {};
     Class<? extends Payload>[] payload() default {};
 }
