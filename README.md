@@ -79,19 +79,19 @@ instructions below). Also check that both servers provide an SSL encrypted conne
 3. Fill in the content shown below:
 ```properties
 # JWT and CORS policy
-PROD_FRONTEND_CORS_AGENT=xxxxx -> ex. [[https://exampledomain.pl/]]
-PROD_JWT_KEY=xxxxx
-PROD_FRONTEND_WITH_JWT_ISSUER=xxxxx -> [[ex. exampledomain.pl]]
+PROD_FRONTEND_CORS_AGENT      = xxxxx -> ex. [[https://exampledomain.pl/]]
+PROD_JWT_KEY                  = xxxxx
+PROD_FRONTEND_WITH_JWT_ISSUER = xxxxx -> [[ex. exampledomain.pl]]
 
 # SMTP email service
-PROD_SMTP_MAIL_AGENT=xxxxx    ex. mail.example.net
-PROD_SMTP_MAIL_USERNAME=xxxxx
-PROD_SMTP_MAIL_PASSWORD=xxxxx
+PROD_SMTP_MAIL_AGENT          = xxxxx    ex. mail.example.net
+PROD_SMTP_MAIL_USERNAME       = xxxxx
+PROD_SMTP_MAIL_PASSWORD       = xxxxx
 
 # Database connectivity
-PROD_DB_CONNECTION_STRING=jdbc:[dbProvider]://[dbHost]:[dbPort]/[dbName]
-PROD_DB_USERNAME=xxxxx
-PROD_DB_PASSWORD=xxxxx
+PROD_DB_CONNECTION_STRING     = jdbc:[dbProvider]://[dbHost]:[dbPort]/[dbName]
+PROD_DB_USERNAME              = xxxxx
+PROD_DB_PASSWORD              = xxxxx
 ```
 4. To run application in production mode, use `--prod` switch.
 > NOTE: If you do not use any switch, the application will not start correctly.
