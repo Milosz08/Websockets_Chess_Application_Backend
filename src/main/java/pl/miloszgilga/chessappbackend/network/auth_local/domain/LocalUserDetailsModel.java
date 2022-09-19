@@ -48,8 +48,8 @@ public class LocalUserDetailsModel extends AuditableEntity implements Serializab
     private LocalUserModel localUser;
 
     LocalUserDetailsModel(
-            String secondEmailAddress, Date birthDate, String country, UserGenderSpecific gender, boolean hasPhoto,
-            boolean hasNewsletterAccept
+            String secondEmailAddress, Date birthDate, String country, UserGenderSpecific gender, Boolean hasPhoto,
+            Boolean hasNewsletterAccept
     ) {
         this.secondEmailAddress = secondEmailAddress;
         this.birthDate = birthDate;

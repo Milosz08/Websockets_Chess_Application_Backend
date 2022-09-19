@@ -44,6 +44,7 @@ public class LocalUserModel extends AuditableEntity implements Serializable {
     @Column(name = "PASSWORD")              private String password;
     @Column(name = "CREDENTIALS_SUPPLIER")  private CredentialsSupplier credentialsSupplier;
     @Column(name = "IS_ACTIVATED")          private Boolean isActivated;
+    @Column(name = "IS_BLOCKED")            private Boolean isBlocked;
 
     @OneToOne(mappedBy = "localUser")       private RefreshTokenModel refreshToken;
     @OneToOne(mappedBy = "localUser")       private RenewCredentialsOtaTokenModel renewCredentials;
@@ -57,7 +58,7 @@ public class LocalUserModel extends AuditableEntity implements Serializable {
 
     LocalUserModel(
             String nickname, String firstName, String lastName, String emailAddress, String password,
-            CredentialsSupplier credentialsSupplier, boolean isActivated
+            CredentialsSupplier credentialsSupplier, Boolean isActivated, Boolean isBlocked
     ) {
         this.nickname = nickname;
         this.firstName = firstName;
@@ -66,6 +67,7 @@ public class LocalUserModel extends AuditableEntity implements Serializable {
         this.password = password;
         this.credentialsSupplier = credentialsSupplier;
         this.isActivated = isActivated;
+        this.isBlocked = isBlocked;
     }
 
     String getNickname() {
@@ -124,6 +126,14 @@ public class LocalUserModel extends AuditableEntity implements Serializable {
         isActivated = activated;
     }
 
+    Boolean isBlocked() {
+        return isBlocked;
+    }
+
+    void setBlocked(Boolean blocked) {
+        isBlocked = blocked;
+    }
+
     RefreshTokenModel getRefreshToken() {
         return refreshToken;
     }
@@ -166,7 +176,9 @@ public class LocalUserModel extends AuditableEntity implements Serializable {
                 ", password='" + password + '\'' +
                 ", credentialsSupplier=" + credentialsSupplier +
                 ", isActivated=" + isActivated +
+                ", isBlocked=" + isBlocked +
                 ", refreshToken=" + refreshToken +
+                ", renewCredentials=" + renewCredentials +
                 ", localUserDetails=" + localUserDetails +
                 ", roles=" + roles +
                 "} " + super.toString();

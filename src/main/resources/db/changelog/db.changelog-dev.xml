@@ -12,6 +12,7 @@
     <include file="migrations/2022-09-migrations/V5__2022-09-14__change-some-user-schema-columns-name.xml" relativeToChangelogFile="true"/>
     <include file="migrations/2022-09-migrations/V6__2022-09-16__remove-user-phone-number-column.xml" relativeToChangelogFile="true"/>
     <include file="migrations/2022-09-migrations/V7__2022-09-16__split-user-data-to-user-details-table.xml" relativeToChangelogFile="true"/>
+    <include file="migrations/2022-09-migrations/V8__2022-09-19__add-is-blocked-property-to-user-schema.xml" relativeToChangelogFile="true"/>
 
     <!-- Auto filled data -->
 
