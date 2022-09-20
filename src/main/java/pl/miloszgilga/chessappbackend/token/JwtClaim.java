@@ -28,7 +28,10 @@ import lombok.AllArgsConstructor;
 public enum JwtClaim {
     IS_EXPIRED("isExpired"),
     OTA_TOKEN("otaToken"),
-    EMAIL("email");
+    EMAIL("email"),
+    NICKNAME("nickname"),
+    ROLES("roles"),
+    USER_ID("userId");
 
     private final String claimName;
 }

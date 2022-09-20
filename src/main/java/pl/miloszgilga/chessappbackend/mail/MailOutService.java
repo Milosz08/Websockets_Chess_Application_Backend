@@ -25,8 +25,8 @@ import java.util.List;
 import java.util.HashMap;
 
 import pl.miloszgilga.chessappbackend.utils.TimeHelper;
-import pl.miloszgilga.chessappbackend.token.JsonWebToken;
 import pl.miloszgilga.chessappbackend.config.EnvironmentVars;
+import pl.miloszgilga.chessappbackend.token.JsonWebTokenCreator;
 
 //----------------------------------------------------------------------------------------------------------------------
 
@@ -35,15 +35,14 @@ public class MailOutService implements IMailOutService {
 
     private final MailService mailService;
     private final TimeHelper timeHelper;
-    private final JsonWebToken webToken;
+    private final JsonWebTokenCreator creator;
     private final EnvironmentVars environment;
 
-    public MailOutService(
-            MailService mailService, TimeHelper timeHelper, JsonWebToken webToken, EnvironmentVars environment
-    ) {
+    public MailOutService(MailService mailService, TimeHelper timeHelper, JsonWebTokenCreator creator,
+                          EnvironmentVars environment) {
         this.mailService = mailService;
         this.timeHelper = timeHelper;
-        this.webToken = webToken;
+        this.creator = creator;
         this.environment = environment;
     }
 
@@ -64,7 +63,7 @@ public class MailOutService implements IMailOutService {
     private Map<String, Object> extendsParametersWithDef(String email) {
         final Map<String, Object> parameters = new HashMap<>();
         parameters.put("servletTime", timeHelper.getCurrentUTC());
-        parameters.put("unsubscribeEndlessLink", computeBearer(webToken.createNonExpUnsubscribeNewsletterToken(email)));
+        parameters.put("unsubscribeEndlessLink", computeBearer(creator.createNonExpUnsubscribeNewsletterToken(email)));
         parameters.put("applicationLink", environment.getFrontEndUrl());
         parameters.put("applicationName", environment.getFrontendName());
         return parameters;

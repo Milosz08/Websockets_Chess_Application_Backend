@@ -21,18 +21,19 @@ package pl.miloszgilga.chessappbackend.network.newsletter_email;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.auth0.jwt.interfaces.DecodedJWT;
 import org.springframework.stereotype.Service;
 import static org.springframework.http.HttpStatus.EXPECTATION_FAILED;
 
 import java.util.Optional;
 import javax.transaction.Transactional;
 
-import pl.miloszgilga.chessappbackend.token.JsonWebToken;
 import pl.miloszgilga.chessappbackend.mail.MailOutService;
-import pl.miloszgilga.chessappbackend.dto.SimpleServerMessageDto;
 import pl.miloszgilga.chessappbackend.utils.StringManipulator;
+import pl.miloszgilga.chessappbackend.token.JsonWebTokenCreator;
+import pl.miloszgilga.chessappbackend.dto.SimpleServerMessageDto;
+import pl.miloszgilga.chessappbackend.token.JsonWebTokenVerificator;
 import pl.miloszgilga.chessappbackend.exception.custom.EmailException.*;
+import pl.miloszgilga.chessappbackend.token.dto.NewsletterUnsubscribeClaims;
 
 import pl.miloszgilga.chessappbackend.network.newsletter_email.dto.EmailNewsletterReqDto;
 import pl.miloszgilga.chessappbackend.network.newsletter_email.domain.NewsletterEmailModel;
@@ -41,8 +42,6 @@ import pl.miloszgilga.chessappbackend.network.newsletter_email.domain.INewslette
 import pl.miloszgilga.chessappbackend.network.newsletter_email.dto.UnsubscribeNewsletterViaOtaReqDto;
 import pl.miloszgilga.chessappbackend.network.newsletter_email.dto.UnsubscribeNewsletterViaJwtReqDto;
 
-import static pl.miloszgilga.chessappbackend.token.JwtClaim.*;
-
 //----------------------------------------------------------------------------------------------------------------------
 
 @Service
@@ -50,20 +49,21 @@ class NewsletterEmailService implements INewsletterEmailService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(NewsletterEmailService.class);
 
-    private final JsonWebToken jsonWebToken;
+    private final JsonWebTokenCreator creator;
+    private final JsonWebTokenVerificator verificator;
     private final INewsletterEmailRepository repository;
 
     private final MailOutService mailService;
     private final StringManipulator manipulator;
     private final UnsubscribeOtaTokenService unsubscribeService;
 
-    NewsletterEmailService(
-            INewsletterEmailRepository repository, UnsubscribeOtaTokenService unsubscribeService,
-            JsonWebToken jsonWebToken, MailOutService mailService, StringManipulator manipulator
-    ) {
+    NewsletterEmailService(INewsletterEmailRepository repository, UnsubscribeOtaTokenService unsubscribeService,
+                           JsonWebTokenCreator creator, JsonWebTokenVerificator verificator, MailOutService mailService,
+                           StringManipulator manipulator) {
         this.repository = repository;
-        this.jsonWebToken = jsonWebToken;
+        this.creator = creator;
         this.unsubscribeService = unsubscribeService;
+        this.verificator = verificator;
         this.mailService = mailService;
         this.manipulator = manipulator;
     }
@@ -90,7 +90,7 @@ class NewsletterEmailService implements INewsletterEmailService {
         final String email = model.getUserEmail();
 
         final String otaToken = unsubscribeService.generateAndSaveOtaToken(email);
-        final String bearerToken = jsonWebToken.createUnsubscribeNewsletterToken(email, otaToken);
+        final String bearerToken = creator.createUnsubscribeNewsletterToken(email, otaToken);
         mailService.unsubscribeNewsletter(model.getId(), model.getUserName(), email, bearerToken, otaToken);
 
         return new SimpleServerMessageDto(String.format("Message has been send to the email '%s'.", email));
@@ -112,15 +112,12 @@ class NewsletterEmailService implements INewsletterEmailService {
     @Override
     @Transactional
     public SimpleServerMessageDto unsubscribeNewsletterViaJwt(final UnsubscribeNewsletterViaJwtReqDto token) {
-        final DecodedJWT jwtDecoded = jsonWebToken.verifyJsonWebToken(token.getToken());
+        final NewsletterUnsubscribeClaims claims = verificator.validateUnsubscriveNewsletterJwt(token.getToken());
+        final String emailAddress = claims.getEmailAddress();
 
-        final String emailAddress = jwtDecoded.getClaim(EMAIL.getClaimName()).asString();
         final NewsletterEmailModel model = checkIfRemovingEmailExist(emailAddress);
-
-        final boolean isExpired = jwtDecoded.getClaim(IS_EXPIRED.getClaimName()).asBoolean();
-        if (isExpired) {
-            final String otaToken = jwtDecoded.getClaim(OTA_TOKEN.getClaimName()).asString();
-            unsubscribeService.validateOtaToken(otaToken, emailAddress);
+        if (claims.isExpired()) {
+            unsubscribeService.validateOtaToken(claims.getOtaToken(), emailAddress);
         }
 
         repository.delete(model);

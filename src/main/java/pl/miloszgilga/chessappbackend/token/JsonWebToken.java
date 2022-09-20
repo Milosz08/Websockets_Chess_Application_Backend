@@ -18,72 +18,32 @@
 
 package pl.miloszgilga.chessappbackend.token;
 
-import com.auth0.jwt.JWTCreator;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.Getter;
 
-import com.auth0.jwt.JWT;
-import com.auth0.jwt.JWTVerifier;
-import com.auth0.jwt.algorithms.Algorithm;
-import com.auth0.jwt.interfaces.DecodedJWT;
-import com.auth0.jwt.exceptions.JWTVerificationException;
-
+import io.jsonwebtoken.SignatureAlgorithm;
 import org.springframework.stereotype.Component;
 
-import pl.miloszgilga.chessappbackend.utils.TimeHelper;
-import pl.miloszgilga.chessappbackend.config.EnvironmentVars;
-import pl.miloszgilga.chessappbackend.exception.custom.TokenException;
+import javax.crypto.spec.SecretKeySpec;
+import javax.xml.bind.DatatypeConverter;
 
-import static pl.miloszgilga.chessappbackend.token.JwtClaim.*;
+import java.security.Key;
+
+import pl.miloszgilga.chessappbackend.config.EnvironmentVars;
 
 //----------------------------------------------------------------------------------------------------------------------
 
+@Getter
 @Component
-public class JsonWebToken {
+class JsonWebToken {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(JsonWebToken.class);
+    private final SignatureAlgorithm signatureAlgorithm = SignatureAlgorithm.HS256;
+    private final byte[] apiKeySecretBytes;
 
-    private final Algorithm algorithm;
-
-    private final TimeHelper timeHelper;
-    private final EnvironmentVars environment;
-
-    public JsonWebToken(EnvironmentVars environment, TimeHelper timeHelper) {
-        this.environment = environment;
-        this.timeHelper = timeHelper;
-        this.algorithm = Algorithm.HMAC256(environment.getJwtSecretKey().getBytes());
+    JsonWebToken(EnvironmentVars environment) {
+        this.apiKeySecretBytes = DatatypeConverter.parseBase64Binary(environment.getJwtSecretKey());
     }
 
-    public DecodedJWT verifyJsonWebToken(String token) {
-        try {
-            final JWTVerifier verifier = JWT.require(algorithm).withIssuer(environment.getJwtIssuer()).build();
-            return verifier.verify(token);
-        } catch (JWTVerificationException ex) {
-            LOGGER.error("Passed JWT is malformed, expired or corrupted. Token: {}", token);
-            throw new TokenException.JwtMalformedTokenException(
-                    "Data could not be verified due to an incorrect, expired or corrupted token.");
-        }
-    }
-
-    public String createUnsubscribeNewsletterToken(String email, String otaToken) {
-        return basicJwtToken("unsubscribe-newsletter-token")
-                .withClaim(EMAIL.getClaimName(), email)
-                .withClaim(OTA_TOKEN.getClaimName(), otaToken)
-                .withClaim(IS_EXPIRED.getClaimName(), true)
-                .withExpiresAt(timeHelper.addMinutesToCurrentDate(environment.getOtaTokenExpiredMinutes()))
-                .sign(algorithm);
-    }
-
-    public String createNonExpUnsubscribeNewsletterToken(String email) {
-        return basicJwtToken("non-expired-unsubscribe-newsletter-token")
-                .withClaim(EMAIL.getClaimName(), email)
-                .withClaim(IS_EXPIRED.getClaimName(), false)
-                .sign(algorithm);
-    }
-
-    private JWTCreator.Builder basicJwtToken(String subject) {
-        return JWT.create()
-                .withIssuer(environment.getJwtIssuer())
-                .withSubject(subject);
+    Key getSignatureKey() {
+        return new SecretKeySpec(apiKeySecretBytes, signatureAlgorithm.getJcaName());
     }
 }
