@@ -19,10 +19,22 @@
 package pl.miloszgilga.chessappbackend.network.auth_local.domain;
 
 import org.springframework.stereotype.Repository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.jpa.repository.JpaRepository;
+
+import java.util.Optional;
 
 //----------------------------------------------------------------------------------------------------------------------
 
 @Repository
 public interface ILocalUserRepository extends JpaRepository<LocalUserModel, Long> {
+
+    @Query(value = "SELECT m FROM LocalUserModel m WHERE m.nickname=:nickname")
+    Optional<LocalUserModel> findUserByNickname(String nickname);
+
+    @Query(value = "SELECT m FROM LocalUserModel m WHERE m.emailAddress=:emailAddress")
+    Optional<LocalUserModel> findUserByEmailAddress(String emailAddress);
+
+    @Query(value = "SELECT m FROM LocalUserModel m WHERE m.emailAddress=:emailAddress AND m.nickname=:nickname AND m.id=:id")
+    Optional<LocalUserModel> findUserByEmailAddressNicknameAndId(String emailAddress, String nickname, Long id);
 }

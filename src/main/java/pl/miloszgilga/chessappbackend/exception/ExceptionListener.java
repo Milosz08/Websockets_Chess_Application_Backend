@@ -22,6 +22,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.http.converter.HttpMessageNotReadableException;
@@ -65,11 +66,19 @@ public class ExceptionListener {
     }
 
     @ExceptionHandler(BasicServerException.class)
-    public BasicDataExceptionRes handleBasicServerException(
-            BasicServerException ex, HttpServletRequest req, HttpServletResponse res) {
+    public BasicDataExceptionRes handleBasicServerException(BasicServerException ex, HttpServletRequest req,
+                                                            HttpServletResponse res) {
         final HttpStatus status = ex.getStatus();
         final var resData = basicExceptionRes(status, req);
         res.setStatus(status.value());
+        return new BasicDataExceptionRes(resData, ex.getMessage());
+    }
+
+    @ExceptionHandler(AuthenticationException.class)
+    public BasicDataExceptionRes handleAuthenticationException(AuthenticationException ex, HttpServletRequest req,
+                                                               HttpServletResponse res) {
+        final var resData = basicExceptionRes(HttpStatus.UNAUTHORIZED, req);
+        res.setStatus(HttpStatus.UNAUTHORIZED.value());
         return new BasicDataExceptionRes(resData, ex.getMessage());
     }
 

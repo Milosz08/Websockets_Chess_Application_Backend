@@ -21,12 +21,15 @@ package pl.miloszgilga.chessappbackend.security;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import pl.miloszgilga.chessappbackend.config.EnvironmentVars;
+import pl.miloszgilga.chessappbackend.filter.JwtTokenAuthenticationFilter;
 
 import static pl.miloszgilga.chessappbackend.config.ApplicationEndpoints.*;
 
@@ -37,20 +40,41 @@ import static pl.miloszgilga.chessappbackend.config.ApplicationEndpoints.*;
 public class SecurityConfiguration {
 
     private final EnvironmentVars environment;
+    private final JwtTokenAuthenticationFilter authenticationFilter;
+    private final AuthenticationRestEntryPoint restEntryPoint;
 
-    public SecurityConfiguration(EnvironmentVars environment) {
+    public static final String[] DISABLE_PATHS_FOR_JWT_FILTERING = {
+            "/", "/error", "/oauth2/**",
+            NEWSLETTER_EMAIL_ENDPOINT + "/**",
+            EXPOSE_STATIC_DATA_ENDPOINT + "/**",
+    };
+
+    public SecurityConfiguration(
+            EnvironmentVars environment, JwtTokenAuthenticationFilter authenticationFilter,
+            AuthenticationRestEntryPoint restEntryPoint
+    ) {
         this.environment = environment;
+        this.authenticationFilter = authenticationFilter;
+        this.restEntryPoint = restEntryPoint;
     }
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         enableH2ConsoleForDevelopment(http);
 
-        http.csrf().disable().authorizeRequests()
-                .antMatchers(NEWSLETTER_EMAIL_ENDPOINT + "/**").permitAll()
-                .antMatchers(AUTH_LOCAL_ENDPOINT + "/**").permitAll()
-                .antMatchers(EXPOSE_STATIC_DATA_ENDPOINT + "/**").permitAll()
-                .anyRequest().authenticated();
+        http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
+                .csrf().disable()
+                .formLogin().disable()
+                .httpBasic().disable()
+                .antMatcher(BASIC_ENDPOINT + "**")
+                .exceptionHandling()
+                    .authenticationEntryPoint(restEntryPoint)
+                    .and()
+                .authorizeRequests()
+                    .antMatchers(DISABLE_PATHS_FOR_JWT_FILTERING).permitAll()
+                    .anyRequest().authenticated()
+                    .and()
+                .addFilterBefore(authenticationFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }
