@@ -18,15 +18,22 @@
 
 package pl.miloszgilga.chessappbackend.security;
 
+import org.springframework.validation.Validator;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
+import org.springframework.web.servlet.LocaleResolver;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.support.ResourceBundleMessageSource;
+import org.springframework.web.servlet.i18n.CookieLocaleResolver;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.context.support.ResourceBundleMessageSource;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 import org.springframework.validation.beanvalidation.MethodValidationPostProcessor;
 
 import static org.springframework.http.HttpMethod.*;
+
+import java.util.Locale;
+import java.nio.charset.StandardCharsets;
 
 import pl.miloszgilga.chessappbackend.config.EnvironmentVars;
 
@@ -51,10 +58,24 @@ public class WebMvcConfigurerExtender implements WebMvcConfigurer {
 
     @Bean("messageSource")
     public MessageSource messageSource() {
-        ResourceBundleMessageSource messageSource = new ResourceBundleMessageSource();
+        final var messageSource = new ResourceBundleMessageSource();
         messageSource.setBasenames("locale/messages");
-        messageSource.setDefaultEncoding("UTF-8");
+        messageSource.setDefaultEncoding(String.valueOf(StandardCharsets.UTF_8));
         return messageSource;
+    }
+
+    @Bean
+    public LocaleResolver localeResolver() {
+        final var cookieLocaleResolver = new CookieLocaleResolver();
+        cookieLocaleResolver.setDefaultLocale(Locale.ENGLISH);
+        return cookieLocaleResolver;
+    }
+
+    @Override
+    public Validator getValidator() {
+        final var validator = new LocalValidatorFactoryBean();
+        validator.setValidationMessageSource(messageSource());
+        return validator;
     }
 
     @Bean
