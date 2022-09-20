@@ -22,11 +22,13 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import org.springframework.stereotype.Component;
+import org.springframework.context.annotation.Primary;
 import org.springframework.beans.factory.annotation.Value;
 
 //----------------------------------------------------------------------------------------------------------------------
 
 @Getter
+@Primary
 @Component
 @NoArgsConstructor
 public class EnvironmentVars {
@@ -41,4 +43,6 @@ public class EnvironmentVars {
     @Value("${config.mail-helpdesk-agent}")                                     private String mailHelpdeskAgent;
     @Value("${config.authorization.jwt-issuer}")                                private String jwtIssuer;
     @Value("${config.cors-max-age-seconds}")                                    private Integer corsMaxAgeSeconds;
+    @Value("${config.authorization.password-encoder-strength}")                 private Integer passwordEncoderStrength;
+    @Value("${authorization.bearer-token.token-expired-minutes}")               private Integer bearerTokenExpiredMinutes;
 }

@@ -4,6 +4,7 @@ config:
   authorization:
     jwt-key: daw94289vndq98198nkejfnkaendwef93892fnskjdenfkjeiwefibiu32983fnskjdfn
     jwt-issuer: localhost
+    password-encoder-strength: 4
 server:
   port: 7575
 

@@ -4,6 +4,7 @@ config:
   authorization:
     jwt-key: ${env.PROD_JWT_KEY}
     jwt-issuer: ${env.PROD_FRONTEND_WITH_JWT_ISSUER}
+    password-encoder-strength: 10
 
 spring:
   h2.console.enabled: false

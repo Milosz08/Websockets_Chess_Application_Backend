@@ -56,8 +56,8 @@ public class SecurityConfiguration {
     }
 
     @Bean
-    public WebSecurityCustomizer webSecurityCustomizer() {
-        return null;
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder(environment.getPasswordEncoderStrength());
     }
 
     private void enableH2ConsoleForDevelopment(HttpSecurity http) throws Exception {
