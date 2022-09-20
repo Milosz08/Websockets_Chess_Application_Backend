@@ -46,7 +46,7 @@ public class LocalUserRoleModel extends AuditableEntity implements Serializable 
         this.roleName = roleName;
     }
 
-    LocalUserRole getRoleName() {
+    public LocalUserRole getRoleName() {
         return roleName;
     }
 

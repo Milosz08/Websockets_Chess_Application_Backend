@@ -44,7 +44,6 @@ public class SecurityConfiguration {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
         enableH2ConsoleForDevelopment(http);
 
         http.csrf().disable().authorizeRequests()
@@ -62,10 +61,12 @@ public class SecurityConfiguration {
     }
 
     private void enableH2ConsoleForDevelopment(HttpSecurity http) throws Exception {
-        if (environment.getApplicationMode().equals(ApplicationMode.DEV.getModeName())) {
-            http.authorizeRequests().antMatchers("/h2-console/**").permitAll()
-                    .and().csrf().ignoringAntMatchers("/h2-console/**")
-                    .and().headers().frameOptions().sameOrigin();
-        }
+        if (!environment.getApplicationMode().equals(ApplicationMode.DEV.getModeName())) return;
+        http.authorizeRequests()
+                .antMatchers("/h2-console/**").permitAll()
+                    .and()
+                .csrf().ignoringAntMatchers("/h2-console/**")
+                    .and()
+                .headers().frameOptions().sameOrigin();
     }
 }

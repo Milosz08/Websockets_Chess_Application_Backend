@@ -70,7 +70,7 @@ public class LocalUserModel extends AuditableEntity implements Serializable {
         this.isBlocked = isBlocked;
     }
 
-    String getNickname() {
+    public String getNickname() {
         return nickname;
     }
 
@@ -94,7 +94,7 @@ public class LocalUserModel extends AuditableEntity implements Serializable {
         this.lastName = lastName;
     }
 
-    String getEmailAddress() {
+    public String getEmailAddress() {
         return emailAddress;
     }
 
@@ -102,7 +102,7 @@ public class LocalUserModel extends AuditableEntity implements Serializable {
         this.emailAddress = emailAddress;
     }
 
-    String getPassword() {
+    public String getPassword() {
         return password;
     }
 
@@ -118,7 +118,7 @@ public class LocalUserModel extends AuditableEntity implements Serializable {
         this.credentialsSupplier = credentialsSupplier;
     }
 
-    Boolean isActivated() {
+    public Boolean isActivated() {
         return isActivated;
     }
 
@@ -126,7 +126,7 @@ public class LocalUserModel extends AuditableEntity implements Serializable {
         isActivated = activated;
     }
 
-    Boolean isBlocked() {
+    public Boolean isBlocked() {
         return isBlocked;
     }
 
@@ -158,7 +158,7 @@ public class LocalUserModel extends AuditableEntity implements Serializable {
         this.localUserDetails = localUserDetails;
     }
 
-    Set<LocalUserRoleModel> getRoles() {
+    public Set<LocalUserRoleModel> getRoles() {
         return roles;
     }
 

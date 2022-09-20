@@ -22,7 +22,7 @@ package pl.miloszgilga.chessappbackend.config;
 
 public class ApplicationEndpoints {
 
-    private static final String BASIC_ENDPOINT = "/javabean/app/v1/";
+    public static final String BASIC_ENDPOINT = "/javabean/app/v1/";
 
     //------------------------------------------------------------------------------------------------------------------
 
