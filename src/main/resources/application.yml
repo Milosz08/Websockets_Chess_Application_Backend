@@ -16,6 +16,8 @@ spring:
     test-connection: false
   web:
     locale: en_US
+  security.oauth2.client.provider.facebook:
+    user-info-uri: https://graph.facebook.com/me?fields=id,name,email,picture
 
 logging:
   pattern:

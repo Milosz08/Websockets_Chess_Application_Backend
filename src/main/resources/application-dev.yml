@@ -30,3 +30,15 @@ spring:
         ssl.enable: false
         auth: true
         starttls.enable: false
+  security.oauth2.client.registration:
+    google:
+      clientId: ${env.DEV_OAUTH2_GOOGLE_CLIENT_SECRET}
+      clientSecret: ${env.DEV_OAUTH2_GOOGLE_CLIENT_ID}
+    facebook:
+      clientId: ${env.DEV_OAUTH2_FACEBOOK_CLIENT_SECRET}
+      clientSecret: ${env.DEV_OAUTH2_FACEBOOK_CLIENT_ID}
+
+oauth2-custom:
+  token-secret: ${env.DEV_OAUTH2_TOKEN_SECRET}
+  token-expiration-hours: 24
+  redirect-uris: http://127.0.0.1:4200/oauth2/redirect,myandroidapp://oauth2/redirect,myiosapp://oauth2/redirect

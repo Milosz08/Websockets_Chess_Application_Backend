@@ -28,6 +28,18 @@ spring:
         ssl.enable: true
         auth: true
         starttls.enable: true
+  security.oauth2.client.registration:
+    google:
+      clientId: ${env.PROD_OAUTH2_GOOGLE_CLIENT_SECRET}
+      clientSecret: ${env.PROD_OAUTH2_GOOGLE_CLIENT_ID}
+    facebook:
+      clientId: ${env.PROD_OAUTH2_FACEBOOK_CLIENT_SECRET}
+      clientSecret: ${env.PROD_OAUTH2_FACEBOOK_CLIENT_ID}
+
+oauth2-custom:
+  token-secret: ${env.PROD_OAUTH2_TOKEN_SECRET}
+  token-expiration-hours: 12
+  redirect-uris: ${env.PROD_FRONTEND_CORS_AGENT}/oauth2/redirect,myandroidapp://oauth2/redirect,myiosapp://oauth2/redirect
 
 logging:
   file.name: prod-logs/chessappbackend.log

@@ -25,6 +25,8 @@ import org.springframework.stereotype.Component;
 import org.springframework.context.annotation.Primary;
 import org.springframework.beans.factory.annotation.Value;
 
+import java.util.List;
+
 //----------------------------------------------------------------------------------------------------------------------
 
 @Getter
@@ -45,4 +47,7 @@ public class EnvironmentVars {
     @Value("${config.cors-max-age-seconds}")                                    private Integer corsMaxAgeSeconds;
     @Value("${config.authorization.password-encoder-strength}")                 private Integer passwordEncoderStrength;
     @Value("${authorization.bearer-token.token-expired-minutes}")               private Integer bearerTokenExpiredMinutes;
+    @Value("${oauth2-custom.token-secret}")                                     private String oauth2TokenSecret;
+    @Value("${oauth2-custom.token-expiration-hours}")                           private Integer oauth2TokenExpirationHours;
+    @Value("${oauth2-custom.redirect-uris}")                                    private List<String> oauth2RedirectUris;
 }
