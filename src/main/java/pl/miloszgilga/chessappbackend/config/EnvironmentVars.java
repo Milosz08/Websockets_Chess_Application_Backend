@@ -50,4 +50,7 @@ public class EnvironmentVars {
     @Value("${oauth2-custom.token-secret}")                                     private String oauth2TokenSecret;
     @Value("${oauth2-custom.token-expiration-hours}")                           private Integer oauth2TokenExpirationHours;
     @Value("${oauth2-custom.redirect-uris}")                                    private List<String> oauth2RedirectUris;
+    @Value("${authorization.oauth2-custom.session-remember-cookie-name}")       private String oauth2SessionRememberCookieName;
+    @Value("${authorization.oauth2-custom.redirect-uri-cookie-name}")           private String oauth2RedirectUriCookieName;
+    @Value("${authorization.oauth2-custom.cookie-expired-minutes}")             private Integer oauth2CookieExpiredMinutes;
 }

@@ -38,3 +38,7 @@ authorization:
     token-length: 10
   bearer-token:
     token-expired-minutes: 5
+  oauth2-custom:
+    session-remember-cookie-name: oauth2_auth_request
+    redirect-uri-cookie-name: redirect_uri
+    cookie-expired-minutes: 3
