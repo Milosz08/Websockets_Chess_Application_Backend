@@ -29,4 +29,22 @@ public class AuthException {
             super(HttpStatus.UNAUTHORIZED, message, args);
         }
     }
+
+    public static class OAuth2AuthenticationProcessingException extends BasicServerException {
+        public OAuth2AuthenticationProcessingException(String message, Object... args) {
+            super(HttpStatus.NOT_IMPLEMENTED, message, args);
+        }
+    }
+
+    public static class OAuth2CredentialsSupplierMalformedException extends BasicServerException {
+        public OAuth2CredentialsSupplierMalformedException(String message, Object... args) {
+            super(HttpStatus.UNAUTHORIZED, message, args);
+        }
+    }
+
+    public static class OAuth2NotSupportedUriException extends BasicServerException {
+        public OAuth2NotSupportedUriException(String message, Object... args) {
+            super(HttpStatus.BAD_REQUEST, message, args);
+        }
+    }
 }

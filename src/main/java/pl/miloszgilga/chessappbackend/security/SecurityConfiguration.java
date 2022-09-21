@@ -20,16 +20,26 @@ package pl.miloszgilga.chessappbackend.security;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 
+import pl.miloszgilga.chessappbackend.utils.CookieHelper;
 import pl.miloszgilga.chessappbackend.config.EnvironmentVars;
 import pl.miloszgilga.chessappbackend.filter.JwtTokenAuthenticationFilter;
+
+import pl.miloszgilga.chessappbackend.oauth.AppOidcUserService;
+import pl.miloszgilga.chessappbackend.oauth.AppOAuth2UserService;
+import pl.miloszgilga.chessappbackend.oauth.CookieOAuth2ReqRepository;
+import pl.miloszgilga.chessappbackend.oauth.resolver.OAuth2AuthFailureResolver;
+import pl.miloszgilga.chessappbackend.oauth.resolver.OAuth2AuthSuceessfulResolver;
 
 import static pl.miloszgilga.chessappbackend.config.ApplicationEndpoints.*;
 
@@ -39,9 +49,16 @@ import static pl.miloszgilga.chessappbackend.config.ApplicationEndpoints.*;
 @EnableWebSecurity
 public class SecurityConfiguration {
 
+    private final CookieHelper cookieHelper;
     private final EnvironmentVars environment;
-    private final JwtTokenAuthenticationFilter authenticationFilter;
+    private final SecurityHelper securityHelper;
     private final AuthenticationRestEntryPoint restEntryPoint;
+    private final JwtTokenAuthenticationFilter authenticationFilter;
+
+    private final AppOidcUserService appOidcUserService;
+    private final AppOAuth2UserService appOAuth2UserService;
+    private final OAuth2AuthFailureResolver oAuth2AuthFailureResolver;
+    private final OAuth2AuthSuceessfulResolver oAuth2AuthSuceessfulResolver;
 
     public static final String[] DISABLE_PATHS_FOR_JWT_FILTERING = {
             "/", "/error", "/oauth2/**",
@@ -49,13 +66,20 @@ public class SecurityConfiguration {
             EXPOSE_STATIC_DATA_ENDPOINT + "/**",
     };
 
-    public SecurityConfiguration(
-            EnvironmentVars environment, JwtTokenAuthenticationFilter authenticationFilter,
-            AuthenticationRestEntryPoint restEntryPoint
-    ) {
+    public SecurityConfiguration(EnvironmentVars environment, JwtTokenAuthenticationFilter authenticationFilter,
+                                 AuthenticationRestEntryPoint restEntryPoint, AppOidcUserService appOidcUserService,
+                                 AppOAuth2UserService appOAuth2UserService, CookieHelper cookieHelper,
+                                 OAuth2AuthFailureResolver oAuth2AuthFailureResolver, SecurityHelper securityHelper,
+                                 OAuth2AuthSuceessfulResolver oAuth2AuthSuceessfulResolver) {
         this.environment = environment;
+        this.securityHelper = securityHelper;
+        this.cookieHelper = cookieHelper;
         this.authenticationFilter = authenticationFilter;
         this.restEntryPoint = restEntryPoint;
+        this.appOidcUserService = appOidcUserService;
+        this.appOAuth2UserService = appOAuth2UserService;
+        this.oAuth2AuthFailureResolver = oAuth2AuthFailureResolver;
+        this.oAuth2AuthSuceessfulResolver = oAuth2AuthSuceessfulResolver;
     }
 
     @Bean
@@ -73,6 +97,22 @@ public class SecurityConfiguration {
                     .antMatchers(DISABLE_PATHS_FOR_JWT_FILTERING).permitAll()
                     .anyRequest().authenticated()
                     .and()
+                .oauth2Login()
+                    .authorizationEndpoint()
+                        .authorizationRequestRepository(cookieOAuth2ReqRepository())
+                        .and()
+                    .redirectionEndpoint()
+                        .and()
+                    .userInfoEndpoint()
+                        .oidcUserService(appOidcUserService)
+                        .userService(appOAuth2UserService)
+                        .and()
+                    .tokenEndpoint()
+                        .accessTokenResponseClient(securityHelper.authTokenCodeResponseToTheClient())
+                        .and()
+                    .successHandler(oAuth2AuthSuceessfulResolver)
+                    .failureHandler(oAuth2AuthFailureResolver)
+                    .and()
                 .addFilterBefore(authenticationFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
@@ -86,6 +126,12 @@ public class SecurityConfiguration {
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder(environment.getPasswordEncoderStrength());
+    }
+
+    @Bean
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration)
+            throws Exception {
+        return authenticationConfiguration.getAuthenticationManager();
     }
 
     private void enableH2ConsoleForDevelopment(HttpSecurity http) throws Exception {

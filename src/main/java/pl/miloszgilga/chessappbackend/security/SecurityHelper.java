@@ -19,13 +19,22 @@
 package pl.miloszgilga.chessappbackend.security;
 
 import org.springframework.stereotype.Component;
+import org.springframework.web.client.RestTemplate;
+import org.springframework.http.converter.FormHttpMessageConverter;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.oauth2.client.http.OAuth2ErrorResponseErrorHandler;
+import org.springframework.security.oauth2.client.endpoint.OAuth2AccessTokenResponseClient;
+import org.springframework.security.oauth2.client.endpoint.OAuth2AuthorizationCodeGrantRequest;
+import org.springframework.security.oauth2.client.endpoint.DefaultAuthorizationCodeTokenResponseClient;
+import org.springframework.security.oauth2.core.http.converter.OAuth2AccessTokenResponseHttpMessageConverter;
 
 import java.util.Set;
 import java.util.List;
+import java.util.Arrays;
 import java.util.ArrayList;
 
 import pl.miloszgilga.chessappbackend.oauth.AuthUser;
+import pl.miloszgilga.chessappbackend.oauth.OAuth2CustomTokenConverter;
 import pl.miloszgilga.chessappbackend.network.auth_local.domain.LocalUserModel;
 import pl.miloszgilga.chessappbackend.network.auth_local.domain.LocalUserRoleModel;
 
@@ -44,5 +53,15 @@ public class SecurityHelper {
 
     AuthUser generateSecurityUserByModelData(final LocalUserModel model) {
         return new AuthUser(model, generateSimpleGrantedAuthorities(model.getRoles()));
+    }
+
+    OAuth2AccessTokenResponseClient<OAuth2AuthorizationCodeGrantRequest> authTokenCodeResponseToTheClient() {
+        final var converter = new OAuth2AccessTokenResponseHttpMessageConverter();
+        converter.setAccessTokenResponseConverter(new OAuth2CustomTokenConverter());
+        final var template = new RestTemplate(Arrays.asList(new FormHttpMessageConverter(), converter));
+        template.setErrorHandler(new OAuth2ErrorResponseErrorHandler());
+        final var responseClient = new DefaultAuthorizationCodeTokenResponseClient();
+        responseClient.setRestOperations(template);
+        return responseClient;
     }
 }

@@ -18,8 +18,17 @@
 
 package pl.miloszgilga.chessappbackend.oauth;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import lombok.Getter;
 import lombok.AllArgsConstructor;
+
+import java.util.List;
+import java.util.stream.Stream;
+import java.util.stream.Collectors;
+
+import pl.miloszgilga.chessappbackend.exception.custom.AuthException;
 
 //----------------------------------------------------------------------------------------------------------------------
 
@@ -31,4 +40,23 @@ public enum CredentialsSupplier {
     LOCAL("local");
 
     private final String supplier;
+    private static final Logger LOGGER = LoggerFactory.getLogger(CredentialsSupplier.class);
+
+    public static List<String> getAllSuppliers() {
+        return Stream.of(CredentialsSupplier.values())
+                .filter(s -> s.supplier.equals(LOCAL.supplier))
+                .map(CredentialsSupplier::getSupplier)
+                .collect(Collectors.toList());
+    }
+
+    public static CredentialsSupplier findSupplierBasedRegistrationId(String registrationId) {
+        return Stream.of(CredentialsSupplier.values())
+                .filter(s -> s.supplier.equalsIgnoreCase(registrationId))
+                .findFirst()
+                .orElseThrow(() -> {
+                    LOGGER.error("Passed registration id: {} is not valid credentials supplier name.", registrationId);
+                    throw new AuthException.OAuth2CredentialsSupplierMalformedException(String.format(
+                            "Passed registration id: %s is not valid credentials supplier name.", registrationId));
+                });
+    }
 }

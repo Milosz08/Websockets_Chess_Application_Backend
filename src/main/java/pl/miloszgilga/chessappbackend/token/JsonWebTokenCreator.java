@@ -22,11 +22,12 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.Claims;
 
 import org.springframework.stereotype.Component;
+import org.springframework.security.core.Authentication;
 
+import pl.miloszgilga.chessappbackend.oauth.AuthUser;
 import pl.miloszgilga.chessappbackend.utils.TimeHelper;
 import pl.miloszgilga.chessappbackend.config.EnvironmentVars;
 import pl.miloszgilga.chessappbackend.security.LocalUserRole;
-import pl.miloszgilga.chessappbackend.network.auth_local.domain.LocalUserModel;
 
 import static pl.miloszgilga.chessappbackend.token.JwtClaim.*;
 
@@ -54,12 +55,13 @@ public class JsonWebTokenCreator {
         return basicJwtToken("unsubscribe-newsletter-token", claims);
     }
 
-    public String createUserCredentialsToken(LocalUserModel user) {
+    public String createUserCredentialsToken(Authentication authentication) {
+        final AuthUser localAuthUser = (AuthUser) authentication.getPrincipal();
         final Claims claims = Jwts.claims();
-        claims.put(USER_ID.getClaimName(), user.getId());
-        claims.put(NICKNAME.getClaimName(), user.getNickname());
-        claims.put(EMAIL.getClaimName(), user.getEmailAddress());
-        claims.put(ROLES.getClaimName(), LocalUserRole.simplifyUserRoles(user.getRoles()));
+        claims.put(USER_ID.getClaimName(), localAuthUser.getUserModel().getId());
+        claims.put(NICKNAME.getClaimName(), localAuthUser.getUserModel().getNickname());
+        claims.put(EMAIL.getClaimName(), localAuthUser.getUserModel().getEmailAddress());
+        claims.put(ROLES.getClaimName(), LocalUserRole.simplifyUserRoles(localAuthUser.getUserModel().getRoles()));
         claims.setExpiration(timeHelper.addMinutesToCurrentDate(environment.getBearerTokenExpiredMinutes()));
         return basicJwtToken("user-credentials", claims);
     }
