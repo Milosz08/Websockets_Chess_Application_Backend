@@ -66,7 +66,6 @@ public class SecurityConfiguration {
                 .csrf().disable()
                 .formLogin().disable()
                 .httpBasic().disable()
-                .antMatcher(BASIC_ENDPOINT + "**")
                 .exceptionHandling()
                     .authenticationEntryPoint(restEntryPoint)
                     .and()
@@ -77,6 +76,11 @@ public class SecurityConfiguration {
                 .addFilterBefore(authenticationFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
+    }
+
+    @Bean
+    public CookieOAuth2ReqRepository cookieOAuth2ReqRepository() {
+        return new CookieOAuth2ReqRepository(cookieHelper, environment);
     }
 
     @Bean
