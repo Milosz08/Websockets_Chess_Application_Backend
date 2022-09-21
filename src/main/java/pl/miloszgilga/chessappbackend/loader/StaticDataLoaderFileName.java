@@ -1,7 +1,7 @@
 /*
  * Copyright (c) 2022 by MILOSZ GILGA <https://miloszgilga.pl>
  *
- * File name: StaticDataLoaderFile.java
+ * File name: StaticDataLoaderFileName.java
  * Last modified: 15/09/2022, 19:31
  * Project name: chess-app-backend
  *

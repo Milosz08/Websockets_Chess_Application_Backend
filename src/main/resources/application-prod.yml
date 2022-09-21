@@ -30,11 +30,11 @@ spring:
         starttls.enable: true
   security.oauth2.client.registration:
     google:
-      clientId: ${env.PROD_OAUTH2_GOOGLE_CLIENT_SECRET}
-      clientSecret: ${env.PROD_OAUTH2_GOOGLE_CLIENT_ID}
+      clientId: ${env.PROD_OAUTH2_GOOGLE_CLIENT_ID}
+      clientSecret: ${env.PROD_OAUTH2_GOOGLE_CLIENT_SECRET}
     facebook:
-      clientId: ${env.PROD_OAUTH2_FACEBOOK_CLIENT_SECRET}
-      clientSecret: ${env.PROD_OAUTH2_FACEBOOK_CLIENT_ID}
+      clientId: ${env.PROD_OAUTH2_FACEBOOK_CLIENT_ID}
+      clientSecret: ${env.PROD_OAUTH2_FACEBOOK_CLIENT_SECRET}
 
 oauth2-custom:
   token-secret: ${env.PROD_OAUTH2_TOKEN_SECRET}

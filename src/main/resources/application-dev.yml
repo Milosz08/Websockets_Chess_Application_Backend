@@ -1,12 +1,12 @@
 config:
-  frontend-cors-url: http://127.0.0.1:4200
+  frontend-cors-url: http://localhost:4200
   frontend-name: localhost
   authorization:
     jwt-key: daw94289vndq98198nkejfnkaendwef93892fnskjdenfkjeiwefibiu32983fnskjdfn
     jwt-issuer: localhost
     password-encoder-strength: 4
 server:
-  port: 7575
+  port: 9595
 
 spring:
   devtools.livereload.port: 35731
@@ -32,13 +32,13 @@ spring:
         starttls.enable: false
   security.oauth2.client.registration:
     google:
-      clientId: ${env.DEV_OAUTH2_GOOGLE_CLIENT_SECRET}
-      clientSecret: ${env.DEV_OAUTH2_GOOGLE_CLIENT_ID}
+      clientId: ${env.DEV_OAUTH2_GOOGLE_CLIENT_ID}
+      clientSecret: ${env.DEV_OAUTH2_GOOGLE_CLIENT_SECRET}
     facebook:
-      clientId: ${env.DEV_OAUTH2_FACEBOOK_CLIENT_SECRET}
-      clientSecret: ${env.DEV_OAUTH2_FACEBOOK_CLIENT_ID}
+      clientId: ${env.DEV_OAUTH2_FACEBOOK_CLIENT_ID}
+      clientSecret: ${env.DEV_OAUTH2_FACEBOOK_CLIENT_SECRET}
 
 oauth2-custom:
   token-secret: ${env.DEV_OAUTH2_TOKEN_SECRET}
   token-expiration-hours: 24
-  redirect-uris: http://127.0.0.1:4200/oauth2/redirect,myandroidapp://oauth2/redirect,myiosapp://oauth2/redirect
+  redirect-uris: http://localhost:4200/oauth2/redirect,myandroidapp://oauth2/redirect,myiosapp://oauth2/redirect
