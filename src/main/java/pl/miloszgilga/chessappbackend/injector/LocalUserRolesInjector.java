@@ -33,12 +33,12 @@ import pl.miloszgilga.chessappbackend.network.auth_local.domain.ILocalUserRoleRe
 //----------------------------------------------------------------------------------------------------------------------
 
 @Component
-class LocalUserRolesLoader implements ApplicationRunner {
+class LocalUserRolesInjector implements ApplicationRunner {
 
     private final ILocalUserRoleRepository repository;
     private final Set<String> userRoles;
 
-    LocalUserRolesLoader(ILocalUserRoleRepository repository) {
+    LocalUserRolesInjector(ILocalUserRoleRepository repository) {
         this.repository = repository;
         this.userRoles = Stream.of(LocalUserRole.values())
                 .map(LocalUserRole::getRoleName)
