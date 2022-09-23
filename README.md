@@ -67,7 +67,21 @@ to `127.0.0.1`.
 11. Return to XAMPP control panel, and start Mercury via `Start` button.
 > NOTE: For more info about XAMPP Mercury SMTP server configuration, go 
 > [under this link](https://www.c-sharpcorner.com/UploadFile/c8aa13/send-mail-on-local-host-via-mercury-with-xampp/).
-12. Run Java application with `--dev` switch. Application should be available on `http://127.0.0.1:7575/javabean/app/v1`.
+12. Create `.env` file or add environment server variables (file must be located in root application directory).
+13. Fill in the content shown below:
+```properties
+# OAuth2 authentication tokens
+DEV_OAUTH2_GOOGLE_CLIENT_SECRET         = xxxxx -> <your-google-client-secret>
+DEV_OAUTH2_GOOGLE_CLIENT_ID             = xxxxx -> <your-google-client-id>
+DEV_OAUTH2_FACEBOOK_CLIENT_SECRET       = xxxxx -> <your-facebook-client-secret>
+DEV_OAUTH2_FACEBOOK_CLIENT_ID           = xxxxx -> <your-facebook-client-secret>
+
+# OAuth2 authentication miscs
+DEV_OAUTH2_TOKEN_SECRET                 = xxxxx -> ex. [[G879789N9QVWC897V0F094NMODF]]
+PROD_OAUTH2_TOKEN_SECRET                = xxxxx -> ex. [[9B8VWI3JHJ3KOHO5O9OQODNNV89]]
+DEV_PROD_OAUTH2_PASSWORD_REPLACER       = xxxxx -> ex. [[5m2vFmwfi7]]
+```
+14. Run Java application with `--dev` switch. Application should be available on `http://127.0.0.1:7575/javabean/app/v1`.
 > NOTE: If you do not use any switch, the application will not start correctly.
 
 <a name="prepare-production-configuration"></a>
@@ -94,17 +108,12 @@ PROD_DB_USERNAME                        = xxxxx
 PROD_DB_PASSWORD                        = xxxxx
 
 # OAuth2 authentication tokens
-DEV_OAUTH2_GOOGLE_CLIENT_SECRET         = xxxxx -> <your-google-client-secret>
-DEV_OAUTH2_GOOGLE_CLIENT_ID             = xxxxx -> <your-google-client-id>
-DEV_OAUTH2_FACEBOOK_CLIENT_SECRET       = xxxxx -> <your-facebook-client-secret>
-DEV_OAUTH2_FACEBOOK_CLIENT_ID           = xxxxx -> <your-facebook-client-secret>
-PROD_OAUTH2_GOOGLE_CLIENT_SECRET        = xxxxx
-PROD_OAUTH2_GOOGLE_CLIENT_ID            = xxxxx
-PROD_OAUTH2_FACEBOOK_CLIENT_SECRET      = xxxxx
-PROD_OAUTH2_FACEBOOK_CLIENT_ID          = xxxxx
+PROD_OAUTH2_GOOGLE_CLIENT_SECRET        = xxxxx -> <your-google-client-secret>
+PROD_OAUTH2_GOOGLE_CLIENT_ID            = xxxxx -> <your-google-client-id>
+PROD_OAUTH2_FACEBOOK_CLIENT_SECRET      = xxxxx -> <your-facebook-client-secret>
+PROD_OAUTH2_FACEBOOK_CLIENT_ID          = xxxxx -> <your-facebook-client-secret>
 
 # OAuth2 authentication miscs
-DEV_OAUTH2_TOKEN_SECRET                 = xxxxx -> ex. [[G879789N9QVWC897V0F094NMODF]]
 PROD_OAUTH2_TOKEN_SECRET                = xxxxx -> ex. [[9B8VWI3JHJ3KOHO5O9OQODNNV89]]
 DEV_PROD_OAUTH2_PASSWORD_REPLACER       = xxxxx -> ex. [[5m2vFmwfi7]]
 ```
