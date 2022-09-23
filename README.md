@@ -29,7 +29,7 @@ $ git clone https://github.com/Milosz08/Websockets_Chess_Application_Backend
 <a name="prepare-development-configuration"></a>
 ## Prepare development configuration
 1. The application in debug mode uses the default H2 database. The database is configured and after cloning the 
-repository, all you have to do is go to `http://127.0.0.1:7575/h2-console` and log in (username: `sa`, without password).
+repository, all you have to do is go to `http://127.0.0.1:9595/h2-console` and log in (username: `sa`, without password).
 2. Download the XAMPP installer from [this link](https://www.apachefriends.org/download.html).
 3. Install XAMPP (make sure you install XAMPP together with the Mercury mail agent).
 4. Click on the `Admin` tab to open the Mercury configuration window.
@@ -80,7 +80,7 @@ DEV_OAUTH2_FACEBOOK_CLIENT_ID           = xxxxx -> <your-facebook-client-secret>
 DEV_OAUTH2_TOKEN_SECRET                 = xxxxx -> ex. [[G879789N9QVWC897V0F094NMODF]]
 DEV_PROD_OAUTH2_PASSWORD_REPLACER       = xxxxx -> ex. [[5m2vFmwfi7]]
 ```
-14. Run Java application with `--dev` switch. Application should be available on `http://127.0.0.1:7575/javabean/app/v1`.
+14. Run Java application with `--dev` switch. Application should be available on `http://127.0.0.1:9595/javabean/app/v1`.
 > NOTE: If you do not use any switch, the application will not start correctly.
 
 <a name="prepare-production-configuration"></a>
