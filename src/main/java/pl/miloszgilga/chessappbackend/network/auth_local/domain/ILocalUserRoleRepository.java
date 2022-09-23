@@ -20,8 +20,9 @@ package pl.miloszgilga.chessappbackend.network.auth_local.domain;
 
 import org.springframework.stereotype.Repository;
 import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
 import org.springframework.data.jpa.repository.JpaRepository;
+
+import java.util.Optional;
 
 import pl.miloszgilga.chessappbackend.security.LocalUserRole;
 
@@ -31,5 +32,8 @@ import pl.miloszgilga.chessappbackend.security.LocalUserRole;
 public interface ILocalUserRoleRepository extends JpaRepository<LocalUserRoleModel, Long> {
 
     @Query(value = "SELECT COUNT(m) > 0 FROM LocalUserRoleModel m WHERE m.roleName=:roleName")
-    boolean findIfRoleExist(@Param("roleName") LocalUserRole roleName);
+    Boolean findIfRoleExist(LocalUserRole roleName);
+
+    @Query(value = "SELECT m FROM LocalUserRoleModel m WHERE m.roleName=:roleName")
+    Optional<LocalUserRoleModel> findRoleByType(LocalUserRole roleName);
 }

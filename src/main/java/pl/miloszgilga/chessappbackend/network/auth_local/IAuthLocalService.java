@@ -18,14 +18,18 @@
 
 package pl.miloszgilga.chessappbackend.network.auth_local;
 
-import pl.miloszgilga.chessappbackend.dto.SimpleServerMessageDto;
-import pl.miloszgilga.chessappbackend.network.auth_local.dto.LoginViaLocalRequestDto;
-import pl.miloszgilga.chessappbackend.network.auth_local.dto.SignupViaLocalRequestDto;
-import pl.miloszgilga.chessappbackend.network.auth_local.dto.SuccessedLoginViaLocalResponseDto;
+import pl.miloszgilga.chessappbackend.oauth.AuthUser;
+import pl.miloszgilga.chessappbackend.oauth.dto.OAuth2RegistrationData;
+
+import pl.miloszgilga.chessappbackend.network.auth_local.dto.LoginViaLocalReqDto;
+import pl.miloszgilga.chessappbackend.network.auth_local.dto.SignupViaLocalReqDto;
+import pl.miloszgilga.chessappbackend.network.auth_local.dto.SuccessedLoginViaLocalResDto;
+import pl.miloszgilga.chessappbackend.network.auth_local.dto.SuccessedSignupViaLocalResDto;
 
 //----------------------------------------------------------------------------------------------------------------------
 
 interface IAuthLocalService {
-    SuccessedLoginViaLocalResponseDto loginViaLocal(LoginViaLocalRequestDto req);
-    SimpleServerMessageDto signupViaLocal(SignupViaLocalRequestDto req);
+    SuccessedLoginViaLocalResDto loginViaLocal(LoginViaLocalReqDto req);
+    SuccessedSignupViaLocalResDto signupViaLocal(SignupViaLocalReqDto req);
+    AuthUser registrationProcessingFactory(OAuth2RegistrationData registrationData);
 }

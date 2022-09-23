@@ -32,8 +32,14 @@ public interface ILocalUserRepository extends JpaRepository<LocalUserModel, Long
     @Query(value = "SELECT m FROM LocalUserModel m WHERE m.nickname=:nickname")
     Optional<LocalUserModel> findUserByNickname(String nickname);
 
+    @Query(value = "SELECT count(m) > 0 FROM LocalUserModel m WHERE m.nickname=:nickname")
+    Boolean checkIfUserByNicknameExist(String nickname);
+
     @Query(value = "SELECT m FROM LocalUserModel m WHERE m.emailAddress=:emailAddress")
     Optional<LocalUserModel> findUserByEmailAddress(String emailAddress);
+
+    @Query(value = "SELECT count(m) > 0 FROM LocalUserModel m WHERE m.emailAddress=:emailAddress")
+    Boolean checkIfUserByEmailAddressExist(String emailAddress);
 
     @Query(value = "SELECT m FROM LocalUserModel m WHERE m.emailAddress=:emailAddress AND m.nickname=:nickname AND m.id=:id")
     Optional<LocalUserModel> findUserByEmailAddressNicknameAndId(String emailAddress, String nickname, Long id);
