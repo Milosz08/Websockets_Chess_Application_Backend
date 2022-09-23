@@ -79,21 +79,37 @@ instructions below). Also check that both servers provide an SSL encrypted conne
 3. Fill in the content shown below:
 ```properties
 # JWT and CORS policy
-PROD_FRONTEND_CORS_AGENT      = xxxxx -> ex. [[https://exampledomain.pl/]]
-PROD_JWT_KEY                  = xxxxx
-PROD_FRONTEND_WITH_JWT_ISSUER = xxxxx -> [[ex. exampledomain.pl]]
+PROD_FRONTEND_CORS_AGENT                = xxxxx -> ex. [[https://exampledomain.pl/]]
+PROD_JWT_KEY                            = xxxxx
+PROD_FRONTEND_WITH_JWT_ISSUER           = xxxxx -> ex. [[exampledomain.pl]]
 
 # SMTP email service
-PROD_SMTP_MAIL_AGENT          = xxxxx    ex. mail.example.net
-PROD_SMTP_MAIL_USERNAME       = xxxxx
-PROD_SMTP_MAIL_PASSWORD       = xxxxx
+PROD_SMTP_MAIL_AGENT                    = xxxxx -> ex. [[mail.example.net]]
+PROD_SMTP_MAIL_USERNAME                 = xxxxx
+PROD_SMTP_MAIL_PASSWORD                 = xxxxx
 
 # Database connectivity
-PROD_DB_CONNECTION_STRING     = jdbc:[dbProvider]://[dbHost]:[dbPort]/[dbName]
-PROD_DB_USERNAME              = xxxxx
-PROD_DB_PASSWORD              = xxxxx
+PROD_DB_CONNECTION_STRING               = jdbc:[dbProvider]://[dbHost]:[dbPort]/[dbName]
+PROD_DB_USERNAME                        = xxxxx
+PROD_DB_PASSWORD                        = xxxxx
+# OAuth2 authentication tokens
+DEV_OAUTH2_GOOGLE_CLIENT_SECRET         = xxxxx -> <your-google-client-secret>
+DEV_OAUTH2_GOOGLE_CLIENT_ID             = xxxxx -> <your-google-client-id>
+DEV_OAUTH2_FACEBOOK_CLIENT_SECRET       = xxxxx -> <your-facebook-client-secret>
+DEV_OAUTH2_FACEBOOK_CLIENT_ID           = xxxxx -> <your-facebook-client-secret>
+PROD_OAUTH2_GOOGLE_CLIENT_SECRET        = xxxxx
+PROD_OAUTH2_GOOGLE_CLIENT_ID            = xxxxx
+PROD_OAUTH2_FACEBOOK_CLIENT_SECRET      = xxxxx
+PROD_OAUTH2_FACEBOOK_CLIENT_ID          = xxxxx
+
+# OAuth2 authentication miscs
+DEV_OAUTH2_TOKEN_SECRET                 = xxxxx -> ex. [[G879789N9QVWC897V0F094NMODF]]
+PROD_OAUTH2_TOKEN_SECRET                = xxxxx -> ex. [[9B8VWI3JHJ3KOHO5O9OQODNNV89]]
+DEV_PROD_OAUTH2_PASSWORD_REPLACER       = xxxxx -> ex. [[5m2vFmwfi7]]
 ```
-4. To run application in production mode, use `--prod` switch.
+4. Rest of values you can change in `application.properties`, `application-dev.properties` or `application-prod.properties`
+   accordingly for the selected server mode.
+5. To run application in production mode, use `--prod` switch.
 > NOTE: If you do not use any switch, the application will not start correctly.
 
 <a name="author"></a>
