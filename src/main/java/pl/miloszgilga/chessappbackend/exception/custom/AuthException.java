@@ -30,7 +30,13 @@ public class AuthException {
         }
     }
 
-    public static class OAuth2AuthenticationProcessingException extends BasicServerException {
+    public static class RoleNotFoundException extends BasicServerException {
+        public RoleNotFoundException(String message, Object... args) {
+            super(HttpStatus.NOT_FOUND, message, args);
+        }
+    }
+
+    public static class OAuth2AuthenticationProcessingException extends OAuthRedirectException {
         public OAuth2AuthenticationProcessingException(String message, Object... args) {
             super(HttpStatus.NOT_IMPLEMENTED, message, args);
         }
@@ -45,6 +51,24 @@ public class AuthException {
     public static class OAuth2NotSupportedUriException extends OAuthRedirectException {
         public OAuth2NotSupportedUriException(String message, Object... args) {
             super(HttpStatus.BAD_REQUEST, message, args);
+        }
+    }
+
+    public static class MalformedBirthDateException extends BasicServerException {
+        public MalformedBirthDateException(String message, Object... args) {
+            super(HttpStatus.BAD_REQUEST, message, args);
+        }
+    }
+
+    public static class AccountAlreadyExistException extends OAuthRedirectException {
+        public AccountAlreadyExistException(String message, Object... args) {
+            super(HttpStatus.BAD_REQUEST, message, args);
+        }
+    }
+
+    public static class DifferentAuthenticationProviderException extends BasicServerException {
+        public DifferentAuthenticationProviderException(String message, Object... args) {
+            super(HttpStatus.UNAUTHORIZED, message, args);
         }
     }
 }

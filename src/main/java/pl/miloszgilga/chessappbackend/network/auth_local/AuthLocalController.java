@@ -52,7 +52,7 @@ class AuthLocalController {
     }
 
     @PostMapping(SIGNUP_VIA_LOCAL)
-    ResponseEntity<SimpleServerMessageDto> signupViaLocal(@Valid @RequestBody SignupViaLocalRequestDto req) {
+    ResponseEntity<SuccessedSignupViaLocalResDto> signupViaLocal(@Valid @RequestBody SignupViaLocalReqDto req) {
         return new ResponseEntity<>(service.signupViaLocal(req), HttpStatus.CREATED);
     }
 }

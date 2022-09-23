@@ -64,4 +64,14 @@ public class SecurityHelper {
         responseClient.setRestOperations(template);
         return responseClient;
     }
+
+    public String hashingStringValue(String value, char hashChar) {
+        final String hashedPart = value.substring(0, value.indexOf('@'));
+        int hashingCharsCount = 3;
+        if (hashedPart.length() < 5) hashingCharsCount = 1;
+        final String hashPartVisible = value.substring(0, hashingCharsCount);
+        final String hashPartNonVisible = value.substring(hashingCharsCount + 1, value.indexOf('@'));
+        final String nonHashPart = value.substring(value.indexOf('@') + 2);
+        return hashPartVisible + Character.toString(hashChar).repeat(hashPartNonVisible.length()) + "@" + nonHashPart;
+    }
 }

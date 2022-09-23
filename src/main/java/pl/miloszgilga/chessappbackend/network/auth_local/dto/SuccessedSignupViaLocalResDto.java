@@ -1,8 +1,8 @@
 /*
  * Copyright (c) 2022 by MILOSZ GILGA <https://miloszgilga.pl>
  *
- * File name: UserSex.java
- * Last modified: 11/09/2022, 02:07
+ * File name: SuccessedSignupViaLocalResDto.java
+ * Last modified: 23/09/2022, 04:44
  * Project name: chess-app-backend
  *
  * Licensed under the MIT license; you may not use this file except in compliance with the License.
@@ -16,28 +16,19 @@
  * COPIES OR SUBSTANTIAL PORTIONS OF THE SOFTWARE.
  */
 
-package pl.miloszgilga.chessappbackend.utils;
+package pl.miloszgilga.chessappbackend.network.auth_local.dto;
 
-import lombok.Getter;
+import lombok.Data;
 import lombok.AllArgsConstructor;
 
-import java.util.stream.Stream;
+import java.util.List;
 
 //----------------------------------------------------------------------------------------------------------------------
 
-@Getter
+@Data
 @AllArgsConstructor
-public enum UserGenderSpecific {
-    MALE("male"),
-    FEMALE("female"),
-    OTHER("other");
-
-    private final String gender;
-
-    public static UserGenderSpecific findGenderByString(final String gender) {
-        return Stream.of(UserGenderSpecific.values())
-                .filter(r -> r.getGender().equals(gender))
-                .findFirst()
-                .orElse(UserGenderSpecific.OTHER);
-    }
+public class SuccessedSignupViaLocalResDto {
+    private String firstNameWithLastName;
+    private String serverResponse;
+    private List<String> activatedEmailsHash;
 }
