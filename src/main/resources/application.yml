@@ -38,7 +38,12 @@ authorization:
     token-length: 10
   bearer-token:
     token-expired-minutes: 5
+  refresh-token:
+    token-expired-months: 3
   oauth2-custom:
     session-remember-cookie-name: oauth2_auth_request
-    redirect-uri-cookie-name: redirect_uri
+    base-redirect-uri-cookie-name: base_uri
+    after-login-redirect-uri-cookie-name: after_login_uri
+    after-signup-redirect-uri-cookie-name: after_signup_uri
     cookie-expired-minutes: 3
+    password-replacer: ${env.DEV_PROD_OAUTH2_PASSWORD_REPLACER}
