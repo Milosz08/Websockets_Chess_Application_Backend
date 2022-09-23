@@ -36,13 +36,13 @@ public class AuthException {
         }
     }
 
-    public static class OAuth2CredentialsSupplierMalformedException extends BasicServerException {
+    public static class OAuth2CredentialsSupplierMalformedException extends OAuthRedirectException {
         public OAuth2CredentialsSupplierMalformedException(String message, Object... args) {
             super(HttpStatus.UNAUTHORIZED, message, args);
         }
     }
 
-    public static class OAuth2NotSupportedUriException extends BasicServerException {
+    public static class OAuth2NotSupportedUriException extends OAuthRedirectException {
         public OAuth2NotSupportedUriException(String message, Object... args) {
             super(HttpStatus.BAD_REQUEST, message, args);
         }

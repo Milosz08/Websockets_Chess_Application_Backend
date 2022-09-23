@@ -19,6 +19,7 @@
 package pl.miloszgilga.chessappbackend.exception;
 
 import org.springframework.http.HttpStatus;
+import org.springframework.context.MessageSource;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -28,6 +29,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 
 import java.util.List;
+import java.util.Locale;
 import java.util.ArrayList;
 
 import javax.servlet.http.HttpServletRequest;
@@ -42,9 +44,11 @@ import pl.miloszgilga.chessappbackend.exception.custom.BasicServerException;
 public class ExceptionListener {
 
     private final TimeHelper timeHelper;
+    private final MessageSource messageSource;
 
-    public ExceptionListener(TimeHelper timeHelper) {
+    public ExceptionListener(TimeHelper timeHelper, MessageSource messageSource) {
         this.timeHelper = timeHelper;
+        this.messageSource = messageSource;
     }
 
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
@@ -79,11 +83,20 @@ public class ExceptionListener {
                                                                HttpServletResponse res) {
         final var resData = basicExceptionRes(HttpStatus.UNAUTHORIZED, req);
         res.setStatus(HttpStatus.UNAUTHORIZED.value());
-        return new BasicDataExceptionRes(resData, ex.getMessage());
+        return new BasicDataExceptionRes(resData, mappingAuthorizationExceptionMessages(ex.getMessage()));
     }
 
     private ServerExceptionRes basicExceptionRes(HttpStatus status, HttpServletRequest req) {
         return new ServerExceptionRes(timeHelper.getCurrentUTC(), status.value(), status.name(),
                 req.getServletPath(), req.getMethod());
+    }
+
+    private String mappingAuthorizationExceptionMessages(String rawMessage) {
+        String messagePattern = "";
+        switch (rawMessage) {
+            case "User is disabled":            messagePattern = "auth.exception.accountNotVerified";   break;
+            case "Bad credentials":             messagePattern = "auth.exception.accountNotExist";      break;
+        }
+        return messagePattern.equals("") ? rawMessage : messageSource.getMessage(messagePattern, null, Locale.getDefault());
     }
 }
