@@ -18,9 +18,6 @@
 
 package pl.miloszgilga.chessappbackend.security;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import org.springframework.stereotype.Component;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.servlet.HandlerExceptionResolver;
@@ -35,7 +32,6 @@ import javax.servlet.http.HttpServletResponse;
 @Component
 class AuthenticationRestEntryPoint implements AuthenticationEntryPoint {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(AuthenticationException.class);
     private final HandlerExceptionResolver resolver;
 
     AuthenticationRestEntryPoint(@Qualifier("handlerExceptionResolver") HandlerExceptionResolver resolver) {
@@ -44,7 +40,6 @@ class AuthenticationRestEntryPoint implements AuthenticationEntryPoint {
 
     @Override
     public void commence(HttpServletRequest req, HttpServletResponse res, AuthenticationException ex) {
-        LOGGER.error("Attempt to access resource without authorization: {}", ex.getMessage());
         resolver.resolveException(req, res, null, ex);
     }
 }

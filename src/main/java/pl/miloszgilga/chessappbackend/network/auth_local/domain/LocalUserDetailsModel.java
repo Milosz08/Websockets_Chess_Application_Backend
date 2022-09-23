@@ -44,7 +44,7 @@ public class LocalUserDetailsModel extends AuditableEntity implements Serializab
     @Column(name = "PHOTO_EMBED_LINK")      private String photoEmbedLink;
     @Column(name = "HAS_NEWSLETTER_ACCEPT") private Boolean hasNewsletterAccept;
 
-    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "LOCAL_USER_ID", referencedColumnName = "ID")
     private LocalUserModel localUser;
 

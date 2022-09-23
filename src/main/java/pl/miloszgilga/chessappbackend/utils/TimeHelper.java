@@ -40,8 +40,8 @@ public class TimeHelper {
         return new Date(new Date().getTime() + ((long) minutes * 60 * 1000));
     }
 
-    public Date addDaysToCurrentDate(int days) {
-        return new Date(new Date().getTime() + ((long) days * 24 * 60 * 60 * 1000));
+    public Date addMonthsToCurrentDate(int months) {
+        return new Date(new Date().getTime() + ((long) months * 31 * 24 * 60 * 60 * 1000));
     }
 
     public int currentYearMinusAcceptableAge() {

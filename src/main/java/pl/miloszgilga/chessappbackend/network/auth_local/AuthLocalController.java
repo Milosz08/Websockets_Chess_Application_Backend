@@ -27,11 +27,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
 
-import pl.miloszgilga.chessappbackend.dto.SimpleServerMessageDto;
-import pl.miloszgilga.chessappbackend.network.auth_local.dto.LoginViaLocalRequestDto;
-import pl.miloszgilga.chessappbackend.network.auth_local.dto.SignupViaLocalRequestDto;
-import pl.miloszgilga.chessappbackend.network.auth_local.dto.SuccessedLoginViaLocalResponseDto;
-
+import pl.miloszgilga.chessappbackend.network.auth_local.dto.LoginViaLocalReqDto;
+import pl.miloszgilga.chessappbackend.network.auth_local.dto.SignupViaLocalReqDto;
+import pl.miloszgilga.chessappbackend.network.auth_local.dto.SuccessedLoginViaLocalResDto;
+import pl.miloszgilga.chessappbackend.network.auth_local.dto.SuccessedSignupViaLocalResDto;
 
 import static pl.miloszgilga.chessappbackend.config.ApplicationEndpoints.*;
 
@@ -48,7 +47,7 @@ class AuthLocalController {
     }
 
     @PostMapping(LOGIN_VIA_LOCAL)
-    ResponseEntity<SuccessedLoginViaLocalResponseDto> loginViaLocal(@Valid @RequestBody LoginViaLocalRequestDto req) {
+    ResponseEntity<SuccessedLoginViaLocalResDto> loginViaLocal(@Valid @RequestBody LoginViaLocalReqDto req) {
         return new ResponseEntity<>(service.loginViaLocal(req), HttpStatus.OK);
     }
 

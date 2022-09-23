@@ -61,8 +61,9 @@ public class SecurityConfiguration {
     private final OAuth2AuthSuccessfulResolver oAuth2AuthSuccessfulResolver;
 
     public static final String[] DISABLE_PATHS_FOR_JWT_FILTERING = {
-            "/", "/error", "/oauth2/**",
+            "/", "/error", "/oauth2/**", "/h2-console/**",
             NEWSLETTER_EMAIL_ENDPOINT + "/**",
+            AUTH_LOCAL_ENDPOINT + "/**",
             EXPOSE_STATIC_DATA_ENDPOINT + "/**",
     };
 
