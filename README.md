@@ -92,6 +92,7 @@ PROD_SMTP_MAIL_PASSWORD                 = xxxxx
 PROD_DB_CONNECTION_STRING               = jdbc:[dbProvider]://[dbHost]:[dbPort]/[dbName]
 PROD_DB_USERNAME                        = xxxxx
 PROD_DB_PASSWORD                        = xxxxx
+
 # OAuth2 authentication tokens
 DEV_OAUTH2_GOOGLE_CLIENT_SECRET         = xxxxx -> <your-google-client-secret>
 DEV_OAUTH2_GOOGLE_CLIENT_ID             = xxxxx -> <your-google-client-id>
