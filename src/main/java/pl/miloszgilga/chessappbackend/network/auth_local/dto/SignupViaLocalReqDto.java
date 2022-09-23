@@ -34,6 +34,7 @@ import static pl.miloszgilga.chessappbackend.validator.RegexPattern.*;
 @ValidateSecondEmailNotRepeat(message = "{jpa.validator.emailsAreTheSame.custom}")
 public class SignupViaLocalRequestDto {
 
+    @ValidateNicknameNotRepeat(message = "{jpa.validator.nickname.notRepeat}")
     @NotBlank(message = "{jpa.validator.nickname.notBlank}")
     @Pattern(regexp = NICKNAME_PATTERN, message = "{jpa.validator.nickname.regex}")
     private String nickname;
@@ -49,6 +50,7 @@ public class SignupViaLocalRequestDto {
     @NotBlank(message = "{jpa.validator.emailAddress.notBlank}")
     @Email(message = "{jpa.validator.emailAddress.pattern}")
     @Size(max = 100, message = "{jpa.validator.emailAddress.size}")
+    @ValidateEmailAlreadyExist(message = "{jpa.validator.emailAddress.notRepeat}")
     private String emailAddress;
 
     @NotNull(message = "{jpa.validator.secondEmailAddress.notNull}")
