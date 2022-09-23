@@ -19,6 +19,7 @@
 package pl.miloszgilga.chessappbackend.oauth;
 
 import org.springframework.stereotype.Service;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
@@ -41,7 +42,7 @@ public class AppOAuth2UserService extends DefaultOAuth2UserService {
 
     private final AuthLocalService authLocalService;
 
-    public AppOAuth2UserService(AuthLocalService authLocalService) {
+    public AppOAuth2UserService(@Lazy AuthLocalService authLocalService) {
         this.authLocalService = authLocalService;
     }
 

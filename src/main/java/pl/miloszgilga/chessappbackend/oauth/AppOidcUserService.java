@@ -19,6 +19,7 @@
 package pl.miloszgilga.chessappbackend.oauth;
 
 import org.springframework.stereotype.Service;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.oauth2.core.oidc.user.OidcUser;
 import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
@@ -38,7 +39,7 @@ public class AppOidcUserService extends OidcUserService {
 
     private final AuthLocalService authLocalService;
 
-    public AppOidcUserService(AuthLocalService authLocalService) {
+    public AppOidcUserService(@Lazy AuthLocalService authLocalService) {
         this.authLocalService = authLocalService;
     }
 
