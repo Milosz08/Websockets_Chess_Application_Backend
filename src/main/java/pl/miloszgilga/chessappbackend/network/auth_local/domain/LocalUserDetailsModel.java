@@ -41,6 +41,7 @@ public class LocalUserDetailsModel extends AuditableEntity implements Serializab
     @Column(name = "COUNTRY")               private String country;
     @Column(name = "GENDER")                private UserGenderSpecific gender;
     @Column(name = "HAS_PHOTO")             private Boolean hasPhoto;
+    @Column(name = "PHOTO_EMBED_LINK")      private String photoEmbedLink;
     @Column(name = "HAS_NEWSLETTER_ACCEPT") private Boolean hasNewsletterAccept;
 
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
@@ -49,13 +50,20 @@ public class LocalUserDetailsModel extends AuditableEntity implements Serializab
 
     public LocalUserDetailsModel(
             String secondEmailAddress, Date birthDate, String country, UserGenderSpecific gender, Boolean hasPhoto,
-            Boolean hasNewsletterAccept
+            String photoEmbedLink, Boolean hasNewsletterAccept
     ) {
         this.secondEmailAddress = secondEmailAddress;
         this.birthDate = birthDate;
         this.country = country;
         this.gender = gender;
         this.hasPhoto = hasPhoto;
+        this.photoEmbedLink = photoEmbedLink;
+        this.hasNewsletterAccept = hasNewsletterAccept;
+    }
+
+    public LocalUserDetailsModel(Boolean hasPhoto, String photoEmbedLink, Boolean hasNewsletterAccept) {
+        this.hasPhoto = hasPhoto;
+        this.photoEmbedLink = photoEmbedLink;
         this.hasNewsletterAccept = hasNewsletterAccept;
     }
 
@@ -99,6 +107,14 @@ public class LocalUserDetailsModel extends AuditableEntity implements Serializab
         this.hasPhoto = hasPhoto;
     }
 
+    String getPhotoEmbedLink() {
+        return photoEmbedLink;
+    }
+
+    public void setPhotoEmbedLink(String photoEmbedLink) {
+        this.photoEmbedLink = photoEmbedLink;
+    }
+
     Boolean isHasNewsletterAccept() {
         return hasNewsletterAccept;
     }
@@ -123,6 +139,7 @@ public class LocalUserDetailsModel extends AuditableEntity implements Serializab
                 ", country='" + country + '\'' +
                 ", gender=" + gender +
                 ", hasPhoto=" + hasPhoto +
+                ", photoEmbedLink='" + photoEmbedLink + '\'' +
                 ", hasNewsletterAccept=" + hasNewsletterAccept +
                 "} ";
     }

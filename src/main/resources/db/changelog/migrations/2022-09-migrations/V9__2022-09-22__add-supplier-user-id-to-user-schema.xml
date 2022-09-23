@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.4.xsd">
+
+    <changeSet id="15" author="Milosz08">
+        <dropColumn tableName="LOCAL_USER" columnName="NICKNAME"/>
+        <dropColumn tableName="LOCAL_USER" columnName="LAST_NAME"/>
+
+        <dropColumn tableName="LOCAL_USER_DETAILS" columnName="SECOND_EMAIL_ADDRESS"/>
+        <dropColumn tableName="LOCAL_USER_DETAILS" columnName="BIRTH_DATE"/>
+        <dropColumn tableName="LOCAL_USER_DETAILS" columnName="COUNTRY"/>
+        <dropColumn tableName="LOCAL_USER_DETAILS" columnName="GENDER"/>
+
+        <addColumn tableName="LOCAL_USER">
+            <column name="NICKNAME" type="varchar(30)">
+                <constraints nullable="true"/>
+            </column>
+            <column name="LAST_NAME" type="varchar(30)">
+                <constraints nullable="true"/>
+            </column>
+            <column name="SUPPLIED_USER_ID" type="varchar(50)">
+                <constraints nullable="true"/>
+            </column>
+        </addColumn>
+
+        <addColumn tableName="LOCAL_USER_DETAILS">
+            <column name="SECOND_EMAIL_ADDRESS" type="varchar(100)">
+                <constraints nullable="true"/>
+            </column>
+            <column name="BIRTH_DATE" type="datetime">
+                <constraints nullable="true"/>
+            </column>
+            <column name="COUNTRY" type="varchar(50)">
+                <constraints nullable="true"/>
+            </column>
+            <column name="GENDER" type="varchar(10)">
+                <constraints nullable="true"/>
+            </column>
+            <column name="PHOTO_EMBED_LINK" type="varchar(100)">
+                <constraints nullable="true"/>
+            </column>
+        </addColumn>
+    </changeSet>
+
+</databaseChangeLog>

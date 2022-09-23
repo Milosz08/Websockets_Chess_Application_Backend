@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.4.xsd">
+
+    <changeSet id="16" author="Milosz08">
+        <dropColumn tableName="LOCAL_USER" columnName="NICKNAME"/>
+
+        <addColumn tableName="LOCAL_USER">
+            <column name="NICKNAME" type="varchar(30)">
+                <constraints nullable="false"/>
+            </column>
+        </addColumn>
+    </changeSet>
+
+    <changeSet id="17" author="Milosz08">
+        <dropTable tableName="LOCAL_USER_ROLE_BINDING"/>
+
+        <createTable tableName="LOCAL_USER_ROLE_BINDING">
+            <column name="LOCAL_USER_ID" type="bigint">
+                <constraints
+                        unique="false"
+                        nullable="false"
+                        referencedColumnNames="ID"
+                        foreignKeyName="FK_LOCAL_USER_BINDING"
+                        referencedTableName="LOCAL_USER"/>
+            </column>
+            <column name="LOCAL_USER_ROLE_ID" type="bigint">
+                <constraints
+                        unique="false"
+                        nullable="false"
+                        referencedColumnNames="ID"
+                        foreignKeyName="FK_LOCAL_USER_ROLE_BINDING"
+                        referencedTableName="LOCAL_USER_ROLE"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="18" author="Milosz08">
+        <dropColumn tableName="LOCAL_USER_DETAILS" columnName="PHOTO_EMBED_LINK"/>
+
+        <addColumn tableName="LOCAL_USER_DETAILS">
+            <column name="PHOTO_EMBED_LINK" type="varchar(500)">
+                <constraints nullable="true"/>
+            </column>
+        </addColumn>
+    </changeSet>
+</databaseChangeLog>

@@ -43,6 +43,7 @@ public class LocalUserModel extends AuditableEntity implements Serializable {
     @Column(name = "EMAIL_ADDRESS")         private String emailAddress;
     @Column(name = "PASSWORD")              private String password;
     @Column(name = "CREDENTIALS_SUPPLIER")  private CredentialsSupplier credentialsSupplier;
+    @Column(name = "SUPPLIED_USER_ID")      private String supplierUserId;
     @Column(name = "IS_ACTIVATED")          private Boolean isActivated;
     @Column(name = "IS_BLOCKED")            private Boolean isBlocked;
 
@@ -63,7 +64,7 @@ public class LocalUserModel extends AuditableEntity implements Serializable {
 
     public LocalUserModel(
             String nickname, String firstName, String lastName, String emailAddress, String password,
-            CredentialsSupplier credentialsSupplier, Boolean isActivated, Boolean isBlocked
+            CredentialsSupplier credentialsSupplier, String supplierUserId, Boolean isActivated, Boolean isBlocked
     ) {
         this.nickname = nickname;
         this.firstName = firstName;
@@ -71,6 +72,7 @@ public class LocalUserModel extends AuditableEntity implements Serializable {
         this.emailAddress = emailAddress;
         this.password = password;
         this.credentialsSupplier = credentialsSupplier;
+        this.supplierUserId = supplierUserId;
         this.isActivated = isActivated;
         this.isBlocked = isBlocked;
     }
@@ -121,6 +123,14 @@ public class LocalUserModel extends AuditableEntity implements Serializable {
 
     public void setCredentialsSupplier(CredentialsSupplier credentialsSupplier) {
         this.credentialsSupplier = credentialsSupplier;
+    }
+
+    public String getSupplierUserId() {
+        return supplierUserId;
+    }
+
+    public void setSupplierUserId(String supplierUserId) {
+        this.supplierUserId = supplierUserId;
     }
 
     public Boolean isActivated() {
@@ -179,6 +189,7 @@ public class LocalUserModel extends AuditableEntity implements Serializable {
                 ", lastName='" + lastName + '\'' +
                 ", emailAddress='" + emailAddress + '\'' +
                 ", credentialsSupplier=" + credentialsSupplier +
+                ", supplierUserId='" + supplierUserId + '\'' +
                 ", isActivated=" + isActivated +
                 ", isBlocked=" + isBlocked +
                 "} ";
