@@ -53,20 +53,22 @@ public class OAuth2AuthFailureResolver extends SimpleUrlAuthenticationFailureHan
     @Override
     public void onAuthenticationFailure(HttpServletRequest req, HttpServletResponse res, AuthenticationException ex)
             throws IOException {
-        final String targetUrl = cookieHelper.getCookieValue(req, environment.getOauth2RedirectUriCookieName()).orElse("/");
+        final String targetUrl = cookieHelper
+                .getCookieValue(req, environment.getOauth2AfterLoginRedirectUriCookieName())
+                .orElse("/");
 
         LOGGER.error("OAuth2 authorization failure: Error: {}", ex.getMessage());
         deleteOAuth2AuthorizationRequestCookies(req, res);
 
         final String rediretTargetUrl = UriComponentsBuilder.fromUriString(targetUrl)
-                .queryParam("error", ex.getLocalizedMessage()).build().toUriString();
+                .queryParam("error", ex.getLocalizedMessage())
+                .build().toUriString();
 
-        // TODO: come up with how to send data without any URI parameters
         getRedirectStrategy().sendRedirect(req, res, rediretTargetUrl);
     }
 
     private void deleteOAuth2AuthorizationRequestCookies(HttpServletRequest req, HttpServletResponse res) {
         cookieHelper.deleteCookie(req, res, environment.getOauth2SessionRememberCookieName());
-        cookieHelper.deleteCookie(req, res, environment.getOauth2RedirectUriCookieName());
+        cookieHelper.deleteCookie(req, res, environment.getOauth2AfterLoginRedirectUriCookieName());
     }
 }

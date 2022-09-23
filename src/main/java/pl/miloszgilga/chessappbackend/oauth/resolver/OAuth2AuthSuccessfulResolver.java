@@ -33,6 +33,7 @@ import java.net.URI;
 import java.util.Optional;
 import java.io.IOException;
 
+import pl.miloszgilga.chessappbackend.oauth.AuthUser;
 import pl.miloszgilga.chessappbackend.utils.CookieHelper;
 import pl.miloszgilga.chessappbackend.config.EnvironmentVars;
 import pl.miloszgilga.chessappbackend.token.JsonWebTokenCreator;
@@ -41,15 +42,15 @@ import pl.miloszgilga.chessappbackend.exception.custom.AuthException;
 //----------------------------------------------------------------------------------------------------------------------
 
 @Component
-public class OAuth2AuthSuceessfulResolver extends SimpleUrlAuthenticationSuccessHandler {
+public class OAuth2AuthSuccessfulResolver extends SimpleUrlAuthenticationSuccessHandler {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(OAuth2AuthSuceessfulResolver.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(OAuth2AuthSuccessfulResolver.class);
 
     private final CookieHelper cookieHelper;
     private final EnvironmentVars environment;
     private final JsonWebTokenCreator webTokenCreator;
 
-    public OAuth2AuthSuceessfulResolver(EnvironmentVars environment, JsonWebTokenCreator webTokenCreator,
+    public OAuth2AuthSuccessfulResolver(EnvironmentVars environment, JsonWebTokenCreator webTokenCreator,
                                         CookieHelper cookieHelper) {
         this.environment = environment;
         this.cookieHelper = cookieHelper;
@@ -64,37 +65,48 @@ public class OAuth2AuthSuceessfulResolver extends SimpleUrlAuthenticationSuccess
             LOGGER.info("Response has already been committed. Unable to redirect to address: {}", targetUrl);
             return;
         }
-
         clearAuthenticationAttributes(req);
         cookieHelper.deleteCookie(req, res, environment.getOauth2SessionRememberCookieName());
-        cookieHelper.deleteCookie(req, res, environment.getOauth2RedirectUriCookieName());
+        cookieHelper.deleteCookie(req, res, environment.getOauth2AfterLoginRedirectUriCookieName());
+        cookieHelper.deleteCookie(req, res, environment.getOauth2AfterSignupRedirectUriCookieName());
 
         getRedirectStrategy().sendRedirect(req, res, targetUrl);
     }
 
     @Override
     protected String determineTargetUrl(HttpServletRequest req, HttpServletResponse res, Authentication auth) {
-        final Optional<String> redirectUri = cookieHelper
-                .getCookieValue(req, environment.getOauth2RedirectUriCookieName());
-
-        if (redirectUri.isPresent() && !checkIfUserIsAuthorizedViaRequestUri(redirectUri.get())) {
-            LOGGER.error("Attempt to authenticate via OAuth2 by not supported URI. Redirect URI: {}", redirectUri.get());
-            throw new AuthException.OAuth2NotSupportedUriException("Redirect URI is not supported by OAuth2 service.");
-        }
-
-        final String targetUrl = redirectUri.orElse(getDefaultTargetUrl());
+        final AuthUser localAuthUser = (AuthUser) auth.getPrincipal();
         final String token = webTokenCreator.createUserCredentialsToken(auth);
 
-        // TODO: come up with how to send data without any URI parameters
-        return UriComponentsBuilder.fromUriString(targetUrl).queryParam("token", token).build().toUriString();
+        if (localAuthUser.getUserModel().isActivated()) {
+            final String redirectLoginUri = checkIfRedirectUriIsValidAndReturn(req,
+                    environment.getOauth2AfterLoginRedirectUriCookieName());
+            return UriComponentsBuilder.fromUriString(redirectLoginUri)
+                    .queryParam("token", token)
+                    .build().toUriString();
+        }
+        final String redirectSignupUri = checkIfRedirectUriIsValidAndReturn(req,
+                environment.getOauth2AfterSignupRedirectUriCookieName());
+        return UriComponentsBuilder.fromUriString(redirectSignupUri)
+                .queryParam("token", token)
+                .build().toUriString();
     }
 
     private boolean checkIfUserIsAuthorizedViaRequestUri(String uri) {
         final URI redirectClientUri = URI.create(uri);
-        return environment.getOauth2RedirectUris().stream().anyMatch(reqUri -> {
+        return environment.getOauth2RedirectUris().stream().noneMatch(reqUri -> {
             final URI authorizedUri = URI.create(reqUri);
             return authorizedUri.getHost().equalsIgnoreCase(redirectClientUri.getHost()) &&
                     authorizedUri.getPort() == redirectClientUri.getPort();
         });
+    }
+
+    private String checkIfRedirectUriIsValidAndReturn(HttpServletRequest req, String cookieName) {
+        final Optional<String> redirectUri = cookieHelper.getCookieValue(req, cookieName);
+        if (redirectUri.isEmpty() || checkIfUserIsAuthorizedViaRequestUri(redirectUri.get())) {
+            LOGGER.error("Attempt to authenticate via OAuth2 by not supported URI.");
+            throw new AuthException.OAuth2NotSupportedUriException("Redirect URI is not supported by OAuth2 service.");
+        }
+        return redirectUri.orElse(getDefaultTargetUrl());
     }
 }
