@@ -18,21 +18,27 @@
 
 package pl.miloszgilga.chessappbackend.validator.constraint;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 
 import pl.miloszgilga.chessappbackend.exception.custom.EmailException;
-import pl.miloszgilga.chessappbackend.network.auth_local.dto.SignupViaLocalRequestDto;
+import pl.miloszgilga.chessappbackend.network.auth_local.dto.SignupViaLocalReqDto;
 import pl.miloszgilga.chessappbackend.validator.annotation.ValidateSecondEmailNotRepeat;
 
 //----------------------------------------------------------------------------------------------------------------------
 
-public class SecondEmailNotRepeatValidator implements ConstraintValidator<ValidateSecondEmailNotRepeat, SignupViaLocalRequestDto> {
+public class SecondEmailNotRepeatValidator implements ConstraintValidator<ValidateSecondEmailNotRepeat, SignupViaLocalReqDto> {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(SecondEmailNotRepeatValidator.class);
 
     @Override
-    public boolean isValid(final SignupViaLocalRequestDto req, final ConstraintValidatorContext context) {
+    public boolean isValid(final SignupViaLocalReqDto req, final ConstraintValidatorContext context) {
         if (req.getEmailAddress() == null || req.getSecondEmailAddress().isBlank()) return true;
         if (req.getEmailAddress().equalsIgnoreCase(req.getSecondEmailAddress())) {
+            LOGGER.error("Attempt to create account with the same emails address. Request data: {}", req);
             throw new EmailException
                     .EmailAndSecondEmailIdenticalException("Second email should not be the same as firstly email.");
         }
