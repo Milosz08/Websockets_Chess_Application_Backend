@@ -78,7 +78,6 @@ DEV_OAUTH2_FACEBOOK_CLIENT_ID           = xxxxx -> <your-facebook-client-secret>
 
 # OAuth2 authentication miscs
 DEV_OAUTH2_TOKEN_SECRET                 = xxxxx -> ex. [[G879789N9QVWC897V0F094NMODF]]
-PROD_OAUTH2_TOKEN_SECRET                = xxxxx -> ex. [[9B8VWI3JHJ3KOHO5O9OQODNNV89]]
 DEV_PROD_OAUTH2_PASSWORD_REPLACER       = xxxxx -> ex. [[5m2vFmwfi7]]
 ```
 14. Run Java application with `--dev` switch. Application should be available on `http://127.0.0.1:7575/javabean/app/v1`.
