@@ -18,20 +18,26 @@
 
 package pl.miloszgilga.chessappbackend.validator.constraint;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 
 import pl.miloszgilga.chessappbackend.exception.custom.PasswordException;
-import pl.miloszgilga.chessappbackend.network.auth_local.dto.SignupViaLocalRequestDto;
+import pl.miloszgilga.chessappbackend.network.auth_local.dto.SignupViaLocalReqDto;
 import pl.miloszgilga.chessappbackend.validator.annotation.ValidatePasswordMatch;
 
 //----------------------------------------------------------------------------------------------------------------------
 
-public class PasswordMatchValidator implements ConstraintValidator<ValidatePasswordMatch, SignupViaLocalRequestDto> {
+public class PasswordMatchValidator implements ConstraintValidator<ValidatePasswordMatch, SignupViaLocalReqDto> {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(PasswordMatchValidator.class);
 
     @Override
-    public boolean isValid(final SignupViaLocalRequestDto req, final ConstraintValidatorContext context) {
+    public boolean isValid(final SignupViaLocalReqDto req, final ConstraintValidatorContext context) {
         if (!req.getPassword().equals(req.getPasswordRepeat())) {
+            LOGGER.error("Attempt to create new account with different passwords. Request data: {}", req);
             throw new PasswordException
                     .PasswordAndRepeatPassowordNotTheSameException("Password and repeated password should be the same.");
         }

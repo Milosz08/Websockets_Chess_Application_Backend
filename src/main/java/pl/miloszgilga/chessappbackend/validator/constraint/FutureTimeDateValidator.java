@@ -18,6 +18,9 @@
 
 package pl.miloszgilga.chessappbackend.validator.constraint;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 
@@ -30,6 +33,8 @@ import pl.miloszgilga.chessappbackend.validator.annotation.ValidateFutureTimeDat
 
 public class FutureTimeDateValidator implements ConstraintValidator<ValidateFutureTimeDate, String> {
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(FutureTimeDateValidator.class);
+
     private final TimeHelper timeHelper;
 
     public FutureTimeDateValidator(TimeHelper timeHelper) {
@@ -38,8 +43,11 @@ public class FutureTimeDateValidator implements ConstraintValidator<ValidateFutu
 
     @Override
     public boolean isValid(String birthDateString, ConstraintValidatorContext context) {
-        if (birthDateString == null) return false;
         final Date birthDate = timeHelper.convertStringDateToDateObject(birthDateString);
-        return birthDate.before(new Date());
+        if (birthDateString == null || birthDate.after(new Date())) {
+            LOGGER.error("Attempt to add birth date which is after the current date.");
+            return false;
+        }
+        return true;
     }
 }

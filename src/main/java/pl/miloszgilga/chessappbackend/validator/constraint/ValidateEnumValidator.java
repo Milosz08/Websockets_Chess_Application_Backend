@@ -18,7 +18,8 @@
 
 package pl.miloszgilga.chessappbackend.validator.constraint;
 
-import pl.miloszgilga.chessappbackend.validator.annotation.ValidateEnum;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
@@ -28,9 +29,13 @@ import java.util.Locale;
 import java.util.stream.Stream;
 import java.util.stream.Collectors;
 
+import pl.miloszgilga.chessappbackend.validator.annotation.ValidateEnum;
+
 //----------------------------------------------------------------------------------------------------------------------
 
 public class ValidateEnumValidator implements ConstraintValidator<ValidateEnum, String> {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(ValidateEnumValidator.class);
 
     private Set<String> availableValues;
 
@@ -43,7 +48,11 @@ public class ValidateEnumValidator implements ConstraintValidator<ValidateEnum, 
 
     @Override
     public boolean isValid(final String value, final ConstraintValidatorContext context) {
-        if (value == null) return false;
-        return availableValues.contains(value.toLowerCase(Locale.ROOT));
+        if (value == null || !availableValues.contains(value.toLowerCase(Locale.ROOT))) {
+            LOGGER.error("Attept to add not existing enum value (malformed enum string data for enum parser)." +
+                    "Available values: {}, passed value: {}", availableValues, value);
+            return false;
+        }
+        return true;
     }
 }

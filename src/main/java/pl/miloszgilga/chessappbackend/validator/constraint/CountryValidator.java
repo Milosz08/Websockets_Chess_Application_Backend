@@ -18,6 +18,9 @@
 
 package pl.miloszgilga.chessappbackend.validator.constraint;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 
@@ -32,6 +35,8 @@ import pl.miloszgilga.chessappbackend.loader.country_data.CountryPropertiesLoade
 
 public class CountryValidator implements ConstraintValidator<ValidateCountry, String> {
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(EmailAlreadyExistValidator.class);
+
     private final CountryPropertiesLoader loader;
     private List<String> availableCountries;
 
@@ -42,11 +47,16 @@ public class CountryValidator implements ConstraintValidator<ValidateCountry, St
     @Override
     public void initialize(ValidateCountry constraintAnnotation) {
         this.availableCountries = loader.getLoadedData().getCountries().stream()
-                .map(x -> x.toLowerCase(Locale.ROOT)).collect(Collectors.toList());
+                .map(x -> x.toLowerCase(Locale.ROOT))
+                .collect(Collectors.toList());
     }
 
     @Override
     public boolean isValid(String countryName, ConstraintValidatorContext context) {
-        return availableCountries.contains(countryName);
+        if (!availableCountries.contains(countryName)) {
+            LOGGER.error("Attempt to add new user with not existing country. Country name: {}", countryName);
+            return false;
+        }
+        return true;
     }
 }
