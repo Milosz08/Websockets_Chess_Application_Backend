@@ -45,8 +45,8 @@ public class OAuth2UserInfoFactory {
                 return new GoogleOAuth2UserInfo(attributes);
             default:
                 LOGGER.error("Attempt to login via unsupported supplier. Unsupported supplier: {}", supplier);
-                throw new AuthException.OAuth2CredentialsSupplierMalformedException(String.format(
-                        "Login via supplier: %s is not supported yet. Try via: %s", supplier, getAllSuppliers()));
+                throw new AuthException.OAuth2CredentialsSupplierMalformedException("Login via supplier: %s is not " +
+                        "supported yet. Try via: %s", supplier, getAllSuppliers());
         }
     }
 }

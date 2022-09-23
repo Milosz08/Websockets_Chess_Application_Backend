@@ -24,7 +24,7 @@ import org.slf4j.LoggerFactory;
 import lombok.Getter;
 import lombok.AllArgsConstructor;
 
-import java.util.List;
+import java.util.Set;
 import java.util.stream.Stream;
 import java.util.stream.Collectors;
 
@@ -42,11 +42,11 @@ public enum CredentialsSupplier {
     private final String supplier;
     private static final Logger LOGGER = LoggerFactory.getLogger(CredentialsSupplier.class);
 
-    public static List<String> getAllSuppliers() {
+    public static Set<String> getAllSuppliers() {
         return Stream.of(CredentialsSupplier.values())
                 .filter(s -> s.supplier.equals(LOCAL.supplier))
                 .map(CredentialsSupplier::getSupplier)
-                .collect(Collectors.toList());
+                .collect(Collectors.toSet());
     }
 
     public static CredentialsSupplier findSupplierBasedRegistrationId(String registrationId) {
@@ -55,8 +55,8 @@ public enum CredentialsSupplier {
                 .findFirst()
                 .orElseThrow(() -> {
                     LOGGER.error("Passed registration id: {} is not valid credentials supplier name.", registrationId);
-                    throw new AuthException.OAuth2CredentialsSupplierMalformedException(String.format(
-                            "Passed registration id: %s is not valid credentials supplier name.", registrationId));
+                    throw new AuthException.OAuth2CredentialsSupplierMalformedException(
+                            "Passed registration id: %s is not valid credentials supplier name.", registrationId);
                 });
     }
 }

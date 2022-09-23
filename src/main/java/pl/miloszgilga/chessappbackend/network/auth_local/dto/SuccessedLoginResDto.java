@@ -25,7 +25,7 @@ import lombok.AllArgsConstructor;
 
 @Data
 @AllArgsConstructor
-public class SuccessedLoginViaLocalResDto {
+public class SuccessedLoginResDto {
     private String fullName;
     private String jwtToken;
     private String refreshToken;
