@@ -39,7 +39,7 @@ import pl.miloszgilga.chessappbackend.oauth.AppOidcUserService;
 import pl.miloszgilga.chessappbackend.oauth.AppOAuth2UserService;
 import pl.miloszgilga.chessappbackend.oauth.CookieOAuth2ReqRepository;
 import pl.miloszgilga.chessappbackend.oauth.resolver.OAuth2AuthFailureResolver;
-import pl.miloszgilga.chessappbackend.oauth.resolver.OAuth2AuthSuceessfulResolver;
+import pl.miloszgilga.chessappbackend.oauth.resolver.OAuth2AuthSuccessfulResolver;
 
 import static pl.miloszgilga.chessappbackend.config.ApplicationEndpoints.*;
 
@@ -58,7 +58,7 @@ public class SecurityConfiguration {
     private final AppOidcUserService appOidcUserService;
     private final AppOAuth2UserService appOAuth2UserService;
     private final OAuth2AuthFailureResolver oAuth2AuthFailureResolver;
-    private final OAuth2AuthSuceessfulResolver oAuth2AuthSuceessfulResolver;
+    private final OAuth2AuthSuccessfulResolver oAuth2AuthSuccessfulResolver;
 
     public static final String[] DISABLE_PATHS_FOR_JWT_FILTERING = {
             "/", "/error", "/oauth2/**",
@@ -70,7 +70,7 @@ public class SecurityConfiguration {
                                  AuthenticationRestEntryPoint restEntryPoint, AppOidcUserService appOidcUserService,
                                  AppOAuth2UserService appOAuth2UserService, CookieHelper cookieHelper,
                                  OAuth2AuthFailureResolver oAuth2AuthFailureResolver, SecurityHelper securityHelper,
-                                 OAuth2AuthSuceessfulResolver oAuth2AuthSuceessfulResolver) {
+                                 OAuth2AuthSuccessfulResolver oAuth2AuthSuccessfulResolver) {
         this.environment = environment;
         this.securityHelper = securityHelper;
         this.cookieHelper = cookieHelper;
@@ -79,7 +79,7 @@ public class SecurityConfiguration {
         this.appOidcUserService = appOidcUserService;
         this.appOAuth2UserService = appOAuth2UserService;
         this.oAuth2AuthFailureResolver = oAuth2AuthFailureResolver;
-        this.oAuth2AuthSuceessfulResolver = oAuth2AuthSuceessfulResolver;
+        this.oAuth2AuthSuccessfulResolver = oAuth2AuthSuccessfulResolver;
     }
 
     @Bean
@@ -110,7 +110,7 @@ public class SecurityConfiguration {
                     .tokenEndpoint()
                         .accessTokenResponseClient(securityHelper.authTokenCodeResponseToTheClient())
                         .and()
-                    .successHandler(oAuth2AuthSuceessfulResolver)
+                    .successHandler(oAuth2AuthSuccessfulResolver)
                     .failureHandler(oAuth2AuthFailureResolver)
                     .and()
                 .addFilterBefore(authenticationFilter, UsernamePasswordAuthenticationFilter.class);

@@ -75,7 +75,7 @@ public class JwtTokenAuthenticationFilter extends OncePerRequestFilter {
 
     @Override
     protected boolean shouldNotFilter(HttpServletRequest req) {
-        AntPathMatcher matcher = new AntPathMatcher();
+        final AntPathMatcher matcher = new AntPathMatcher();
         return Arrays.stream(DISABLE_PATHS_FOR_JWT_FILTERING).anyMatch(p -> matcher.match(p, req.getServletPath()));
     }
 

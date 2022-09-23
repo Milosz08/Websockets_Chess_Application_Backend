@@ -19,12 +19,14 @@
 package pl.miloszgilga.chessappbackend.network.auth_local.dto;
 
 import lombok.Data;
+import lombok.AllArgsConstructor;
 
 //----------------------------------------------------------------------------------------------------------------------
 
 @Data
-public class SuccessedLoginViaLocalResponseDto {
-    private String username;
+@AllArgsConstructor
+public class SuccessedLoginViaLocalResDto {
+    private String fullName;
     private String jwtToken;
     private String refreshToken;
 }

@@ -29,7 +29,7 @@ import static pl.miloszgilga.chessappbackend.validator.RegexPattern.PASSWORD_PAT
 //----------------------------------------------------------------------------------------------------------------------
 
 @Data
-public class LoginViaLocalRequestDto {
+public class LoginViaLocalReqDto {
 
     @NotBlank(message = "{jpa.validator.usernameEmail.notBlank}")
     @Size(max = 100, message = "{jpa.validator.usernameEmail.size}")

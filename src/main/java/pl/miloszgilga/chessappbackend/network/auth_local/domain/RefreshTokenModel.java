@@ -42,12 +42,12 @@ public class RefreshTokenModel extends AuditableEntity implements Serializable {
     @JoinColumn(name = "LOCAL_USER_ID", referencedColumnName = "ID")
     private LocalUserModel localUser;
 
-    RefreshTokenModel(String refreshToken, Date expiredDate) {
+    public RefreshTokenModel(String refreshToken, Date expiredDate) {
         this.refreshToken = refreshToken;
         this.expiredAt = expiredDate;
     }
 
-    String getRefreshToken() {
+    public String getRefreshToken() {
         return refreshToken;
     }
 
@@ -67,7 +67,7 @@ public class RefreshTokenModel extends AuditableEntity implements Serializable {
         return localUser;
     }
 
-    void setLocalUser(LocalUserModel localUser) {
+    public void setLocalUser(LocalUserModel localUser) {
         this.localUser = localUser;
     }
 

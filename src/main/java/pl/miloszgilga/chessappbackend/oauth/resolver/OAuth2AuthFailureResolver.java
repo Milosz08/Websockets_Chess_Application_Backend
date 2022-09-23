@@ -29,10 +29,11 @@ import org.springframework.security.web.authentication.SimpleUrlAuthenticationFa
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import java.io.IOException;
+
 import pl.miloszgilga.chessappbackend.utils.CookieHelper;
 import pl.miloszgilga.chessappbackend.config.EnvironmentVars;
 
-import java.io.IOException;
 
 //----------------------------------------------------------------------------------------------------------------------
 

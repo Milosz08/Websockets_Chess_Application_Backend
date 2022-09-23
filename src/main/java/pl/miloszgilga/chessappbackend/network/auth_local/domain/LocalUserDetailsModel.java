@@ -47,7 +47,7 @@ public class LocalUserDetailsModel extends AuditableEntity implements Serializab
     @JoinColumn(name = "LOCAL_USER_ID", referencedColumnName = "ID")
     private LocalUserModel localUser;
 
-    LocalUserDetailsModel(
+    public LocalUserDetailsModel(
             String secondEmailAddress, Date birthDate, String country, UserGenderSpecific gender, Boolean hasPhoto,
             Boolean hasNewsletterAccept
     ) {
@@ -59,7 +59,7 @@ public class LocalUserDetailsModel extends AuditableEntity implements Serializab
         this.hasNewsletterAccept = hasNewsletterAccept;
     }
 
-    String getSecondEmailAddress() {
+    public String getSecondEmailAddress() {
         return secondEmailAddress;
     }
 
@@ -95,7 +95,7 @@ public class LocalUserDetailsModel extends AuditableEntity implements Serializab
         return hasPhoto;
     }
 
-    void setHasPhoto(Boolean hasPhoto) {
+    public void setHasPhoto(Boolean hasPhoto) {
         this.hasPhoto = hasPhoto;
     }
 
@@ -111,7 +111,7 @@ public class LocalUserDetailsModel extends AuditableEntity implements Serializab
         return localUser;
     }
 
-    void setLocalUser(LocalUserModel localUser) {
+    public void setLocalUser(LocalUserModel localUser) {
         this.localUser = localUser;
     }
 
@@ -124,7 +124,6 @@ public class LocalUserDetailsModel extends AuditableEntity implements Serializab
                 ", gender=" + gender +
                 ", hasPhoto=" + hasPhoto +
                 ", hasNewsletterAccept=" + hasNewsletterAccept +
-                ", localUser=" + localUser +
-                "} " + super.toString();
+                "} ";
     }
 }

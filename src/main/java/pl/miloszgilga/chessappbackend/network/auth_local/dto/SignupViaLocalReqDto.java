@@ -32,7 +32,7 @@ import static pl.miloszgilga.chessappbackend.validator.RegexPattern.*;
 @Data
 @ValidatePasswordMatch(message = "{jpa.validator.passwordsMismatch.custom}")
 @ValidateSecondEmailNotRepeat(message = "{jpa.validator.emailsAreTheSame.custom}")
-public class SignupViaLocalRequestDto {
+public class SignupViaLocalReqDto {
 
     @ValidateNicknameNotRepeat(message = "{jpa.validator.nickname.notRepeat}")
     @NotBlank(message = "{jpa.validator.nickname.notBlank}")

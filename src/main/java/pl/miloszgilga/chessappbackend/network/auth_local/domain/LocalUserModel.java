@@ -46,9 +46,14 @@ public class LocalUserModel extends AuditableEntity implements Serializable {
     @Column(name = "IS_ACTIVATED")          private Boolean isActivated;
     @Column(name = "IS_BLOCKED")            private Boolean isBlocked;
 
-    @OneToOne(mappedBy = "localUser")       private RefreshTokenModel refreshToken;
-    @OneToOne(mappedBy = "localUser")       private RenewCredentialsOtaTokenModel renewCredentials;
-    @OneToOne(mappedBy = "localUser")       private LocalUserDetailsModel localUserDetails;
+    @OneToOne(fetch = FetchType.LAZY, mappedBy = "localUser", cascade = CascadeType.ALL)
+    private RefreshTokenModel refreshToken;
+
+    @OneToOne(fetch = FetchType.LAZY, mappedBy = "localUser", cascade = CascadeType.ALL)
+    private RenewCredentialsOtaTokenModel renewCredentials;
+
+    @OneToOne(fetch = FetchType.LAZY, mappedBy = "localUser", cascade = CascadeType.ALL)
+    private LocalUserDetailsModel localUserDetails;
 
     @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinTable(name = "LOCAL_USER_ROLE_BINDING",
@@ -56,7 +61,7 @@ public class LocalUserModel extends AuditableEntity implements Serializable {
             inverseJoinColumns = { @JoinColumn(name = "LOCAL_USER_ROLE_ID") })
     private Set<LocalUserRoleModel> roles;
 
-    LocalUserModel(
+    public LocalUserModel(
             String nickname, String firstName, String lastName, String emailAddress, String password,
             CredentialsSupplier credentialsSupplier, Boolean isActivated, Boolean isBlocked
     ) {
@@ -74,23 +79,23 @@ public class LocalUserModel extends AuditableEntity implements Serializable {
         return nickname;
     }
 
-    void setNickname(String nickname) {
+    public void setNickname(String nickname) {
         this.nickname = nickname;
     }
 
-    String getFirstName() {
+    public String getFirstName() {
         return firstName;
     }
 
-    void setFirstName(String firstName) {
+    public void setFirstName(String firstName) {
         this.firstName = firstName;
     }
 
-    String getLastName() {
+    public String getLastName() {
         return lastName;
     }
 
-    void setLastName(String lastName) {
+    public void setLastName(String lastName) {
         this.lastName = lastName;
     }
 
@@ -98,7 +103,7 @@ public class LocalUserModel extends AuditableEntity implements Serializable {
         return emailAddress;
     }
 
-    void setEmailAddress(String emailAddress) {
+    public void setEmailAddress(String emailAddress) {
         this.emailAddress = emailAddress;
     }
 
@@ -106,15 +111,15 @@ public class LocalUserModel extends AuditableEntity implements Serializable {
         return password;
     }
 
-    void setPassword(String password) {
+    public void setPassword(String password) {
         this.password = password;
     }
 
-    CredentialsSupplier getCredentialsSupplier() {
+    public CredentialsSupplier getCredentialsSupplier() {
         return credentialsSupplier;
     }
 
-    void setCredentialsSupplier(CredentialsSupplier credentialsSupplier) {
+    public void setCredentialsSupplier(CredentialsSupplier credentialsSupplier) {
         this.credentialsSupplier = credentialsSupplier;
     }
 
@@ -122,7 +127,7 @@ public class LocalUserModel extends AuditableEntity implements Serializable {
         return isActivated;
     }
 
-    void setActivated(Boolean activated) {
+    public void setActivated(Boolean activated) {
         isActivated = activated;
     }
 
@@ -130,15 +135,15 @@ public class LocalUserModel extends AuditableEntity implements Serializable {
         return isBlocked;
     }
 
-    void setBlocked(Boolean blocked) {
+    public void setBlocked(Boolean blocked) {
         isBlocked = blocked;
     }
 
-    RefreshTokenModel getRefreshToken() {
+    public RefreshTokenModel getRefreshToken() {
         return refreshToken;
     }
 
-    void setRefreshToken(RefreshTokenModel refreshToken) {
+    public void setRefreshToken(RefreshTokenModel refreshToken) {
         this.refreshToken = refreshToken;
     }
 
@@ -150,11 +155,11 @@ public class LocalUserModel extends AuditableEntity implements Serializable {
         this.renewCredentials = renewCredentials;
     }
 
-    LocalUserDetailsModel getLocalUserDetails() {
+    public LocalUserDetailsModel getLocalUserDetails() {
         return localUserDetails;
     }
 
-    void setLocalUserDetails(LocalUserDetailsModel localUserDetails) {
+    public void setLocalUserDetails(LocalUserDetailsModel localUserDetails) {
         this.localUserDetails = localUserDetails;
     }
 
@@ -162,7 +167,7 @@ public class LocalUserModel extends AuditableEntity implements Serializable {
         return roles;
     }
 
-    void setRoles(Set<LocalUserRoleModel> roles) {
+    public void setRoles(Set<LocalUserRoleModel> roles) {
         this.roles = roles;
     }
 
@@ -173,14 +178,9 @@ public class LocalUserModel extends AuditableEntity implements Serializable {
                 ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
                 ", emailAddress='" + emailAddress + '\'' +
-                ", password='" + password + '\'' +
                 ", credentialsSupplier=" + credentialsSupplier +
                 ", isActivated=" + isActivated +
                 ", isBlocked=" + isBlocked +
-                ", refreshToken=" + refreshToken +
-                ", renewCredentials=" + renewCredentials +
-                ", localUserDetails=" + localUserDetails +
-                ", roles=" + roles +
-                "} " + super.toString();
+                "} ";
     }
 }
