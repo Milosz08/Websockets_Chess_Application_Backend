@@ -181,6 +181,10 @@ public class LocalUserModel extends AuditableEntity implements Serializable {
         this.roles = roles;
     }
 
+    public String getNestedRefreshToken() {
+        return refreshToken.getRefreshToken();
+    }
+
     @Override
     public String toString() {
         return "LocalUserModel{" +

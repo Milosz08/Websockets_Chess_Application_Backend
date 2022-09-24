@@ -70,5 +70,6 @@ public class OAuth2AuthFailureResolver extends SimpleUrlAuthenticationFailureHan
     private void deleteOAuth2AuthorizationRequestCookies(HttpServletRequest req, HttpServletResponse res) {
         cookieHelper.deleteCookie(req, res, environment.getOauth2SessionRememberCookieName());
         cookieHelper.deleteCookie(req, res, environment.getOauth2AfterLoginRedirectUriCookieName());
+        cookieHelper.deleteCookie(req, res, environment.getOauth2AfterSignupRedirectUriCookieName());
     }
 }

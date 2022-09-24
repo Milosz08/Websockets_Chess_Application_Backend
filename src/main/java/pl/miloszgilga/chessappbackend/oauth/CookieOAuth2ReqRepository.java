@@ -49,7 +49,7 @@ public class CookieOAuth2ReqRepository implements AuthorizationRequestRepository
         return cookieHelper.getCookie(req, environment.getOauth2SessionRememberCookieName())
                 .map(c -> cookieHelper.deserializeCookieObjectData(c, OAuth2AuthorizationRequest.class))
                 .orElseThrow(() -> {
-                    throw new AuthException.OAuth2AuthenticationProcessingException("Unable to load account.");
+                    throw new AuthException.OAuth2AuthenticationProcessingException("Unable to load account data.");
                 });
     }
 

@@ -68,7 +68,10 @@ public class JsonWebTokenVerificator {
 
     private Claims extractClaimsFromRawToken(String token) {
         return Jwts.parserBuilder()
-                .setSigningKey(jsonWebToken.getSignatureKey()).build().parseClaimsJws(token).getBody();
+                .setSigningKey(jsonWebToken.getSignatureKey())
+                .build()
+                .parseClaimsJws(token)
+                .getBody();
     }
 
     public boolean basicTokenIsMalformed(String token) {

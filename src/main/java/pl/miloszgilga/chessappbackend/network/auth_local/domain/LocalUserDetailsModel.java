@@ -99,7 +99,7 @@ public class LocalUserDetailsModel extends AuditableEntity implements Serializab
         this.gender = gender;
     }
 
-    Boolean isHasPhoto() {
+    public Boolean isHasPhoto() {
         return hasPhoto;
     }
 
@@ -107,7 +107,7 @@ public class LocalUserDetailsModel extends AuditableEntity implements Serializab
         this.hasPhoto = hasPhoto;
     }
 
-    String getPhotoEmbedLink() {
+    public String getPhotoEmbedLink() {
         return photoEmbedLink;
     }
 

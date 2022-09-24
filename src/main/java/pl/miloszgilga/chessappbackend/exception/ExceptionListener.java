@@ -60,13 +60,13 @@ public class ExceptionListener {
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public InvalidDaoExceptionRes handleInvalidArgument(MethodArgumentNotValidException ex, HttpServletRequest req) {
+    public InvalidDtoExceptionRes handleInvalidArgument(MethodArgumentNotValidException ex, HttpServletRequest req) {
         final List<String> errors = new ArrayList<>();
         for (final FieldError error : ex.getBindingResult().getFieldErrors()) {
             errors.add(error.getDefaultMessage());
         }
         final ServerExceptionRes res = basicExceptionRes(HttpStatus.BAD_REQUEST, req);
-        return new InvalidDaoExceptionRes(res, errors);
+        return new InvalidDtoExceptionRes(res, errors);
     }
 
     @ExceptionHandler(BasicServerException.class)
