@@ -2,7 +2,7 @@
  * Copyright (c) 2022 by MILOSZ GILGA <https://miloszgilga.pl>
  *
  * File name: SignupUserFactoryMapper.java
- * Last modified: 22/09/2022, 23:45
+ * Last modified: 23/09/2022, 20:56
  * Project name: chess-app-backend
  *
  * Licensed under the MIT license; you may not use this file except in compliance with the License.
@@ -64,17 +64,19 @@ class AuthLocalFactoryMapper {
     private final EnvironmentVars environment;
     private final StringManipulator manipulator;
     private final PasswordEncoder passwordEncoder;
-    private final OAuth2UserInfoFactory userInfoFactory;
     private final ILocalUserRoleRepository roleRepository;
+    private final OAuth2UserInfoFactory userInfoFactory;
+    private final AuthLocalServiceHelper authLocalServiceHelper;
 
-    public SignupUserFactoryMapper(EnvironmentVars environment, StringManipulator manipulator,
-                                   @Lazy PasswordEncoder passwordEncoder, OAuth2UserInfoFactory userInfoFactory,
-                                   ILocalUserRoleRepository roleRepository) {
+    AuthLocalFactoryMapper(EnvironmentVars environment, StringManipulator manipulator,
+                           @Lazy PasswordEncoder passwordEncoder, OAuth2UserInfoFactory userInfoFactory,
+                           ILocalUserRoleRepository roleRepository, AuthLocalServiceHelper authLocalServiceHelper) {
         this.environment = environment;
         this.manipulator = manipulator;
         this.passwordEncoder = passwordEncoder;
         this.userInfoFactory = userInfoFactory;
         this.roleRepository = roleRepository;
+        this.authLocalServiceHelper = authLocalServiceHelper;
     }
 
     LocalUserModel mappedSignupLocalUserDtoToUserEntity(SignupViaLocalReqDto dto) throws ParseException {
@@ -99,7 +101,8 @@ class AuthLocalFactoryMapper {
         final OAuth2UserInfo userInfo = userInfoFactory.getOAuth2UserInfo(data.getSupplier(), data.getAttributes());
         final Boolean ifUserHasImage = !userInfo.getUserImageUrl().isEmpty();
         final String userImageUri = ifUserHasImage ? userInfo.getUserImageUrl() : null;
-        final Triplet<String, String, String> namesData = generateNickFirstLastNameFromOAuthName(userInfo.getUsername());
+        final Triplet<String, String, String> namesData = authLocalServiceHelper
+                .generateNickFirstLastNameFromOAuthName(userInfo.getUsername());
         final LocalUserDetailsModel userDetailsModel = new LocalUserDetailsModel(ifUserHasImage, userImageUri, false);
         final LocalUserModel userModel = new LocalUserModel(
                 namesData.getValue0(), namesData.getValue1(), namesData.getValue2(), userInfo.getEmailAddress(),
@@ -122,16 +125,5 @@ class AuthLocalFactoryMapper {
         }
         roles.add(foundRole.get());
         return roles;
-    }
-
-    public Triplet<String, String, String> generateNickFirstLastNameFromOAuthName(String username) {
-        final String nickname = username.toLowerCase().replaceAll(" ", "");
-        final String[] firstNameWithLastName = username.contains(" ")
-                ? username.split(" ") : new String[] { username, null };
-        return new Triplet<>(
-                nickname,
-                manipulator.capitalised(firstNameWithLastName[0]),
-                manipulator.capitalised(firstNameWithLastName[1])
-        );
     }
 }

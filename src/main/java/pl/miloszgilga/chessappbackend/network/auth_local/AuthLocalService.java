@@ -21,9 +21,6 @@ package pl.miloszgilga.chessappbackend.network.auth_local;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import org.javatuples.Pair;
-import org.javatuples.Triplet;
-
 import org.springframework.stereotype.Service;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -32,15 +29,11 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 
 import javax.transaction.Transactional;
 
-import java.util.Date;
-import java.util.List;
 import java.util.Optional;
-import java.util.ArrayList;
 import java.text.ParseException;
 
 import pl.miloszgilga.chessappbackend.oauth.AuthUser;
 import pl.miloszgilga.chessappbackend.oauth.AuthUserBuilder;
-import pl.miloszgilga.chessappbackend.security.SecurityHelper;
 import pl.miloszgilga.chessappbackend.token.JsonWebTokenCreator;
 import pl.miloszgilga.chessappbackend.oauth.CredentialsSupplier;
 import pl.miloszgilga.chessappbackend.exception.custom.AuthException;
@@ -50,13 +43,7 @@ import pl.miloszgilga.chessappbackend.oauth.user_info.OAuth2UserInfoFactory;
 
 import pl.miloszgilga.chessappbackend.network.auth_local.dto.*;
 import pl.miloszgilga.chessappbackend.network.auth_local.domain.LocalUserModel;
-import pl.miloszgilga.chessappbackend.network.auth_local.dto.LoginViaLocalReqDto;
-import pl.miloszgilga.chessappbackend.network.auth_local.domain.RefreshTokenModel;
-import pl.miloszgilga.chessappbackend.network.auth_local.dto.SignupViaLocalReqDto;
 import pl.miloszgilga.chessappbackend.network.auth_local.domain.ILocalUserRepository;
-import pl.miloszgilga.chessappbackend.network.auth_local.mapper.SignupUserFactoryMapper;
-import pl.miloszgilga.chessappbackend.network.auth_local.dto.SuccessedLoginViaLocalResDto;
-import pl.miloszgilga.chessappbackend.network.auth_local.dto.SuccessedSignupViaLocalResDto;
 
 //----------------------------------------------------------------------------------------------------------------------
 
@@ -67,18 +54,18 @@ public class AuthLocalService implements IAuthLocalService {
 
     private final AuthUserBuilder userBuilder;
     private final AuthenticationManager manager;
-    private final SecurityHelper securityHelper;
+    private final AuthLocalServiceHelper helper;
     private final JsonWebTokenCreator tokenCreator;
     private final OAuth2UserInfoFactory userInfoFactory;
     private final ILocalUserRepository localUserRepository;
-    private final SignupUserFactoryMapper userFactoryMapper;
+    private final AuthLocalFactoryMapper userFactoryMapper;
 
-    AuthLocalService(AuthUserBuilder userBuilder, AuthenticationManager manager, SecurityHelper securityHelper,
+    AuthLocalService(AuthUserBuilder userBuilder, AuthenticationManager manager, AuthLocalServiceHelper helper,
                      JsonWebTokenCreator tokenCreator, OAuth2UserInfoFactory userInfoFactory,
-                     ILocalUserRepository localUserRepository, SignupUserFactoryMapper userFactoryMapper) {
+                     ILocalUserRepository localUserRepository, AuthLocalFactoryMapper userFactoryMapper) {
         this.userBuilder = userBuilder;
         this.manager = manager;
-        this.securityHelper = securityHelper;
+        this.helper = helper;
         this.tokenCreator = tokenCreator;
         this.userInfoFactory = userInfoFactory;
         this.localUserRepository = localUserRepository;
@@ -116,8 +103,8 @@ public class AuthLocalService implements IAuthLocalService {
     @Transactional
     public SuccessedSignupViaLocalResDto signupViaLocal(SignupViaLocalReqDto req) {
         try {
-            final LocalUserModel localUserModel = userFactoryMapper.mappedLocalUserDtoToUserEntity(req);
-            localUserModel.setRefreshToken(createRefreshToken(localUserModel));
+            final LocalUserModel localUserModel = userFactoryMapper.mappedSignupLocalUserDtoToUserEntity(req);
+            localUserModel.setRefreshToken(helper.createRefreshToken(localUserModel));
             final LocalUserModel newUser = localUserRepository.save(localUserModel);
             LOGGER.info("Create new user in database via LOCAL interface. User data: {}", newUser);
             final String fullName = newUser.getFirstName() + " " + newUser.getLastName();
@@ -126,7 +113,7 @@ public class AuthLocalService implements IAuthLocalService {
 
             return new SuccessedSignupViaLocalResDto(
                     fullName, String.format("Account for user %s was successfuly created.", fullName),
-                    generateHashedActivationEmails(newUser)
+                    helper.generateHashedActivationEmails(newUser)
             );
         } catch (ParseException ex) {
             LOGGER.error("Unable to parsed data via java date formatter. Passed date: {}", req.getBirthDate());
@@ -146,8 +133,8 @@ public class AuthLocalService implements IAuthLocalService {
         }
         final Optional<LocalUserModel> user = localUserRepository.findUserByEmailAddress(userInfo.getEmailAddress());
         if (user.isEmpty()) {
-            final LocalUserModel newUser = userFactoryMapper.mappedOAuth2UserDtoToUserEntity(data);
-            newUser.setRefreshToken(createRefreshToken(newUser));
+            final LocalUserModel newUser = userFactoryMapper.mappedSignupOAuth2UserDtoToUserEntity(data);
+            newUser.setRefreshToken(helper.createRefreshToken(newUser));
             localUserRepository.save(newUser);
             LOGGER.info("Create new user in database via {} OAuth2 interface. User data: {}", supplierName , newUser);
             return userBuilder.buildUser(newUser, data.getAttributes(), data.getIdToken(), data.getUserInfo());
@@ -159,38 +146,8 @@ public class AuthLocalService implements IAuthLocalService {
             throw new AuthException.AccountAlreadyExistException("Account with this email is already registered.");
         }
 
-        final LocalUserModel updatedUser = updateOAuth2UserDetails(userModel, userInfo);
+        final LocalUserModel updatedUser = helper.updateOAuth2UserDetails(userModel, userInfo);
         LOGGER.info("Update existing user in database via {} OAuth2 interface. User data: {}", supplierName, updatedUser);
         return userBuilder.buildUser(updatedUser, data.getAttributes(), data.getIdToken(), data.getUserInfo());
-    }
-
-    private LocalUserModel updateOAuth2UserDetails(LocalUserModel existUser, OAuth2UserInfo existUserInfo) {
-        final Triplet<String, String, String> namesData = userFactoryMapper
-                .generateNickFirstLastNameFromOAuthName(existUserInfo.getUsername());
-        existUser.setNickname(namesData.getValue0());
-        existUser.setFirstName(namesData.getValue1());
-        existUser.setLastName(namesData.getValue2());
-        existUser.getLocalUserDetails().setHasPhoto(!existUserInfo.getUserImageUrl().equals(""));
-        existUser.getLocalUserDetails().setPhotoEmbedLink(existUserInfo.getUserImageUrl());
-        return localUserRepository.save(existUser);
-    }
-
-    private List<String> generateHashedActivationEmails(LocalUserModel newUser) {
-        final List<String> hashedEmails = new ArrayList<>();
-        hashedEmails.add(securityHelper.hashingStringValue(newUser.getEmailAddress(), '*'));
-        final String secondEmailAddress = newUser.getLocalUserDetails().getSecondEmailAddress();
-        if (!secondEmailAddress.equals("")) {
-            hashedEmails.add(securityHelper.hashingStringValue(secondEmailAddress, '*'));
-        }
-        return hashedEmails;
-    }
-
-    private RefreshTokenModel createRefreshToken(LocalUserModel newUser) {
-        final Pair<String, Date> refreshToken = tokenCreator.createUserRefreshToken(newUser);
-        final RefreshTokenModel refreshTokenModel = new RefreshTokenModel(
-                refreshToken.getValue0(), refreshToken.getValue1());
-        refreshTokenModel.setLocalUser(newUser);
-        LOGGER.info("Refresh token was created for user: {}. Expired after {}", newUser, refreshToken.getValue1());
-        return refreshTokenModel;
     }
 }
