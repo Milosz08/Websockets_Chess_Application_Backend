@@ -87,10 +87,7 @@ public class AuthLocalService implements IAuthLocalService {
         final String jsonWebToken = tokenCreator.createUserCredentialsToken(authentication);
         LOGGER.info("User with id: {} and email: {} was successfuly logged.",
                 authUser.getUserModel().getId(), authUser.getUserModel().getEmailAddress());
-        return new SuccessedLoginResDto(
-                authUser.getUserModel().getFirstName() + " " + authUser.getUserModel().getLastName(),
-                jsonWebToken, authUser.getUserModel().getRefreshToken().getRefreshToken()
-        );
+        return SuccessedLoginResDto.factoryBuilder(authUser.getUserModel(), jsonWebToken);
     }
 
     @Override
