@@ -44,7 +44,7 @@ public enum CredentialsSupplier {
 
     public static Set<String> getAllSuppliers() {
         return Stream.of(CredentialsSupplier.values())
-                .filter(s -> s.supplier.equals(LOCAL.supplier))
+                .filter(s -> s.equals(LOCAL))
                 .map(CredentialsSupplier::getSupplier)
                 .collect(Collectors.toSet());
     }

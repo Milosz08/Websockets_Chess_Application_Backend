@@ -87,7 +87,7 @@ public class AuthLocalService implements IAuthLocalService {
 
     @Override
     @Transactional
-    public SuccessedLoginViaLocalResDto loginViaLocal(LoginViaLocalReqDto req) {
+    public SuccessedLoginResDto loginViaLocal(LoginViaLocalReqDto req) {
         final var userCredentials = new UsernamePasswordAuthenticationToken(req.getUsernameEmail(), req.getPassword());
         final Authentication authentication = manager.authenticate(userCredentials);
         final AuthUser authUser = (AuthUser) authentication.getPrincipal();
@@ -100,7 +100,7 @@ public class AuthLocalService implements IAuthLocalService {
         final String jsonWebToken = tokenCreator.createUserCredentialsToken(authentication);
         LOGGER.info("User with id: {} and email: {} was successfuly logged.",
                 authUser.getUserModel().getId(), authUser.getUserModel().getEmailAddress());
-        return new SuccessedLoginViaLocalResDto(
+        return new SuccessedLoginResDto(
                 authUser.getUserModel().getFirstName() + " " + authUser.getUserModel().getLastName(),
                 jsonWebToken, authUser.getUserModel().getRefreshToken().getRefreshToken()
         );
@@ -140,9 +140,9 @@ public class AuthLocalService implements IAuthLocalService {
         final OAuth2UserInfo userInfo = userInfoFactory.getOAuth2UserInfo(data.getSupplier(), data.getAttributes());
         final String supplierName = data.getSupplier().getSupplier();
         if (userInfo.getUsername().equals("") || userInfo.getEmailAddress().equals("")) {
-            throw new AuthException.OAuth2CredentialsSupplierMalformedException(String.format(
+            throw new AuthException.OAuth2CredentialsSupplierMalformedException(
                     "Unable to authenticate via %s provider. Select other authentication method.", supplierName
-            ));
+            );
         }
         final Optional<LocalUserModel> user = localUserRepository.findUserByEmailAddress(userInfo.getEmailAddress());
         if (user.isEmpty()) {

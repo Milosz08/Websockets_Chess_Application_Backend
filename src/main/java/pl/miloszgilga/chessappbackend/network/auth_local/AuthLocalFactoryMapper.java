@@ -16,7 +16,7 @@
  * COPIES OR SUBSTANTIAL PORTIONS OF THE SOFTWARE.
  */
 
-package pl.miloszgilga.chessappbackend.network.auth_local.mapper;
+package pl.miloszgilga.chessappbackend.network.auth_local;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -56,9 +56,9 @@ import static pl.miloszgilga.chessappbackend.utils.UserGenderSpecific.findGender
 //----------------------------------------------------------------------------------------------------------------------
 
 @Component
-public class SignupUserFactoryMapper {
+class AuthLocalFactoryMapper {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(SignupUserFactoryMapper.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(AuthLocalFactoryMapper.class);
     private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("dd/MM/yyyy");
 
     private final EnvironmentVars environment;
@@ -77,7 +77,7 @@ public class SignupUserFactoryMapper {
         this.roleRepository = roleRepository;
     }
 
-    public LocalUserModel mappedLocalUserDtoToUserEntity(SignupViaLocalReqDto dto) throws ParseException {
+    LocalUserModel mappedSignupLocalUserDtoToUserEntity(SignupViaLocalReqDto dto) throws ParseException {
         final String secondEmailAddress = dto.getSecondEmailAddress().equals("") ? null : dto.getSecondEmailAddress();
         final Date date = DATE_FORMAT.parse(dto.getBirthDate());
         final UserGenderSpecific genderSpecific = findGenderByString(dto.getGender());
@@ -95,7 +95,7 @@ public class SignupUserFactoryMapper {
         return userModel;
     }
 
-    public LocalUserModel mappedOAuth2UserDtoToUserEntity(OAuth2RegistrationData data) {
+    LocalUserModel mappedSignupOAuth2UserDtoToUserEntity(OAuth2RegistrationData data) {
         final OAuth2UserInfo userInfo = userInfoFactory.getOAuth2UserInfo(data.getSupplier(), data.getAttributes());
         final Boolean ifUserHasImage = !userInfo.getUserImageUrl().isEmpty();
         final String userImageUri = ifUserHasImage ? userInfo.getUserImageUrl() : null;
