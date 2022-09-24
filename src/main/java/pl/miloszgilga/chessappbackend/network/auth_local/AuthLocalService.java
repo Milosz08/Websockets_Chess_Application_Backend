@@ -48,6 +48,7 @@ import pl.miloszgilga.chessappbackend.oauth.user_info.OAuth2UserInfo;
 import pl.miloszgilga.chessappbackend.oauth.dto.OAuth2RegistrationData;
 import pl.miloszgilga.chessappbackend.oauth.user_info.OAuth2UserInfoFactory;
 
+import pl.miloszgilga.chessappbackend.network.auth_local.dto.*;
 import pl.miloszgilga.chessappbackend.network.auth_local.domain.LocalUserModel;
 import pl.miloszgilga.chessappbackend.network.auth_local.dto.LoginViaLocalReqDto;
 import pl.miloszgilga.chessappbackend.network.auth_local.domain.RefreshTokenModel;
@@ -103,6 +104,12 @@ public class AuthLocalService implements IAuthLocalService {
                 authUser.getUserModel().getFirstName() + " " + authUser.getUserModel().getLastName(),
                 jsonWebToken, authUser.getUserModel().getRefreshToken().getRefreshToken()
         );
+    }
+
+    @Override
+    @Transactional
+    public SuccessedLoginResDto loginViaOAuth2(LoginSignupViaOAuth2ReqDto req) {
+        return null;
     }
 
     @Override

@@ -59,4 +59,11 @@ public enum CredentialsSupplier {
                             "Passed registration id: %s is not valid credentials supplier name.", registrationId);
                 });
     }
+
+    public static Set<String> getOAuth2Suppliers() {
+        return Stream.of(CredentialsSupplier.values())
+                .filter(s -> !s.equals(LOCAL))
+                .map(CredentialsSupplier::getSupplier)
+                .collect(Collectors.toSet());
+    }
 }

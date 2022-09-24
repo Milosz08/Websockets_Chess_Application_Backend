@@ -48,6 +48,11 @@ class AuthLocalController {
         return new ResponseEntity<>(service.loginViaLocal(req), HttpStatus.OK);
     }
 
+    @PostMapping(LOGIN_VIA_OAUTH2)
+    ResponseEntity<SuccessedLoginResDto> loginViaOAuth2(@Valid @RequestBody LoginSignupViaOAuth2ReqDto req) {
+        return new ResponseEntity<>(service.loginViaOAuth2(req), HttpStatus.OK);
+    }
+
     @PostMapping(SIGNUP_VIA_LOCAL)
     ResponseEntity<SuccessedSignupViaLocalResDto> signupViaLocal(@Valid @RequestBody SignupViaLocalReqDto req) {
         return new ResponseEntity<>(service.signupViaLocal(req), HttpStatus.CREATED);

@@ -34,6 +34,7 @@ public class ApplicationEndpoints {
 
     public static final String AUTH_LOCAL_ENDPOINT = BASIC_ENDPOINT + "auth-local";
     public static final String LOGIN_VIA_LOCAL = "/login-via-local";
+    public static final String LOGIN_VIA_OAUTH2 = "/login-via-oauth";
     public static final String SIGNUP_VIA_LOCAL = "/signup-via-local";
 
     public static final String RENEW_CREDETIALS_LOCAL = BASIC_ENDPOINT + "renew-credentials";
