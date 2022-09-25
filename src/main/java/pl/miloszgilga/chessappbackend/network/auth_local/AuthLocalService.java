@@ -27,6 +27,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 
+import org.javatuples.Pair;
 import javax.transaction.Transactional;
 
 import java.util.Optional;
@@ -87,13 +88,14 @@ public class AuthLocalService implements IAuthLocalService {
         final String jsonWebToken = tokenCreator.createUserCredentialsToken(authentication);
         LOGGER.info("User with id: {} and email: {} was successfuly logged.",
                 authUser.getUserModel().getId(), authUser.getUserModel().getEmailAddress());
-        return SuccessedLoginResDto.factoryBuilder(authUser.getUserModel(), jsonWebToken);
+        return SuccessedLoginResDto.factoryBuilder(new Pair<>(authUser.getUserModel(), jsonWebToken));
     }
 
     @Override
     @Transactional
     public SuccessedLoginResDto loginViaOAuth2(LoginSignupViaOAuth2ReqDto req) {
-        return null;
+        final Pair<LocalUserModel, String> validateUser = helper.validateUserAndReturnTokenWithUserData(req);
+        return SuccessedLoginResDto.factoryBuilder(validateUser);
     }
 
     @Override
@@ -120,6 +122,22 @@ public class AuthLocalService implements IAuthLocalService {
 
     @Override
     @Transactional
+    public SuccessedAttemptToFinishSignupResDto attemptToFinishSignup(LoginSignupViaOAuth2ReqDto req) {
+        final Pair<LocalUserModel, String> validateUser = helper.validateUserAndReturnTokenWithUserData(req);
+        if (validateUser.getValue0().isActivated()) {
+            LOGGER.warn("Attempt to re-activate account. Account data: {}", validateUser.getValue0());
+            throw new AuthException.AccountIsAlreadyActivatedException("Your account has been already activated.");
+        }
+        return SuccessedAttemptToFinishSignupResDto.factoryBuilder(validateUser);
+    }
+
+    @Override
+    public SuccessedFinishSignupResDto finishSignup(FinishSignupReqDto req) {
+        return null;
+    }
+
+    @Override
+    @Transactional
     public AuthUser registrationProcessingFactory(OAuth2RegistrationData data) {
         final OAuth2UserInfo userInfo = userInfoFactory.getOAuth2UserInfo(data.getSupplier(), data.getAttributes());
         final String supplierName = data.getSupplier().getSupplier();
@@ -138,7 +156,8 @@ public class AuthLocalService implements IAuthLocalService {
         }
 
         final LocalUserModel userModel = user.get();
-        if (userModel.getCredentialsSupplier().equals(CredentialsSupplier.LOCAL)) {
+        final CredentialsSupplier supplier = userModel.getCredentialsSupplier();
+        if (!supplier.equals(data.getSupplier()) || supplier.equals(CredentialsSupplier.LOCAL)) {
             LOGGER.error("Attempt to create already existing user account via OAuth2. Email: {}", userModel.getEmailAddress());
             throw new AuthException.AccountAlreadyExistException("Account with this email is already registered.");
         }

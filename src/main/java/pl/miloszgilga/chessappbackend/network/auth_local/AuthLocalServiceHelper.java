@@ -25,10 +25,17 @@ import org.javatuples.Pair;
 import org.javatuples.Triplet;
 import org.springframework.stereotype.Component;
 
+import javax.transaction.Transactional;
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
+import pl.miloszgilga.chessappbackend.exception.custom.AuthException;
+import pl.miloszgilga.chessappbackend.network.auth_local.dto.LoginSignupViaOAuth2ReqDto;
+import pl.miloszgilga.chessappbackend.token.JsonWebTokenVerificator;
+import pl.miloszgilga.chessappbackend.token.dto.UserVerficationClaims;
 import pl.miloszgilga.chessappbackend.utils.StringManipulator;
 import pl.miloszgilga.chessappbackend.security.SecurityHelper;
 import pl.miloszgilga.chessappbackend.token.JsonWebTokenCreator;
@@ -48,13 +55,15 @@ public class AuthLocalServiceHelper {
     private final StringManipulator manipulator;
     private final SecurityHelper securityHelper;
     private final JsonWebTokenCreator tokenCreator;
+    private final JsonWebTokenVerificator tokenVerificator;
     private final ILocalUserRepository localUserRepository;
 
     AuthLocalServiceHelper(StringManipulator manipulator, SecurityHelper securityHelper, JsonWebTokenCreator tokenCreator,
-                           ILocalUserRepository localUserRepository) {
+                           JsonWebTokenVerificator tokenVerificator, ILocalUserRepository localUserRepository) {
         this.manipulator = manipulator;
         this.securityHelper = securityHelper;
         this.tokenCreator = tokenCreator;
+        this.tokenVerificator = tokenVerificator;
         this.localUserRepository = localUserRepository;
     }
 
@@ -69,6 +78,7 @@ public class AuthLocalServiceHelper {
         );
     }
 
+    @Transactional
     LocalUserModel updateOAuth2UserDetails(LocalUserModel existUser, OAuth2UserInfo existUserInfo) {
         final Triplet<String, String, String> namesData = generateNickFirstLastNameFromOAuthName(
                 existUserInfo.getUsername());
@@ -97,5 +107,19 @@ public class AuthLocalServiceHelper {
         refreshTokenModel.setLocalUser(newUser);
         LOGGER.info("Refresh token was created for user: {}. Expired after {}", newUser, refreshToken.getValue1());
         return refreshTokenModel;
+    }
+
+    @Transactional
+    Pair<LocalUserModel, String> validateUserAndReturnTokenWithUserData(LoginSignupViaOAuth2ReqDto req) {
+        final UserVerficationClaims claims = tokenVerificator.validateUserJwtFilter(req.getBearerToken());
+        final Optional<LocalUserModel> findingUser = localUserRepository
+                .findUserByEmailAddressNicknameAndId(claims.getEmailAddress(), claims.getNickname(), claims.getId());
+        if (findingUser.isEmpty()) {
+            LOGGER.error("Unable to load user based bearer token req data. Req: {}", req);
+            throw new AuthException.UserNotFoundException("User based passed data not exist.");
+        }
+        final LocalUserModel foundUser = findingUser.get();
+        final String jsonWebToken = tokenCreator.createUserCredentialsToken(foundUser);
+        return new Pair<>(foundUser, jsonWebToken);
     }
 }

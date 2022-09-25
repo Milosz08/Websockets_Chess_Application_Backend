@@ -61,11 +61,15 @@ public class JsonWebTokenCreator {
 
     public String createUserCredentialsToken(Authentication authentication) {
         final AuthUser localAuthUser = (AuthUser) authentication.getPrincipal();
+        return createUserCredentialsToken(localAuthUser.getUserModel());
+    }
+
+    public String createUserCredentialsToken(LocalUserModel userModel) {
         final Claims claims = Jwts.claims();
-        claims.put(USER_ID.getClaimName(), localAuthUser.getUserModel().getId());
-        claims.put(NICKNAME.getClaimName(), localAuthUser.getUserModel().getNickname());
-        claims.put(EMAIL.getClaimName(), localAuthUser.getUserModel().getEmailAddress());
-        claims.put(ROLES.getClaimName(), LocalUserRole.simplifyUserRoles(localAuthUser.getUserModel().getRoles()));
+        claims.put(USER_ID.getClaimName(), userModel.getId());
+        claims.put(NICKNAME.getClaimName(), userModel.getNickname());
+        claims.put(EMAIL.getClaimName(), userModel.getEmailAddress());
+        claims.put(ROLES.getClaimName(), LocalUserRole.simplifyUserRoles(userModel.getRoles()));
         claims.setExpiration(timeHelper.addMinutesToCurrentDate(environment.getBearerTokenExpiredMinutes()));
         return basicJwtToken("user-credentials", claims);
     }

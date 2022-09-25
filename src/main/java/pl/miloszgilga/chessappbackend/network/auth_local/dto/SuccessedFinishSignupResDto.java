@@ -1,8 +1,8 @@
 /*
  * Copyright (c) 2022 by MILOSZ GILGA <https://miloszgilga.pl>
  *
- * File name: IAuthLocalService.java
- * Last modified: 11/09/2022, 01:38
+ * File name: SuccessedFinishSignupResDto.java
+ * Last modified: 25/09/2022, 02:16
  * Project name: chess-app-backend
  *
  * Licensed under the MIT license; you may not use this file except in compliance with the License.
@@ -16,19 +16,12 @@
  * COPIES OR SUBSTANTIAL PORTIONS OF THE SOFTWARE.
  */
 
-package pl.miloszgilga.chessappbackend.network.auth_local;
+package pl.miloszgilga.chessappbackend.network.auth_local.dto;
 
-import pl.miloszgilga.chessappbackend.oauth.AuthUser;
-import pl.miloszgilga.chessappbackend.network.auth_local.dto.*;
-import pl.miloszgilga.chessappbackend.oauth.dto.OAuth2RegistrationData;
+import lombok.Data;
 
 //----------------------------------------------------------------------------------------------------------------------
 
-interface IAuthLocalService {
-    SuccessedLoginResDto loginViaLocal(LoginViaLocalReqDto req);
-    SuccessedLoginResDto loginViaOAuth2(LoginSignupViaOAuth2ReqDto req);
-    SuccessedSignupViaLocalResDto signupViaLocal(SignupViaLocalReqDto req);
-    SuccessedAttemptToFinishSignupResDto attemptToFinishSignup(LoginSignupViaOAuth2ReqDto req);
-    SuccessedFinishSignupResDto finishSignup(FinishSignupReqDto req);
-    AuthUser registrationProcessingFactory(OAuth2RegistrationData registrationData);
+@Data
+public class SuccessedFinishSignupResDto {
 }
