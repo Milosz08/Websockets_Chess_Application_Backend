@@ -22,6 +22,8 @@ import org.springframework.stereotype.Component;
 
 import java.util.Locale;
 
+import pl.miloszgilga.chessappbackend.network.auth_local.domain.LocalUserModel;
+
 //----------------------------------------------------------------------------------------------------------------------
 
 @Component
@@ -30,5 +32,10 @@ public class StringManipulator {
     public String capitalised(String textToCapitalised) {
         final String normalized = textToCapitalised.trim().toLowerCase(Locale.ROOT);
         return Character.toString(normalized.charAt(0)).toUpperCase(Locale.ROOT) + normalized.substring(1);
+    }
+
+    public static String generateInitials(LocalUserModel userModel) {
+        return (userModel.getFirstName().charAt(0) + Character.toString(userModel.getLastName().charAt(0)))
+                .toUpperCase(Locale.ROOT);
     }
 }

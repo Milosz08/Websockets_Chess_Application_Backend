@@ -71,4 +71,10 @@ public class AuthException {
             super(HttpStatus.UNAUTHORIZED, message, args);
         }
     }
+
+    public static class AccountIsAlreadyActivatedException extends BasicServerException {
+        public AccountIsAlreadyActivatedException(String message, Object... args) {
+            super(HttpStatus.BAD_REQUEST, message, args);
+        }
+    }
 }
