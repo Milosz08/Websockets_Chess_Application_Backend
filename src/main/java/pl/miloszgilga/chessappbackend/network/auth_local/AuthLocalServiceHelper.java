@@ -108,17 +108,21 @@ class AuthLocalServiceHelper {
         return refreshTokenModel;
     }
 
+    Pair<LocalUserModel, String> validateUserAndReturnTokenWithUserData(String jwtToken) {
+        final LocalUserModel foundUser = validateUserAndReturnUserData(jwtToken);
+        final String jsonWebToken = tokenCreator.createUserCredentialsToken(foundUser);
+        return new Pair<>(foundUser, jsonWebToken);
+    }
+
     @Transactional
-    Pair<LocalUserModel, String> validateUserAndReturnTokenWithUserData(LoginSignupViaOAuth2ReqDto req) {
-        final UserVerficationClaims claims = tokenVerificator.validateUserJwtFilter(req.getBearerToken());
+    LocalUserModel validateUserAndReturnUserData(String jwtToken) {
+        final UserVerficationClaims claims = tokenVerificator.validateUserJwtFilter(jwtToken);
         final Optional<LocalUserModel> findingUser = localUserRepository
                 .findUserByEmailAddressNicknameAndId(claims.getEmailAddress(), claims.getNickname(), claims.getId());
         if (findingUser.isEmpty()) {
-            LOGGER.error("Unable to load user based bearer token req data. Req: {}", req);
+            LOGGER.error("Unable to load user based bearer token req data. Bearer token: {}", jwtToken);
             throw new AuthException.UserNotFoundException("User based passed data not exist.");
         }
-        final LocalUserModel foundUser = findingUser.get();
-        final String jsonWebToken = tokenCreator.createUserCredentialsToken(foundUser);
-        return new Pair<>(foundUser, jsonWebToken);
+        return findingUser.get();
     }
 }

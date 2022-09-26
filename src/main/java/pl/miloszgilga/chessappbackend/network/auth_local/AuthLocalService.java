@@ -27,11 +27,9 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 
+import java.util.Optional;
 import org.javatuples.Pair;
 import javax.transaction.Transactional;
-
-import java.util.Optional;
-import java.text.ParseException;
 
 import pl.miloszgilga.chessappbackend.oauth.AuthUser;
 import pl.miloszgilga.chessappbackend.oauth.AuthUserBuilder;
@@ -94,7 +92,7 @@ public class AuthLocalService implements IAuthLocalService {
     @Override
     @Transactional
     public SuccessedLoginResDto loginViaOAuth2(LoginSignupViaOAuth2ReqDto req) {
-        final Pair<LocalUserModel, String> validateUser = helper.validateUserAndReturnTokenWithUserData(req);
+        final Pair<LocalUserModel, String> validateUser = helper.validateUserAndReturnTokenWithUserData(req.getJwtToken());
         return SuccessedLoginResDto.factoryBuilder(validateUser);
     }
 
@@ -123,7 +121,7 @@ public class AuthLocalService implements IAuthLocalService {
     @Override
     @Transactional
     public SuccessedAttemptToFinishSignupResDto attemptToFinishSignup(LoginSignupViaOAuth2ReqDto req) {
-        final Pair<LocalUserModel, String> validateUser = helper.validateUserAndReturnTokenWithUserData(req);
+        final Pair<LocalUserModel, String> validateUser = helper.validateUserAndReturnTokenWithUserData(req.getJwtToken());
         if (validateUser.getValue0().isActivated()) {
             LOGGER.warn("Attempt to re-activate account. Account data: {}", validateUser.getValue0());
             throw new AuthException.AccountIsAlreadyActivatedException("Your account has been already activated.");
