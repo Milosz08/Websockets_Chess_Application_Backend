@@ -31,6 +31,7 @@ import pl.miloszgilga.chessappbackend.oauth.AuthUser;
 import pl.miloszgilga.chessappbackend.utils.TimeHelper;
 import pl.miloszgilga.chessappbackend.config.EnvironmentVars;
 import pl.miloszgilga.chessappbackend.security.LocalUserRole;
+import pl.miloszgilga.chessappbackend.utils.StringManipulator;
 import pl.miloszgilga.chessappbackend.network.auth_local.domain.LocalUserModel;
 
 import static pl.miloszgilga.chessappbackend.token.JwtClaim.*;
@@ -41,8 +42,8 @@ import static pl.miloszgilga.chessappbackend.token.JwtClaim.*;
 public class JsonWebTokenCreator {
 
     private final TimeHelper timeHelper;
-    private final EnvironmentVars environment;
     private final JsonWebToken jsonWebToken;
+    private final EnvironmentVars environment;
 
     public JsonWebTokenCreator(TimeHelper timeHelper, EnvironmentVars environment, JsonWebToken jsonWebToken) {
         this.timeHelper = timeHelper;
@@ -57,6 +58,15 @@ public class JsonWebTokenCreator {
         claims.put(IS_EXPIRED.getClaimName(), true);
         claims.setExpiration(timeHelper.addMinutesToCurrentDate(environment.getOtaTokenExpiredMinutes()));
         return basicJwtToken("unsubscribe-newsletter-token", claims);
+    }
+
+    public String createActivateAccountToken(LocalUserModel userModel) {
+        final Claims claims = Jwts.claims();
+        claims.put(USER_ID.getClaimName(), userModel.getId());
+        claims.put(NICKNAME.getClaimName(), userModel.getNickname());
+        claims.put(FULL_NAME.getClaimName(), StringManipulator.generateInitials(userModel));
+        claims.setExpiration(timeHelper.addMinutesToCurrentDate(environment.getOtaTokenExpiredMinutes()));
+        return basicJwtToken("activate-account-token", claims);
     }
 
     public String createUserCredentialsToken(Authentication authentication) {
