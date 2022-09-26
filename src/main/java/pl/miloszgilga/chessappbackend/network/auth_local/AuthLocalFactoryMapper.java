@@ -29,7 +29,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import javax.transaction.Transactional;
 
 import java.util.*;
-import java.text.SimpleDateFormat;
 
 import pl.miloszgilga.chessappbackend.utils.TimeHelper;
 import pl.miloszgilga.chessappbackend.config.EnvironmentVars;
@@ -57,7 +56,6 @@ import static pl.miloszgilga.chessappbackend.utils.UserGenderSpecific.findGender
 class AuthLocalFactoryMapper {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(AuthLocalFactoryMapper.class);
-    private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("dd/MM/yyyy");
 
     private final TimeHelper timeHelper;
     private final EnvironmentVars environment;
