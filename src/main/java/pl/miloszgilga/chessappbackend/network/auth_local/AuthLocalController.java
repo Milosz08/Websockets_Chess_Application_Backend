@@ -28,6 +28,7 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.validation.Valid;
 
 import pl.miloszgilga.chessappbackend.network.auth_local.dto.*;
+import pl.miloszgilga.chessappbackend.dto.SimpleServerMessageDto;
 
 import static pl.miloszgilga.chessappbackend.config.ApplicationEndpoints.*;
 
@@ -54,7 +55,7 @@ class AuthLocalController {
     }
 
     @PostMapping(SIGNUP_VIA_LOCAL)
-    ResponseEntity<SuccessedSignupViaLocalResDto> signupViaLocal(@Valid @RequestBody SignupViaLocalReqDto req) {
+    ResponseEntity<SimpleServerMessageDto> signupViaLocal(@Valid @RequestBody SignupViaLocalReqDto req) {
         return new ResponseEntity<>(service.signupViaLocal(req), HttpStatus.CREATED);
     }
 
@@ -65,7 +66,7 @@ class AuthLocalController {
     }
 
     @PostMapping(FINISH_SIGNUP_VIA_OAUTH2)
-    ResponseEntity<SuccessedFinishSignupResDto> finishSignup(@Valid @RequestBody FinishSignupReqDto req) {
+    ResponseEntity<SimpleServerMessageDto> finishSignup(@Valid @RequestBody FinishSignupReqDto req) {
         return new ResponseEntity<>(service.finishSignup(req), HttpStatus.OK);
     }
 }

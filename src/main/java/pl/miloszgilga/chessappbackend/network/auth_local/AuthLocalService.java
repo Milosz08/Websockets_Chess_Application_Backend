@@ -35,6 +35,7 @@ import pl.miloszgilga.chessappbackend.oauth.AuthUser;
 import pl.miloszgilga.chessappbackend.oauth.AuthUserBuilder;
 import pl.miloszgilga.chessappbackend.token.JsonWebTokenCreator;
 import pl.miloszgilga.chessappbackend.oauth.CredentialsSupplier;
+import pl.miloszgilga.chessappbackend.dto.SimpleServerMessageDto;
 import pl.miloszgilga.chessappbackend.exception.custom.AuthException;
 import pl.miloszgilga.chessappbackend.oauth.user_info.OAuth2UserInfo;
 import pl.miloszgilga.chessappbackend.oauth.dto.OAuth2RegistrationData;
@@ -98,24 +99,16 @@ public class AuthLocalService implements IAuthLocalService {
 
     @Override
     @Transactional
-    public SuccessedSignupViaLocalResDto signupViaLocal(SignupViaLocalReqDto req) {
-        try {
-            final LocalUserModel localUserModel = userFactoryMapper.mappedSignupLocalUserDtoToUserEntity(req);
-            localUserModel.setRefreshToken(helper.createRefreshToken(localUserModel));
-            final LocalUserModel newUser = localUserRepository.save(localUserModel);
-            LOGGER.info("Create new user in database via LOCAL interface. User data: {}", newUser);
-            final String fullName = newUser.getFirstName() + " " + newUser.getLastName();
-
-            // TODO: Send email with verification code
-
-            return new SuccessedSignupViaLocalResDto(
-                    fullName, String.format("Account for user %s was successfuly created.", fullName),
-                    helper.generateHashedActivationEmails(newUser)
-            );
-        } catch (ParseException ex) {
-            LOGGER.error("Unable to parsed data via java date formatter. Passed date: {}", req.getBirthDate());
-            throw new AuthException.MalformedBirthDateException("Passed birth date value is not valid.");
-        }
+    public SimpleServerMessageDto signupViaLocal(SignupViaLocalReqDto req) {
+        final LocalUserModel localUserModel = userFactoryMapper.mappedSignupLocalUserDtoToUserEntity(req);
+        localUserModel.setRefreshToken(helper.createRefreshToken(localUserModel));
+        final LocalUserModel newUser = localUserRepository.save(localUserModel);
+        helper.sendEmailMessageForActivateAccount(newUser);
+        LOGGER.info("Create new user in database via LOCAL interface. User data: {}", newUser);
+        return new SimpleServerMessageDto(
+                "Your account was successfuly created. To complete, activate your account using the link sent " +
+                        "to your email address."
+        );
     }
 
     @Override
