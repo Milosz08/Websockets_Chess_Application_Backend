@@ -1,8 +1,8 @@
 /*
  * Copyright (c) 2022 by MILOSZ GILGA <https://miloszgilga.pl>
  *
- * File name: ILocalUserRoleRepository.java
- * Last modified: 11/09/2022, 01:46
+ * File name: LoginViaLocalRequestDto.java
+ * Last modified: 10/09/2022, 19:15
  * Project name: chess-app-backend
  *
  * Licensed under the MIT license; you may not use this file except in compliance with the License.
@@ -16,24 +16,26 @@
  * COPIES OR SUBSTANTIAL PORTIONS OF THE SOFTWARE.
  */
 
-package pl.miloszgilga.chessappbackend.network.auth_local.domain;
+package pl.miloszgilga.chessappbackend.network.auth.dto;
 
-import org.springframework.stereotype.Repository;
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.jpa.repository.JpaRepository;
+import lombok.Data;
 
-import java.util.Optional;
+import javax.validation.constraints.Size;
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.NotBlank;
 
-import pl.miloszgilga.chessappbackend.security.LocalUserRole;
+import static pl.miloszgilga.chessappbackend.validator.RegexPattern.PASSWORD_PATTERN;
 
 //----------------------------------------------------------------------------------------------------------------------
 
-@Repository
-public interface ILocalUserRoleRepository extends JpaRepository<LocalUserRoleModel, Long> {
+@Data
+public class LoginViaLocalReqDto {
 
-    @Query(value = "SELECT COUNT(m) > 0 FROM LocalUserRoleModel m WHERE m.roleName=:roleName")
-    Boolean findIfRoleExist(LocalUserRole roleName);
+    @NotBlank(message = "{jpa.validator.usernameEmail.notBlank}")
+    @Size(max = 100, message = "{jpa.validator.usernameEmail.size}")
+    private String usernameEmail;
 
-    @Query(value = "SELECT m FROM LocalUserRoleModel m WHERE m.roleName=:roleName")
-    Optional<LocalUserRoleModel> findRoleByType(LocalUserRole roleName);
+    @NotBlank(message = "{jpa.validator.password.notBlank}")
+    @Pattern(regexp = PASSWORD_PATTERN, message = "{jpa.validator.password.regex}")
+    private String password;
 }

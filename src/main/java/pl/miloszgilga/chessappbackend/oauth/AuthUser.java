@@ -29,7 +29,7 @@ import java.util.Map;
 import java.util.List;
 import java.io.Serializable;
 
-import pl.miloszgilga.chessappbackend.network.auth_local.domain.LocalUserModel;
+import pl.miloszgilga.chessappbackend.network.auth.domain.LocalUserModel;
 
 //----------------------------------------------------------------------------------------------------------------------
 

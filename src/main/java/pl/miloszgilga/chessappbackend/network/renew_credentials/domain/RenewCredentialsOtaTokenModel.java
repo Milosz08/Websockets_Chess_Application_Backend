@@ -20,11 +20,11 @@ package pl.miloszgilga.chessappbackend.network.renew_credentials.domain;
 
 import java.io.Serializable;
 
+import javax.persistence.*;
+
 import lombok.NoArgsConstructor;
 import pl.miloszgilga.chessappbackend.audit.AuditableEntity;
-import pl.miloszgilga.chessappbackend.network.auth_local.domain.LocalUserModel;
-
-import javax.persistence.*;
+import pl.miloszgilga.chessappbackend.network.auth.domain.LocalUserModel;
 
 //----------------------------------------------------------------------------------------------------------------------
 

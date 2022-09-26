@@ -16,7 +16,7 @@
  * COPIES OR SUBSTANTIAL PORTIONS OF THE SOFTWARE.
  */
 
-package pl.miloszgilga.chessappbackend.network.auth_local;
+package pl.miloszgilga.chessappbackend.network.auth;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -27,7 +27,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
 
-import pl.miloszgilga.chessappbackend.network.auth_local.dto.*;
+import pl.miloszgilga.chessappbackend.network.auth.dto.*;
 import pl.miloszgilga.chessappbackend.dto.SimpleServerMessageDto;
 
 import static pl.miloszgilga.chessappbackend.config.ApplicationEndpoints.*;
@@ -36,11 +36,11 @@ import static pl.miloszgilga.chessappbackend.config.ApplicationEndpoints.*;
 
 @RestController
 @RequestMapping(AUTH_LOCAL_ENDPOINT)
-class AuthLocalController {
+class AuthController {
 
-    private final AuthLocalService service;
+    private final AuthService service;
 
-    AuthLocalController(AuthLocalService service) {
+    AuthController(AuthService service) {
         this.service = service;
     }
 

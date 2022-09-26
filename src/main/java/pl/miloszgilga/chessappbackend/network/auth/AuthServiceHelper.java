@@ -16,7 +16,7 @@
  * COPIES OR SUBSTANTIAL PORTIONS OF THE SOFTWARE.
  */
 
-package pl.miloszgilga.chessappbackend.network.auth_local;
+package pl.miloszgilga.chessappbackend.network.auth;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -37,24 +37,24 @@ import pl.miloszgilga.chessappbackend.exception.custom.AuthException;
 import pl.miloszgilga.chessappbackend.oauth.user_info.OAuth2UserInfo;
 import pl.miloszgilga.chessappbackend.token.dto.UserVerficationClaims;
 
-import pl.miloszgilga.chessappbackend.network.auth_local.domain.LocalUserModel;
-import pl.miloszgilga.chessappbackend.network.auth_local.domain.RefreshTokenModel;
-import pl.miloszgilga.chessappbackend.network.auth_local.domain.ILocalUserRepository;
+import pl.miloszgilga.chessappbackend.network.auth.domain.LocalUserModel;
+import pl.miloszgilga.chessappbackend.network.auth.domain.RefreshTokenModel;
+import pl.miloszgilga.chessappbackend.network.auth.domain.ILocalUserRepository;
 
 //----------------------------------------------------------------------------------------------------------------------
 
 @Component
-class AuthLocalServiceHelper {
+class AuthServiceHelper {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(AuthLocalServiceHelper.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(AuthServiceHelper.class);
 
     private final StringManipulator manipulator;
     private final JsonWebTokenCreator tokenCreator;
     private final JsonWebTokenVerificator tokenVerificator;
     private final ILocalUserRepository localUserRepository;
 
-    AuthLocalServiceHelper(StringManipulator manipulator, JsonWebTokenCreator tokenCreator,
-                           JsonWebTokenVerificator tokenVerificator, ILocalUserRepository localUserRepository) {
+    AuthServiceHelper(StringManipulator manipulator, JsonWebTokenCreator tokenCreator,
+                      JsonWebTokenVerificator tokenVerificator, ILocalUserRepository localUserRepository) {
         this.manipulator = manipulator;
         this.tokenCreator = tokenCreator;
         this.tokenVerificator = tokenVerificator;

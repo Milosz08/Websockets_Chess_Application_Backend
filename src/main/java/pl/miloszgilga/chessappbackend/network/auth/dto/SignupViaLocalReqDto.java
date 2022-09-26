@@ -16,7 +16,7 @@
  * COPIES OR SUBSTANTIAL PORTIONS OF THE SOFTWARE.
  */
 
-package pl.miloszgilga.chessappbackend.network.auth_local.dto;
+package pl.miloszgilga.chessappbackend.network.auth.dto;
 
 import lombok.Data;
 

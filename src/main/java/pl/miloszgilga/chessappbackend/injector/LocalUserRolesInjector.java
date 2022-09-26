@@ -27,8 +27,8 @@ import java.util.stream.Stream;
 import java.util.stream.Collectors;
 
 import pl.miloszgilga.chessappbackend.security.LocalUserRole;
-import pl.miloszgilga.chessappbackend.network.auth_local.domain.LocalUserRoleModel;
-import pl.miloszgilga.chessappbackend.network.auth_local.domain.ILocalUserRoleRepository;
+import pl.miloszgilga.chessappbackend.network.auth.domain.LocalUserRoleModel;
+import pl.miloszgilga.chessappbackend.network.auth.domain.ILocalUserRoleRepository;
 
 //----------------------------------------------------------------------------------------------------------------------
 

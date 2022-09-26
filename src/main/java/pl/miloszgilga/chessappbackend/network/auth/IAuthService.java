@@ -1,8 +1,8 @@
 /*
  * Copyright (c) 2022 by MILOSZ GILGA <https://miloszgilga.pl>
  *
- * File name: LoginViaOAuth2ReqDto.java
- * Last modified: 23/09/2022, 19:17
+ * File name: IAuthLocalService.java
+ * Last modified: 11/09/2022, 01:38
  * Project name: chess-app-backend
  *
  * Licensed under the MIT license; you may not use this file except in compliance with the License.
@@ -16,22 +16,20 @@
  * COPIES OR SUBSTANTIAL PORTIONS OF THE SOFTWARE.
  */
 
-package pl.miloszgilga.chessappbackend.network.auth_local.dto;
+package pl.miloszgilga.chessappbackend.network.auth;
 
-import lombok.Data;
-import javax.validation.constraints.NotBlank;
-
-import pl.miloszgilga.chessappbackend.validator.annotation.ValidateOAuth2Supplier;
+import pl.miloszgilga.chessappbackend.oauth.AuthUser;
+import pl.miloszgilga.chessappbackend.network.auth.dto.*;
+import pl.miloszgilga.chessappbackend.dto.SimpleServerMessageDto;
+import pl.miloszgilga.chessappbackend.oauth.dto.OAuth2RegistrationData;
 
 //----------------------------------------------------------------------------------------------------------------------
 
-@Data
-public class LoginSignupViaOAuth2ReqDto {
-
-    @NotBlank(message = "{jpa.validator.jwtToken.notBlank}")
-    private String jwtToken;
-
-    @NotBlank(message = "{jpa.validator.credentialsSupplier.notBlank}")
-    @ValidateOAuth2Supplier(message = "{jpa.validator.credentialsSupplier.notExist}")
-    private String oauth2supplier;
+interface IAuthService {
+    SuccessedLoginResDto loginViaLocal(LoginViaLocalReqDto req);
+    SuccessedLoginResDto loginViaOAuth2(LoginSignupViaOAuth2ReqDto req);
+    SimpleServerMessageDto signupViaLocal(SignupViaLocalReqDto req);
+    SuccessedAttemptToFinishSignupResDto attemptToFinishSignup(LoginSignupViaOAuth2ReqDto req);
+    SimpleServerMessageDto finishSignup(FinishSignupReqDto req);
+    AuthUser registrationProcessingFactory(OAuth2RegistrationData registrationData);
 }

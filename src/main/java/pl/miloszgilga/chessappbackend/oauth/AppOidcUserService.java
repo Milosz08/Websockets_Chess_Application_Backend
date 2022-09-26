@@ -28,7 +28,7 @@ import org.springframework.security.oauth2.client.oidc.userinfo.OidcUserService;
 
 import pl.miloszgilga.chessappbackend.exception.custom.AuthException;
 import pl.miloszgilga.chessappbackend.oauth.dto.OAuth2RegistrationData;
-import pl.miloszgilga.chessappbackend.network.auth_local.AuthLocalService;
+import pl.miloszgilga.chessappbackend.network.auth.AuthService;
 
 import static pl.miloszgilga.chessappbackend.oauth.CredentialsSupplier.findSupplierBasedRegistrationId;
 
@@ -37,10 +37,10 @@ import static pl.miloszgilga.chessappbackend.oauth.CredentialsSupplier.findSuppl
 @Service
 public class AppOidcUserService extends OidcUserService {
 
-    private final AuthLocalService authLocalService;
+    private final AuthService authService;
 
-    public AppOidcUserService(@Lazy AuthLocalService authLocalService) {
-        this.authLocalService = authLocalService;
+    public AppOidcUserService(@Lazy AuthService authService) {
+        this.authService = authService;
     }
 
     @Override
@@ -52,7 +52,7 @@ public class AppOidcUserService extends OidcUserService {
             final var registrationData = new OAuth2RegistrationData(provider, oidcUser.getAttributes(),
                     oidcUser.getIdToken(), oidcUser.getUserInfo());
 
-            return authLocalService.registrationProcessingFactory(registrationData);
+            return authService.registrationProcessingFactory(registrationData);
         } catch (AuthenticationException ex) {
             throw ex;
         } catch (Exception ex) {

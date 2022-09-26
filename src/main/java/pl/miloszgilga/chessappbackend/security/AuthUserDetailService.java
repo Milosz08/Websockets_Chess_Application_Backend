@@ -32,8 +32,8 @@ import java.util.Optional;
 import pl.miloszgilga.chessappbackend.oauth.AuthUser;
 import pl.miloszgilga.chessappbackend.exception.custom.AuthException;
 import pl.miloszgilga.chessappbackend.token.dto.UserVerficationClaims;
-import pl.miloszgilga.chessappbackend.network.auth_local.domain.LocalUserModel;
-import pl.miloszgilga.chessappbackend.network.auth_local.domain.ILocalUserRepository;
+import pl.miloszgilga.chessappbackend.network.auth.domain.LocalUserModel;
+import pl.miloszgilga.chessappbackend.network.auth.domain.ILocalUserRepository;
 
 //----------------------------------------------------------------------------------------------------------------------
 

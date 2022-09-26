@@ -35,8 +35,8 @@ import java.util.ArrayList;
 
 import pl.miloszgilga.chessappbackend.oauth.AuthUser;
 import pl.miloszgilga.chessappbackend.oauth.OAuth2CustomTokenConverter;
-import pl.miloszgilga.chessappbackend.network.auth_local.domain.LocalUserModel;
-import pl.miloszgilga.chessappbackend.network.auth_local.domain.LocalUserRoleModel;
+import pl.miloszgilga.chessappbackend.network.auth.domain.LocalUserModel;
+import pl.miloszgilga.chessappbackend.network.auth.domain.LocalUserRoleModel;
 
 //----------------------------------------------------------------------------------------------------------------------
 

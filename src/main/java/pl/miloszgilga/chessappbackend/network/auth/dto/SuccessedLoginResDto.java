@@ -16,15 +16,15 @@
  * COPIES OR SUBSTANTIAL PORTIONS OF THE SOFTWARE.
  */
 
-package pl.miloszgilga.chessappbackend.network.auth_local.dto;
+package pl.miloszgilga.chessappbackend.network.auth.dto;
 
 import lombok.Data;
 import lombok.AllArgsConstructor;
 
 import org.javatuples.Pair;
 
-import pl.miloszgilga.chessappbackend.network.auth_local.domain.LocalUserModel;
-import pl.miloszgilga.chessappbackend.network.auth_local.domain.LocalUserDetailsModel;
+import pl.miloszgilga.chessappbackend.network.auth.domain.LocalUserModel;
+import pl.miloszgilga.chessappbackend.network.auth.domain.LocalUserDetailsModel;
 
 //----------------------------------------------------------------------------------------------------------------------
 

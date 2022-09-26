@@ -24,7 +24,7 @@ import org.slf4j.LoggerFactory;
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 
-import pl.miloszgilga.chessappbackend.network.auth_local.domain.ILocalUserRepository;
+import pl.miloszgilga.chessappbackend.network.auth.domain.ILocalUserRepository;
 import pl.miloszgilga.chessappbackend.validator.annotation.ValidateEmailAlreadyExist;
 
 //----------------------------------------------------------------------------------------------------------------------

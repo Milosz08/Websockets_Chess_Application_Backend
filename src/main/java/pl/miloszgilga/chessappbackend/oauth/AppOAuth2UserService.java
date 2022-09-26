@@ -31,7 +31,7 @@ import java.util.HashMap;
 
 import pl.miloszgilga.chessappbackend.exception.custom.AuthException;
 import pl.miloszgilga.chessappbackend.oauth.dto.OAuth2RegistrationData;
-import pl.miloszgilga.chessappbackend.network.auth_local.AuthLocalService;
+import pl.miloszgilga.chessappbackend.network.auth.AuthService;
 
 import static pl.miloszgilga.chessappbackend.oauth.CredentialsSupplier.findSupplierBasedRegistrationId;
 
@@ -40,10 +40,10 @@ import static pl.miloszgilga.chessappbackend.oauth.CredentialsSupplier.findSuppl
 @Service
 public class AppOAuth2UserService extends DefaultOAuth2UserService {
 
-    private final AuthLocalService authLocalService;
+    private final AuthService authService;
 
-    public AppOAuth2UserService(@Lazy AuthLocalService authLocalService) {
-        this.authLocalService = authLocalService;
+    public AppOAuth2UserService(@Lazy AuthService authService) {
+        this.authService = authService;
     }
 
     @Override
@@ -55,7 +55,7 @@ public class AppOAuth2UserService extends DefaultOAuth2UserService {
             final CredentialsSupplier provider = findSupplierBasedRegistrationId(credentialsSupplierRaw);
             final var registrationData = new OAuth2RegistrationData(provider, userAttributes);
 
-            return authLocalService.registrationProcessingFactory(registrationData);
+            return authService.registrationProcessingFactory(registrationData);
         } catch (AuthenticationException ex) {
             throw ex;
         } catch (Exception ex) {

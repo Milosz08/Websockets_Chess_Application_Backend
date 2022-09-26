@@ -25,7 +25,7 @@ import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 
 import pl.miloszgilga.chessappbackend.exception.custom.PasswordException;
-import pl.miloszgilga.chessappbackend.network.auth_local.dto.SignupViaLocalReqDto;
+import pl.miloszgilga.chessappbackend.network.auth.dto.SignupViaLocalReqDto;
 import pl.miloszgilga.chessappbackend.validator.annotation.ValidatePasswordMatch;
 
 //----------------------------------------------------------------------------------------------------------------------

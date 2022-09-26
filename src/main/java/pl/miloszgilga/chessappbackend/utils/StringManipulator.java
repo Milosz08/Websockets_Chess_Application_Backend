@@ -22,7 +22,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.Locale;
 
-import pl.miloszgilga.chessappbackend.network.auth_local.domain.LocalUserModel;
+import pl.miloszgilga.chessappbackend.network.auth.domain.LocalUserModel;
 
 //----------------------------------------------------------------------------------------------------------------------
 

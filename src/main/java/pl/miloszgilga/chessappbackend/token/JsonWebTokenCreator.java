@@ -32,7 +32,7 @@ import pl.miloszgilga.chessappbackend.utils.TimeHelper;
 import pl.miloszgilga.chessappbackend.config.EnvironmentVars;
 import pl.miloszgilga.chessappbackend.security.LocalUserRole;
 import pl.miloszgilga.chessappbackend.utils.StringManipulator;
-import pl.miloszgilga.chessappbackend.network.auth_local.domain.LocalUserModel;
+import pl.miloszgilga.chessappbackend.network.auth.domain.LocalUserModel;
 
 import static pl.miloszgilga.chessappbackend.token.JwtClaim.*;
 

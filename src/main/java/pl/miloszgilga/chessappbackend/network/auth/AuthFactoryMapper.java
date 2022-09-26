@@ -16,7 +16,7 @@
  * COPIES OR SUBSTANTIAL PORTIONS OF THE SOFTWARE.
  */
 
-package pl.miloszgilga.chessappbackend.network.auth_local;
+package pl.miloszgilga.chessappbackend.network.auth;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -41,21 +41,21 @@ import pl.miloszgilga.chessappbackend.oauth.user_info.OAuth2UserInfo;
 import pl.miloszgilga.chessappbackend.oauth.dto.OAuth2RegistrationData;
 import pl.miloszgilga.chessappbackend.oauth.user_info.OAuth2UserInfoFactory;
 
-import pl.miloszgilga.chessappbackend.network.auth_local.domain.LocalUserModel;
-import pl.miloszgilga.chessappbackend.network.auth_local.dto.FinishSignupReqDto;
-import pl.miloszgilga.chessappbackend.network.auth_local.dto.SignupViaLocalReqDto;
-import pl.miloszgilga.chessappbackend.network.auth_local.domain.LocalUserRoleModel;
-import pl.miloszgilga.chessappbackend.network.auth_local.domain.LocalUserDetailsModel;
-import pl.miloszgilga.chessappbackend.network.auth_local.domain.ILocalUserRoleRepository;
+import pl.miloszgilga.chessappbackend.network.auth.domain.LocalUserModel;
+import pl.miloszgilga.chessappbackend.network.auth.dto.FinishSignupReqDto;
+import pl.miloszgilga.chessappbackend.network.auth.dto.SignupViaLocalReqDto;
+import pl.miloszgilga.chessappbackend.network.auth.domain.LocalUserRoleModel;
+import pl.miloszgilga.chessappbackend.network.auth.domain.LocalUserDetailsModel;
+import pl.miloszgilga.chessappbackend.network.auth.domain.ILocalUserRoleRepository;
 
 import static pl.miloszgilga.chessappbackend.utils.UserGenderSpecific.findGenderByString;
 
 //----------------------------------------------------------------------------------------------------------------------
 
 @Component
-class AuthLocalFactoryMapper {
+class AuthFactoryMapper {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(AuthLocalFactoryMapper.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(AuthFactoryMapper.class);
 
     private final TimeHelper timeHelper;
     private final EnvironmentVars environment;
@@ -63,18 +63,18 @@ class AuthLocalFactoryMapper {
     private final PasswordEncoder passwordEncoder;
     private final ILocalUserRoleRepository roleRepository;
     private final OAuth2UserInfoFactory userInfoFactory;
-    private final AuthLocalServiceHelper authLocalServiceHelper;
+    private final AuthServiceHelper authServiceHelper;
 
-    AuthLocalFactoryMapper(TimeHelper timeHelper, EnvironmentVars environment, StringManipulator manipulator,
-                           @Lazy PasswordEncoder passwordEncoder, OAuth2UserInfoFactory userInfoFactory,
-                           ILocalUserRoleRepository roleRepository, AuthLocalServiceHelper authLocalServiceHelper) {
+    AuthFactoryMapper(TimeHelper timeHelper, EnvironmentVars environment, StringManipulator manipulator,
+                      @Lazy PasswordEncoder passwordEncoder, OAuth2UserInfoFactory userInfoFactory,
+                      ILocalUserRoleRepository roleRepository, AuthServiceHelper authServiceHelper) {
         this.timeHelper = timeHelper;
         this.environment = environment;
         this.manipulator = manipulator;
         this.passwordEncoder = passwordEncoder;
         this.userInfoFactory = userInfoFactory;
         this.roleRepository = roleRepository;
-        this.authLocalServiceHelper = authLocalServiceHelper;
+        this.authServiceHelper = authServiceHelper;
     }
 
     LocalUserModel mappedSignupLocalUserDtoToUserEntity(SignupViaLocalReqDto dto) {
@@ -99,7 +99,7 @@ class AuthLocalFactoryMapper {
         final OAuth2UserInfo userInfo = userInfoFactory.getOAuth2UserInfo(data.getSupplier(), data.getAttributes());
         final Boolean ifUserHasImage = !userInfo.getUserImageUrl().isEmpty();
         final String userImageUri = ifUserHasImage ? userInfo.getUserImageUrl() : null;
-        final Triplet<String, String, String> namesData = authLocalServiceHelper
+        final Triplet<String, String, String> namesData = authServiceHelper
                 .generateNickFirstLastNameFromOAuthName(userInfo.getUsername());
         final LocalUserDetailsModel userDetailsModel = new LocalUserDetailsModel(ifUserHasImage, userImageUri, false);
         final LocalUserModel userModel = new LocalUserModel(

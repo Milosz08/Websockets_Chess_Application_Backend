@@ -16,7 +16,7 @@
  * COPIES OR SUBSTANTIAL PORTIONS OF THE SOFTWARE.
  */
 
-package pl.miloszgilga.chessappbackend.network.auth_local;
+package pl.miloszgilga.chessappbackend.network.auth;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -41,28 +41,28 @@ import pl.miloszgilga.chessappbackend.oauth.user_info.OAuth2UserInfo;
 import pl.miloszgilga.chessappbackend.oauth.dto.OAuth2RegistrationData;
 import pl.miloszgilga.chessappbackend.oauth.user_info.OAuth2UserInfoFactory;
 
-import pl.miloszgilga.chessappbackend.network.auth_local.dto.*;
-import pl.miloszgilga.chessappbackend.network.auth_local.domain.LocalUserModel;
-import pl.miloszgilga.chessappbackend.network.auth_local.domain.ILocalUserRepository;
+import pl.miloszgilga.chessappbackend.network.auth.dto.*;
+import pl.miloszgilga.chessappbackend.network.auth.domain.LocalUserModel;
+import pl.miloszgilga.chessappbackend.network.auth.domain.ILocalUserRepository;
 
 //----------------------------------------------------------------------------------------------------------------------
 
 @Service
-public class AuthLocalService implements IAuthLocalService {
+public class AuthService implements IAuthService {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(AuthLocalService.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(AuthService.class);
 
     private final AuthUserBuilder userBuilder;
     private final AuthenticationManager manager;
-    private final AuthLocalServiceHelper helper;
+    private final AuthServiceHelper helper;
     private final JsonWebTokenCreator tokenCreator;
     private final OAuth2UserInfoFactory userInfoFactory;
     private final ILocalUserRepository localUserRepository;
-    private final AuthLocalFactoryMapper userFactoryMapper;
+    private final AuthFactoryMapper userFactoryMapper;
 
-    AuthLocalService(AuthUserBuilder userBuilder, AuthenticationManager manager, AuthLocalServiceHelper helper,
-                     JsonWebTokenCreator tokenCreator, OAuth2UserInfoFactory userInfoFactory,
-                     ILocalUserRepository localUserRepository, AuthLocalFactoryMapper userFactoryMapper) {
+    AuthService(AuthUserBuilder userBuilder, AuthenticationManager manager, AuthServiceHelper helper,
+                JsonWebTokenCreator tokenCreator, OAuth2UserInfoFactory userInfoFactory,
+                ILocalUserRepository localUserRepository, AuthFactoryMapper userFactoryMapper) {
         this.userBuilder = userBuilder;
         this.manager = manager;
         this.helper = helper;

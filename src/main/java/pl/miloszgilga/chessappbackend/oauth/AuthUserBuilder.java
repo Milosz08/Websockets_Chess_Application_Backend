@@ -27,7 +27,7 @@ import java.util.Map;
 import java.util.List;
 
 import pl.miloszgilga.chessappbackend.security.SecurityHelper;
-import pl.miloszgilga.chessappbackend.network.auth_local.domain.LocalUserModel;
+import pl.miloszgilga.chessappbackend.network.auth.domain.LocalUserModel;
 
 //----------------------------------------------------------------------------------------------------------------------
 
