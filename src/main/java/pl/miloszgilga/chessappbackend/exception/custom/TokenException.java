@@ -30,6 +30,12 @@ public class TokenException {
         }
     }
 
+    public static class JwtTokenExpiredException extends BasicServerException {
+        public JwtTokenExpiredException(String message, Object... args) {
+            super(HttpStatus.UNAUTHORIZED, message, args);
+        }
+    }
+
     public static class OtaTokenExpiredException extends BasicServerException {
         public OtaTokenExpiredException(String message, Object... args) {
             super(HttpStatus.UNAUTHORIZED, message, args);
