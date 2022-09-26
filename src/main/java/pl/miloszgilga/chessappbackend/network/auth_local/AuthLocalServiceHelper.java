@@ -32,23 +32,22 @@ import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
-import pl.miloszgilga.chessappbackend.exception.custom.AuthException;
-import pl.miloszgilga.chessappbackend.network.auth_local.dto.LoginSignupViaOAuth2ReqDto;
-import pl.miloszgilga.chessappbackend.token.JsonWebTokenVerificator;
-import pl.miloszgilga.chessappbackend.token.dto.UserVerficationClaims;
 import pl.miloszgilga.chessappbackend.utils.StringManipulator;
 import pl.miloszgilga.chessappbackend.security.SecurityHelper;
 import pl.miloszgilga.chessappbackend.token.JsonWebTokenCreator;
+import pl.miloszgilga.chessappbackend.token.JsonWebTokenVerificator;
+import pl.miloszgilga.chessappbackend.exception.custom.AuthException;
 import pl.miloszgilga.chessappbackend.oauth.user_info.OAuth2UserInfo;
+import pl.miloszgilga.chessappbackend.token.dto.UserVerficationClaims;
 
-import pl.miloszgilga.chessappbackend.network.auth_local.domain.ILocalUserRepository;
 import pl.miloszgilga.chessappbackend.network.auth_local.domain.LocalUserModel;
 import pl.miloszgilga.chessappbackend.network.auth_local.domain.RefreshTokenModel;
+import pl.miloszgilga.chessappbackend.network.auth_local.domain.ILocalUserRepository;
 
 //----------------------------------------------------------------------------------------------------------------------
 
 @Component
-public class AuthLocalServiceHelper {
+class AuthLocalServiceHelper {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(AuthLocalServiceHelper.class);
 

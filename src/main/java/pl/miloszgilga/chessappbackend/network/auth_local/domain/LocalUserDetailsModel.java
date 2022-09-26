@@ -79,7 +79,7 @@ public class LocalUserDetailsModel extends AuditableEntity implements Serializab
         return birthDate;
     }
 
-    void setBirthDate(Date birthDate) {
+    public void setBirthDate(Date birthDate) {
         this.birthDate = birthDate;
     }
 
@@ -87,7 +87,7 @@ public class LocalUserDetailsModel extends AuditableEntity implements Serializab
         return country;
     }
 
-    void setCountry(String country) {
+    public void setCountry(String country) {
         this.country = country;
     }
 
@@ -95,7 +95,7 @@ public class LocalUserDetailsModel extends AuditableEntity implements Serializab
         return gender;
     }
 
-    void setGender(UserGenderSpecific gender) {
+    public void setGender(UserGenderSpecific gender) {
         this.gender = gender;
     }
 
@@ -119,7 +119,7 @@ public class LocalUserDetailsModel extends AuditableEntity implements Serializab
         return hasNewsletterAccept;
     }
 
-    void setHasNewsletterAccept(Boolean hasNewsletterAccept) {
+    public void setHasNewsletterAccept(Boolean hasNewsletterAccept) {
         this.hasNewsletterAccept = hasNewsletterAccept;
     }
 

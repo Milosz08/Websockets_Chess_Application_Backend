@@ -28,11 +28,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.transaction.Transactional;
 
-import java.util.Set;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.Optional;
-import java.text.ParseException;
+import java.util.*;
 import java.text.SimpleDateFormat;
 
 import pl.miloszgilga.chessappbackend.config.EnvironmentVars;
