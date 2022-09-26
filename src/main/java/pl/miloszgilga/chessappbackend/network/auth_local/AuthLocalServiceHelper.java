@@ -110,4 +110,10 @@ class AuthLocalServiceHelper {
         }
         return findingUser.get();
     }
+
+    void sendEmailMessageForActivateAccount(LocalUserModel userModel) {
+        final String token = tokenCreator.createActivateAccountToken(userModel);
+
+        // TODO: Send email with verification link
+    }
 }

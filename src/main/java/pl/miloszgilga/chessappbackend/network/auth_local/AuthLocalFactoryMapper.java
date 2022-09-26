@@ -43,6 +43,7 @@ import pl.miloszgilga.chessappbackend.oauth.dto.OAuth2RegistrationData;
 import pl.miloszgilga.chessappbackend.oauth.user_info.OAuth2UserInfoFactory;
 
 import pl.miloszgilga.chessappbackend.network.auth_local.domain.LocalUserModel;
+import pl.miloszgilga.chessappbackend.network.auth_local.dto.FinishSignupReqDto;
 import pl.miloszgilga.chessappbackend.network.auth_local.dto.SignupViaLocalReqDto;
 import pl.miloszgilga.chessappbackend.network.auth_local.domain.LocalUserRoleModel;
 import pl.miloszgilga.chessappbackend.network.auth_local.domain.LocalUserDetailsModel;
@@ -111,6 +112,15 @@ class AuthLocalFactoryMapper {
         userDetailsModel.setLocalUser(userModel);
         userModel.setLocalUserDetails(userDetailsModel);
         userModel.setRoles(generateUserRoles());
+        return userModel;
+    }
+
+    LocalUserModel mappedFinishSignupReqDtoToUserEntity(LocalUserModel userModel, FinishSignupReqDto dto) {
+        final LocalUserDetailsModel userDetailsModel = userModel.getLocalUserDetails();
+        userDetailsModel.setBirthDate(timeHelper.convertStringDateToDateObject(dto.getBirthDate()));
+        userDetailsModel.setCountry(dto.getCountryName());
+        userDetailsModel.setGender(UserGenderSpecific.findGenderByString(dto.getGender()));
+        userDetailsModel.setHasNewsletterAccept(dto.getNewsletterAccept());
         return userModel;
     }
 

@@ -123,8 +123,17 @@ public class AuthLocalService implements IAuthLocalService {
     }
 
     @Override
-    public SuccessedFinishSignupResDto finishSignup(FinishSignupReqDto req) {
-        return null;
+    @Transactional
+    public SimpleServerMessageDto finishSignup(FinishSignupReqDto req) {
+        final LocalUserModel validateUser = helper.validateUserAndReturnUserData(req.getJwtToken());
+        final LocalUserModel userModel = userFactoryMapper.mappedFinishSignupReqDtoToUserEntity(validateUser, req);
+        localUserRepository.save(userModel);
+        helper.sendEmailMessageForActivateAccount(validateUser);
+        LOGGER.info("Update new user data in database via OAUTH2 interface. User data: {}", req);
+        return new SimpleServerMessageDto(
+                "Your account information has been successfully updated. To complete, activate your account using " +
+                "the link sent to your email address."
+        );
     }
 
     @Override
