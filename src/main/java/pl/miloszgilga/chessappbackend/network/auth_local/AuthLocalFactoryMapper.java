@@ -31,6 +31,7 @@ import javax.transaction.Transactional;
 import java.util.*;
 import java.text.SimpleDateFormat;
 
+import pl.miloszgilga.chessappbackend.utils.TimeHelper;
 import pl.miloszgilga.chessappbackend.config.EnvironmentVars;
 import pl.miloszgilga.chessappbackend.security.LocalUserRole;
 import pl.miloszgilga.chessappbackend.utils.StringManipulator;
@@ -57,6 +58,7 @@ class AuthLocalFactoryMapper {
     private static final Logger LOGGER = LoggerFactory.getLogger(AuthLocalFactoryMapper.class);
     private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("dd/MM/yyyy");
 
+    private final TimeHelper timeHelper;
     private final EnvironmentVars environment;
     private final StringManipulator manipulator;
     private final PasswordEncoder passwordEncoder;
@@ -64,9 +66,10 @@ class AuthLocalFactoryMapper {
     private final OAuth2UserInfoFactory userInfoFactory;
     private final AuthLocalServiceHelper authLocalServiceHelper;
 
-    AuthLocalFactoryMapper(EnvironmentVars environment, StringManipulator manipulator,
+    AuthLocalFactoryMapper(TimeHelper timeHelper, EnvironmentVars environment, StringManipulator manipulator,
                            @Lazy PasswordEncoder passwordEncoder, OAuth2UserInfoFactory userInfoFactory,
                            ILocalUserRoleRepository roleRepository, AuthLocalServiceHelper authLocalServiceHelper) {
+        this.timeHelper = timeHelper;
         this.environment = environment;
         this.manipulator = manipulator;
         this.passwordEncoder = passwordEncoder;
@@ -75,9 +78,9 @@ class AuthLocalFactoryMapper {
         this.authLocalServiceHelper = authLocalServiceHelper;
     }
 
-    LocalUserModel mappedSignupLocalUserDtoToUserEntity(SignupViaLocalReqDto dto) throws ParseException {
+    LocalUserModel mappedSignupLocalUserDtoToUserEntity(SignupViaLocalReqDto dto) {
         final String secondEmailAddress = dto.getSecondEmailAddress().equals("") ? null : dto.getSecondEmailAddress();
-        final Date date = DATE_FORMAT.parse(dto.getBirthDate());
+        final Date date = timeHelper.convertStringDateToDateObject(dto.getBirthDate());
         final UserGenderSpecific genderSpecific = findGenderByString(dto.getGender());
         final LocalUserDetailsModel userDetailsModel = new LocalUserDetailsModel(
                 secondEmailAddress, date, dto.getCountryName(), genderSpecific, false, null, dto.getNewsletterAccept()

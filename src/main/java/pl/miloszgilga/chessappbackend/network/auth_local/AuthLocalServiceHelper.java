@@ -27,13 +27,10 @@ import org.springframework.stereotype.Component;
 
 import javax.transaction.Transactional;
 
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 import java.util.Optional;
 
 import pl.miloszgilga.chessappbackend.utils.StringManipulator;
-import pl.miloszgilga.chessappbackend.security.SecurityHelper;
 import pl.miloszgilga.chessappbackend.token.JsonWebTokenCreator;
 import pl.miloszgilga.chessappbackend.token.JsonWebTokenVerificator;
 import pl.miloszgilga.chessappbackend.exception.custom.AuthException;
@@ -52,15 +49,13 @@ class AuthLocalServiceHelper {
     private static final Logger LOGGER = LoggerFactory.getLogger(AuthLocalServiceHelper.class);
 
     private final StringManipulator manipulator;
-    private final SecurityHelper securityHelper;
     private final JsonWebTokenCreator tokenCreator;
     private final JsonWebTokenVerificator tokenVerificator;
     private final ILocalUserRepository localUserRepository;
 
-    AuthLocalServiceHelper(StringManipulator manipulator, SecurityHelper securityHelper, JsonWebTokenCreator tokenCreator,
+    AuthLocalServiceHelper(StringManipulator manipulator, JsonWebTokenCreator tokenCreator,
                            JsonWebTokenVerificator tokenVerificator, ILocalUserRepository localUserRepository) {
         this.manipulator = manipulator;
-        this.securityHelper = securityHelper;
         this.tokenCreator = tokenCreator;
         this.tokenVerificator = tokenVerificator;
         this.localUserRepository = localUserRepository;
@@ -87,16 +82,6 @@ class AuthLocalServiceHelper {
         existUser.getLocalUserDetails().setHasPhoto(!existUserInfo.getUserImageUrl().equals(""));
         existUser.getLocalUserDetails().setPhotoEmbedLink(existUserInfo.getUserImageUrl());
         return localUserRepository.save(existUser);
-    }
-
-    List<String> generateHashedActivationEmails(LocalUserModel newUser) {
-        final List<String> hashedEmails = new ArrayList<>();
-        hashedEmails.add(securityHelper.hashingStringValue(newUser.getEmailAddress(), '*'));
-        final String secondEmailAddress = newUser.getLocalUserDetails().getSecondEmailAddress();
-        if (!secondEmailAddress.equals("")) {
-            hashedEmails.add(securityHelper.hashingStringValue(secondEmailAddress, '*'));
-        }
-        return hashedEmails;
     }
 
     RefreshTokenModel createRefreshToken(LocalUserModel newUser) {
