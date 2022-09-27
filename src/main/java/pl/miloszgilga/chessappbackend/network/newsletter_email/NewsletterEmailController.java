@@ -24,11 +24,12 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
+import pl.miloszgilga.chessappbackend.dto.SimpleJwtTokenReqDto;
+import pl.miloszgilga.chessappbackend.dto.SimpleOtaTokenReqDto;
 import pl.miloszgilga.chessappbackend.dto.SimpleServerMessageDto;
+
 import pl.miloszgilga.chessappbackend.network.newsletter_email.dto.EmailNewsletterReqDto;
 import pl.miloszgilga.chessappbackend.network.newsletter_email.dto.AttemptToUnsubscribeReqDto;
-import pl.miloszgilga.chessappbackend.network.newsletter_email.dto.UnsubscribeNewsletterViaJwtReqDto;
-import pl.miloszgilga.chessappbackend.network.newsletter_email.dto.UnsubscribeNewsletterViaOtaReqDto;
 
 import static pl.miloszgilga.chessappbackend.config.ApplicationEndpoints.*;
 
@@ -55,12 +56,12 @@ class NewsletterEmailController {
     }
 
     @DeleteMapping(NEWSLETTER_UNSUBSCRIBE_VIA_OTA)
-    ResponseEntity<SimpleServerMessageDto> unsubscribeNewsletterViaOta(@Valid @RequestBody UnsubscribeNewsletterViaOtaReqDto req) {
+    ResponseEntity<SimpleServerMessageDto> unsubscribeNewsletterViaOta(@Valid @RequestBody SimpleOtaTokenReqDto req) {
         return new ResponseEntity<>(service.unsubscribeNewsletterViaOta(req), HttpStatus.OK);
     }
 
     @DeleteMapping(NEWSLETTER_UNSUBSCRIBE_VIA_JWT)
-    ResponseEntity<SimpleServerMessageDto> unsubscribeNewsletterViaJwt(@Valid @RequestBody UnsubscribeNewsletterViaJwtReqDto req) {
+    ResponseEntity<SimpleServerMessageDto> unsubscribeNewsletterViaJwt(@Valid @RequestBody SimpleJwtTokenReqDto req) {
         return new ResponseEntity<>(service.unsubscribeNewsletterViaJwt(req), HttpStatus.OK);
     }
 }

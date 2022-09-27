@@ -78,6 +78,6 @@ public class SignupViaLocalReqDto {
     @NotBlank(message = "{jpa.validator.passwordRepeat.notBlank}")
     private String passwordRepeat;
 
-    @NotNull(message = "{jpa.validator.newsletterAccept.notNull}")
-    private Boolean newsletterAccept;
+    @NotNull(message = "{jpa.validator.hasNewsletterAccept.notNull}")
+    private Boolean hasNewsletterAccept;
 }

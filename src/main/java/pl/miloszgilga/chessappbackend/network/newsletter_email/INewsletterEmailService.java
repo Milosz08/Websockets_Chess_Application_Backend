@@ -18,17 +18,18 @@
 
 package pl.miloszgilga.chessappbackend.network.newsletter_email;
 
+import pl.miloszgilga.chessappbackend.dto.SimpleJwtTokenReqDto;
+import pl.miloszgilga.chessappbackend.dto.SimpleOtaTokenReqDto;
 import pl.miloszgilga.chessappbackend.dto.SimpleServerMessageDto;
+
 import pl.miloszgilga.chessappbackend.network.newsletter_email.dto.EmailNewsletterReqDto;
 import pl.miloszgilga.chessappbackend.network.newsletter_email.dto.AttemptToUnsubscribeReqDto;
-import pl.miloszgilga.chessappbackend.network.newsletter_email.dto.UnsubscribeNewsletterViaJwtReqDto;
-import pl.miloszgilga.chessappbackend.network.newsletter_email.dto.UnsubscribeNewsletterViaOtaReqDto;
 
 //----------------------------------------------------------------------------------------------------------------------
 
 interface INewsletterEmailService {
     SimpleServerMessageDto subscribeNewsletter(EmailNewsletterReqDto emailAddress);
     SimpleServerMessageDto attemptToUnsubscribeNewsletter(AttemptToUnsubscribeReqDto email);
-    SimpleServerMessageDto unsubscribeNewsletterViaOta(UnsubscribeNewsletterViaOtaReqDto token);
-    SimpleServerMessageDto unsubscribeNewsletterViaJwt(UnsubscribeNewsletterViaJwtReqDto token);
+    SimpleServerMessageDto unsubscribeNewsletterViaOta(SimpleOtaTokenReqDto token);
+    SimpleServerMessageDto unsubscribeNewsletterViaJwt(SimpleJwtTokenReqDto token);
 }

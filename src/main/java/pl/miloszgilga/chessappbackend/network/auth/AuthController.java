@@ -55,7 +55,7 @@ class AuthController {
     }
 
     @PostMapping(SIGNUP_VIA_LOCAL)
-    ResponseEntity<SimpleServerMessageDto> signupViaLocal(@Valid @RequestBody SignupViaLocalReqDto req) {
+    ResponseEntity<SuccessedAttemptToFinishSignupResDto> signupViaLocal(@Valid @RequestBody SignupViaLocalReqDto req) {
         return new ResponseEntity<>(service.signupViaLocal(req), HttpStatus.CREATED);
     }
 

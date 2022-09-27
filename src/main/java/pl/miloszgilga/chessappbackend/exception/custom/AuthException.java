@@ -26,7 +26,7 @@ public class AuthException {
 
     public static class UserNotFoundException extends BasicServerException {
         public UserNotFoundException(String message, Object... args) {
-            super(HttpStatus.UNAUTHORIZED, message, args);
+            super(HttpStatus.NOT_FOUND, message, args);
         }
     }
 
@@ -50,12 +50,6 @@ public class AuthException {
 
     public static class OAuth2NotSupportedUriException extends OAuthRedirectException {
         public OAuth2NotSupportedUriException(String message, Object... args) {
-            super(HttpStatus.BAD_REQUEST, message, args);
-        }
-    }
-
-    public static class MalformedBirthDateException extends BasicServerException {
-        public MalformedBirthDateException(String message, Object... args) {
             super(HttpStatus.BAD_REQUEST, message, args);
         }
     }

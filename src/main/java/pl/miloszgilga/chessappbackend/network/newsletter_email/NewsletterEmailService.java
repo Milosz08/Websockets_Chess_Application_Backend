@@ -29,6 +29,8 @@ import javax.transaction.Transactional;
 
 import pl.miloszgilga.chessappbackend.mail.MailOutService;
 import pl.miloszgilga.chessappbackend.utils.StringManipulator;
+import pl.miloszgilga.chessappbackend.dto.SimpleJwtTokenReqDto;
+import pl.miloszgilga.chessappbackend.dto.SimpleOtaTokenReqDto;
 import pl.miloszgilga.chessappbackend.token.JsonWebTokenCreator;
 import pl.miloszgilga.chessappbackend.dto.SimpleServerMessageDto;
 import pl.miloszgilga.chessappbackend.token.JsonWebTokenVerificator;
@@ -39,8 +41,6 @@ import pl.miloszgilga.chessappbackend.network.newsletter_email.dto.EmailNewslett
 import pl.miloszgilga.chessappbackend.network.newsletter_email.domain.NewsletterEmailModel;
 import pl.miloszgilga.chessappbackend.network.newsletter_email.dto.AttemptToUnsubscribeReqDto;
 import pl.miloszgilga.chessappbackend.network.newsletter_email.domain.INewsletterEmailRepository;
-import pl.miloszgilga.chessappbackend.network.newsletter_email.dto.UnsubscribeNewsletterViaOtaReqDto;
-import pl.miloszgilga.chessappbackend.network.newsletter_email.dto.UnsubscribeNewsletterViaJwtReqDto;
 
 //----------------------------------------------------------------------------------------------------------------------
 
@@ -98,7 +98,7 @@ class NewsletterEmailService implements INewsletterEmailService {
 
     @Override
     @Transactional
-    public SimpleServerMessageDto unsubscribeNewsletterViaOta(final UnsubscribeNewsletterViaOtaReqDto token) {
+    public SimpleServerMessageDto unsubscribeNewsletterViaOta(final SimpleOtaTokenReqDto token) {
         final String emailAddress = token.getEmailAddress();
         final NewsletterEmailModel model = checkIfRemovingEmailExist(emailAddress);
         unsubscribeService.validateOtaToken(token.getToken(), emailAddress);
@@ -111,7 +111,7 @@ class NewsletterEmailService implements INewsletterEmailService {
 
     @Override
     @Transactional
-    public SimpleServerMessageDto unsubscribeNewsletterViaJwt(final UnsubscribeNewsletterViaJwtReqDto token) {
+    public SimpleServerMessageDto unsubscribeNewsletterViaJwt(final SimpleJwtTokenReqDto token) {
         final NewsletterUnsubscribeClaims claims = verificator.validateUnsubscriveNewsletterJwt(token.getToken());
         final String emailAddress = claims.getEmailAddress();
 
