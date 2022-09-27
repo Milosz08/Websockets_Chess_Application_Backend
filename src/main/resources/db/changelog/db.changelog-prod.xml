@@ -16,5 +16,6 @@
     <include file="migrations/2022-09-migrations/V9__2022-09-22__add-supplier-user-id-to-user-schema.xml" relativeToChangelogFile="true"/>
     <include file="migrations/2022-09-migrations/V10__2022-09-23__remove-nullable-nickname-property.xml" relativeToChangelogFile="true"/>
     <include file="migrations/2022-09-migrations/V11__2022-09-26__change-datetime-to-date-sql-type.xml" relativeToChangelogFile="true"/>
+    <include file="migrations/2022-09-migrations/V12__2022-09-26__add-data-filled-column-in-user-details-schema.xml" relativeToChangelogFile="true"/>
 
 </databaseChangeLog>

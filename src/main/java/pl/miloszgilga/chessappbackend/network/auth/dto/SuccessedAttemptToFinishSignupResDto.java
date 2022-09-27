@@ -37,6 +37,8 @@ public class SuccessedAttemptToFinishSignupResDto {
     private String photoUrl;
     private String initials;
     private String jwtToken;
+    private boolean isDataFilled;
+    private String dataFilledResponse;
     private String authSupplier;
 
     public static SuccessedAttemptToFinishSignupResDto factoryBuilder(Pair<LocalUserModel, String> userWithToken) {
