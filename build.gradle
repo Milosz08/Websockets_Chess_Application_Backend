@@ -1,16 +1,16 @@
 plugins {
-    id 'org.springframework.boot' version '2.7.3'
-    id 'io.spring.dependency-management' version '1.0.13.RELEASE'
-    id 'java'
+    id "org.springframework.boot" version "2.7.3"
+    id "io.spring.dependency-management" version "1.0.13.RELEASE"
+    id "java"
 }
 
-group = 'pl.miloszgilga'
-version = '0.0.1-SNAPSHOT'
-sourceCompatibility = '11'
+group = "pl.miloszgilga"
+version = "0.0.1-SNAPSHOT"
+sourceCompatibility = "11"
 
-compileJava.options.encoding = 'UTF-8'
+compileJava.options.encoding = "UTF-8"
 tasks.withType(JavaCompile) {
-    options.encoding = 'UTF-8'
+    options.encoding = "UTF-8"
 }
 
 configurations {
@@ -23,36 +23,52 @@ repositories {
     mavenCentral()
 }
 
-dependencies {
-    implementation 'org.javatuples:javatuples:1.2'
-    implementation 'io.jsonwebtoken:jjwt-api:0.11.5'
-    implementation 'io.jsonwebtoken:jjwt-impl:0.11.5'
-    implementation 'org.freemarker:freemarker:2.3.31'
-    implementation 'mysql:mysql-connector-java:8.0.30'
-    implementation 'me.paulschwarz:spring-dotenv:2.5.4'
-    implementation 'io.jsonwebtoken:jjwt-jackson:0.11.5'
-    implementation 'org.liquibase:liquibase-core:4.16.1'
-    implementation 'com.fasterxml.jackson.core:jackson-databind:2.13.4'
-    implementation 'org.springframework.boot:spring-boot-starter-web:2.7.3'
-    implementation 'org.springframework.boot:spring-boot-starter-mail:2.7.3'
-    implementation 'org.springframework.boot:spring-boot-starter-data-jpa:2.7.3'
-    implementation 'org.springframework.boot:spring-boot-starter-security:2.7.3'
-    implementation 'org.springframework.boot:spring-boot-starter-websocket:2.7.3'
-    implementation 'org.springframework.boot:spring-boot-starter-validation:2.7.3'
-    implementation 'org.springframework.boot:spring-boot-starter-oauth2-client:2.7.3'
-
-    compileOnly 'org.projectlombok:lombok'
-
-    runtimeOnly 'com.h2database:h2:1.4.200'
-
-    developmentOnly 'org.springframework.boot:spring-boot-devtools'
-
-    annotationProcessor 'org.projectlombok:lombok'
-
-    testImplementation 'org.springframework.boot:spring-boot-starter-test'
-    testImplementation 'org.springframework.security:spring-security-test'
+ext {
+    springVersion = "2.7.3"
+    lombokVersion = "1.18.20"
+    jjwtVersion = "0.11.5"
+    jTuplesVersion = "1.2"
+    freemarkerVersion = "2.3.31"
+    mySqlVersion = "8.0.30"
+    liquibaseVersion = "4.16.1"
+    dotEnvVersion = "2.5.4"
+    xmlBinderVersion = "2.13.4"
+    h2DatabaseVersion = "1.4.200"
+    orikaMapperVersion = "1.6.0"
+    reflectionsApiVersion = "0.10.2"
 }
 
-tasks.named('test') {
+dependencies {
+    implementation "org.javatuples:javatuples:${jTuplesVersion}"
+    implementation "org.reflections:reflections:${reflectionsApiVersion}"
+    implementation "org.projectlombok:lombok:${lombokVersion}"
+    implementation "org.freemarker:freemarker:${freemarkerVersion}"
+    implementation "org.liquibase:liquibase-core:${liquibaseVersion}"
+    implementation "io.jsonwebtoken:jjwt-api:${jjwtVersion}"
+    implementation "io.jsonwebtoken:jjwt-impl:${jjwtVersion}"
+    implementation "io.jsonwebtoken:jjwt-jackson:${jjwtVersion}"
+    implementation "mysql:mysql-connector-java:${mySqlVersion}"
+    implementation "me.paulschwarz:spring-dotenv:${dotEnvVersion}"
+    implementation "net.rakugakibox.spring.boot:orika-spring-boot-starter:${orikaMapperVersion}"
+    implementation "com.fasterxml.jackson.core:jackson-databind:${xmlBinderVersion}"
+
+    implementation "org.springframework.boot:spring-boot-starter-web:${springVersion}"
+    implementation "org.springframework.boot:spring-boot-starter-mail:${springVersion}"
+    implementation "org.springframework.boot:spring-boot-starter-data-jpa:${springVersion}"
+    implementation "org.springframework.boot:spring-boot-starter-security:${springVersion}"
+    implementation "org.springframework.boot:spring-boot-starter-websocket:${springVersion}"
+    implementation "org.springframework.boot:spring-boot-starter-validation:${springVersion}"
+    implementation "org.springframework.boot:spring-boot-starter-oauth2-client:${springVersion}"
+    implementation "org.springframework.boot:spring-boot-starter-hateoas:${springVersion}"
+
+    runtimeOnly "com.h2database:h2:${h2DatabaseVersion}"
+    developmentOnly "org.springframework.boot:spring-boot-devtools:${springVersion}"
+    annotationProcessor "org.projectlombok:lombok:${lombokVersion}"
+
+    testImplementation "org.springframework.boot:spring-boot-starter-test:${springVersion}"
+    testImplementation "org.springframework.security:spring-security-test"
+}
+
+tasks.named("test") {
     useJUnitPlatform()
 }
