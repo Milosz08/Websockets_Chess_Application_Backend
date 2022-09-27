@@ -18,6 +18,8 @@
 
 package pl.miloszgilga.chessappbackend.network.auth.domain;
 
+import lombok.Getter;
+import lombok.Setter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.Table;
@@ -35,6 +37,7 @@ import pl.miloszgilga.chessappbackend.security.LocalUserRole;
 
 @Entity
 @Table(name = "LOCAL_USER_ROLE")
+@Getter @Setter
 @NoArgsConstructor
 public class LocalUserRoleModel extends AuditableEntity implements Serializable {
     private static final long serialVersionUID = 1L;
@@ -44,22 +47,6 @@ public class LocalUserRoleModel extends AuditableEntity implements Serializable 
 
     public LocalUserRoleModel(LocalUserRole roleName) {
         this.roleName = roleName;
-    }
-
-    public LocalUserRole getRoleName() {
-        return roleName;
-    }
-
-    void setRoleName(LocalUserRole roleName) {
-        this.roleName = roleName;
-    }
-
-    Set<LocalUserModel> getUsers() {
-        return users;
-    }
-
-    void setUsers(Set<LocalUserModel> userRoles) {
-        this.users = userRoles;
     }
 
     @Override

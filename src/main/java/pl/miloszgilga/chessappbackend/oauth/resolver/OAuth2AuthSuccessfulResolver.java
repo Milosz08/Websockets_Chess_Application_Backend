@@ -79,7 +79,7 @@ public class OAuth2AuthSuccessfulResolver extends SimpleUrlAuthenticationSuccess
         final String token = webTokenCreator.createUserCredentialsToken(auth);
         final String credentialsSupplier = localAuthUser.getUserModel().getCredentialsSupplier().getSupplier();
 
-        if (localAuthUser.getUserModel().isActivated()) {
+        if (localAuthUser.getUserModel().getIsActivated()) {
             final String redirectLoginUri = checkIfRedirectUriIsValidAndReturn(req,
                     environment.getOauth2AfterLoginRedirectUriCookieName());
             return UriComponentsBuilder.fromUriString(redirectLoginUri)

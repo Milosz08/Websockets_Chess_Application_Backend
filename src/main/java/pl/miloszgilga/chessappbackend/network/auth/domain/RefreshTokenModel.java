@@ -18,9 +18,12 @@
 
 package pl.miloszgilga.chessappbackend.network.auth.domain;
 
+import lombok.Setter;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import org.javatuples.Pair;
 
 import java.util.Date;
 import java.io.Serializable;
@@ -31,6 +34,7 @@ import pl.miloszgilga.chessappbackend.audit.AuditableEntity;
 
 @Entity
 @Table(name = "USER_REFRESH_TOKEN")
+@Getter @Setter
 @NoArgsConstructor
 public class RefreshTokenModel extends AuditableEntity implements Serializable {
     private static final long serialVersionUID = 1L;
@@ -47,28 +51,9 @@ public class RefreshTokenModel extends AuditableEntity implements Serializable {
         this.expiredAt = expiredDate;
     }
 
-    public String getRefreshToken() {
-        return refreshToken;
-    }
-
-    void setRefreshToken(String refreshToken) {
-        this.refreshToken = refreshToken;
-    }
-
-    Date getExpiredAt() {
-        return expiredAt;
-    }
-
-    void setExpiredAt(Date expiredDate) {
-        this.expiredAt = expiredDate;
-    }
-
-    LocalUserModel getLocalUser() {
-        return localUser;
-    }
-
-    public void setLocalUser(LocalUserModel localUser) {
-        this.localUser = localUser;
+    public RefreshTokenModel(Pair<String, Date> tokenDateTuple) {
+        this.refreshToken = tokenDateTuple.getValue0();
+        this.expiredAt = tokenDateTuple.getValue1();
     }
 
     @Override

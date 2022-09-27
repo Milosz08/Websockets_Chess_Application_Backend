@@ -46,7 +46,7 @@ public class AuthUser extends User implements OAuth2User, OidcUser, Serializable
     }
 
     AuthUser(LocalUserModel user, List<SimpleGrantedAuthority> authorities, OidcIdToken token, OidcUserInfo info) {
-        super(user.getNickname(), user.getPassword(), user.isActivated(), true, true, !user.isBlocked(), authorities);
+        super(user.getNickname(), user.getPassword(), user.getIsActivated(), true, true, !user.getIsBlocked(), authorities);
         this.userModel = user;
         this.oidcIdToken = token;
         this.oidcUserInfo = info;

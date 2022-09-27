@@ -18,6 +18,8 @@
 
 package pl.miloszgilga.chessappbackend.network.auth.domain;
 
+import lombok.Getter;
+import lombok.Setter;
 import lombok.NoArgsConstructor;
 
 import java.util.Date;
@@ -32,6 +34,7 @@ import pl.miloszgilga.chessappbackend.utils.UserGenderSpecific;
 
 @Entity
 @Table(name = "LOCAL_USER_DETAILS")
+@Getter @Setter
 @NoArgsConstructor
 public class LocalUserDetailsModel extends AuditableEntity implements Serializable {
     private static final long serialVersionUID = 1L;
@@ -65,70 +68,6 @@ public class LocalUserDetailsModel extends AuditableEntity implements Serializab
         this.hasPhoto = hasPhoto;
         this.photoEmbedLink = photoEmbedLink;
         this.hasNewsletterAccept = hasNewsletterAccept;
-    }
-
-    public String getSecondEmailAddress() {
-        return secondEmailAddress;
-    }
-
-    void setSecondEmailAddress(String secondEmailAddress) {
-        this.secondEmailAddress = secondEmailAddress;
-    }
-
-    Date getBirthDate() {
-        return birthDate;
-    }
-
-    public void setBirthDate(Date birthDate) {
-        this.birthDate = birthDate;
-    }
-
-    String getCountry() {
-        return country;
-    }
-
-    public void setCountry(String country) {
-        this.country = country;
-    }
-
-    UserGenderSpecific getGender() {
-        return gender;
-    }
-
-    public void setGender(UserGenderSpecific gender) {
-        this.gender = gender;
-    }
-
-    public Boolean isHasPhoto() {
-        return hasPhoto;
-    }
-
-    public void setHasPhoto(Boolean hasPhoto) {
-        this.hasPhoto = hasPhoto;
-    }
-
-    public String getPhotoEmbedLink() {
-        return photoEmbedLink;
-    }
-
-    public void setPhotoEmbedLink(String photoEmbedLink) {
-        this.photoEmbedLink = photoEmbedLink;
-    }
-
-    Boolean isHasNewsletterAccept() {
-        return hasNewsletterAccept;
-    }
-
-    public void setHasNewsletterAccept(Boolean hasNewsletterAccept) {
-        this.hasNewsletterAccept = hasNewsletterAccept;
-    }
-
-    LocalUserModel getLocalUser() {
-        return localUser;
-    }
-
-    public void setLocalUser(LocalUserModel localUser) {
-        this.localUser = localUser;
     }
 
     @Override

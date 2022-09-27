@@ -18,6 +18,8 @@
 
 package pl.miloszgilga.chessappbackend.network.auth.domain;
 
+import lombok.Getter;
+import lombok.Setter;
 import lombok.NoArgsConstructor;
 
 import java.util.Set;
@@ -33,6 +35,7 @@ import pl.miloszgilga.chessappbackend.network.renew_credentials.domain.RenewCred
 
 @Entity
 @Table(name = "LOCAL_USER")
+@Getter @Setter
 @NoArgsConstructor
 public class LocalUserModel extends AuditableEntity implements Serializable {
     private static final long serialVersionUID = 1L;
@@ -75,114 +78,6 @@ public class LocalUserModel extends AuditableEntity implements Serializable {
         this.supplierUserId = supplierUserId;
         this.isActivated = isActivated;
         this.isBlocked = isBlocked;
-    }
-
-    public String getNickname() {
-        return nickname;
-    }
-
-    public void setNickname(String nickname) {
-        this.nickname = nickname;
-    }
-
-    public String getFirstName() {
-        return firstName;
-    }
-
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
-
-    public String getEmailAddress() {
-        return emailAddress;
-    }
-
-    public void setEmailAddress(String emailAddress) {
-        this.emailAddress = emailAddress;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public CredentialsSupplier getCredentialsSupplier() {
-        return credentialsSupplier;
-    }
-
-    public void setCredentialsSupplier(CredentialsSupplier credentialsSupplier) {
-        this.credentialsSupplier = credentialsSupplier;
-    }
-
-    public String getSupplierUserId() {
-        return supplierUserId;
-    }
-
-    public void setSupplierUserId(String supplierUserId) {
-        this.supplierUserId = supplierUserId;
-    }
-
-    public Boolean isActivated() {
-        return isActivated;
-    }
-
-    public void setActivated(Boolean activated) {
-        isActivated = activated;
-    }
-
-    public Boolean isBlocked() {
-        return isBlocked;
-    }
-
-    public void setBlocked(Boolean blocked) {
-        isBlocked = blocked;
-    }
-
-    public RefreshTokenModel getRefreshToken() {
-        return refreshToken;
-    }
-
-    public void setRefreshToken(RefreshTokenModel refreshToken) {
-        this.refreshToken = refreshToken;
-    }
-
-    RenewCredentialsOtaTokenModel getRenewCredentials() {
-        return renewCredentials;
-    }
-
-    void setRenewCredentials(RenewCredentialsOtaTokenModel renewCredentials) {
-        this.renewCredentials = renewCredentials;
-    }
-
-    public LocalUserDetailsModel getLocalUserDetails() {
-        return localUserDetails;
-    }
-
-    public void setLocalUserDetails(LocalUserDetailsModel localUserDetails) {
-        this.localUserDetails = localUserDetails;
-    }
-
-    public Set<LocalUserRoleModel> getRoles() {
-        return roles;
-    }
-
-    public void setRoles(Set<LocalUserRoleModel> roles) {
-        this.roles = roles;
-    }
-
-    public String getNestedRefreshToken() {
-        return refreshToken.getRefreshToken();
     }
 
     @Override
