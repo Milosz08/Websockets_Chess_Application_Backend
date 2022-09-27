@@ -30,7 +30,7 @@ import pl.miloszgilga.chessappbackend.validator.constraint.FutureTimeDateValidat
 
 //----------------------------------------------------------------------------------------------------------------------
 
-@Target({ FIELD })
+@Target(FIELD)
 @Retention(RUNTIME)
 @Constraint(validatedBy = FutureTimeDateValidator.class)
 @Documented

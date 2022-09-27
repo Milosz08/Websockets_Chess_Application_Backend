@@ -30,7 +30,7 @@ import pl.miloszgilga.chessappbackend.validator.constraint.NicknameNotRepeatVali
 
 //----------------------------------------------------------------------------------------------------------------------
 
-@Target({ FIELD })
+@Target(FIELD)
 @Retention(RUNTIME)
 @Constraint(validatedBy = NicknameNotRepeatValidator.class)
 @Documented

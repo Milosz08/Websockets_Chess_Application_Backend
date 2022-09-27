@@ -30,7 +30,7 @@ import pl.miloszgilga.chessappbackend.validator.constraint.PasswordMatchValidato
 
 //----------------------------------------------------------------------------------------------------------------------
 
-@Target({ TYPE })
+@Target(TYPE)
 @Retention(RUNTIME)
 @Constraint(validatedBy = PasswordMatchValidator.class)
 @Documented

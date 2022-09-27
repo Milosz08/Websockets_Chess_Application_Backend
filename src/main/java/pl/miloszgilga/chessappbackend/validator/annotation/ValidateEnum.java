@@ -30,7 +30,7 @@ import pl.miloszgilga.chessappbackend.validator.constraint.ValidateEnumValidator
 
 //----------------------------------------------------------------------------------------------------------------------
 
-@Target({ FIELD })
+@Target(FIELD)
 @Retention(RUNTIME)
 @Constraint(validatedBy = ValidateEnumValidator.class)
 @Documented

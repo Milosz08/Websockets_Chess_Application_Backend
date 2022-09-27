@@ -30,7 +30,7 @@ import pl.miloszgilga.chessappbackend.validator.constraint.OAuth2SupplierValidat
 
 //----------------------------------------------------------------------------------------------------------------------
 
-@Target({ FIELD })
+@Target(FIELD)
 @Retention(RUNTIME)
 @Constraint(validatedBy = OAuth2SupplierValidator.class)
 @Documented

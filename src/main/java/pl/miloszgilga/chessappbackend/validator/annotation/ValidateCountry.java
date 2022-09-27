@@ -30,7 +30,7 @@ import pl.miloszgilga.chessappbackend.validator.constraint.CountryValidator;
 
 //----------------------------------------------------------------------------------------------------------------------
 
-@Target({ FIELD })
+@Target(FIELD)
 @Retention(RUNTIME)
 @Constraint(validatedBy = CountryValidator.class)
 @Documented

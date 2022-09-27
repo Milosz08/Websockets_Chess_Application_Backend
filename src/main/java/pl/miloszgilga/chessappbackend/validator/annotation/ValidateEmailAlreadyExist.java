@@ -30,7 +30,7 @@ import pl.miloszgilga.chessappbackend.validator.constraint.EmailAlreadyExistVali
 
 //----------------------------------------------------------------------------------------------------------------------
 
-@Target({ FIELD })
+@Target(FIELD)
 @Retention(RUNTIME)
 @Constraint(validatedBy = EmailAlreadyExistValidator.class)
 @Documented

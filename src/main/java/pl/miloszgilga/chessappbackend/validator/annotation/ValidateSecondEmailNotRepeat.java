@@ -32,7 +32,7 @@ import pl.miloszgilga.chessappbackend.validator.constraint.SecondEmailNotRepeatV
 
 //----------------------------------------------------------------------------------------------------------------------
 
-@Target({ TYPE })
+@Target(TYPE)
 @Retention(RUNTIME)
 @Constraint(validatedBy = SecondEmailNotRepeatValidator.class)
 @Documented
