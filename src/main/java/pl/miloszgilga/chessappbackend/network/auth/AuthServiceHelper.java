@@ -85,6 +85,19 @@ public class AuthServiceHelper {
         return findingUser.get();
     }
 
+    //------------------------------------------------------------------------------------------------------------------
+
+    public RefreshTokenModel generateRefreshTokenModel(LocalUserModel userModel) {
+        final Pair<String, Date> refreshTokenParams = tokenCreator.createUserRefreshToken(userModel);
+        return RefreshTokenModel.builder()
+                .refreshToken(refreshTokenParams.getValue0())
+                .expiredAt(refreshTokenParams.getValue1())
+                .localUser(userModel)
+                .build();
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+
     void sendEmailMessageForActivateAccount(LocalUserModel userModel) {
         final String token = tokenCreator.createActivateAccountToken(userModel);
 

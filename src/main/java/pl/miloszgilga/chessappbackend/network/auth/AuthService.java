@@ -21,6 +21,8 @@ package pl.miloszgilga.chessappbackend.network.auth;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import ma.glasnost.orika.MapperFacade;
+
 import org.springframework.stereotype.Service;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -89,6 +91,9 @@ public class AuthService implements IAuthService {
                     "Try login via outside supplier.");
         }
         SecurityContextHolder.getContext().setAuthentication(authentication);
+
+        // TODO: generate jwt and refresh token
+
         final String jsonWebToken = tokenCreator.createUserCredentialsToken(authentication);
         LOGGER.info("User with id: {} and email: {} was successfuly logged.",
                 authUser.getUserModel().getId(), authUser.getUserModel().getEmailAddress());
@@ -101,6 +106,9 @@ public class AuthService implements IAuthService {
     @Transactional
     public SuccessedLoginResDto loginViaOAuth2(LoginSignupViaOAuth2ReqDto req, Long userId) {
         final LocalUserModel userModel = helper.findUserAndReturnUserData(userId);
+
+        // TODO: map userModel to ReqDto object + generate jwt and refresh token
+
         return null;
     }
 
@@ -108,45 +116,57 @@ public class AuthService implements IAuthService {
 
     @Override
     @Transactional
-    public SimpleServerMessageDto signupViaLocal(SignupViaLocalReqDto req) {
-        final LocalUserModel localUserModel = userFactoryMapper.mappedSignupLocalUserDtoToUserEntity(req);
-        localUserModel.setRefreshToken(helper.createRefreshToken(localUserModel));
-        final LocalUserModel newUser = localUserRepository.save(localUserModel);
-        helper.sendEmailMessageForActivateAccount(newUser);
-        LOGGER.info("Create new user in database via LOCAL interface. User data: {}", newUser);
-        return new SimpleServerMessageDto(
-                "Your account was successfuly created. To complete, activate your account using the link sent " +
-                        "to your email address."
-        );
+    public SuccessedAttemptToFinishSignupResDto signupViaLocal(SignupViaLocalReqDto req) {
+        final LocalUserModel userModel = mapperFacade.map(req, LocalUserModel.class);
+        final LocalUserDetailsModel userDetailsModel = mapperFacade.map(req, LocalUserDetailsModel.class);
+
+        userModel.setLocalUserDetails(userDetailsModel);
+        userDetailsModel.setLocalUser(userModel);
+        localUserRepository.save(userModel);
+        helper.sendEmailMessageForActivateAccount(userModel);
+
+        LOGGER.info("Create new user in database via LOCAL interface. User data: {}", userModel);
+        final SuccessedAttemptToFinishSignupResDto resDto = SuccessedAttemptToFinishSignupResDto.builder()
+                .authSupplier(LOCAL.getName())
+                .isDataFilled(true)
+                .responseMessage("Your account was successfuly created, but not activated.")
+                .build();
+        mapperFacade.map(userModel, resDto);
+        return resDto;
     }
 
     //------------------------------------------------------------------------------------------------------------------
 
     @Override
     @Transactional
-    public SuccessedAttemptToFinishSignupResDto attemptToFinishSignup(LoginSignupViaOAuth2ReqDto req) {
-        final Pair<LocalUserModel, String> validateUser = helper.validateUserAndReturnTokenWithUserData(req.getJwtToken());
-        if (validateUser.getValue0().isActivated()) {
-            LOGGER.warn("Attempt to re-activate account. Account data: {}", validateUser.getValue0());
+    public SuccessedAttemptToFinishSignupResDto attemptToFinishSignup(LoginSignupViaOAuth2ReqDto req, Long userId) {
+        final LocalUserModel userModel = helper.findUserAndReturnUserData(userId);
+        if (userModel.getIsActivated()) {
+            LOGGER.warn("Attempt to re-activate account. Account data: {}", userModel);
             throw new AuthException.AccountIsAlreadyActivatedException("Your account has been already activated.");
         }
-        return SuccessedAttemptToFinishSignupResDto.factoryBuilder(validateUser);
+
+        final SuccessedAttemptToFinishSignupResDto resDto = SuccessedAttemptToFinishSignupResDto.builder()
+                .authSupplier(userModel.getCredentialsSupplier().getName())
+                .responseMessage("Your account has already filled with additional data, but not activated.")
+                .isDataFilled(userModel.getLocalUserDetails().getIsDataFilled())
+                .build();
+        mapperFacade.map(userModel, resDto);
+        return resDto;
     }
 
     //------------------------------------------------------------------------------------------------------------------
 
     @Override
     @Transactional
-    public SimpleServerMessageDto finishSignup(FinishSignupReqDto req) {
-        final LocalUserModel validateUser = helper.validateUserAndReturnUserData(req.getJwtToken());
-        final LocalUserModel userModel = userFactoryMapper.mappedFinishSignupReqDtoToUserEntity(validateUser, req);
-        localUserRepository.save(userModel);
+    public SimpleServerMessageDto finishSignup(FinishSignupReqDto req, Long userId) {
+        final LocalUserModel validateUser = helper.findUserAndReturnUserData(userId);
+        mapperFacade.map(req, validateUser.getLocalUserDetails());
+        validateUser.getLocalUserDetails().setIsDataFilled(true);
+        localUserRepository.save(validateUser);
         helper.sendEmailMessageForActivateAccount(validateUser);
         LOGGER.info("Update new user data in database via OAUTH2 interface. User data: {}", req);
-        return new SimpleServerMessageDto(
-                "Your account information has been successfully updated. To complete, activate your account using " +
-                "the link sent to your email address."
-        );
+        return new SimpleServerMessageDto("Your account details information has been successfully updated.");
     }
 
     //------------------------------------------------------------------------------------------------------------------
@@ -188,9 +208,10 @@ public class AuthService implements IAuthService {
             throw new AuthException.AccountAlreadyExistException("Account with email %s is already registered.",
                     foundUser.getEmailAddress());
         }
-
-        final LocalUserModel updatedUser = helper.updateOAuth2UserDetails(userModel, userInfo);
-        LOGGER.info("Update existing user in database via {} OAuth2 interface. User data: {}", supplierName, updatedUser);
-        return userBuilder.buildUser(updatedUser, data.getAttributes(), data.getIdToken(), data.getUserInfo());
+        mapperFacade.map(data, foundUser);
+        mapperFacade.map(data, foundUser.getLocalUserDetails());
+        localUserRepository.save(foundUser);
+        LOGGER.info("Update user via {} OAuth2 provider. User data: {}", data.getSupplier().getName(), foundUser);
+        return userBuilder.build(foundUser, data);
     }
 }
