@@ -27,6 +27,10 @@ import java.io.Serializable;
 
 import javax.persistence.*;
 
+import static javax.persistence.FetchType.LAZY;
+import static javax.persistence.CascadeType.MERGE;
+import static javax.persistence.CascadeType.PERSIST;
+
 import pl.miloszgilga.chessappbackend.audit.AuditableEntity;
 import pl.miloszgilga.chessappbackend.utils.UserGenderSpecific;
 
@@ -48,7 +52,7 @@ public class LocalUserDetailsModel extends AuditableEntity implements Serializab
     @Column(name = "HAS_NEWSLETTER_ACCEPT") private Boolean hasNewsletterAccept;
     @Column(name = "IS_DATA_FILLED")        private Boolean isDataFilled;
 
-    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToOne(cascade = { PERSIST, MERGE }, fetch = LAZY)
     @JoinColumn(name = "LOCAL_USER_ID", referencedColumnName = "ID")
     private LocalUserModel localUser;
 
@@ -64,12 +68,6 @@ public class LocalUserDetailsModel extends AuditableEntity implements Serializab
         this.photoEmbedLink = photoEmbedLink;
         this.hasNewsletterAccept = hasNewsletterAccept;
         this.isDataFilled = isDataFilled;
-    }
-
-    public LocalUserDetailsModel(Boolean hasPhoto, String photoEmbedLink, Boolean hasNewsletterAccept) {
-        this.hasPhoto = hasPhoto;
-        this.photoEmbedLink = photoEmbedLink;
-        this.hasNewsletterAccept = hasNewsletterAccept;
     }
 
     @Override

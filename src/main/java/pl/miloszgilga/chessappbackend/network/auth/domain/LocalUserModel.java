@@ -27,6 +27,10 @@ import java.io.Serializable;
 
 import javax.persistence.*;
 
+import static javax.persistence.FetchType.LAZY;
+import static javax.persistence.CascadeType.MERGE;
+import static javax.persistence.CascadeType.PERSIST;
+
 import pl.miloszgilga.chessappbackend.audit.AuditableEntity;
 import pl.miloszgilga.chessappbackend.oauth.CredentialsSupplier;
 import pl.miloszgilga.chessappbackend.network.renew_credentials.domain.RenewCredentialsOtaTokenModel;
@@ -50,16 +54,16 @@ public class LocalUserModel extends AuditableEntity implements Serializable {
     @Column(name = "IS_ACTIVATED")          private Boolean isActivated;
     @Column(name = "IS_BLOCKED")            private Boolean isBlocked;
 
-    @OneToOne(fetch = FetchType.LAZY, mappedBy = "localUser", cascade = CascadeType.ALL)
+    @OneToOne(fetch = LAZY, mappedBy = "localUser", cascade = { PERSIST, MERGE })
     private RefreshTokenModel refreshToken;
 
-    @OneToOne(fetch = FetchType.LAZY, mappedBy = "localUser", cascade = CascadeType.ALL)
+    @OneToOne(fetch = LAZY, mappedBy = "localUser", cascade = { PERSIST, MERGE })
     private RenewCredentialsOtaTokenModel renewCredentials;
 
-    @OneToOne(fetch = FetchType.LAZY, mappedBy = "localUser", cascade = CascadeType.ALL)
+    @OneToOne(fetch = LAZY, mappedBy = "localUser", cascade = { PERSIST, MERGE })
     private LocalUserDetailsModel localUserDetails;
 
-    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @ManyToMany(cascade = { PERSIST, MERGE }, fetch = LAZY)
     @JoinTable(name = "LOCAL_USER_ROLE_BINDING",
             joinColumns = { @JoinColumn(name = "LOCAL_USER_ID") },
             inverseJoinColumns = { @JoinColumn(name = "LOCAL_USER_ROLE_ID") })
