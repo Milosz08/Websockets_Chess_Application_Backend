@@ -44,6 +44,9 @@ import pl.miloszgilga.chessappbackend.oauth.user_info.OAuth2UserInfoFactory;
 import pl.miloszgilga.chessappbackend.network.auth.dto.*;
 import pl.miloszgilga.chessappbackend.network.auth.domain.LocalUserModel;
 import pl.miloszgilga.chessappbackend.network.auth.domain.ILocalUserRepository;
+import pl.miloszgilga.chessappbackend.network.auth.domain.LocalUserDetailsModel;
+
+import static pl.miloszgilga.chessappbackend.oauth.CredentialsSupplier.LOCAL;
 
 //----------------------------------------------------------------------------------------------------------------------
 
@@ -52,6 +55,8 @@ public class AuthService implements IAuthService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(AuthService.class);
 
+    private final AuthServiceHelper helper;
+    private final MapperFacade mapperFacade;
     private final AuthUserBuilder userBuilder;
     private final AuthenticationManager manager;
     private final JsonWebTokenCreator tokenCreator;
@@ -153,8 +158,7 @@ public class AuthService implements IAuthService {
         final String supplierName = data.getSupplier().getName();
         if (userInfo.getUsername().equals("") || userInfo.getEmailAddress().equals("")) {
             throw new AuthException.OAuth2CredentialsSupplierMalformedException(
-                    "Unable to authenticate via %s provider. Select other authentication method.", supplierName
-            );
+                    "Unable to authenticate via %s provider. Select other authentication method.", supplierName);
         }
         final Optional<LocalUserModel> user = localUserRepository.findUserByEmailAddress(userInfo.getEmailAddress());
         if (user.isEmpty()) return registerNewUserViaOAuth2(data, supplierName);

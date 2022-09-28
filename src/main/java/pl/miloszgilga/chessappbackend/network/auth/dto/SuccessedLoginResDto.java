@@ -44,8 +44,8 @@ public class SuccessedLoginResDto {
         final LocalUserDetailsModel userDetailsModel = userModel.getLocalUserDetails();
         return new SuccessedLoginResDto(
                 userModel.getNickname(), userModel.getFirstName(), userModel.getLastName(),
-                userDetailsModel.isHasPhoto(), userDetailsModel.getPhotoEmbedLink(), userWithToken.getValue1(),
-                userModel.getNestedRefreshToken()
+                userDetailsModel.getHasPhoto(), userDetailsModel.getPhotoEmbedLink(), userWithToken.getValue1(),
+                userModel.getRefreshToken().getRefreshToken()
         );
     }
 }
