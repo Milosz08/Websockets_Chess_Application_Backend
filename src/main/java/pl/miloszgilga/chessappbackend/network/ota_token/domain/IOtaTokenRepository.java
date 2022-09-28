@@ -1,8 +1,8 @@
 /*
  * Copyright (c) 2022 by MILOSZ GILGA <https://miloszgilga.pl>
  *
- * File name: UnsubscribeNewsletterReq.java
- * Last modified: 02/09/2022, 15:22
+ * File name: IOtaTokenRepository.java
+ * Last modified: 26/09/2022, 23:29
  * Project name: chess-app-backend
  *
  * Licensed under the MIT license; you may not use this file except in compliance with the License.
@@ -16,28 +16,20 @@
  * COPIES OR SUBSTANTIAL PORTIONS OF THE SOFTWARE.
  */
 
-package pl.miloszgilga.chessappbackend.network.newsletter_email.dto;
+package pl.miloszgilga.chessappbackend.network.ota_token.domain;
 
-import lombok.Data;
+import org.springframework.stereotype.Repository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
+import org.springframework.data.jpa.repository.JpaRepository;
 
-import javax.validation.constraints.Size;
-import javax.validation.constraints.Email;
-import javax.validation.constraints.Pattern;
-import javax.validation.constraints.NotBlank;
-
-import static pl.miloszgilga.chessappbackend.validator.RegexPattern.OTA_TOKEN_PATTERN;
+import java.util.Optional;
 
 //----------------------------------------------------------------------------------------------------------------------
 
-@Data
-public class UnsubscribeNewsletterViaOtaReqDto {
+@Repository
+public interface IOtaTokenRepository extends JpaRepository<OtaTokenModel, Long> {
 
-    @NotBlank(message = "{jpa.validator.otaToken.notBlank}")
-    @Pattern(regexp = OTA_TOKEN_PATTERN, message = "{jpa.validator.otaToken.regex}")
-    private String token;
-
-    @NotBlank(message = "{jpa.validator.emailAddress.notBlank}")
-    @Email(message = "{jpa.validator.emailAddress.pattern}")
-    @Size(max = 100, message = "{jpa.validator.emailAddress.size}")
-    private String emailAddress;
+    @Query(value = "SELECT m FROM OtaTokenModel m WHERE m.localUser.emailAddress=:emailAddress")
+    Optional<OtaTokenModel> findTokenByUserEmail(@Param("emailAddress") String emailAddress);
 }

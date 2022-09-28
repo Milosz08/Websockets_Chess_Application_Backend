@@ -41,10 +41,13 @@ public class ApplicationEndpoints {
 
     public static final String RENEW_CREDETIALS_LOCAL = BASIC_ENDPOINT + "renew-credentials";
     public static final String ATTEMPT_TO_CHANGE_PASSWORD = "/attempt-to-change-password";
-    public static final String CHANGE_PASSWORD_VIA_OTA = "/change-password-via-ota";
 
     public static final String EXPOSE_STATIC_DATA_ENDPOINT = BASIC_ENDPOINT + "static-data";
     public static final String SIGNUP_CALENDAR_DATA = "/signup-calendar-data";
     public static final String SIGNUP_GENDER_DATA = "/signup-gender-data";
     public static final String SIGNUP_COUNTRY_DATA = "/signup-country-data";
+
+    public static final String OTA_TOKEN_ENDPOINT = BASIC_ENDPOINT + "ota-token";
+    public static final String CHANGE_PASSWORD = "/change-password";
+    public static final String ACTIVATE_ACCOUNT = "/activate-account";
 }
