@@ -51,7 +51,4 @@ public class FinishSignupReqDto {
 
     @NotNull(message = "{jpa.validator.newsletterAccept.notNull}")
     private Boolean newsletterAccept;
-
-    @NotBlank(message = "{jpa.validator.jwtToken.notBlank}")
-    private String jwtToken;
 }

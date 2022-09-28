@@ -22,7 +22,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import org.javatuples.Pair;
-import org.javatuples.Triplet;
 import org.springframework.stereotype.Component;
 
 import javax.transaction.Transactional;
@@ -30,25 +29,19 @@ import javax.transaction.Transactional;
 import java.util.Date;
 import java.util.Optional;
 
-import pl.miloszgilga.chessappbackend.utils.StringManipulator;
+import pl.miloszgilga.chessappbackend.network.auth.domain.*;
 import pl.miloszgilga.chessappbackend.token.JsonWebTokenCreator;
-import pl.miloszgilga.chessappbackend.token.JsonWebTokenVerificator;
 import pl.miloszgilga.chessappbackend.exception.custom.AuthException;
-import pl.miloszgilga.chessappbackend.oauth.user_info.OAuth2UserInfo;
-import pl.miloszgilga.chessappbackend.token.dto.UserVerficationClaims;
 
-import pl.miloszgilga.chessappbackend.network.auth.domain.LocalUserModel;
-import pl.miloszgilga.chessappbackend.network.auth.domain.RefreshTokenModel;
-import pl.miloszgilga.chessappbackend.network.auth.domain.ILocalUserRepository;
+import static pl.miloszgilga.chessappbackend.security.LocalUserRole.USER;
 
 //----------------------------------------------------------------------------------------------------------------------
 
 @Component
-class AuthServiceHelper {
+public class AuthServiceHelper {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(AuthServiceHelper.class);
 
-    private final StringManipulator manipulator;
     private final JsonWebTokenCreator tokenCreator;
     private final JsonWebTokenVerificator tokenVerificator;
     private final ILocalUserRepository localUserRepository;
@@ -61,16 +54,7 @@ class AuthServiceHelper {
         this.localUserRepository = localUserRepository;
     }
 
-    Triplet<String, String, String> generateNickFirstLastNameFromOAuthName(String username) {
-        final String nickname = username.toLowerCase().replaceAll(" ", "");
-        final String[] firstNameWithLastName = username.contains(" ")
-                ? username.split(" ") : new String[] { username, null };
-        return new Triplet<>(
-                nickname,
-                manipulator.capitalised(firstNameWithLastName[0]),
-                manipulator.capitalised(firstNameWithLastName[1])
-        );
-    }
+    //------------------------------------------------------------------------------------------------------------------
 
     @Transactional
     LocalUserModel updateOAuth2UserDetails(LocalUserModel existUser, OAuth2UserInfo existUserInfo) {
@@ -93,11 +77,7 @@ class AuthServiceHelper {
         return refreshTokenModel;
     }
 
-    Pair<LocalUserModel, String> validateUserAndReturnTokenWithUserData(String jwtToken) {
-        final LocalUserModel foundUser = validateUserAndReturnUserData(jwtToken);
-        final String jsonWebToken = tokenCreator.createUserCredentialsToken(foundUser);
-        return new Pair<>(foundUser, jsonWebToken);
-    }
+    //------------------------------------------------------------------------------------------------------------------
 
     @Transactional
     LocalUserModel validateUserAndReturnUserData(String jwtToken) {

@@ -150,7 +150,7 @@ public class AuthService implements IAuthService {
     @Transactional
     public AuthUser registrationProcessingFactory(OAuth2RegistrationData data) {
         final OAuth2UserInfo userInfo = userInfoFactory.getOAuth2UserInfo(data.getSupplier(), data.getAttributes());
-        final String supplierName = data.getSupplier().getSupplier();
+        final String supplierName = data.getSupplier().getName();
         if (userInfo.getUsername().equals("") || userInfo.getEmailAddress().equals("")) {
             throw new AuthException.OAuth2CredentialsSupplierMalformedException(
                     "Unable to authenticate via %s provider. Select other authentication method.", supplierName
@@ -174,11 +174,15 @@ public class AuthService implements IAuthService {
         return userBuilder.build(userModel, data);
     }
 
-        final LocalUserModel userModel = user.get();
-        final CredentialsSupplier supplier = userModel.getCredentialsSupplier();
-        if (!supplier.equals(data.getSupplier()) || supplier.equals(CredentialsSupplier.LOCAL)) {
-            LOGGER.error("Attempt to create already existing user account via OAuth2. Email: {}", userModel.getEmailAddress());
-            throw new AuthException.AccountAlreadyExistException("Account with this email is already registered.");
+    //------------------------------------------------------------------------------------------------------------------
+
+    @Transactional
+    AuthUser updateAlreadyExistUserViaOAuth2(OAuth2RegistrationData data, LocalUserModel foundUser) {
+        final CredentialsSupplier supplier = foundUser.getCredentialsSupplier();
+        if (!supplier.equals(data.getSupplier()) || supplier.equals(LOCAL)) {
+            LOGGER.error("Attempt to create already existing user via OAuth2. Email: {}", foundUser.getEmailAddress());
+            throw new AuthException.AccountAlreadyExistException("Account with email %s is already registered.",
+                    foundUser.getEmailAddress());
         }
 
         final LocalUserModel updatedUser = helper.updateOAuth2UserDetails(userModel, userInfo);
