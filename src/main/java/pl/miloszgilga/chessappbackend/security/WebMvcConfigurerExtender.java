@@ -52,7 +52,9 @@ public class WebMvcConfigurerExtender implements WebMvcConfigurer {
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")
                 .allowedOrigins(environment.getFrontEndUrl())
-                .allowedMethods(GET.name(), POST.name(), PUT.name(), PATCH.name(), DELETE.name())
+                .allowedMethods(GET.name(), POST.name(), OPTIONS.name(), PUT.name(), PATCH.name(), DELETE.name())
+                .allowCredentials(true)
+                .allowedHeaders("*")
                 .maxAge(environment.getCorsMaxAgeSeconds());
     }
 
