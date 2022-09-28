@@ -18,6 +18,8 @@
 
 package pl.miloszgilga.chessappbackend.network.newsletter_email.domain;
 
+import lombok.Getter;
+import lombok.Setter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.Table;
@@ -32,6 +34,7 @@ import pl.miloszgilga.chessappbackend.audit.AuditableEntity;
 
 @Entity
 @Table(name = "NEWSLETTER_EMAIL")
+@Getter @Setter
 @NoArgsConstructor
 public class NewsletterEmailModel extends AuditableEntity implements Serializable {
     private static final long serialVersionUID = 1L;
@@ -41,22 +44,6 @@ public class NewsletterEmailModel extends AuditableEntity implements Serializabl
 
     public NewsletterEmailModel(String userName, String userEmail) {
         this.userName = userName;
-        this.userEmail = userEmail;
-    }
-
-    public String getUserName() {
-        return userName;
-    }
-
-    void setUserName(String userName) {
-        this.userName = userName;
-    }
-
-    public String getUserEmail() {
-        return userEmail;
-    }
-
-    void setUserEmail(String userEmail) {
         this.userEmail = userEmail;
     }
 

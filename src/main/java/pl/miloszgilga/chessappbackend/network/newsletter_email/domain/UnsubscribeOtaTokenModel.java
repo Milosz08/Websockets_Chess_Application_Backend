@@ -18,6 +18,8 @@
 
 package pl.miloszgilga.chessappbackend.network.newsletter_email.domain;
 
+import lombok.Getter;
+import lombok.Setter;
 import lombok.NoArgsConstructor;
 
 import java.util.Date;
@@ -33,6 +35,7 @@ import pl.miloszgilga.chessappbackend.audit.AuditableEntity;
 
 @Entity
 @Table(name = "UNSUBSCRIBE_NEWSLETTER_OTA")
+@Getter @Setter
 @NoArgsConstructor
 public class UnsubscribeOtaTokenModel extends AuditableEntity implements Serializable {
     private static final long serialVersionUID = 1L;
@@ -46,38 +49,6 @@ public class UnsubscribeOtaTokenModel extends AuditableEntity implements Seriali
         this.userEmail = userEmail;
         this.token = token;
         this.tokenExpired = tokenExpired;
-    }
-
-    String getUserEmail() {
-        return userEmail;
-    }
-
-    void setUserEmail(String userEmail) {
-        this.userEmail = userEmail;
-    }
-
-    public String getToken() {
-        return token;
-    }
-
-    void setToken(String token) {
-        this.token = token;
-    }
-
-    public Date getTokenExpired() {
-        return tokenExpired;
-    }
-
-    void setTokenExpired(Date tokenExpired) {
-        this.tokenExpired = tokenExpired;
-    }
-
-    boolean isAlreadyUsed() {
-        return alreadyUsed;
-    }
-
-    public void setAlreadyUsed(boolean alreadyUsed) {
-        this.alreadyUsed = alreadyUsed;
     }
 
     @Override

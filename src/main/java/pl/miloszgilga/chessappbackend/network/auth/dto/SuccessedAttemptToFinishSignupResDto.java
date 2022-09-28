@@ -19,35 +19,24 @@
 package pl.miloszgilga.chessappbackend.network.auth.dto;
 
 import lombok.Data;
+import lombok.Builder;
 import lombok.AllArgsConstructor;
 
-import org.javatuples.Pair;
+import java.util.Set;
 
-import pl.miloszgilga.chessappbackend.utils.StringManipulator;
-import pl.miloszgilga.chessappbackend.network.auth.domain.LocalUserModel;
-import pl.miloszgilga.chessappbackend.network.auth.domain.LocalUserDetailsModel;
 
 //----------------------------------------------------------------------------------------------------------------------
 
 @Data
+@Builder
 @AllArgsConstructor
 public class SuccessedAttemptToFinishSignupResDto {
     private String nickname;
     private String fullName;
     private String photoUrl;
     private String initials;
-    private String jwtToken;
     private boolean isDataFilled;
-    private String dataFilledResponse;
+    private String responseMessage;
     private String authSupplier;
-
-    public static SuccessedAttemptToFinishSignupResDto factoryBuilder(Pair<LocalUserModel, String> userWithToken) {
-        final LocalUserModel userModel = userWithToken.getValue0();
-        final LocalUserDetailsModel userDetailsModel = userModel.getLocalUserDetails();
-        return new SuccessedAttemptToFinishSignupResDto(
-                userModel.getNickname(), userModel.getFirstName() + " " + userModel.getLastName(),
-                userDetailsModel.getPhotoEmbedLink(), StringManipulator.generateInitials(userModel),
-                userWithToken.getValue1(), userModel.getCredentialsSupplier().getSupplier()
-        );
-    }
+    private Set<String> hashedEmails;
 }

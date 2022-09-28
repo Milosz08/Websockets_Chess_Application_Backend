@@ -18,15 +18,16 @@
 
 package pl.miloszgilga.chessappbackend.network.auth.domain;
 
-import lombok.Setter;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
-import org.javatuples.Pair;
 
 import java.util.Date;
 import java.io.Serializable;
+
+import static javax.persistence.FetchType.LAZY;
+import static javax.persistence.CascadeType.MERGE;
+import static javax.persistence.CascadeType.PERSIST;
 
 import pl.miloszgilga.chessappbackend.audit.AuditableEntity;
 
@@ -35,26 +36,18 @@ import pl.miloszgilga.chessappbackend.audit.AuditableEntity;
 @Entity
 @Table(name = "USER_REFRESH_TOKEN")
 @Getter @Setter
+@Builder
 @NoArgsConstructor
+@AllArgsConstructor
 public class RefreshTokenModel extends AuditableEntity implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @Column(name = "REFRESH_TOKEN")     private String refreshToken;
     @Column(name = "EXPIRED_AT")        private Date expiredAt;
 
-    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToOne(cascade = { PERSIST, MERGE }, fetch = LAZY)
     @JoinColumn(name = "LOCAL_USER_ID", referencedColumnName = "ID")
     private LocalUserModel localUser;
-
-    public RefreshTokenModel(String refreshToken, Date expiredDate) {
-        this.refreshToken = refreshToken;
-        this.expiredAt = expiredDate;
-    }
-
-    public RefreshTokenModel(Pair<String, Date> tokenDateTuple) {
-        this.refreshToken = tokenDateTuple.getValue0();
-        this.expiredAt = tokenDateTuple.getValue1();
-    }
 
     @Override
     public String toString() {

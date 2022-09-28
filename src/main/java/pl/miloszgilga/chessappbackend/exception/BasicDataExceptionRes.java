@@ -26,7 +26,7 @@ import java.util.ArrayList;
 //----------------------------------------------------------------------------------------------------------------------
 
 @Getter
-class BasicDataExceptionRes extends ServerExceptionRes {
+public class BasicDataExceptionRes extends ServerExceptionRes {
 
     private final List<String> errors = new ArrayList<>();
 
