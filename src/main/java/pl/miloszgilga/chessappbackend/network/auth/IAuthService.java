@@ -27,9 +27,9 @@ import pl.miloszgilga.chessappbackend.oauth.dto.OAuth2RegistrationData;
 
 interface IAuthService {
     SuccessedLoginResDto loginViaLocal(LoginViaLocalReqDto req);
-    SuccessedLoginResDto loginViaOAuth2(LoginSignupViaOAuth2ReqDto req);
+    SuccessedLoginResDto loginViaOAuth2(LoginSignupViaOAuth2ReqDto req, Long userId);
     SuccessedAttemptToFinishSignupResDto signupViaLocal(SignupViaLocalReqDto req);
-    SuccessedAttemptToFinishSignupResDto attemptToFinishSignup(LoginSignupViaOAuth2ReqDto req);
-    SimpleServerMessageDto finishSignup(FinishSignupReqDto req);
+    SuccessedAttemptToFinishSignupResDto attemptToFinishSignup(LoginSignupViaOAuth2ReqDto req, Long userId);
+    SimpleServerMessageDto finishSignup(FinishSignupReqDto req, Long userId);
     AuthUser registrationProcessingFactory(OAuth2RegistrationData registrationData);
 }

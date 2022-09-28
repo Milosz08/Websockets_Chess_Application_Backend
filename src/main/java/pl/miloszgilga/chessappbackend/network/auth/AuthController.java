@@ -27,7 +27,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
 
+import pl.miloszgilga.chessappbackend.oauth.AuthUser;
 import pl.miloszgilga.chessappbackend.network.auth.dto.*;
+import pl.miloszgilga.chessappbackend.security.CurrentUser;
 import pl.miloszgilga.chessappbackend.dto.SimpleServerMessageDto;
 
 import static pl.miloszgilga.chessappbackend.config.ApplicationEndpoints.*;
@@ -54,8 +56,9 @@ class AuthController {
     //------------------------------------------------------------------------------------------------------------------
 
     @PostMapping(LOGIN_VIA_OAUTH2)
-    ResponseEntity<SuccessedLoginResDto> loginViaOAuth2(@Valid @RequestBody LoginSignupViaOAuth2ReqDto req) {
-        return new ResponseEntity<>(service.loginViaOAuth2(req), HttpStatus.OK);
+    ResponseEntity<SuccessedLoginResDto> loginViaOAuth2(@Valid @RequestBody LoginSignupViaOAuth2ReqDto req,
+                                                        @CurrentUser AuthUser user) {
+        return new ResponseEntity<>(service.loginViaOAuth2(req, user.getUserModel().getId()), HttpStatus.OK);
     }
 
     //------------------------------------------------------------------------------------------------------------------
@@ -69,14 +72,16 @@ class AuthController {
 
     @PostMapping(ATTEMPT_FINISH_SIGNUP_VIA_OAUTH2)
     ResponseEntity<SuccessedAttemptToFinishSignupResDto> attemptToFinishSignup(
-            @Valid @RequestBody LoginSignupViaOAuth2ReqDto req) {
-        return new ResponseEntity<>(service.attemptToFinishSignup(req), HttpStatus.OK);
+            @Valid @RequestBody LoginSignupViaOAuth2ReqDto req, @CurrentUser AuthUser user
+    ) {
+        return new ResponseEntity<>(service.attemptToFinishSignup(req, user.getUserModel().getId()), HttpStatus.OK);
     }
 
     //------------------------------------------------------------------------------------------------------------------
 
     @PostMapping(FINISH_SIGNUP_VIA_OAUTH2)
-    ResponseEntity<SimpleServerMessageDto> finishSignup(@Valid @RequestBody FinishSignupReqDto req) {
-        return new ResponseEntity<>(service.finishSignup(req), HttpStatus.OK);
+    ResponseEntity<SimpleServerMessageDto> finishSignup(@Valid @RequestBody FinishSignupReqDto req,
+                                                        @CurrentUser AuthUser user) {
+        return new ResponseEntity<>(service.finishSignup(req, user.getUserModel().getId()), HttpStatus.OK);
     }
 }

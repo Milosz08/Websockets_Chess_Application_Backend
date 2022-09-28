@@ -63,7 +63,8 @@ public class SecurityConfiguration {
     public static final String[] DISABLE_PATHS_FOR_JWT_FILTERING = {
             "/", "/error", "/oauth2/**", "/h2-console/**",
             NEWSLETTER_EMAIL_ENDPOINT + "/**",
-            AUTH_LOCAL_ENDPOINT + "/**",
+            AUTH_LOCAL_ENDPOINT + LOGIN_VIA_LOCAL + "/**",
+            AUTH_LOCAL_ENDPOINT + SIGNUP_VIA_LOCAL + "/**",
             EXPOSE_STATIC_DATA_ENDPOINT + "/**",
     };
 

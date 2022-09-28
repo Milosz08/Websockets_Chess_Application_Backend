@@ -26,7 +26,9 @@ import org.springframework.stereotype.Component;
 
 import javax.transaction.Transactional;
 
+import java.util.Set;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.Optional;
 
 import pl.miloszgilga.chessappbackend.network.auth.domain.*;
@@ -43,49 +45,41 @@ public class AuthServiceHelper {
     private static final Logger LOGGER = LoggerFactory.getLogger(AuthServiceHelper.class);
 
     private final JsonWebTokenCreator tokenCreator;
-    private final JsonWebTokenVerificator tokenVerificator;
+    private final ILocalUserRoleRepository roleRepository;
     private final ILocalUserRepository localUserRepository;
 
-    AuthServiceHelper(StringManipulator manipulator, JsonWebTokenCreator tokenCreator,
-                      JsonWebTokenVerificator tokenVerificator, ILocalUserRepository localUserRepository) {
-        this.manipulator = manipulator;
+    AuthServiceHelper(JsonWebTokenCreator tokenCreator, ILocalUserRoleRepository roleRepository,
+                      ILocalUserRepository localUserRepository) {
         this.tokenCreator = tokenCreator;
-        this.tokenVerificator = tokenVerificator;
+        this.roleRepository = roleRepository;
         this.localUserRepository = localUserRepository;
     }
 
     //------------------------------------------------------------------------------------------------------------------
 
     @Transactional
-    LocalUserModel updateOAuth2UserDetails(LocalUserModel existUser, OAuth2UserInfo existUserInfo) {
-        final Triplet<String, String, String> namesData = generateNickFirstLastNameFromOAuthName(
-                existUserInfo.getUsername());
-        existUser.setNickname(namesData.getValue0());
-        existUser.setFirstName(namesData.getValue1());
-        existUser.setLastName(namesData.getValue2());
-        existUser.getLocalUserDetails().setHasPhoto(!existUserInfo.getUserImageUrl().equals(""));
-        existUser.getLocalUserDetails().setPhotoEmbedLink(existUserInfo.getUserImageUrl());
-        return localUserRepository.save(existUser);
-    }
-
-    RefreshTokenModel createRefreshToken(LocalUserModel newUser) {
-        final Pair<String, Date> refreshToken = tokenCreator.createUserRefreshToken(newUser);
-        final RefreshTokenModel refreshTokenModel = new RefreshTokenModel(
-                refreshToken.getValue0(), refreshToken.getValue1());
-        refreshTokenModel.setLocalUser(newUser);
-        LOGGER.info("Refresh token was created for user: {}. Expired after {}", newUser, refreshToken.getValue1());
-        return refreshTokenModel;
+    public Set<LocalUserRoleModel> findAndGenerateUserRole() {
+        final Set<LocalUserRoleModel> roles = new HashSet<>();
+        final Optional<LocalUserRoleModel> foundRole = roleRepository.findRoleByType(USER);
+        if (foundRole.isEmpty()) {
+            LOGGER.error("Role for user is not present in database.");
+            throw new AuthException.RoleNotFoundException("Unable to create new account. Try again later.");
+        }
+        roles.add(foundRole.get());
+        return roles;
     }
 
     //------------------------------------------------------------------------------------------------------------------
 
     @Transactional
-    LocalUserModel validateUserAndReturnUserData(String jwtToken) {
-        final UserVerficationClaims claims = tokenVerificator.validateUserJwtFilter(jwtToken);
-        final Optional<LocalUserModel> findingUser = localUserRepository
-                .findUserByEmailAddressNicknameAndId(claims.getEmailAddress(), claims.getNickname(), claims.getId());
+    LocalUserModel findUserAndReturnUserData(Long userId) {
+        if (userId == null) {
+            LOGGER.error("Passed user ID is null. Nulls in indexes are strictly prohibited.");
+            throw new AuthException.UserNotFoundException("Unable to load user data. Try again later.");
+        }
+        final Optional<LocalUserModel> findingUser = localUserRepository.findById(userId);
         if (findingUser.isEmpty()) {
-            LOGGER.error("Unable to load user based bearer token req data. Bearer token: {}", jwtToken);
+            LOGGER.error("Unable to load user based id req data. Id: {}", userId);
             throw new AuthException.UserNotFoundException("User based passed data not exist.");
         }
         return findingUser.get();
