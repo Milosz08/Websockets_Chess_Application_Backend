@@ -33,14 +33,14 @@ public class CredentialsSupplierPersistenceConverter implements AttributeConvert
     @Override
     public String convertToDatabaseColumn(CredentialsSupplier attribute) {
         if (attribute == null) return null;
-        return attribute.getSupplier();
+        return attribute.getName();
     }
 
     @Override
     public CredentialsSupplier convertToEntityAttribute(String supplierName) {
         if (supplierName == null) return null;
         return Stream.of(CredentialsSupplier.values())
-                .filter(s -> s.getSupplier().equals(supplierName))
+                .filter(s -> s.getName().equals(supplierName))
                 .findFirst()
                 .orElseThrow(IllegalArgumentException::new);
     }

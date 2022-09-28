@@ -82,8 +82,8 @@ public class JsonWebTokenVerificator {
             LOGGER.error("Passed JSON Web Token is malformed. Token: {}", token);
         } catch (ExpiredJwtException ex) {
             LOGGER.error("Passed JSON Web Token is expired. Token: {}", token);
-            throw new TokenException
-                    .JwtTokenExpiredException("Session is expired. Before insert any changes please login again.");
+            throw new TokenException.JwtTokenExpiredException("Token is expired. Before insert any changes " +
+                    "please login again.");
         } catch (JwtException ex) {
             LOGGER.error("Passed JSON Web Token is invalid. Token: {}", token);
         } catch (IllegalArgumentException ex) {

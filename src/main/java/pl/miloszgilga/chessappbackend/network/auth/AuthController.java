@@ -44,26 +44,36 @@ class AuthController {
         this.service = service;
     }
 
+    //------------------------------------------------------------------------------------------------------------------
+
     @PostMapping(LOGIN_VIA_LOCAL)
     ResponseEntity<SuccessedLoginResDto> loginViaLocal(@Valid @RequestBody LoginViaLocalReqDto req) {
         return new ResponseEntity<>(service.loginViaLocal(req), HttpStatus.OK);
     }
+
+    //------------------------------------------------------------------------------------------------------------------
 
     @PostMapping(LOGIN_VIA_OAUTH2)
     ResponseEntity<SuccessedLoginResDto> loginViaOAuth2(@Valid @RequestBody LoginSignupViaOAuth2ReqDto req) {
         return new ResponseEntity<>(service.loginViaOAuth2(req), HttpStatus.OK);
     }
 
+    //------------------------------------------------------------------------------------------------------------------
+
     @PostMapping(SIGNUP_VIA_LOCAL)
     ResponseEntity<SuccessedAttemptToFinishSignupResDto> signupViaLocal(@Valid @RequestBody SignupViaLocalReqDto req) {
         return new ResponseEntity<>(service.signupViaLocal(req), HttpStatus.CREATED);
     }
+
+    //------------------------------------------------------------------------------------------------------------------
 
     @PostMapping(ATTEMPT_FINISH_SIGNUP_VIA_OAUTH2)
     ResponseEntity<SuccessedAttemptToFinishSignupResDto> attemptToFinishSignup(
             @Valid @RequestBody LoginSignupViaOAuth2ReqDto req) {
         return new ResponseEntity<>(service.attemptToFinishSignup(req), HttpStatus.OK);
     }
+
+    //------------------------------------------------------------------------------------------------------------------
 
     @PostMapping(FINISH_SIGNUP_VIA_OAUTH2)
     ResponseEntity<SimpleServerMessageDto> finishSignup(@Valid @RequestBody FinishSignupReqDto req) {

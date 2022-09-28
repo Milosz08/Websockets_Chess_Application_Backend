@@ -1,8 +1,8 @@
 /*
  * Copyright (c) 2022 by MILOSZ GILGA <https://miloszgilga.pl>
  *
- * File name: AuthenticationRestEntryPoint.java
- * Last modified: 19/09/2022, 21:40
+ * File name: FilledSignupDataToUserDetailsCustomizer.java
+ * Last modified: 28/09/2022, 12:03
  * Project name: chess-app-backend
  *
  * Licensed under the MIT license; you may not use this file except in compliance with the License.
@@ -16,30 +16,25 @@
  * COPIES OR SUBSTANTIAL PORTIONS OF THE SOFTWARE.
  */
 
-package pl.miloszgilga.chessappbackend.security;
+package pl.miloszgilga.chessappbackend.network.auth.mapper;
+
+import ma.glasnost.orika.CustomMapper;
+import ma.glasnost.orika.MappingContext;
 
 import org.springframework.stereotype.Component;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.web.servlet.HandlerExceptionResolver;
-import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.web.AuthenticationEntryPoint;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import pl.miloszgilga.chessappbackend.utils.UserGenderSpecific;
+import pl.miloszgilga.chessappbackend.network.auth.dto.FinishSignupReqDto;
+import pl.miloszgilga.chessappbackend.network.auth.domain.LocalUserDetailsModel;
 
 //----------------------------------------------------------------------------------------------------------------------
 
 @Component
-public class AuthenticationRestEntryPoint implements AuthenticationEntryPoint {
-
-    private final HandlerExceptionResolver resolver;
-
-    AuthenticationRestEntryPoint(@Qualifier("handlerExceptionResolver") HandlerExceptionResolver resolver) {
-        this.resolver = resolver;
-    }
+public class FilledSignupDataToUserDetailsCustomizer extends CustomMapper<FinishSignupReqDto, LocalUserDetailsModel> {
 
     @Override
-    public void commence(HttpServletRequest req, HttpServletResponse res, AuthenticationException ex) {
-        resolver.resolveException(req, res, null, ex);
+    public void mapAtoB(FinishSignupReqDto reqDto, LocalUserDetailsModel userDetailsModel, MappingContext context) {
+        userDetailsModel.setGender(UserGenderSpecific.findGenderByString(reqDto.getGender()));
+        userDetailsModel.setIsDataFilled(true);
     }
 }

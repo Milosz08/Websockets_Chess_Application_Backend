@@ -26,11 +26,11 @@ import org.springframework.security.core.AuthenticationException;
 //----------------------------------------------------------------------------------------------------------------------
 
 @Getter
-class OAuthRedirectException extends AuthenticationException {
+class BasicAuthenticationException extends AuthenticationException {
 
     private final HttpStatus status;
 
-    OAuthRedirectException(HttpStatus status, String msg, Object... args) {
+    BasicAuthenticationException(HttpStatus status, String msg, Object... args) {
         super(String.format(msg, args));
         this.status = status;
     }

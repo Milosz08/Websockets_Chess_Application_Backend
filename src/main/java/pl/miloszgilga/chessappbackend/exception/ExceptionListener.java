@@ -87,8 +87,13 @@ public class ExceptionListener {
     }
 
     private ServerExceptionRes basicExceptionRes(HttpStatus status, HttpServletRequest req) {
-        return new ServerExceptionRes(timeHelper.getCurrentUTC(), status.value(), status.name(),
-                req.getServletPath(), req.getMethod());
+        return ServerExceptionRes.builder()
+                .path(req.getServletPath())
+                .method(req.getMethod())
+                .statusCode(status.value())
+                .statusText(status.name())
+                .servletTimestampUTC(timeHelper.getCurrentUTC())
+                .build();
     }
 
     private String mappingAuthorizationExceptionMessages(String rawMessage) {

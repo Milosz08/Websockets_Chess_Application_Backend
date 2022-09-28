@@ -36,25 +36,25 @@ public class AuthException {
         }
     }
 
-    public static class OAuth2AuthenticationProcessingException extends OAuthRedirectException {
+    public static class OAuth2AuthenticationProcessingException extends BasicAuthenticationException {
         public OAuth2AuthenticationProcessingException(String message, Object... args) {
             super(HttpStatus.NOT_IMPLEMENTED, message, args);
         }
     }
 
-    public static class OAuth2CredentialsSupplierMalformedException extends OAuthRedirectException {
+    public static class OAuth2CredentialsSupplierMalformedException extends BasicAuthenticationException {
         public OAuth2CredentialsSupplierMalformedException(String message, Object... args) {
             super(HttpStatus.UNAUTHORIZED, message, args);
         }
     }
 
-    public static class OAuth2NotSupportedUriException extends OAuthRedirectException {
+    public static class OAuth2NotSupportedUriException extends BasicAuthenticationException {
         public OAuth2NotSupportedUriException(String message, Object... args) {
             super(HttpStatus.BAD_REQUEST, message, args);
         }
     }
 
-    public static class AccountAlreadyExistException extends OAuthRedirectException {
+    public static class AccountAlreadyExistException extends BasicAuthenticationException {
         public AccountAlreadyExistException(String message, Object... args) {
             super(HttpStatus.BAD_REQUEST, message, args);
         }

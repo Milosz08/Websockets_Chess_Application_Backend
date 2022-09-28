@@ -19,14 +19,12 @@
 package pl.miloszgilga.chessappbackend.oauth;
 
 import org.springframework.stereotype.Component;
-import org.springframework.security.oauth2.core.oidc.OidcIdToken;
-import org.springframework.security.oauth2.core.oidc.OidcUserInfo;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
-import java.util.Map;
 import java.util.List;
 
 import pl.miloszgilga.chessappbackend.security.SecurityHelper;
+import pl.miloszgilga.chessappbackend.oauth.dto.OAuth2RegistrationData;
 import pl.miloszgilga.chessappbackend.network.auth.domain.LocalUserModel;
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -40,10 +38,10 @@ public class AuthUserBuilder {
         this.securityHelper = securityHelper;
     }
 
-    public AuthUser buildUser(LocalUserModel user, Map<String, Object> attributes, OidcIdToken token, OidcUserInfo info) {
+    public AuthUser build(LocalUserModel user, OAuth2RegistrationData data) {
         final List<SimpleGrantedAuthority> authorities = securityHelper.generateSimpleGrantedAuthorities(user.getRoles());
-        final var authUser = new AuthUser(user, authorities, token, info);
-        authUser.setAttributes(attributes);
+        final var authUser = new AuthUser(user, authorities, data.getIdToken(), data.getUserInfo());
+        authUser.setAttributes(data.getAttributes());
         return authUser;
     }
 }

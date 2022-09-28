@@ -39,19 +39,19 @@ public enum CredentialsSupplier {
     FACEBOOK("facebook"),
     LOCAL("local");
 
-    private final String supplier;
+    private final String name;
     private static final Logger LOGGER = LoggerFactory.getLogger(CredentialsSupplier.class);
 
     public static Set<String> getAllSuppliers() {
         return Stream.of(CredentialsSupplier.values())
                 .filter(s -> s.equals(LOCAL))
-                .map(CredentialsSupplier::getSupplier)
+                .map(CredentialsSupplier::getName)
                 .collect(Collectors.toSet());
     }
 
     public static CredentialsSupplier findSupplierBasedRegistrationId(String registrationId) {
         return Stream.of(CredentialsSupplier.values())
-                .filter(s -> s.supplier.equalsIgnoreCase(registrationId))
+                .filter(s -> s.name.equalsIgnoreCase(registrationId))
                 .findFirst()
                 .orElseThrow(() -> {
                     LOGGER.error("Passed registration id: {} is not valid credentials supplier name.", registrationId);
@@ -63,7 +63,7 @@ public enum CredentialsSupplier {
     public static Set<String> getOAuth2Suppliers() {
         return Stream.of(CredentialsSupplier.values())
                 .filter(s -> !s.equals(LOCAL))
-                .map(CredentialsSupplier::getSupplier)
+                .map(CredentialsSupplier::getName)
                 .collect(Collectors.toSet());
     }
 }

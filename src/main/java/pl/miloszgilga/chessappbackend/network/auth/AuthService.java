@@ -54,23 +54,23 @@ public class AuthService implements IAuthService {
 
     private final AuthUserBuilder userBuilder;
     private final AuthenticationManager manager;
-    private final AuthServiceHelper helper;
     private final JsonWebTokenCreator tokenCreator;
     private final OAuth2UserInfoFactory userInfoFactory;
     private final ILocalUserRepository localUserRepository;
-    private final AuthFactoryMapper userFactoryMapper;
 
-    AuthService(AuthUserBuilder userBuilder, AuthenticationManager manager, AuthServiceHelper helper,
-                JsonWebTokenCreator tokenCreator, OAuth2UserInfoFactory userInfoFactory,
-                ILocalUserRepository localUserRepository, AuthFactoryMapper userFactoryMapper) {
+    AuthService(AuthUserBuilder userBuilder, MapperFacade mapperFacade, AuthenticationManager manager,
+                AuthServiceHelper helper, JsonWebTokenCreator tokenCreator, OAuth2UserInfoFactory userInfoFactory,
+                ILocalUserRepository localUserRepository) {
         this.userBuilder = userBuilder;
+        this.mapperFacade = mapperFacade;
         this.manager = manager;
         this.helper = helper;
         this.tokenCreator = tokenCreator;
         this.userInfoFactory = userInfoFactory;
         this.localUserRepository = localUserRepository;
-        this.userFactoryMapper = userFactoryMapper;
     }
+
+    //------------------------------------------------------------------------------------------------------------------
 
     @Override
     @Transactional
@@ -78,10 +78,10 @@ public class AuthService implements IAuthService {
         final var userCredentials = new UsernamePasswordAuthenticationToken(req.getUsernameEmail(), req.getPassword());
         final Authentication authentication = manager.authenticate(userCredentials);
         final AuthUser authUser = (AuthUser) authentication.getPrincipal();
-        if (!authUser.getUserModel().getCredentialsSupplier().equals(CredentialsSupplier.LOCAL)) {
+        if (!authUser.getUserModel().getCredentialsSupplier().equals(LOCAL)) {
             LOGGER.error("Attempt to log in on OAuth2 account provider via local account login form. Req: {}", req);
             throw new AuthException.DifferentAuthenticationProviderException("This account is not managed locally. " +
-                    "Try login via google or facebook.");
+                    "Try login via outside supplier.");
         }
         SecurityContextHolder.getContext().setAuthentication(authentication);
         final String jsonWebToken = tokenCreator.createUserCredentialsToken(authentication);
@@ -90,12 +90,16 @@ public class AuthService implements IAuthService {
         return SuccessedLoginResDto.factoryBuilder(new Pair<>(authUser.getUserModel(), jsonWebToken));
     }
 
+    //------------------------------------------------------------------------------------------------------------------
+
     @Override
     @Transactional
-    public SuccessedLoginResDto loginViaOAuth2(LoginSignupViaOAuth2ReqDto req) {
-        final Pair<LocalUserModel, String> validateUser = helper.validateUserAndReturnTokenWithUserData(req.getJwtToken());
-        return SuccessedLoginResDto.factoryBuilder(validateUser);
+    public SuccessedLoginResDto loginViaOAuth2(LoginSignupViaOAuth2ReqDto req, Long userId) {
+        final LocalUserModel userModel = helper.findUserAndReturnUserData(userId);
+        return null;
     }
+
+    //------------------------------------------------------------------------------------------------------------------
 
     @Override
     @Transactional
@@ -111,6 +115,8 @@ public class AuthService implements IAuthService {
         );
     }
 
+    //------------------------------------------------------------------------------------------------------------------
+
     @Override
     @Transactional
     public SuccessedAttemptToFinishSignupResDto attemptToFinishSignup(LoginSignupViaOAuth2ReqDto req) {
@@ -121,6 +127,8 @@ public class AuthService implements IAuthService {
         }
         return SuccessedAttemptToFinishSignupResDto.factoryBuilder(validateUser);
     }
+
+    //------------------------------------------------------------------------------------------------------------------
 
     @Override
     @Transactional
@@ -136,6 +144,8 @@ public class AuthService implements IAuthService {
         );
     }
 
+    //------------------------------------------------------------------------------------------------------------------
+
     @Override
     @Transactional
     public AuthUser registrationProcessingFactory(OAuth2RegistrationData data) {
@@ -147,13 +157,22 @@ public class AuthService implements IAuthService {
             );
         }
         final Optional<LocalUserModel> user = localUserRepository.findUserByEmailAddress(userInfo.getEmailAddress());
-        if (user.isEmpty()) {
-            final LocalUserModel newUser = userFactoryMapper.mappedSignupOAuth2UserDtoToUserEntity(data);
-            newUser.setRefreshToken(helper.createRefreshToken(newUser));
-            localUserRepository.save(newUser);
-            LOGGER.info("Create new user in database via {} OAuth2 interface. User data: {}", supplierName , newUser);
-            return userBuilder.buildUser(newUser, data.getAttributes(), data.getIdToken(), data.getUserInfo());
-        }
+        if (user.isEmpty()) return registerNewUserViaOAuth2(data, supplierName);
+        return updateAlreadyExistUserViaOAuth2(data, user.get());
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+
+    @Transactional
+    AuthUser registerNewUserViaOAuth2(OAuth2RegistrationData data, String supplierName) {
+        final LocalUserModel userModel = mapperFacade.map(data, LocalUserModel.class);
+        final LocalUserDetailsModel userDetailsModel = mapperFacade.map(data, LocalUserDetailsModel.class);
+        userDetailsModel.setLocalUser(userModel);
+        userModel.setLocalUserDetails(userDetailsModel);
+        localUserRepository.save(userModel);
+        LOGGER.info("Create new user via {} OAuth2 provider. User data: {}", supplierName, userModel);
+        return userBuilder.build(userModel, data);
+    }
 
         final LocalUserModel userModel = user.get();
         final CredentialsSupplier supplier = userModel.getCredentialsSupplier();
