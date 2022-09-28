@@ -35,8 +35,6 @@ spring:
     facebook:
       clientId: ${env.PROD_OAUTH2_FACEBOOK_CLIENT_ID}
       clientSecret: ${env.PROD_OAUTH2_FACEBOOK_CLIENT_SECRET}
-  jooq:
-    sql-dialect: org.hibernate.dialect.H2Dialect
 
 oauth2-custom:
   token-secret: ${env.PROD_OAUTH2_TOKEN_SECRET}

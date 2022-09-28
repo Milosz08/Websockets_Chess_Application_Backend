@@ -42,3 +42,7 @@ oauth2-custom:
   token-secret: ${env.DEV_OAUTH2_TOKEN_SECRET}
   token-expiration-hours: 24
   redirect-uris: http://localhost:4200/oauth2/redirect,myandroidapp://oauth2/redirect,myiosapp://oauth2/redirect
+
+logging:
+  level:
+    org.hibernate.sql: DEBUG
