@@ -77,7 +77,7 @@ public class OAuth2AuthSuccessfulResolver extends SimpleUrlAuthenticationSuccess
     protected String determineTargetUrl(HttpServletRequest req, HttpServletResponse res, Authentication auth) {
         final AuthUser localAuthUser = (AuthUser) auth.getPrincipal();
         final String token = webTokenCreator.createUserCredentialsToken(auth);
-        final String credentialsSupplier = localAuthUser.getUserModel().getCredentialsSupplier().getSupplier();
+        final String credentialsSupplier = localAuthUser.getUserModel().getCredentialsSupplier().getName();
 
         if (localAuthUser.getUserModel().getIsActivated()) {
             final String redirectLoginUri = checkIfRedirectUriIsValidAndReturn(req,

@@ -19,13 +19,15 @@
 package pl.miloszgilga.chessappbackend.exception;
 
 import lombok.Getter;
+import lombok.Builder;
 import lombok.AllArgsConstructor;
 
 //----------------------------------------------------------------------------------------------------------------------
 
 @Getter
+@Builder
 @AllArgsConstructor
-class ServerExceptionRes {
+public class ServerExceptionRes {
     private final String servletTimestampUTC;
     private final int statusCode;
     private final String statusText;

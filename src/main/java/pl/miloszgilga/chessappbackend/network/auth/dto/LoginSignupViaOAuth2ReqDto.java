@@ -28,9 +28,6 @@ import pl.miloszgilga.chessappbackend.validator.annotation.ValidateOAuth2Supplie
 @Data
 public class LoginSignupViaOAuth2ReqDto {
 
-    @NotBlank(message = "{jpa.validator.jwtToken.notBlank}")
-    private String jwtToken;
-
     @NotBlank(message = "{jpa.validator.credentialsSupplier.notBlank}")
     @ValidateOAuth2Supplier(message = "{jpa.validator.credentialsSupplier.notExist}")
     private String oauth2supplier;

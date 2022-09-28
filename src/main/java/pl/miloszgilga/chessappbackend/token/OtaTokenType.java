@@ -1,8 +1,8 @@
 /*
  * Copyright (c) 2022 by MILOSZ GILGA <https://miloszgilga.pl>
  *
- * File name: UnsubscribeNewsletterViaJwtReq.java
- * Last modified: 04/09/2022, 19:19
+ * File name: OtaTokenType.java
+ * Last modified: 26/09/2022, 23:32
  * Project name: chess-app-backend
  *
  * Licensed under the MIT license; you may not use this file except in compliance with the License.
@@ -16,17 +16,18 @@
  * COPIES OR SUBSTANTIAL PORTIONS OF THE SOFTWARE.
  */
 
-package pl.miloszgilga.chessappbackend.network.newsletter_email.dto;
+package pl.miloszgilga.chessappbackend.token;
 
-import lombok.Data;
-
-import javax.validation.constraints.NotBlank;
+import lombok.Getter;
+import lombok.AllArgsConstructor;
 
 //----------------------------------------------------------------------------------------------------------------------
 
-@Data
-public class UnsubscribeNewsletterViaJwtReqDto {
+@Getter
+@AllArgsConstructor
+public enum OtaTokenType {
+    RESET_PASSWORD("reset-password"),
+    ACTIVATE_ACCOUNT("activate-account");
 
-    @NotBlank(message = "{jpa.validator.jwtToken.notBlank}")
-    private String token;
+    private final String otaTokenTypeName;
 }

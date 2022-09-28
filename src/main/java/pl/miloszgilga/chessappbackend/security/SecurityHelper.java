@@ -71,7 +71,7 @@ public class SecurityHelper {
         if (hashedPart.length() < 5) hashingCharsCount = 1;
         final String hashPartVisible = value.substring(0, hashingCharsCount);
         final String hashPartNonVisible = value.substring(hashingCharsCount + 1, value.indexOf('@'));
-        final String nonHashPart = value.substring(value.indexOf('@') + 2);
+        final String nonHashPart = value.substring(value.indexOf('@') + 1);
         return hashPartVisible + Character.toString(hashChar).repeat(hashPartNonVisible.length()) + "@" + nonHashPart;
     }
 }

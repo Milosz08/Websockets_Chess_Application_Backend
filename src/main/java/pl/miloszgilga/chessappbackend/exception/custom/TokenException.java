@@ -24,19 +24,19 @@ import org.springframework.http.HttpStatus;
 
 public class TokenException {
 
-    public static class JwtMalformedTokenException extends BasicServerException {
+    public static class JwtMalformedTokenException extends BasicAuthenticationException {
         public JwtMalformedTokenException(String message, Object... args) {
             super(HttpStatus.UNAUTHORIZED, message, args);
         }
     }
 
-    public static class JwtTokenExpiredException extends BasicServerException {
+    public static class JwtTokenExpiredException extends BasicAuthenticationException {
         public JwtTokenExpiredException(String message, Object... args) {
             super(HttpStatus.UNAUTHORIZED, message, args);
         }
     }
 
-    public static class OtaTokenExpiredException extends BasicServerException {
+    public static class OtaTokenExpiredException extends BasicAuthenticationException {
         public OtaTokenExpiredException(String message, Object... args) {
             super(HttpStatus.UNAUTHORIZED, message, args);
         }

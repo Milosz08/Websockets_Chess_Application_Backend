@@ -44,11 +44,14 @@ public class JsonWebTokenCreator {
     private final TimeHelper timeHelper;
     private final JsonWebToken jsonWebToken;
     private final EnvironmentVars environment;
+    private final StringManipulator manipulator;
 
-    public JsonWebTokenCreator(TimeHelper timeHelper, EnvironmentVars environment, JsonWebToken jsonWebToken) {
+    public JsonWebTokenCreator(TimeHelper timeHelper, EnvironmentVars environment, JsonWebToken jsonWebToken,
+                               StringManipulator manipulator) {
         this.timeHelper = timeHelper;
         this.environment = environment;
         this.jsonWebToken = jsonWebToken;
+        this.manipulator = manipulator;
     }
 
     public String createUnsubscribeNewsletterToken(String email, String otaToken) {
@@ -64,7 +67,7 @@ public class JsonWebTokenCreator {
         final Claims claims = Jwts.claims();
         claims.put(USER_ID.getClaimName(), userModel.getId());
         claims.put(NICKNAME.getClaimName(), userModel.getNickname());
-        claims.put(FULL_NAME.getClaimName(), StringManipulator.generateInitials(userModel));
+        claims.put(FULL_NAME.getClaimName(), manipulator.generateInitials(userModel));
         claims.setExpiration(timeHelper.addMinutesToCurrentDate(environment.getOtaTokenExpiredMinutes()));
         return basicJwtToken("activate-account-token", claims);
     }
