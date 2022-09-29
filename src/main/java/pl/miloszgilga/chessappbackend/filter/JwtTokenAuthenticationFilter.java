@@ -20,12 +20,13 @@ package pl.miloszgilga.chessappbackend.filter;
 
 import com.nimbusds.common.contenttype.ContentType;
 
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.util.StringUtils;
 import org.springframework.util.AntPathMatcher;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 
 import javax.servlet.FilterChain;
@@ -36,7 +37,6 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.Arrays;
 import java.io.IOException;
 
-import pl.miloszgilga.chessappbackend.oauth.AuthUser;
 import pl.miloszgilga.chessappbackend.utils.TimeHelper;
 import pl.miloszgilga.chessappbackend.utils.StringManipulator;
 import pl.miloszgilga.chessappbackend.exception.ServerExceptionRes;
@@ -77,8 +77,8 @@ public class JwtTokenAuthenticationFilter extends OncePerRequestFilter {
         try {
             if (StringUtils.hasText(token) && !verificator.basicTokenIsMalformed(token)) {
                 final UserVerficationClaims verficationClaims = verificator.validateUserJwtFilter(token);
-                final AuthUser authUser = userDetailService.loadUserByNicknameEmailAndId(verficationClaims);
-                final var authToken = new UsernamePasswordAuthenticationToken(authUser, authUser.getUserModel().getId());
+                final UserDetails authUser = userDetailService.loadUserByNicknameEmailAndId(verficationClaims);
+                final var authToken = new UsernamePasswordAuthenticationToken(authUser, null, authUser.getAuthorities());
                 authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(req));
                 SecurityContextHolder.getContext().setAuthentication(authToken);
             }
