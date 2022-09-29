@@ -64,8 +64,9 @@ class MapperConvertersLoader {
                 final Method method = converterClazz.getMethod("getConverterType");
                 converterFactory.registerConverter((String) method.invoke(converter), converter);
                 LOGGER.info("Custom mapper: {} was successfully loaded via reflection", converterClazz.getSimpleName());
-            } catch (Exception ignored) {
+            } catch (Exception ex) {
                 LOGGER.error("Custom mapper: {} was failure loaded via reflection", converterClazz.getSimpleName());
+                LOGGER.error("Error: {}", ex.getMessage());
             }
         }
     }

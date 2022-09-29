@@ -102,6 +102,6 @@ public class ExceptionListener {
             case "User is disabled":            messagePattern = "auth.exception.accountNotVerified";   break;
             case "Bad credentials":             messagePattern = "auth.exception.accountNotExist";      break;
         }
-        return messagePattern.equals("") ? rawMessage : messageSource.getMessage(messagePattern, null, Locale.getDefault());
+        return messagePattern.isEmpty() ? rawMessage : messageSource.getMessage(messagePattern, null, Locale.getDefault());
     }
 }

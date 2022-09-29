@@ -57,6 +57,7 @@ class MapperFacadesLoader {
                 LOGGER.info("Custom mapping facade: {} was successfull loaded via reflection", method.getName());
             } catch (Exception ex) {
                 LOGGER.error("Custom mapping facade: {} was failure loaded via reflection", method.getName());
+                LOGGER.error("Error: {}", ex.getMessage());
             }
         }
     }
