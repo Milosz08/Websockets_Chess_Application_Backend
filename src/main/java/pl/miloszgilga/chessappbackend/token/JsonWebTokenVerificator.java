@@ -27,7 +27,7 @@ import org.springframework.stereotype.Component;
 
 import pl.miloszgilga.chessappbackend.exception.custom.TokenException;
 import pl.miloszgilga.chessappbackend.token.dto.UserVerficationClaims;
-import pl.miloszgilga.chessappbackend.token.dto.NewsletterUnsubscribeClaims;
+import pl.miloszgilga.chessappbackend.token.dto.ActivateServiceViaEmailTokenClaims;
 
 import static pl.miloszgilga.chessappbackend.token.JwtClaim.*;
 
@@ -43,13 +43,13 @@ public class JsonWebTokenVerificator {
         this.jsonWebToken = jsonWebToken1;
     }
 
-    public NewsletterUnsubscribeClaims validateUnsubscriveNewsletterJwt(String token) {
+    public ActivateServiceViaEmailTokenClaims validateActivatingServiceViaEmail(String token) {
         if (basicTokenIsMalformed(token)) {
             throw new TokenException.JwtMalformedTokenException(
                     "Data could not be verified due to an incorrect, expired or corrupted token.");
         }
         Claims claims = extractClaimsFromRawToken(token);
-        return new NewsletterUnsubscribeClaims(
+        return new ActivateServiceViaEmailTokenClaims(
                 claims.get(EMAIL.getClaimName(), String.class),
                 claims.get(IS_EXPIRED.getClaimName(), Boolean.class),
                 claims.get(OTA_TOKEN.getClaimName(), String.class)

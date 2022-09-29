@@ -35,7 +35,7 @@ import pl.miloszgilga.chessappbackend.token.JsonWebTokenCreator;
 import pl.miloszgilga.chessappbackend.dto.SimpleServerMessageDto;
 import pl.miloszgilga.chessappbackend.token.JsonWebTokenVerificator;
 import pl.miloszgilga.chessappbackend.exception.custom.EmailException.*;
-import pl.miloszgilga.chessappbackend.token.dto.NewsletterUnsubscribeClaims;
+import pl.miloszgilga.chessappbackend.token.dto.ActivateServiceViaEmailTokenClaims;
 
 import pl.miloszgilga.chessappbackend.network.newsletter_email.dto.EmailNewsletterReqDto;
 import pl.miloszgilga.chessappbackend.network.newsletter_email.domain.NewsletterEmailModel;
@@ -90,7 +90,7 @@ class NewsletterEmailService implements INewsletterEmailService {
         final String email = model.getUserEmail();
 
         final String otaToken = unsubscribeService.generateAndSaveOtaToken(email);
-        final String bearerToken = creator.createUnsubscribeNewsletterToken(email, otaToken);
+        final String bearerToken = creator.createAcitivateServiceViaEmailToken(email, otaToken);
         mailService.unsubscribeNewsletter(model.getId(), model.getUserName(), email, bearerToken, otaToken);
 
         return new SimpleServerMessageDto(String.format("Message has been send to the email '%s'.", email));
@@ -112,7 +112,7 @@ class NewsletterEmailService implements INewsletterEmailService {
     @Override
     @Transactional
     public SimpleServerMessageDto unsubscribeNewsletterViaJwt(final SimpleJwtTokenReqDto token) {
-        final NewsletterUnsubscribeClaims claims = verificator.validateUnsubscriveNewsletterJwt(token.getToken());
+        final ActivateServiceViaEmailTokenClaims claims = verificator.validateActivatingServiceViaEmail(token.getToken());
         final String emailAddress = claims.getEmailAddress();
 
         final NewsletterEmailModel model = checkIfRemovingEmailExist(emailAddress);

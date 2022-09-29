@@ -25,7 +25,7 @@ import lombok.AllArgsConstructor;
 
 @Data
 @AllArgsConstructor
-public class NewsletterUnsubscribeClaims {
+public class ActivateServiceViaEmailTokenClaims {
     private String emailAddress;
     private boolean isExpired;
     private String otaToken;

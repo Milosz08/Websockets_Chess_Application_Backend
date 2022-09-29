@@ -31,7 +31,6 @@ import pl.miloszgilga.chessappbackend.oauth.AuthUser;
 import pl.miloszgilga.chessappbackend.utils.TimeHelper;
 import pl.miloszgilga.chessappbackend.config.EnvironmentVars;
 import pl.miloszgilga.chessappbackend.security.LocalUserRole;
-import pl.miloszgilga.chessappbackend.utils.StringManipulator;
 import pl.miloszgilga.chessappbackend.network.auth.domain.LocalUserModel;
 
 import static pl.miloszgilga.chessappbackend.token.JwtClaim.*;
@@ -44,17 +43,14 @@ public class JsonWebTokenCreator {
     private final TimeHelper timeHelper;
     private final JsonWebToken jsonWebToken;
     private final EnvironmentVars environment;
-    private final StringManipulator manipulator;
 
-    public JsonWebTokenCreator(TimeHelper timeHelper, EnvironmentVars environment, JsonWebToken jsonWebToken,
-                               StringManipulator manipulator) {
+    public JsonWebTokenCreator(TimeHelper timeHelper, EnvironmentVars environment, JsonWebToken jsonWebToken) {
         this.timeHelper = timeHelper;
         this.environment = environment;
         this.jsonWebToken = jsonWebToken;
-        this.manipulator = manipulator;
     }
 
-    public String createUnsubscribeNewsletterToken(String email, String otaToken) {
+    public String createAcitivateServiceViaEmailToken(String email, String otaToken) {
         final Claims claims = Jwts.claims();
         claims.put(EMAIL.getClaimName(), email);
         claims.put(OTA_TOKEN.getClaimName(), otaToken);
@@ -63,13 +59,8 @@ public class JsonWebTokenCreator {
         return basicJwtToken("unsubscribe-newsletter-token", claims);
     }
 
-    public String createActivateAccountToken(LocalUserModel userModel) {
-        final Claims claims = Jwts.claims();
-        claims.put(USER_ID.getClaimName(), userModel.getId());
-        claims.put(NICKNAME.getClaimName(), userModel.getNickname());
-        claims.put(FULL_NAME.getClaimName(), manipulator.generateInitials(userModel));
-        claims.setExpiration(timeHelper.addMinutesToCurrentDate(environment.getOtaTokenExpiredMinutes()));
-        return basicJwtToken("activate-account-token", claims);
+    public String createAcitivateServiceViaEmailToken(LocalUserModel userModel, String otaToken) {
+        return createAcitivateServiceViaEmailToken(userModel.getEmailAddress(), otaToken);
     }
 
     public String createUserCredentialsToken(Authentication authentication) {
