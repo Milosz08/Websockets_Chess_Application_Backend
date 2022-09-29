@@ -202,14 +202,20 @@ public class AuthService implements IAuthService {
 
     @Transactional
     AuthUser updateAlreadyExistUserViaOAuth2(OAuth2RegistrationData data, LocalUserModel foundUser) {
+        final OAuth2UserInfo userInfo = userInfoFactory.getOAuth2UserInfo(data.getSupplier(), data.getAttributes());
         final CredentialsSupplier supplier = foundUser.getCredentialsSupplier();
+        final LocalUserDetailsModel userDetails = foundUser.getLocalUserDetails();
         if (!supplier.equals(data.getSupplier()) || supplier.equals(LOCAL)) {
             LOGGER.error("Attempt to create already existing user via OAuth2. Email: {}", foundUser.getEmailAddress());
             throw new AuthException.AccountAlreadyExistException("Account with email %s is already registered.",
                     foundUser.getEmailAddress());
         }
-        mapperFacade.map(data, foundUser);
-        mapperFacade.map(data, foundUser.getLocalUserDetails());
+
+        foundUser.setFirstName(helper.extractUserDataFromUsername(userInfo.getUsername()).getValue0());
+        foundUser.setLastName(helper.extractUserDataFromUsername(userInfo.getUsername()).getValue1());
+        userDetails.setHasPhoto(!userInfo.getUserImageUrl().isEmpty());
+        userDetails.setPhotoEmbedLink(userInfo.getUserImageUrl().isEmpty() ? null : userInfo.getUserImageUrl());
+
         localUserRepository.save(foundUser);
         LOGGER.info("Update user via {} OAuth2 provider. User data: {}", data.getSupplier().getName(), foundUser);
         return userBuilder.build(foundUser, data);

@@ -21,7 +21,7 @@ package pl.miloszgilga.chessappbackend.network.auth.mapper;
 import ma.glasnost.orika.CustomMapper;
 import ma.glasnost.orika.MappingContext;
 
-import org.javatuples.Triplet;
+import org.javatuples.Pair;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
@@ -58,10 +58,11 @@ public class SignupOAuth2DtoToUserCustomizer extends CustomMapper<OAuth2Registra
     @Override
     public void mapAtoB(OAuth2RegistrationData data, LocalUserModel userModel, MappingContext context) {
         final OAuth2UserInfo userInfo = userInfoFactory.getOAuth2UserInfo(data.getSupplier(), data.getAttributes());
-        final Triplet<String, String, String> userExtractedData = extractUserDataFromUsername(userInfo.getUsername());
-        userModel.setNickname(userExtractedData.getValue0());
-        userModel.setFirstName(userExtractedData.getValue1());
-        userModel.setLastName(userExtractedData.getValue2());
+        final Pair<String, String> userExtractedData = helper.extractUserDataFromUsername(userInfo.getUsername());
+        final String nickname = userInfo.getUsername().toLowerCase().replaceAll(" ", "");
+        userModel.setNickname(manipulator.generateUserDefNickname(nickname));
+        userModel.setFirstName(userExtractedData.getValue0());
+        userModel.setLastName(userExtractedData.getValue1());
         userModel.setEmailAddress(userInfo.getEmailAddress());
         userModel.setPassword(passwordEncoder.encode(environment.getOauth2PasswordReplacer()));
         userModel.setCredentialsSupplier(data.getSupplier());
@@ -69,15 +70,5 @@ public class SignupOAuth2DtoToUserCustomizer extends CustomMapper<OAuth2Registra
         userModel.setIsActivated(false);
         userModel.setIsBlocked(false);
         userModel.setRoles(helper.findAndGenerateUserRole());
-    }
-
-    private Triplet<String, String, String> extractUserDataFromUsername(String username) {
-        final String nickname = username.toLowerCase().replaceAll(" ", "");
-        final String[] firstWithLast = username.contains(" ") ? username.split(" ") : new String[] { username, null };
-        return new Triplet<>(
-                manipulator.generateUserDefNickname(nickname),
-                manipulator.capitalised(firstWithLast[0]),
-                manipulator.capitalised(firstWithLast[1])
-        );
     }
 }

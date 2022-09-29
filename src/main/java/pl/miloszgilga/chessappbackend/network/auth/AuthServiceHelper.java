@@ -34,6 +34,7 @@ import java.util.Optional;
 import pl.miloszgilga.chessappbackend.network.auth.domain.*;
 import pl.miloszgilga.chessappbackend.token.JsonWebTokenCreator;
 import pl.miloszgilga.chessappbackend.exception.custom.AuthException;
+import pl.miloszgilga.chessappbackend.utils.StringManipulator;
 
 import static pl.miloszgilga.chessappbackend.security.LocalUserRole.USER;
 
@@ -44,12 +45,14 @@ public class AuthServiceHelper {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(AuthServiceHelper.class);
 
+    private final StringManipulator manipulator;
     private final JsonWebTokenCreator tokenCreator;
     private final ILocalUserRoleRepository roleRepository;
     private final ILocalUserRepository localUserRepository;
 
-    AuthServiceHelper(JsonWebTokenCreator tokenCreator, ILocalUserRoleRepository roleRepository,
-                      ILocalUserRepository localUserRepository) {
+    AuthServiceHelper(StringManipulator manipulator, JsonWebTokenCreator tokenCreator,
+                      ILocalUserRoleRepository roleRepository, ILocalUserRepository localUserRepository) {
+        this.manipulator = manipulator;
         this.tokenCreator = tokenCreator;
         this.roleRepository = roleRepository;
         this.localUserRepository = localUserRepository;
@@ -99,8 +102,18 @@ public class AuthServiceHelper {
     //------------------------------------------------------------------------------------------------------------------
 
     void sendEmailMessageForActivateAccount(LocalUserModel userModel) {
-        final String token = tokenCreator.createActivateAccountToken(userModel);
+        final String token = tokenCreator.createAcitivateServiceViaEmailToken(userModel, "ota-token");
 
         // TODO: Send email with verification link
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+
+    public Pair<String, String> extractUserDataFromUsername(String username) {
+        final String[] firstWithLast = username.contains(" ") ? username.split(" ") : new String[] { username, null };
+        return new Pair<>(
+                manipulator.capitalised(firstWithLast[0]),
+                manipulator.capitalised(firstWithLast[1])
+        );
     }
 }
