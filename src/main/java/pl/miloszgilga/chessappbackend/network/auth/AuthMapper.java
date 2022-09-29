@@ -104,7 +104,6 @@ public class AuthMapper {
                 .exclude("gender")
                 .customize(filledSignupDataToUserDetailsCustomizer)
                 .fieldMap("birthDate").converter(DATE_FROM_STRING_TO_OBJECT.getName()).add()
-                .fieldMap("secondEmailAddress").converter(INSERT_NULL_IF_STRING_IS_EMPTY.getName()).add()
                 .field("countryName", "country")
                 .byDefault()
                 .register();
