@@ -78,7 +78,7 @@ public class ExceptionListener {
         return new BasicDataExceptionRes(resData, ex.getMessage());
     }
 
-    @ExceptionHandler(AuthenticationException.class)
+    @ExceptionHandler({ AuthenticationException.class, RuntimeException.class })
     public BasicDataExceptionRes handleAuthenticationException(AuthenticationException ex, HttpServletRequest req,
                                                                HttpServletResponse res) {
         final var resData = basicExceptionRes(HttpStatus.UNAUTHORIZED, req);

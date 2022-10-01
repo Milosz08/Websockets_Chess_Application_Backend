@@ -18,8 +18,6 @@
 
 package pl.miloszgilga.chessappbackend.filter;
 
-import com.nimbusds.common.contenttype.ContentType;
-
 import org.springframework.util.StringUtils;
 import org.springframework.util.AntPathMatcher;
 import org.springframework.stereotype.Component;
@@ -37,15 +35,10 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.Arrays;
 import java.io.IOException;
 
-import pl.miloszgilga.chessappbackend.utils.TimeHelper;
-import pl.miloszgilga.chessappbackend.utils.StringManipulator;
-import pl.miloszgilga.chessappbackend.exception.ServerExceptionRes;
 import pl.miloszgilga.chessappbackend.token.JsonWebTokenVerificator;
 import pl.miloszgilga.chessappbackend.security.AuthUserDetailService;
-import pl.miloszgilga.chessappbackend.exception.BasicDataExceptionRes;
 import pl.miloszgilga.chessappbackend.token.dto.UserVerficationClaims;
 
-import static org.springframework.http.HttpStatus.UNAUTHORIZED;
 import static pl.miloszgilga.chessappbackend.security.SecurityConfiguration.DISABLE_PATHS_FOR_JWT_FILTERING;
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -56,15 +49,10 @@ public class JwtTokenAuthenticationFilter extends OncePerRequestFilter {
     private static final String TOKEN_HEADER = "Authorization";
     private static final String TOKEN_PREFIX = "Bearer ";
 
-    private final TimeHelper timeHelper;
-    private final StringManipulator manipulator;
     private final JsonWebTokenVerificator verificator;
     private final AuthUserDetailService userDetailService;
 
-    public JwtTokenAuthenticationFilter(TimeHelper timeHelper, AuthUserDetailService userDetailService,
-                                        JsonWebTokenVerificator verificator, StringManipulator manipulator) {
-        this.timeHelper = timeHelper;
-        this.manipulator = manipulator;
+    public JwtTokenAuthenticationFilter(AuthUserDetailService userDetailService, JsonWebTokenVerificator verificator) {
         this.verificator = verificator;
         this.userDetailService = userDetailService;
     }
@@ -72,30 +60,13 @@ public class JwtTokenAuthenticationFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest req, HttpServletResponse res, FilterChain filterChain)
             throws IOException, ServletException {
-
         final String token = extractJwtTokenFromRequest(req);
-        try {
-            if (StringUtils.hasText(token) && !verificator.basicTokenIsMalformed(token)) {
-                final UserVerficationClaims verficationClaims = verificator.validateUserJwtFilter(token);
-                final UserDetails authUser = userDetailService.loadUserByNicknameEmailAndId(verficationClaims);
-                final var authToken = new UsernamePasswordAuthenticationToken(authUser, null, authUser.getAuthorities());
-                authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(req));
-                SecurityContextHolder.getContext().setAuthentication(authToken);
-            }
-        } catch (Exception ex) {
-            final var serverExceptionRes = ServerExceptionRes.builder()
-                    .path(req.getServletPath())
-                    .method(req.getMethod())
-                    .statusCode(UNAUTHORIZED.value())
-                    .statusText(UNAUTHORIZED.name())
-                    .servletTimestampUTC(timeHelper.getCurrentUTC())
-                    .build();
-            final var basicDataExceptionRes = new BasicDataExceptionRes(serverExceptionRes, ex.getMessage());
-            SecurityContextHolder.clearContext();
-
-            res.setContentType(ContentType.APPLICATION_JSON.getType());
-            res.setStatus(UNAUTHORIZED.value());
-            res.getWriter().write(manipulator.convertObjectToJson(basicDataExceptionRes));
+        if (StringUtils.hasText(token) && !verificator.basicTokenIsMalformed(token)) {
+            final UserVerficationClaims verficationClaims = verificator.validateUserJwtFilter(token);
+            final UserDetails authUser = userDetailService.loadUserByNicknameEmailAndId(verficationClaims);
+            final var authToken = new UsernamePasswordAuthenticationToken(authUser, null, authUser.getAuthorities());
+            authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(req));
+            SecurityContextHolder.getContext().setAuthentication(authToken);
         }
         filterChain.doFilter(req, res);
     }

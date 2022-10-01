@@ -26,6 +26,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.web.authentication.logout.LogoutFilter;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
@@ -33,6 +34,7 @@ import org.springframework.security.config.annotation.authentication.configurati
 
 import pl.miloszgilga.chessappbackend.utils.CookieHelper;
 import pl.miloszgilga.chessappbackend.config.EnvironmentVars;
+import pl.miloszgilga.chessappbackend.filter.MiddlewareExceptionsFilter;
 import pl.miloszgilga.chessappbackend.filter.JwtTokenAuthenticationFilter;
 
 import pl.miloszgilga.chessappbackend.oauth.AppOidcUserService;
@@ -54,6 +56,7 @@ public class SecurityConfiguration {
     private final SecurityHelper securityHelper;
     private final AuthenticationRestEntryPoint restEntryPoint;
     private final JwtTokenAuthenticationFilter authenticationFilter;
+    private final MiddlewareExceptionsFilter middlewareExceptionsFilter;
 
     private final AppOidcUserService appOidcUserService;
     private final AppOAuth2UserService appOAuth2UserService;
@@ -68,20 +71,21 @@ public class SecurityConfiguration {
             EXPOSE_STATIC_DATA_ENDPOINT + "/**",
     };
 
-    public SecurityConfiguration(EnvironmentVars environment, JwtTokenAuthenticationFilter authenticationFilter,
-                                 AuthenticationRestEntryPoint restEntryPoint, AppOidcUserService appOidcUserService,
-                                 AppOAuth2UserService appOAuth2UserService, CookieHelper cookieHelper,
-                                 OAuth2AuthFailureResolver oAuth2AuthFailureResolver, SecurityHelper securityHelper,
-                                 OAuth2AuthSuccessfulResolver oAuth2AuthSuccessfulResolver) {
+    public SecurityConfiguration(EnvironmentVars environment, JwtTokenAuthenticationFilter authFilter,
+                                 AuthenticationRestEntryPoint restPoint, AppOidcUserService oidc, CookieHelper cookie,
+                                 MiddlewareExceptionsFilter exFilter, AppOAuth2UserService oauth2,
+                                 SecurityHelper security, OAuth2AuthSuccessfulResolver successfulResolver,
+                                 OAuth2AuthFailureResolver failureResolver) {
         this.environment = environment;
-        this.securityHelper = securityHelper;
-        this.cookieHelper = cookieHelper;
-        this.authenticationFilter = authenticationFilter;
-        this.restEntryPoint = restEntryPoint;
-        this.appOidcUserService = appOidcUserService;
-        this.appOAuth2UserService = appOAuth2UserService;
-        this.oAuth2AuthFailureResolver = oAuth2AuthFailureResolver;
-        this.oAuth2AuthSuccessfulResolver = oAuth2AuthSuccessfulResolver;
+        this.middlewareExceptionsFilter = exFilter;
+        this.securityHelper = security;
+        this.cookieHelper = cookie;
+        this.authenticationFilter = authFilter;
+        this.restEntryPoint = restPoint;
+        this.appOidcUserService = oidc;
+        this.appOAuth2UserService = oauth2;
+        this.oAuth2AuthFailureResolver = failureResolver;
+        this.oAuth2AuthSuccessfulResolver = successfulResolver;
     }
 
     @Bean
@@ -89,6 +93,7 @@ public class SecurityConfiguration {
         enableH2ConsoleForDevelopment(http);
 
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
+                .addFilterBefore(middlewareExceptionsFilter, LogoutFilter.class)
                 .csrf().disable()
                 .formLogin().disable()
                 .httpBasic().disable()
