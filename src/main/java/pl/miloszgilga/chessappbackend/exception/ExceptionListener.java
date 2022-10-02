@@ -22,8 +22,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.context.MessageSource;
 import org.springframework.validation.FieldError;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.http.converter.HttpMessageNotReadableException;
@@ -41,10 +39,14 @@ public class ExceptionListener {
 
     private final TimeHelper timeHelper;
     private final MessageSource messageSource;
+    private final StringManipulator manipulator;
 
-    public ExceptionListener(TimeHelper timeHelper, MessageSource messageSource) {
+    //------------------------------------------------------------------------------------------------------------------
+
+    public ExceptionListener(TimeHelper timeHelper, MessageSource messageSource, StringManipulator manipulator) {
         this.timeHelper = timeHelper;
         this.messageSource = messageSource;
+        this.manipulator = manipulator;
     }
 
     //------------------------------------------------------------------------------------------------------------------
@@ -89,6 +91,19 @@ public class ExceptionListener {
         res.setStatus(HttpStatus.UNAUTHORIZED.value());
         return new BasicDataExceptionRes(resData, mappingAuthorizationExceptionMessages(ex.getMessage()));
     }
+
+    //------------------------------------------------------------------------------------------------------------------
+
+    @ExceptionHandler(Exception.class)
+    public BasicDataExceptionRes handleRuntimeException(Exception ex, HttpServletRequest req,
+                                                               HttpServletResponse res) {
+        final var resData = basicExceptionRes(HttpStatus.BAD_REQUEST, req);
+        res.setStatus(HttpStatus.BAD_REQUEST.value());
+        final String messageWithDot = manipulator.addExtraDotOnFinishIfNotExist(ex.getMessage());
+        return new BasicDataExceptionRes(resData, mappingAuthorizationExceptionMessages(messageWithDot));
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
 
     private ServerExceptionRes basicExceptionRes(HttpStatus status, HttpServletRequest req) {
         return ServerExceptionRes.builder()
