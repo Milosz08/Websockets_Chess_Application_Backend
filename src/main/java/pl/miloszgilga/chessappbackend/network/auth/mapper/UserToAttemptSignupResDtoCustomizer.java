@@ -55,15 +55,18 @@ public class UserToAttemptSignupResDtoCustomizer extends CustomMapper<LocalUserM
     public void mapAtoB(LocalUserModel user, SuccessedAttemptToFinishSignupResDto resDto, MappingContext context) {
         resDto.setFullName(manipulator.capitalised(user.getFirstName()) + " " + manipulator.capitalised(user.getLastName()));
         resDto.setInitials(manipulator.generateInitials(user));
-        resDto.setHashedEmails(generatedHashedEmails(user));
+        resDto.setUserEmailAddresses(generatedHashedEmails(user));
     }
 
-    private Set<String> generatedHashedEmails(LocalUserModel user) {
-        final Set<String> hashedEmails = new HashSet<>();
+    //------------------------------------------------------------------------------------------------------------------
+
+    private Set<EmailHashWithNormalDto> generatedHashedEmails(LocalUserModel user) {
+        final Set<EmailHashWithNormalDto> hashedEmails = new HashSet<>();
         if (user.getLocalUserDetails().getSecondEmailAddress() != null) {
-            hashedEmails.add(hashValue(user.getLocalUserDetails().getSecondEmailAddress()));
+            final String hashed = hashValue(user.getLocalUserDetails().getSecondEmailAddress());
+            hashedEmails.add(new EmailHashWithNormalDto(hashed, user.getLocalUserDetails().getSecondEmailAddress()));
         }
-        hashedEmails.add(hashValue(user.getEmailAddress()));
+        hashedEmails.add(new EmailHashWithNormalDto(hashValue(user.getEmailAddress()), user.getEmailAddress()));
         return hashedEmails;
     }
 

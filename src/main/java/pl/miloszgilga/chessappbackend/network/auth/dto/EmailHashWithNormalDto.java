@@ -1,8 +1,8 @@
 /*
  * Copyright (c) 2022 by MILOSZ GILGA <https://miloszgilga.pl>
  *
- * File name: IUnsubscribeOtaTokenService.java
- * Last modified: 02/09/2022, 17:05
+ * File name: EmailHashWithNormalDto.java
+ * Last modified: 01/10/2022, 13:47
  * Project name: chess-app-backend
  *
  * Licensed under the MIT license; you may not use this file except in compliance with the License.
@@ -16,11 +16,15 @@
  * COPIES OR SUBSTANTIAL PORTIONS OF THE SOFTWARE.
  */
 
-package pl.miloszgilga.chessappbackend.network.newsletter_email;
+package pl.miloszgilga.chessappbackend.network.auth.dto;
+
+import lombok.*;
 
 //----------------------------------------------------------------------------------------------------------------------
 
-interface IUnsubscribeOtaTokenService {
-    String generateAndSaveOtaToken(String email);
-    void validateOtaToken(String token, String email);
+@Data
+@AllArgsConstructor
+public class EmailHashWithNormalDto {
+    private String hash;
+    private String normal;
 }
