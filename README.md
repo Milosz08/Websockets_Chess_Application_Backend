@@ -92,6 +92,7 @@ instructions below). Also check that both servers provide an SSL encrypted conne
 3. Fill in the content shown below:
 ```properties
 # JWT and CORS policy
+PROD_BASE_URL                           = xxxxx -> ex. [[https://api.exampledomain.pl/]]
 PROD_FRONTEND_CORS_AGENT                = xxxxx -> ex. [[https://exampledomain.pl/]]
 PROD_JWT_KEY                            = xxxxx
 PROD_FRONTEND_WITH_JWT_ISSUER           = xxxxx -> ex. [[exampledomain.pl]]
