@@ -75,12 +75,10 @@ public class JsonWebTokenCreator {
         return createUserCredentialsToken(localAuthUser.getUserModel());
     }
 
-    public String createUserCredentialsToken(LocalUserModel userModel) {
-        final Claims claims = Jwts.claims();
-        claims.put(USER_ID.getClaimName(), userModel.getId());
-        claims.put(NICKNAME.getClaimName(), userModel.getNickname());
-        claims.put(EMAIL.getClaimName(), userModel.getEmailAddress());
-        claims.put(ROLES.getClaimName(), LocalUserRole.simplifyUserRoles(userModel.getRoles()));
+    //------------------------------------------------------------------------------------------------------------------
+
+    public String createUserCredentialsToken(LocalUserModel user) {
+        final Claims claims = createBasicAuthTokenWithoutExpired(user);
         claims.setExpiration(timeHelper.addMinutesToCurrentDate(environment.getBearerTokenExpiredMinutes()));
         return basicJwtToken("user-credentials", claims);
     }
@@ -88,14 +86,21 @@ public class JsonWebTokenCreator {
     //------------------------------------------------------------------------------------------------------------------
 
     public Pair<String, Date> createUserRefreshToken(LocalUserModel user) {
-        final Claims claims = Jwts.claims();
+        final Claims claims = createBasicAuthTokenWithoutExpired(user);
         final Date expirationDate = timeHelper.addMonthsToCurrentDate(environment.getRefreshTokenExpiredMonths());
+        claims.setExpiration(expirationDate);
+        return new Pair<>(basicJwtToken("user-refresh-token", claims), expirationDate);
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+
+    private Claims createBasicAuthTokenWithoutExpired(LocalUserModel user) {
+        final Claims claims = Jwts.claims();
         claims.put(USER_ID.getClaimName(), user.getId());
         claims.put(NICKNAME.getClaimName(), user.getNickname());
         claims.put(EMAIL.getClaimName(), user.getEmailAddress());
         claims.put(ROLES.getClaimName(), LocalUserRole.simplifyUserRoles(user.getRoles()));
-        claims.setExpiration(expirationDate);
-        return new Pair<>(basicJwtToken("user-refresh-token", claims), expirationDate);
+        return claims;
     }
 
     //------------------------------------------------------------------------------------------------------------------
