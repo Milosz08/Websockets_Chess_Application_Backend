@@ -22,12 +22,14 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.net.URI;
 import javax.validation.Valid;
 
 import pl.miloszgilga.chessappbackend.dto.*;
 import pl.miloszgilga.chessappbackend.network.newsletter_email.dto.*;
 
 import static pl.miloszgilga.chessappbackend.config.ApplicationEndpoints.*;
+import static pl.miloszgilga.chessappbackend.config.RedirectEndpoints.NEWSLETTER_UNSUBSCRIBE_VIA_LINK;
 
 //----------------------------------------------------------------------------------------------------------------------
 
@@ -64,8 +66,13 @@ class NewsletterEmailController {
         return new ResponseEntity<>(service.unsubscribeNewsletterViaOta(req), HttpStatus.OK);
     }
 
-    @DeleteMapping(NEWSLETTER_UNSUBSCRIBE_VIA_JWT)
-    ResponseEntity<SimpleServerMessageDto> unsubscribeNewsletterViaJwt(@Valid @RequestBody SimpleJwtTokenReqDto req) {
-        return new ResponseEntity<>(service.unsubscribeNewsletterViaJwt(req), HttpStatus.OK);
+    //------------------------------------------------------------------------------------------------------------------
+
+    @GetMapping(NEWSLETTER_UNSUBSCRIBE_VIA_LINK + "{bearer}")
+    ResponseEntity<Void> unsubscribeNewsletterViaJwt(@PathVariable String bearer) {
+        final URI redirectUri = service.unsubscribeNewsletterViaLink(bearer);
+        return ResponseEntity.status(HttpStatus.FOUND)
+                .location(redirectUri)
+                .build();
     }
 }

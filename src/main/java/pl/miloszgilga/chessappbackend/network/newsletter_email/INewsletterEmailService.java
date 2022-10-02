@@ -29,5 +29,5 @@ interface INewsletterEmailService {
     SimpleServerMessageDto subscribeNewsletter(EmailNewsletterReqDto emailAddress);
     SimpleServerMessageDto attemptToUnsubscribeNewsletter(AttemptToUnsubscribeReqDto email);
     SimpleServerMessageDto unsubscribeNewsletterViaOta(SimpleOtaTokenReqDto token);
-    SimpleServerMessageDto unsubscribeNewsletterViaJwt(SimpleJwtTokenReqDto token);
+    URI unsubscribeNewsletterViaLink(String bearer);
 }

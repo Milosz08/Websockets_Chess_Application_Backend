@@ -118,6 +118,7 @@ public class AuthService implements IAuthService {
 
         userModel.setLocalUserDetails(userDetailsModel);
         userDetailsModel.setLocalUser(userModel);
+        helper.addUserToNewsletter(userModel, req.getHasNewsletterAccept());
         localUserRepository.save(userModel);
         helper.sendEmailMessageForActivateAccount(userModel);
 
@@ -159,6 +160,7 @@ public class AuthService implements IAuthService {
         final LocalUserModel validateUser = helper.findUserAndReturnUserData(userId);
         mapperFacade.map(req, validateUser.getLocalUserDetails());
         validateUser.getLocalUserDetails().setIsDataFilled(true);
+        helper.addUserToNewsletter(validateUser, req.getNewsletterAccept());
         localUserRepository.save(validateUser);
         helper.sendEmailMessageForActivateAccount(validateUser);
         LOGGER.info("Update new user data in database via OAUTH2 interface. User data: {}", req);
