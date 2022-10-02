@@ -26,4 +26,5 @@ public class RegexPattern {
     public static final String NICKNAME_PATTERN = "^[a-z\\d]{5,20}";
     public static final String BIRTH_DATE_PATTERN = "^(0[1-9]|[12][0-9]|3[01])/(0[1-9]|1[0-2])/\\d{4}$";
     public static final String PASSWORD_PATTERN = "^[a-zA-Z\\d!@#$%&*]{8,30}$";
+    public static final String EMAIL_PATTERN = "^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,10}$";
 }

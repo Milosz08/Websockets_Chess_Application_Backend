@@ -21,9 +21,7 @@ package pl.miloszgilga.chessappbackend.network.newsletter_email;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import org.springframework.stereotype.Service;
-
-import javax.transaction.Transactional;
+import org.springframework.stereotype.Component;
 
 import java.util.Date;
 import java.util.Optional;
@@ -31,16 +29,14 @@ import java.util.Optional;
 import pl.miloszgilga.chessappbackend.utils.TimeHelper;
 import pl.miloszgilga.chessappbackend.config.EnvironmentVars;
 import pl.miloszgilga.chessappbackend.token.OneTimeAccessToken;
-import pl.miloszgilga.chessappbackend.exception.custom.TokenException;
-import pl.miloszgilga.chessappbackend.network.newsletter_email.domain.UnsubscribeOtaTokenModel;
-import pl.miloszgilga.chessappbackend.network.newsletter_email.domain.IUnsubscribeOtaTokenRepository;
+import pl.miloszgilga.chessappbackend.network.newsletter_email.domain.*;
 
 //----------------------------------------------------------------------------------------------------------------------
 
-@Service
-class UnsubscribeOtaTokenService implements IUnsubscribeOtaTokenService {
+@Component
+class NewsletterEmailServiceHelper {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(UnsubscribeOtaTokenService.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(NewsletterEmailServiceHelper.class);
 
     private final TimeHelper timeHelper;
     private final EnvironmentVars environment;
@@ -63,21 +59,22 @@ class UnsubscribeOtaTokenService implements IUnsubscribeOtaTokenService {
         String token;
         do {
             token = otaService.generateToken();
-        } while (repository.findExistingToken(token));
+        } while (otaTokenRepository.findExistingToken(token));
 
         final Date tokenExpired = timeHelper.addMinutesToCurrentDate(environment.getOtaTokenExpiredMinutes());
         final var otaToken = new UnsubscribeOtaTokenModel(email, token, tokenExpired);
-        repository.save(otaToken);
+        otaTokenRepository.save(otaToken);
 
         LOGGER.info("Successfully generated OTA ({} min exp) token for unsubscribe newsletter: {}",
                 environment.getOtaTokenExpiredMinutes(), otaToken);
         return token;
     }
 
-    @Override
+    //------------------------------------------------------------------------------------------------------------------
+
     @Transactional
     public void validateOtaToken(String token, String email) {
-        final Optional<UnsubscribeOtaTokenModel> probablyValidToken = repository.checkIfTokenExist(token, email);
+        final Optional<UnsubscribeOtaTokenModel> probablyValidToken = otaTokenRepository.checkIfTokenExist(token, email);
         if (probablyValidToken.isEmpty() || !otaService.checkIsTokenIsValid(probablyValidToken.get().getToken())) {
             LOGGER.error("OTA token from JWT is not the same as from DB. Token: {}", token);
             throw new TokenException.JwtMalformedTokenException(
@@ -86,11 +83,11 @@ class UnsubscribeOtaTokenService implements IUnsubscribeOtaTokenService {
 
         final UnsubscribeOtaTokenModel validToken = probablyValidToken.get();
         if (validToken.getTokenExpired().before(new Date())) {
-            LOGGER.error("OTA token from JWT is expired. Token: {}", token);
+            LOGGER.error("OTA token is expired. Token: {}", token);
             throw new TokenException.OtaTokenExpiredException("Passed token is valid, but it has already expired.");
         }
 
         validToken.setAlreadyUsed(true);
-        repository.save(validToken);
+        otaTokenRepository.save(validToken);
     }
 }

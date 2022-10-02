@@ -61,9 +61,16 @@ public class StringManipulator {
         return nickname.toLowerCase(Locale.ROOT) + numbersSequence;
     }
 
-    public String convertObjectToJson(Object object) throws JsonProcessingException {
-        if (object == null) return null;
-        final var mapper = new ObjectMapper();
-        return mapper.writeValueAsString(object);
+    //------------------------------------------------------------------------------------------------------------------
+
+    public String addExtraDotOnFinishIfNotExist(String sequence) {
+        if (sequence.charAt(sequence.length() - 1) == '.') return sequence;
+        return sequence + ".";
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+
+    public String generateFullName(LocalUserModel userModel) {
+        return capitalised(userModel.getFirstName()) + " " + capitalised(userModel.getLastName());
     }
 }
