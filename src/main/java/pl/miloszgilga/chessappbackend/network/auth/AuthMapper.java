@@ -19,17 +19,15 @@
 package pl.miloszgilga.chessappbackend.network.auth;
 
 import ma.glasnost.orika.MapperFactory;
-import org.springframework.context.annotation.Primary;
-import org.springframework.stereotype.Component;
 
+import org.springframework.stereotype.Component;
+import org.springframework.context.annotation.Primary;
+
+import pl.miloszgilga.chessappbackend.network.auth.dto.*;
 import pl.miloszgilga.chessappbackend.network.auth.mapper.*;
+import pl.miloszgilga.chessappbackend.network.auth.domain.*;
 import pl.miloszgilga.chessappbackend.mapper.InjectableMappingFacade;
 import pl.miloszgilga.chessappbackend.oauth.dto.OAuth2RegistrationData;
-import pl.miloszgilga.chessappbackend.network.auth.domain.LocalUserModel;
-import pl.miloszgilga.chessappbackend.network.auth.dto.FinishSignupReqDto;
-import pl.miloszgilga.chessappbackend.network.auth.dto.SignupViaLocalReqDto;
-import pl.miloszgilga.chessappbackend.network.auth.domain.LocalUserDetailsModel;
-import pl.miloszgilga.chessappbackend.network.auth.dto.SuccessedAttemptToFinishSignupResDto;
 
 import static pl.miloszgilga.chessappbackend.mapper.Converter.*;
 
@@ -46,6 +44,8 @@ public class AuthMapper {
     private final SignupOAuth2DtoToUserCustomizer signupOAuth2DtoToUserCustomizer;
     private final SignupOAuth2DtoToUserDetailsCustomizer signupOAuth2DtoToUserDetailsCustomizer;
     private final FilledSignupDataToUserDetailsCustomizer filledSignupDataToUserDetailsCustomizer;
+
+    //------------------------------------------------------------------------------------------------------------------
 
     public AuthMapper(MapperFactory mapperFactory, SignupLocalDtoToUserCustomizer signupLocalDtoToUserCustomizer,
                       SignupLocalDtoToUserDetailsCustomizer signupLocalDtoToUserDetailsCustomizer,

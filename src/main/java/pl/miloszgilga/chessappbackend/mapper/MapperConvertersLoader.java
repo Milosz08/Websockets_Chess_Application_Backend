@@ -21,14 +21,12 @@ package pl.miloszgilga.chessappbackend.mapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import ma.glasnost.orika.MapperFactory;
-import ma.glasnost.orika.CustomConverter;
+import ma.glasnost.orika.*;
 import ma.glasnost.orika.converter.ConverterFactory;
 
+import org.reflections.util.*;
 import org.reflections.Reflections;
 import org.reflections.scanners.Scanners;
-import org.reflections.util.ClasspathHelper;
-import org.reflections.util.ConfigurationBuilder;
 
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Configuration;
@@ -46,11 +44,15 @@ class MapperConvertersLoader {
     private final ConverterFactory converterFactory;
     private final ApplicationContext applicationContext;
 
+    //------------------------------------------------------------------------------------------------------------------
+
     MapperConvertersLoader(MapperFactory mapperFactory, ApplicationContext applicationContext) {
         this.converterFactory = mapperFactory.getConverterFactory();
         this.applicationContext = applicationContext;
         loadAllConvertersByReflection();
     }
+
+    //------------------------------------------------------------------------------------------------------------------
 
     private void loadAllConvertersByReflection() {
         final org.reflections.Configuration configuration = new ConfigurationBuilder()

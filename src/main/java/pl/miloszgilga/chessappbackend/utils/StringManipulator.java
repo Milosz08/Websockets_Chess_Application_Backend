@@ -20,13 +20,8 @@ package pl.miloszgilga.chessappbackend.utils;
 
 import org.springframework.stereotype.Component;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.core.JsonProcessingException;
-
-import java.util.Locale;
-import java.util.Random;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
+import java.util.*;
+import java.util.stream.*;
 
 import pl.miloszgilga.chessappbackend.network.auth.domain.LocalUserModel;
 
@@ -37,19 +32,27 @@ public class StringManipulator {
 
     private static final Random RANDOM = new Random();
 
+    //------------------------------------------------------------------------------------------------------------------
+
     public String capitalised(String textToCapitalised) {
         final String normalized = textToCapitalised.trim().toLowerCase(Locale.ROOT);
         return Character.toString(normalized.charAt(0)).toUpperCase(Locale.ROOT) + normalized.substring(1);
     }
 
+    //------------------------------------------------------------------------------------------------------------------
+
     public String emptyStringRetNull(String text) {
         return text.equals("") ? null : text;
     }
+
+    //------------------------------------------------------------------------------------------------------------------
 
     public String generateInitials(LocalUserModel userModel) {
         return (userModel.getFirstName().charAt(0) + Character.toString(userModel.getLastName().charAt(0)))
                 .toUpperCase(Locale.ROOT);
     }
+
+    //------------------------------------------------------------------------------------------------------------------
 
     public String generateUserDefNickname(String nickname) {
         String numbersSequence = IntStream.generate(() -> RANDOM.nextInt(10)).limit(3)

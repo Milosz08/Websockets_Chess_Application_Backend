@@ -34,9 +34,13 @@ public class AuthUserBuilder {
 
     private final SecurityHelper securityHelper;
 
+    //------------------------------------------------------------------------------------------------------------------
+
     AuthUserBuilder(SecurityHelper securityHelper) {
         this.securityHelper = securityHelper;
     }
+
+    //------------------------------------------------------------------------------------------------------------------
 
     public AuthUser build(LocalUserModel user, OAuth2RegistrationData data) {
         final List<SimpleGrantedAuthority> authorities = securityHelper.generateSimpleGrantedAuthorities(user.getRoles());

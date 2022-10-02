@@ -21,12 +21,8 @@ package pl.miloszgilga.chessappbackend.utils;
 import org.springframework.stereotype.Component;
 import org.springframework.util.SerializationUtils;
 
-import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
-import java.util.Base64;
-import java.util.Optional;
+import java.util.*;
+import javax.servlet.http.*;
 
 //----------------------------------------------------------------------------------------------------------------------
 
@@ -42,6 +38,8 @@ public class CookieHelper {
         return Optional.empty();
     }
 
+    //------------------------------------------------------------------------------------------------------------------
+
     public void addCookie(HttpServletResponse res, String cookieName, String cookieValue, int cookieMaxAge) {
         final Cookie cookie = new Cookie(cookieName, cookieValue);
         cookie.setPath("/");
@@ -49,6 +47,8 @@ public class CookieHelper {
         cookie.setMaxAge(cookieMaxAge);
         res.addCookie(cookie);
     }
+
+    //------------------------------------------------------------------------------------------------------------------
 
     public void deleteCookie(HttpServletRequest req, HttpServletResponse res, String cookieName) {
         final Cookie[] cookies = req.getCookies();
@@ -63,13 +63,19 @@ public class CookieHelper {
         }
     }
 
+    //------------------------------------------------------------------------------------------------------------------
+
     public String serializeCookieObjectData(Object cookieObjectData) {
         return Base64.getUrlEncoder().encodeToString(SerializationUtils.serialize(cookieObjectData));
     }
 
+    //------------------------------------------------------------------------------------------------------------------
+
     public <T> T deserializeCookieObjectData(Cookie cookie, Class<T> cookieClazz) {
         return cookieClazz.cast(SerializationUtils.deserialize(Base64.getUrlDecoder().decode(cookie.getValue())));
     }
+
+    //------------------------------------------------------------------------------------------------------------------
 
     public Optional<String> getCookieValue(HttpServletRequest req, String cookieName) {
         return getCookie(req, cookieName).map(Cookie::getValue);

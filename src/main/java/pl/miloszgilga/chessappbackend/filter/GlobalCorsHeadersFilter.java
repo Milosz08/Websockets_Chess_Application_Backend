@@ -50,14 +50,20 @@ public class GlobalCorsHeadersFilter implements Filter {
             "x-requested-with", "authorization", "Content-Type", "Authorization", "credential", "X-XSRF-TOKEN",
     };
 
+    //------------------------------------------------------------------------------------------------------------------
+
     public GlobalCorsHeadersFilter(EnvironmentVars environment) {
         this.environment = environment;
     }
+
+    //------------------------------------------------------------------------------------------------------------------
 
     @Override
     public void init(FilterConfig filterConfig) {
         this.flattedMethods = Arrays.stream(REST_METHODS).map(Enum::name).collect(Collectors.joining(","));
     }
+
+    //------------------------------------------------------------------------------------------------------------------
 
     @Override
     public void doFilter(ServletRequest req, ServletResponse res, FilterChain chain) throws IOException, ServletException {
@@ -75,6 +81,8 @@ public class GlobalCorsHeadersFilter implements Filter {
             chain.doFilter(req, res);
         }
     }
+
+    //------------------------------------------------------------------------------------------------------------------
 
     @Override
     public void destroy() {

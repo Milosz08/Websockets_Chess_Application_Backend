@@ -27,6 +27,11 @@ import java.util.HashMap;
 import pl.miloszgilga.chessappbackend.utils.TimeHelper;
 import pl.miloszgilga.chessappbackend.config.EnvironmentVars;
 import pl.miloszgilga.chessappbackend.token.JsonWebTokenCreator;
+import pl.miloszgilga.chessappbackend.network.auth.domain.LocalUserModel;
+
+import static pl.miloszgilga.chessappbackend.mail.MailTemplate.*;
+import static pl.miloszgilga.chessappbackend.config.RedirectEndpoints.*;
+import static pl.miloszgilga.chessappbackend.config.ApplicationEndpoints.NEWSLETTER_EMAIL_ENDPOINT;
 
 //----------------------------------------------------------------------------------------------------------------------
 
@@ -46,8 +51,10 @@ public class MailOutService implements IMailOutService {
         this.environment = environment;
     }
 
+    //------------------------------------------------------------------------------------------------------------------
+
     @Override
-    public void unsubscribeNewsletter(long id, String userName, String email, String bearer, String otaToken) {
+    public void unsubscribeNewsletter(Long id, String userName, String email, String bearer, String otaToken) {
         final String messageTitle = String.format("(%s) Chess Online: unsubscribe newsletter for %s", id, userName);
         final var request = new MailRequestDto(List.of(email), environment.getServerMailClient(), messageTitle);
         final Map<String, Object> parameters = new HashMap<>(extendsParametersWithDef(email));
@@ -59,6 +66,8 @@ public class MailOutService implements IMailOutService {
         parameters.put("buttonLink", computeBearer(bearer));
         mailService.generalEmailSender(request, parameters, MailTemplate.UNSUBSCRIBE_NEWSLETTER);
     }
+
+    //------------------------------------------------------------------------------------------------------------------
 
     private Map<String, Object> extendsParametersWithDef(String email) {
         final Map<String, Object> parameters = new HashMap<>();

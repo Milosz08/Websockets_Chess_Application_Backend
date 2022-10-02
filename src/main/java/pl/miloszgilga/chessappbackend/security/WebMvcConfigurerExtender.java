@@ -19,16 +19,13 @@
 package pl.miloszgilga.chessappbackend.security;
 
 import org.springframework.validation.Validator;
+import org.springframework.context.annotation.*;
 import org.springframework.context.MessageSource;
-import org.springframework.context.annotation.Bean;
 import org.springframework.web.servlet.LocaleResolver;
-import org.springframework.context.annotation.Configuration;
+import org.springframework.validation.beanvalidation.*;
+import org.springframework.web.servlet.config.annotation.*;
 import org.springframework.web.servlet.i18n.CookieLocaleResolver;
-import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.context.support.ResourceBundleMessageSource;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
-import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
-import org.springframework.validation.beanvalidation.MethodValidationPostProcessor;
 
 import static org.springframework.http.HttpMethod.*;
 
@@ -44,9 +41,13 @@ public class WebMvcConfigurerExtender implements WebMvcConfigurer {
 
     private final EnvironmentVars environment;
 
+    //------------------------------------------------------------------------------------------------------------------
+
     public WebMvcConfigurerExtender(EnvironmentVars environment) {
         this.environment = environment;
     }
+
+    //------------------------------------------------------------------------------------------------------------------
 
     @Override
     public void addCorsMappings(CorsRegistry registry) {
@@ -58,6 +59,8 @@ public class WebMvcConfigurerExtender implements WebMvcConfigurer {
                 .maxAge(environment.getCorsMaxAgeSeconds());
     }
 
+    //------------------------------------------------------------------------------------------------------------------
+
     @Bean("messageSource")
     public MessageSource messageSource() {
         final var messageSource = new ResourceBundleMessageSource();
@@ -66,6 +69,8 @@ public class WebMvcConfigurerExtender implements WebMvcConfigurer {
         return messageSource;
     }
 
+    //------------------------------------------------------------------------------------------------------------------
+
     @Bean
     public LocaleResolver localeResolver() {
         final var cookieLocaleResolver = new CookieLocaleResolver();
@@ -73,12 +78,16 @@ public class WebMvcConfigurerExtender implements WebMvcConfigurer {
         return cookieLocaleResolver;
     }
 
+    //------------------------------------------------------------------------------------------------------------------
+
     @Override
     public Validator getValidator() {
         final var validator = new LocalValidatorFactoryBean();
         validator.setValidationMessageSource(messageSource());
         return validator;
     }
+
+    //------------------------------------------------------------------------------------------------------------------
 
     @Bean
     public MethodValidationPostProcessor methodValidationPostProcessor() {

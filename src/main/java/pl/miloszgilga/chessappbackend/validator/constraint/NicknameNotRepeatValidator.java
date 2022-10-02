@@ -21,8 +21,7 @@ package pl.miloszgilga.chessappbackend.validator.constraint;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.validation.ConstraintValidator;
-import javax.validation.ConstraintValidatorContext;
+import javax.validation.*;
 
 import pl.miloszgilga.chessappbackend.network.auth.domain.ILocalUserRepository;
 import pl.miloszgilga.chessappbackend.validator.annotation.ValidateNicknameNotRepeat;
@@ -35,9 +34,13 @@ public class NicknameNotRepeatValidator implements ConstraintValidator<ValidateN
 
     private final ILocalUserRepository userRepository;
 
+    //------------------------------------------------------------------------------------------------------------------
+
     public NicknameNotRepeatValidator(ILocalUserRepository userRepository) {
         this.userRepository = userRepository;
     }
+
+    //------------------------------------------------------------------------------------------------------------------
 
     @Override
     public boolean isValid(String nickname, ConstraintValidatorContext context) {

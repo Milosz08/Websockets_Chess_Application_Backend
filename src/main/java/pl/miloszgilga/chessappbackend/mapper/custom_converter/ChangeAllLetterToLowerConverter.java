@@ -18,15 +18,13 @@
 
 package pl.miloszgilga.chessappbackend.mapper.custom_converter;
 
-import ma.glasnost.orika.CustomConverter;
-import ma.glasnost.orika.MappingContext;
+import ma.glasnost.orika.*;
 import ma.glasnost.orika.metadata.Type;
 
 import java.util.Locale;
 import org.springframework.stereotype.Component;
 
-import pl.miloszgilga.chessappbackend.mapper.IReflectConverter;
-import pl.miloszgilga.chessappbackend.mapper.InjectableMappingConverter;
+import pl.miloszgilga.chessappbackend.mapper.*;
 
 import static pl.miloszgilga.chessappbackend.mapper.Converter.CHANGE_ALL_LETTERS_TO_LOWER;
 
@@ -36,10 +34,14 @@ import static pl.miloszgilga.chessappbackend.mapper.Converter.CHANGE_ALL_LETTERS
 @InjectableMappingConverter
 public class ChangeAllLetterToLowerConverter extends CustomConverter<String, String> implements IReflectConverter {
 
+    //------------------------------------------------------------------------------------------------------------------
+
     @Override
     public String convert(String source, Type<? extends String> destinationType, MappingContext mappingContext) {
         return source.toLowerCase(Locale.ROOT);
     }
+
+    //------------------------------------------------------------------------------------------------------------------
 
     @Override
     public String getConverterType() {

@@ -18,10 +18,7 @@
 
 package pl.miloszgilga.chessappbackend.mail;
 
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
-import lombok.AllArgsConstructor;
+import lombok.*;
 
 import java.util.List;
 

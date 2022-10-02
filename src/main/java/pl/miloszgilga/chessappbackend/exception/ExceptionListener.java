@@ -19,23 +19,19 @@
 package pl.miloszgilga.chessappbackend.exception;
 
 import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.context.MessageSource;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.security.core.AuthenticationException;
-import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 
-import java.util.List;
-import java.util.Locale;
-import java.util.ArrayList;
+import java.util.*;
+import javax.servlet.http.*;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
-import pl.miloszgilga.chessappbackend.utils.TimeHelper;
+import pl.miloszgilga.chessappbackend.utils.*;
 import pl.miloszgilga.chessappbackend.exception.custom.BasicServerException;
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -51,12 +47,16 @@ public class ExceptionListener {
         this.messageSource = messageSource;
     }
 
+    //------------------------------------------------------------------------------------------------------------------
+
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     @ExceptionHandler(HttpMessageNotReadableException.class)
     public NotReadableExceptionRes handleNotReadableException(HttpMessageNotReadableException ex, HttpServletRequest req) {
         final ServerExceptionRes res = basicExceptionRes(HttpStatus.INTERNAL_SERVER_ERROR, req);
         return new NotReadableExceptionRes(res, ex.getMessage());
     }
+
+    //------------------------------------------------------------------------------------------------------------------
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(MethodArgumentNotValidException.class)
@@ -69,6 +69,8 @@ public class ExceptionListener {
         return new InvalidDtoExceptionRes(res, errors);
     }
 
+    //------------------------------------------------------------------------------------------------------------------
+
     @ExceptionHandler(BasicServerException.class)
     public BasicDataExceptionRes handleBasicServerException(BasicServerException ex, HttpServletRequest req,
                                                             HttpServletResponse res) {
@@ -78,7 +80,9 @@ public class ExceptionListener {
         return new BasicDataExceptionRes(resData, ex.getMessage());
     }
 
-    @ExceptionHandler({ AuthenticationException.class, RuntimeException.class })
+    //------------------------------------------------------------------------------------------------------------------
+
+    @ExceptionHandler(AuthenticationException.class)
     public BasicDataExceptionRes handleAuthenticationException(AuthenticationException ex, HttpServletRequest req,
                                                                HttpServletResponse res) {
         final var resData = basicExceptionRes(HttpStatus.UNAUTHORIZED, req);
@@ -95,6 +99,8 @@ public class ExceptionListener {
                 .servletTimestampUTC(timeHelper.getCurrentUTC())
                 .build();
     }
+
+    //------------------------------------------------------------------------------------------------------------------
 
     private String mappingAuthorizationExceptionMessages(String rawMessage) {
         String messagePattern = "";

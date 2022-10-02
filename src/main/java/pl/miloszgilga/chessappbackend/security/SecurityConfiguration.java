@@ -18,8 +18,7 @@
 
 package pl.miloszgilga.chessappbackend.security;
 
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.*;
 
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -32,16 +31,11 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 
+import pl.miloszgilga.chessappbackend.oauth.*;
+import pl.miloszgilga.chessappbackend.filter.*;
+import pl.miloszgilga.chessappbackend.oauth.resolver.*;
 import pl.miloszgilga.chessappbackend.utils.CookieHelper;
 import pl.miloszgilga.chessappbackend.config.EnvironmentVars;
-import pl.miloszgilga.chessappbackend.filter.MiddlewareExceptionsFilter;
-import pl.miloszgilga.chessappbackend.filter.JwtTokenAuthenticationFilter;
-
-import pl.miloszgilga.chessappbackend.oauth.AppOidcUserService;
-import pl.miloszgilga.chessappbackend.oauth.AppOAuth2UserService;
-import pl.miloszgilga.chessappbackend.oauth.CookieOAuth2ReqRepository;
-import pl.miloszgilga.chessappbackend.oauth.resolver.OAuth2AuthFailureResolver;
-import pl.miloszgilga.chessappbackend.oauth.resolver.OAuth2AuthSuccessfulResolver;
 
 import static pl.miloszgilga.chessappbackend.config.ApplicationEndpoints.*;
 
@@ -63,6 +57,8 @@ public class SecurityConfiguration {
     private final OAuth2AuthFailureResolver oAuth2AuthFailureResolver;
     private final OAuth2AuthSuccessfulResolver oAuth2AuthSuccessfulResolver;
 
+    //------------------------------------------------------------------------------------------------------------------
+
     public static final String[] DISABLE_PATHS_FOR_JWT_FILTERING = {
             "/", "/error", "/oauth2/**", "/h2-console/**",
             NEWSLETTER_EMAIL_ENDPOINT + "/**",
@@ -70,6 +66,8 @@ public class SecurityConfiguration {
             AUTH_LOCAL_ENDPOINT + SIGNUP_VIA_LOCAL + "/**",
             EXPOSE_STATIC_DATA_ENDPOINT + "/**",
     };
+
+    //------------------------------------------------------------------------------------------------------------------
 
     public SecurityConfiguration(EnvironmentVars environment, JwtTokenAuthenticationFilter authFilter,
                                  AuthenticationRestEntryPoint restPoint, AppOidcUserService oidc, CookieHelper cookie,
@@ -87,6 +85,8 @@ public class SecurityConfiguration {
         this.oAuth2AuthFailureResolver = failureResolver;
         this.oAuth2AuthSuccessfulResolver = successfulResolver;
     }
+
+    //------------------------------------------------------------------------------------------------------------------
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -125,21 +125,29 @@ public class SecurityConfiguration {
         return http.build();
     }
 
+    //------------------------------------------------------------------------------------------------------------------
+
     @Bean
     public CookieOAuth2ReqRepository cookieOAuth2ReqRepository() {
         return new CookieOAuth2ReqRepository(cookieHelper, environment);
     }
+
+    //------------------------------------------------------------------------------------------------------------------
 
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder(environment.getPasswordEncoderStrength());
     }
 
+    //------------------------------------------------------------------------------------------------------------------
+
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration)
             throws Exception {
         return authenticationConfiguration.getAuthenticationManager();
     }
+
+    //------------------------------------------------------------------------------------------------------------------
 
     private void enableH2ConsoleForDevelopment(HttpSecurity http) throws Exception {
         if (!environment.getApplicationMode().equals(ApplicationMode.DEV.getModeName())) return;

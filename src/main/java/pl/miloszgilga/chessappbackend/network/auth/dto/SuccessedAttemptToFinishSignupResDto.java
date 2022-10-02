@@ -18,12 +18,9 @@
 
 package pl.miloszgilga.chessappbackend.network.auth.dto;
 
-import lombok.Data;
-import lombok.Builder;
-import lombok.AllArgsConstructor;
+import lombok.*;
 
 import java.util.Set;
-
 
 //----------------------------------------------------------------------------------------------------------------------
 
@@ -38,5 +35,5 @@ public class SuccessedAttemptToFinishSignupResDto {
     private boolean isDataFilled;
     private String responseMessage;
     private String authSupplier;
-    private Set<String> hashedEmails;
+    private Set<EmailHashWithNormalDto> userEmailAddresses;
 }

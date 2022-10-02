@@ -18,9 +18,7 @@
 
 package pl.miloszgilga.chessappbackend.dto;
 
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.AllArgsConstructor;
+import lombok.*;
 
 //----------------------------------------------------------------------------------------------------------------------
 
@@ -30,6 +28,8 @@ import lombok.AllArgsConstructor;
 public class SimpleTupleDto<T> implements Comparable<SimpleTupleDto<T>> {
     private T id;
     private String value;
+
+    //------------------------------------------------------------------------------------------------------------------
 
     @Override
     public int compareTo(SimpleTupleDto o) {

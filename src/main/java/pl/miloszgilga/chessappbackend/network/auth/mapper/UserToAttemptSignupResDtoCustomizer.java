@@ -28,8 +28,9 @@ import java.util.HashSet;
 
 import pl.miloszgilga.chessappbackend.security.SecurityHelper;
 import pl.miloszgilga.chessappbackend.utils.StringManipulator;
+
+import pl.miloszgilga.chessappbackend.network.auth.dto.*;
 import pl.miloszgilga.chessappbackend.network.auth.domain.LocalUserModel;
-import pl.miloszgilga.chessappbackend.network.auth.dto.SuccessedAttemptToFinishSignupResDto;
 
 //----------------------------------------------------------------------------------------------------------------------
 
@@ -41,10 +42,14 @@ public class UserToAttemptSignupResDtoCustomizer extends CustomMapper<LocalUserM
     private final StringManipulator manipulator;
     private final SecurityHelper securityHelper;
 
+    //------------------------------------------------------------------------------------------------------------------
+
     public UserToAttemptSignupResDtoCustomizer(StringManipulator manipulator, SecurityHelper securityHelper) {
         this.manipulator = manipulator;
         this.securityHelper = securityHelper;
     }
+
+    //------------------------------------------------------------------------------------------------------------------
 
     @Override
     public void mapAtoB(LocalUserModel user, SuccessedAttemptToFinishSignupResDto resDto, MappingContext context) {
@@ -61,6 +66,8 @@ public class UserToAttemptSignupResDtoCustomizer extends CustomMapper<LocalUserM
         hashedEmails.add(hashValue(user.getEmailAddress()));
         return hashedEmails;
     }
+
+    //------------------------------------------------------------------------------------------------------------------
 
     private String hashValue(String value) {
         return securityHelper.hashingStringValue(value, DELIMITER_HASH);

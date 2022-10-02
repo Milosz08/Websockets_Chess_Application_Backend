@@ -39,9 +39,13 @@ class JsonWebToken {
     private final SignatureAlgorithm signatureAlgorithm = SignatureAlgorithm.HS256;
     private final byte[] apiKeySecretBytes;
 
+    //------------------------------------------------------------------------------------------------------------------
+
     JsonWebToken(EnvironmentVars environment) {
         this.apiKeySecretBytes = DatatypeConverter.parseBase64Binary(environment.getJwtSecretKey());
     }
+
+    //------------------------------------------------------------------------------------------------------------------
 
     Key getSignatureKey() {
         return new SecretKeySpec(apiKeySecretBytes, signatureAlgorithm.getJcaName());

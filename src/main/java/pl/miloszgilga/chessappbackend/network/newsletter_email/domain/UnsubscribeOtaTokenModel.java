@@ -18,16 +18,12 @@
 
 package pl.miloszgilga.chessappbackend.network.newsletter_email.domain;
 
-import lombok.Getter;
-import lombok.Setter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.Date;
 import java.io.Serializable;
 
-import javax.persistence.Table;
-import javax.persistence.Column;
-import javax.persistence.Entity;
+import javax.persistence.*;
 
 import pl.miloszgilga.chessappbackend.audit.AuditableEntity;
 
@@ -45,11 +41,15 @@ public class UnsubscribeOtaTokenModel extends AuditableEntity implements Seriali
     @Column(name = "TOKEN_EXPIRED")     private Date tokenExpired;
     @Column(name = "ALREADY_USED")      private boolean alreadyUsed;
 
+    //------------------------------------------------------------------------------------------------------------------
+
     public UnsubscribeOtaTokenModel(String userEmail, String token, Date tokenExpired) {
         this.userEmail = userEmail;
         this.token = token;
         this.tokenExpired = tokenExpired;
     }
+
+    //------------------------------------------------------------------------------------------------------------------
 
     @Override
     public String toString() {

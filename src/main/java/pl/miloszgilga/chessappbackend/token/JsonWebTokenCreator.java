@@ -18,8 +18,7 @@
 
 package pl.miloszgilga.chessappbackend.token;
 
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.*;
 
 import org.javatuples.Pair;
 import org.springframework.stereotype.Component;
@@ -44,11 +43,15 @@ public class JsonWebTokenCreator {
     private final JsonWebToken jsonWebToken;
     private final EnvironmentVars environment;
 
+    //------------------------------------------------------------------------------------------------------------------
+
     public JsonWebTokenCreator(TimeHelper timeHelper, EnvironmentVars environment, JsonWebToken jsonWebToken) {
         this.timeHelper = timeHelper;
         this.environment = environment;
         this.jsonWebToken = jsonWebToken;
     }
+
+    //------------------------------------------------------------------------------------------------------------------
 
     public String createAcitivateServiceViaEmailToken(String email, String otaToken) {
         final Claims claims = Jwts.claims();
@@ -59,9 +62,13 @@ public class JsonWebTokenCreator {
         return basicJwtToken("unsubscribe-newsletter-token", claims);
     }
 
+    //------------------------------------------------------------------------------------------------------------------
+
     public String createAcitivateServiceViaEmailToken(LocalUserModel userModel, String otaToken) {
         return createAcitivateServiceViaEmailToken(userModel.getEmailAddress(), otaToken);
     }
+
+    //------------------------------------------------------------------------------------------------------------------
 
     public String createUserCredentialsToken(Authentication authentication) {
         final AuthUser localAuthUser = (AuthUser) authentication.getPrincipal();
@@ -78,6 +85,8 @@ public class JsonWebTokenCreator {
         return basicJwtToken("user-credentials", claims);
     }
 
+    //------------------------------------------------------------------------------------------------------------------
+
     public Pair<String, Date> createUserRefreshToken(LocalUserModel user) {
         final Claims claims = Jwts.claims();
         final Date expirationDate = timeHelper.addMonthsToCurrentDate(environment.getRefreshTokenExpiredMonths());
@@ -89,12 +98,16 @@ public class JsonWebTokenCreator {
         return new Pair<>(basicJwtToken("user-refresh-token", claims), expirationDate);
     }
 
+    //------------------------------------------------------------------------------------------------------------------
+
     public String createNonExpUnsubscribeNewsletterToken(String email) {
         final Claims claims = Jwts.claims();
         claims.put(EMAIL.getClaimName(), email);
         claims.put(IS_EXPIRED.getClaimName(), false);
         return basicJwtToken("non-expired-unsubscribe-newsletter-token", claims);
     }
+
+    //------------------------------------------------------------------------------------------------------------------
 
     private String basicJwtToken(String subject, Claims claims) {
         return Jwts.builder()

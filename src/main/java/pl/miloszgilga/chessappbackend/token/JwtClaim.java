@@ -34,5 +34,7 @@ public enum JwtClaim {
     USER_ID("userId"),
     FULL_NAME("fullName");
 
+    //------------------------------------------------------------------------------------------------------------------
+
     private final String claimName;
 }

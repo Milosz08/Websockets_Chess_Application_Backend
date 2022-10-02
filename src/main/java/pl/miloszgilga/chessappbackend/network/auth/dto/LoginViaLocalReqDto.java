@@ -19,10 +19,7 @@
 package pl.miloszgilga.chessappbackend.network.auth.dto;
 
 import lombok.Data;
-
-import javax.validation.constraints.Size;
-import javax.validation.constraints.Pattern;
-import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.*;
 
 import static pl.miloszgilga.chessappbackend.validator.RegexPattern.PASSWORD_PATTERN;
 
@@ -34,6 +31,8 @@ public class LoginViaLocalReqDto {
     @NotBlank(message = "{jpa.validator.usernameEmail.notBlank}")
     @Size(max = 100, message = "{jpa.validator.usernameEmail.size}")
     private String usernameEmail;
+
+    //------------------------------------------------------------------------------------------------------------------
 
     @NotBlank(message = "{jpa.validator.password.notBlank}")
     @Pattern(regexp = PASSWORD_PATTERN, message = "{jpa.validator.password.regex}")

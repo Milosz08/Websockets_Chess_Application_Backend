@@ -18,17 +18,14 @@
 
 package pl.miloszgilga.chessappbackend.injector;
 
+import org.springframework.boot.*;
 import org.springframework.stereotype.Component;
-import org.springframework.boot.ApplicationRunner;
-import org.springframework.boot.ApplicationArguments;
 
 import java.util.Set;
-import java.util.stream.Stream;
-import java.util.stream.Collectors;
+import java.util.stream.*;
 
+import pl.miloszgilga.chessappbackend.network.auth.domain.*;
 import pl.miloszgilga.chessappbackend.security.LocalUserRole;
-import pl.miloszgilga.chessappbackend.network.auth.domain.LocalUserRoleModel;
-import pl.miloszgilga.chessappbackend.network.auth.domain.ILocalUserRoleRepository;
 
 //----------------------------------------------------------------------------------------------------------------------
 
@@ -38,12 +35,16 @@ class LocalUserRolesInjector implements ApplicationRunner {
     private final ILocalUserRoleRepository repository;
     private final Set<String> userRoles;
 
+    //------------------------------------------------------------------------------------------------------------------
+
     LocalUserRolesInjector(ILocalUserRoleRepository repository) {
         this.repository = repository;
         this.userRoles = Stream.of(LocalUserRole.values())
                 .map(LocalUserRole::getRoleName)
                 .collect(Collectors.toSet());
     }
+
+    //------------------------------------------------------------------------------------------------------------------
 
     @Override
     public void run(ApplicationArguments args) {

@@ -20,23 +20,16 @@ package pl.miloszgilga.chessappbackend.security;
 
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.security.oauth2.client.endpoint.*;
 import org.springframework.http.converter.FormHttpMessageConverter;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.oauth2.client.http.OAuth2ErrorResponseErrorHandler;
-import org.springframework.security.oauth2.client.endpoint.OAuth2AccessTokenResponseClient;
-import org.springframework.security.oauth2.client.endpoint.OAuth2AuthorizationCodeGrantRequest;
-import org.springframework.security.oauth2.client.endpoint.DefaultAuthorizationCodeTokenResponseClient;
 import org.springframework.security.oauth2.core.http.converter.OAuth2AccessTokenResponseHttpMessageConverter;
 
-import java.util.Set;
-import java.util.List;
-import java.util.Arrays;
-import java.util.ArrayList;
+import java.util.*;
 
-import pl.miloszgilga.chessappbackend.oauth.AuthUser;
-import pl.miloszgilga.chessappbackend.oauth.OAuth2CustomTokenConverter;
-import pl.miloszgilga.chessappbackend.network.auth.domain.LocalUserModel;
-import pl.miloszgilga.chessappbackend.network.auth.domain.LocalUserRoleModel;
+import pl.miloszgilga.chessappbackend.oauth.*;
+import pl.miloszgilga.chessappbackend.network.auth.domain.*;
 
 //----------------------------------------------------------------------------------------------------------------------
 
@@ -51,9 +44,13 @@ public class SecurityHelper {
         return authorities;
     }
 
+    //------------------------------------------------------------------------------------------------------------------
+
     AuthUser generateSecurityUserByModelData(final LocalUserModel model) {
         return new AuthUser(model, generateSimpleGrantedAuthorities(model.getRoles()));
     }
+
+    //------------------------------------------------------------------------------------------------------------------
 
     OAuth2AccessTokenResponseClient<OAuth2AuthorizationCodeGrantRequest> authTokenCodeResponseToTheClient() {
         final var converter = new OAuth2AccessTokenResponseHttpMessageConverter();
@@ -64,6 +61,8 @@ public class SecurityHelper {
         responseClient.setRestOperations(template);
         return responseClient;
     }
+
+    //------------------------------------------------------------------------------------------------------------------
 
     public String hashingStringValue(String value, char hashChar) {
         final String hashedPart = value.substring(0, value.indexOf('@'));

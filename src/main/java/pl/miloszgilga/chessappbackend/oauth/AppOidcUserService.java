@@ -21,14 +21,13 @@ package pl.miloszgilga.chessappbackend.oauth;
 import org.springframework.stereotype.Service;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.oauth2.client.oidc.userinfo.*;
 import org.springframework.security.oauth2.core.oidc.user.OidcUser;
 import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
-import org.springframework.security.oauth2.client.oidc.userinfo.OidcUserRequest;
-import org.springframework.security.oauth2.client.oidc.userinfo.OidcUserService;
 
+import pl.miloszgilga.chessappbackend.network.auth.AuthService;
 import pl.miloszgilga.chessappbackend.exception.custom.AuthException;
 import pl.miloszgilga.chessappbackend.oauth.dto.OAuth2RegistrationData;
-import pl.miloszgilga.chessappbackend.network.auth.AuthService;
 
 import static pl.miloszgilga.chessappbackend.oauth.CredentialsSupplier.findSupplierBasedRegistrationId;
 
@@ -39,9 +38,13 @@ public class AppOidcUserService extends OidcUserService {
 
     private final AuthService authService;
 
+    //------------------------------------------------------------------------------------------------------------------
+
     public AppOidcUserService(@Lazy AuthService authService) {
         this.authService = authService;
     }
+
+    //------------------------------------------------------------------------------------------------------------------
 
     @Override
     public OidcUser loadUser(OidcUserRequest userRequest) throws OAuth2AuthenticationException {

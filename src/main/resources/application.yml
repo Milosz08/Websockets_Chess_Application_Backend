@@ -1,31 +1,31 @@
 spring:
-  main.banner-mode: off
-  mvc.log-resolved-exception: false
-  devtools.restart.log-condition-evaluation-delta: false
-  jpa:
-    open-in-view: false
-    hibernate.ddl-auto: none
-    hibernate:
-      naming:
-        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
-  liquibase:
-    enabled: true
-  mail:
-    host: localhost
-    default-encoding: UTF-8
-    test-connection: false
-  web:
-    locale: en_US
-  security.oauth2.client.provider.facebook:
-    user-info-uri: https://graph.facebook.com/me?fields=id,name,email,picture
+    main.banner-mode: off
+    mvc.log-resolved-exception: false
+    devtools.restart.log-condition-evaluation-delta: false
+    jpa:
+        open-in-view: false
+        hibernate.ddl-auto: none
+        hibernate:
+            naming:
+                physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+    liquibase:
+        enabled: true
+    mail:
+        host: localhost
+        default-encoding: UTF-8
+        test-connection: false
+    web:
+        locale: en_US
+    security.oauth2.client.provider.facebook:
+        user-info-uri: https://graph.facebook.com/me?fields=id,name,email,picture
 
 logging:
-  pattern:
-    console: "%d{yyyy-MM-dd HH:mm:ss} %5level [%15thread] %-50logger{36} : %msg%n"
-    file: "%d{yyyy-MM-dd HH:mm:ss} %5level [%15thread] %-50logger{36} : %msg%n"
-  file:
-    max-history: 40
-    max-size: 10MB
+    pattern:
+        console: "%d{yyyy-MM-dd HH:mm:ss} %5level [%15thread] %-50logger{36} : %msg%n"
+        file: "%d{yyyy-MM-dd HH:mm:ss} %5level [%15thread] %-50logger{36} : %msg%n"
+    file:
+        max-history: 40
+        max-size: 10MB
 
 config:
   newsletter-unsubscribe-path: /unsubscribe-newsletter/
@@ -33,17 +33,17 @@ config:
   cors-max-age-seconds: 3600
 
 authorization:
-  one-time-access-token:
-    token-expired-minutes: 10
-    token-length: 10
-  bearer-token:
-    token-expired-minutes: 5
-  refresh-token:
-    token-expired-months: 3
-  oauth2-custom:
-    session-remember-cookie-name: oauth2_auth_request
-    base-redirect-uri-cookie-name: base_uri
-    after-login-redirect-uri-cookie-name: after_login_uri
-    after-signup-redirect-uri-cookie-name: after_signup_uri
-    cookie-expired-minutes: 3
-    password-replacer: ${env.DEV_PROD_OAUTH2_PASSWORD_REPLACER}
+    one-time-access-token:
+        token-expired-minutes: 10
+        token-length: 10
+    bearer-token:
+        token-expired-minutes: 5
+    refresh-token:
+        token-expired-months: 3
+    oauth2-custom:
+        session-remember-cookie-name: oauth2_auth_request
+        base-redirect-uri-cookie-name: base_uri
+        after-login-redirect-uri-cookie-name: after_login_uri
+        after-signup-redirect-uri-cookie-name: after_signup_uri
+        cookie-expired-minutes: 3
+        password-replacer: ${env.DEV_PROD_OAUTH2_PASSWORD_REPLACER}

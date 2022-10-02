@@ -20,18 +20,16 @@ package pl.miloszgilga.chessappbackend.oauth;
 
 import org.springframework.stereotype.Service;
 import org.springframework.context.annotation.Lazy;
+import org.springframework.security.oauth2.client.userinfo.*;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
 import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
-import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
 
-import java.util.Map;
-import java.util.HashMap;
+import java.util.*;
 
+import pl.miloszgilga.chessappbackend.network.auth.AuthService;
 import pl.miloszgilga.chessappbackend.exception.custom.AuthException;
 import pl.miloszgilga.chessappbackend.oauth.dto.OAuth2RegistrationData;
-import pl.miloszgilga.chessappbackend.network.auth.AuthService;
 
 import static pl.miloszgilga.chessappbackend.oauth.CredentialsSupplier.findSupplierBasedRegistrationId;
 
@@ -42,9 +40,13 @@ public class AppOAuth2UserService extends DefaultOAuth2UserService {
 
     private final AuthService authService;
 
+    //------------------------------------------------------------------------------------------------------------------
+
     public AppOAuth2UserService(@Lazy AuthService authService) {
         this.authService = authService;
     }
+
+    //------------------------------------------------------------------------------------------------------------------
 
     @Override
     public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {

@@ -18,9 +18,7 @@
 
 package pl.miloszgilga.chessappbackend.network.auth.domain;
 
-import lombok.Getter;
-import lombok.Setter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.Set;
 import java.io.Serializable;
@@ -69,6 +67,8 @@ public class LocalUserModel extends AuditableEntity implements Serializable {
             inverseJoinColumns = { @JoinColumn(name = "LOCAL_USER_ROLE_ID") })
     private Set<LocalUserRoleModel> roles;
 
+    //------------------------------------------------------------------------------------------------------------------
+
     public LocalUserModel(
             String nickname, String firstName, String lastName, String emailAddress, String password,
             CredentialsSupplier credentialsSupplier, String supplierUserId, Boolean isActivated, Boolean isBlocked
@@ -83,6 +83,8 @@ public class LocalUserModel extends AuditableEntity implements Serializable {
         this.isActivated = isActivated;
         this.isBlocked = isBlocked;
     }
+
+    //------------------------------------------------------------------------------------------------------------------
 
     @Override
     public String toString() {

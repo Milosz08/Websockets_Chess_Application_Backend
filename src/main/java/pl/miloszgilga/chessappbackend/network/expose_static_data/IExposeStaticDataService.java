@@ -18,9 +18,7 @@
 
 package pl.miloszgilga.chessappbackend.network.expose_static_data;
 
-import pl.miloszgilga.chessappbackend.network.expose_static_data.dto.SignupGenderDataResDto;
-import pl.miloszgilga.chessappbackend.network.expose_static_data.dto.SignupCountryDataResDto;
-import pl.miloszgilga.chessappbackend.network.expose_static_data.dto.SignupCalendarDataResDto;
+import pl.miloszgilga.chessappbackend.network.expose_static_data.dto.*;
 
 //----------------------------------------------------------------------------------------------------------------------
 

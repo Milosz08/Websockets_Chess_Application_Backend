@@ -24,12 +24,8 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
-import pl.miloszgilga.chessappbackend.dto.SimpleJwtTokenReqDto;
-import pl.miloszgilga.chessappbackend.dto.SimpleOtaTokenReqDto;
-import pl.miloszgilga.chessappbackend.dto.SimpleServerMessageDto;
-
-import pl.miloszgilga.chessappbackend.network.newsletter_email.dto.EmailNewsletterReqDto;
-import pl.miloszgilga.chessappbackend.network.newsletter_email.dto.AttemptToUnsubscribeReqDto;
+import pl.miloszgilga.chessappbackend.dto.*;
+import pl.miloszgilga.chessappbackend.network.newsletter_email.dto.*;
 
 import static pl.miloszgilga.chessappbackend.config.ApplicationEndpoints.*;
 
@@ -41,19 +37,27 @@ class NewsletterEmailController {
 
     private final NewsletterEmailService service;
 
+    //------------------------------------------------------------------------------------------------------------------
+
     NewsletterEmailController(NewsletterEmailService service) {
         this.service = service;
     }
+
+    //------------------------------------------------------------------------------------------------------------------
 
     @PostMapping(NEWSLETTER_SUBSCRIBE)
     ResponseEntity<SimpleServerMessageDto> subscribeNewsletter(@Valid @RequestBody EmailNewsletterReqDto req) {
         return new ResponseEntity<>(service.subscribeNewsletter(req), HttpStatus.CREATED);
     }
 
+    //------------------------------------------------------------------------------------------------------------------
+
     @PostMapping(NEWSLETTER_ATTEMPT_UNSUBSCRIBE)
     ResponseEntity<SimpleServerMessageDto> attemptToUnsubscribeNewsletter(@Valid @RequestBody AttemptToUnsubscribeReqDto req) {
         return new ResponseEntity<>(service.attemptToUnsubscribeNewsletter(req), HttpStatus.OK);
     }
+
+    //------------------------------------------------------------------------------------------------------------------
 
     @DeleteMapping(NEWSLETTER_UNSUBSCRIBE_VIA_OTA)
     ResponseEntity<SimpleServerMessageDto> unsubscribeNewsletterViaOta(@Valid @RequestBody SimpleOtaTokenReqDto req) {

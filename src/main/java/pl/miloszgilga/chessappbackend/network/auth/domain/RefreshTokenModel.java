@@ -49,6 +49,8 @@ public class RefreshTokenModel extends AuditableEntity implements Serializable {
     @JoinColumn(name = "LOCAL_USER_ID", referencedColumnName = "ID")
     private LocalUserModel localUser;
 
+    //------------------------------------------------------------------------------------------------------------------
+
     @Override
     public String toString() {
         return "RefreshTokenModel{" +

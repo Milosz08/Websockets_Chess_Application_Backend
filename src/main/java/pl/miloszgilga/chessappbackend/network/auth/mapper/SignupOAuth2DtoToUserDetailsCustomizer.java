@@ -23,9 +23,8 @@ import ma.glasnost.orika.MappingContext;
 
 import org.springframework.stereotype.Component;
 
-import pl.miloszgilga.chessappbackend.oauth.user_info.OAuth2UserInfo;
+import pl.miloszgilga.chessappbackend.oauth.user_info.*;
 import pl.miloszgilga.chessappbackend.oauth.dto.OAuth2RegistrationData;
-import pl.miloszgilga.chessappbackend.oauth.user_info.OAuth2UserInfoFactory;
 import pl.miloszgilga.chessappbackend.network.auth.domain.LocalUserDetailsModel;
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -35,9 +34,13 @@ public class SignupOAuth2DtoToUserDetailsCustomizer extends CustomMapper<OAuth2R
 
     private final OAuth2UserInfoFactory userInfoFactory;
 
+    //------------------------------------------------------------------------------------------------------------------
+
     public SignupOAuth2DtoToUserDetailsCustomizer(OAuth2UserInfoFactory userInfoFactory) {
         this.userInfoFactory = userInfoFactory;
     }
+
+    //------------------------------------------------------------------------------------------------------------------
 
     @Override
     public void mapAtoB(OAuth2RegistrationData data, LocalUserDetailsModel detModel, MappingContext context) {

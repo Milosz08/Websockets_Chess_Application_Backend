@@ -39,13 +39,19 @@ public class SignupViaLocalReqDto {
     @Pattern(regexp = NICKNAME_PATTERN, message = "{jpa.validator.nickname.regex}")
     private String nickname;
 
+    //------------------------------------------------------------------------------------------------------------------
+
     @NotBlank(message = "{jpa.validator.firstName.notBlank}")
     @Pattern(regexp = NAME_SURNAME_PATTERN, message = "{jpa.validator.firstName.regex}")
     private String firstName;
 
+    //------------------------------------------------------------------------------------------------------------------
+
     @NotBlank(message = "{jpa.validator.lastName.notBlank}")
     @Pattern(regexp = NAME_SURNAME_PATTERN, message = "{jpa.validator.lastName.regex}")
     private String lastName;
+
+    //------------------------------------------------------------------------------------------------------------------
 
     @NotBlank(message = "{jpa.validator.emailAddress.notBlank}")
     @Email(message = "{jpa.validator.emailAddress.pattern}")
@@ -53,30 +59,44 @@ public class SignupViaLocalReqDto {
     @ValidateEmailAlreadyExist(message = "{jpa.validator.emailAddress.notRepeat}")
     private String emailAddress;
 
+    //------------------------------------------------------------------------------------------------------------------
+
     @NotNull(message = "{jpa.validator.secondEmailAddress.notNull}")
     @Email(message = "{jpa.validator.secondEmailAddress.pattern}")
     @Size(max = 100, message = "{jpa.validator.secondEmailAddress.size}")
     private String secondEmailAddress;
+
+    //------------------------------------------------------------------------------------------------------------------
 
     @NotBlank(message = "{jpa.validator.birthDate.notBlank}")
     @Pattern(regexp = BIRTH_DATE_PATTERN, message = "{jpa.validator.birthDate.regex}")
     @ValidateFutureTimeDate(message = "{jpa.validator.birthDate.futureDate}")
     private String birthDate;
 
+    //------------------------------------------------------------------------------------------------------------------
+
     @NotBlank(message = "{jpa.validator.countryName.notBlank}")
     @ValidateCountry(message = "{jpa.validator.countryName.notExist}")
     private String countryName;
+
+    //------------------------------------------------------------------------------------------------------------------
 
     @NotBlank(message = "{jpa.validator.gender.notBlank}")
     @ValidateEnum(enumClazz = UserGenderSpecific.class, message = "{jpa.validator.gender.notExist}")
     private String gender;
 
+    //------------------------------------------------------------------------------------------------------------------
+
     @NotBlank(message = "{jpa.validator.password.notBlank}")
     @Pattern(regexp = PASSWORD_PATTERN, message = "{jpa.validator.password.regex}")
     private String password;
 
+    //------------------------------------------------------------------------------------------------------------------
+
     @NotBlank(message = "{jpa.validator.passwordRepeat.notBlank}")
     private String passwordRepeat;
+
+    //------------------------------------------------------------------------------------------------------------------
 
     @NotNull(message = "{jpa.validator.hasNewsletterAccept.notNull}")
     private Boolean hasNewsletterAccept;

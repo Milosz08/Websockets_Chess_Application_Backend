@@ -18,9 +18,7 @@
 
 package pl.miloszgilga.chessappbackend.network.auth.domain;
 
-import lombok.Getter;
-import lombok.Setter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.Table;
 import javax.persistence.Entity;
@@ -45,9 +43,13 @@ public class LocalUserRoleModel extends AuditableEntity implements Serializable 
     @Column(name = "ROLE_NAME")        private LocalUserRole roleName;
     @ManyToMany(mappedBy = "roles")    private Set<LocalUserModel> users;
 
+    //------------------------------------------------------------------------------------------------------------------
+
     public LocalUserRoleModel(LocalUserRole roleName) {
         this.roleName = roleName;
     }
+
+    //------------------------------------------------------------------------------------------------------------------
 
     @Override
     public String toString() {

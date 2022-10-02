@@ -21,10 +21,9 @@ package pl.miloszgilga.chessappbackend.utils;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 
+import java.text.*;
 import java.time.Year;
 import java.util.Date;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 
 import pl.miloszgilga.chessappbackend.exception.custom.BasicServerException;
 
@@ -36,17 +35,25 @@ public class TimeHelper {
     private final SimpleDateFormat dateTimeFormatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
     private final SimpleDateFormat dateFormatter = new SimpleDateFormat("dd/MM/yyyy");
 
+    //------------------------------------------------------------------------------------------------------------------
+
     public Date addMinutesToCurrentDate(int minutes) {
         return new Date(new Date().getTime() + ((long) minutes * 60 * 1000));
     }
+
+    //------------------------------------------------------------------------------------------------------------------
 
     public Date addMonthsToCurrentDate(int months) {
         return new Date(new Date().getTime() + ((long) months * 31 * 24 * 60 * 60 * 1000));
     }
 
+    //------------------------------------------------------------------------------------------------------------------
+
     public int currentYearMinusAcceptableAge() {
         return Year.now().getValue() - 10;
     }
+
+    //------------------------------------------------------------------------------------------------------------------
 
     public Date convertStringDateToDateObject(String date) {
         try {
@@ -55,6 +62,8 @@ public class TimeHelper {
             throw new BasicServerException(HttpStatus.EXPECTATION_FAILED, "Unhandled date format.");
         }
     }
+
+    //------------------------------------------------------------------------------------------------------------------
 
     public String getCurrentUTC() {
         return dateTimeFormatter.format(new Date());

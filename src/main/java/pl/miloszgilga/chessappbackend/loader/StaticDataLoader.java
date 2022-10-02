@@ -23,8 +23,7 @@ import org.slf4j.LoggerFactory;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 
 //----------------------------------------------------------------------------------------------------------------------
 
@@ -37,11 +36,15 @@ public class StaticDataLoader<T extends LoaderModel> {
     private final Class<T> mappedTypeClazz;
     private T loadedData;
 
+    //------------------------------------------------------------------------------------------------------------------
+
     public StaticDataLoader(StaticDataLoaderFileName fileName, Class<T> mappedTypeClazz) {
         this.fileName = fileName.getFileName();
         this.mappedTypeClazz = mappedTypeClazz;
         loadDataFromFile();
     }
+
+    //------------------------------------------------------------------------------------------------------------------
 
     private void loadDataFromFile() {
         final ObjectMapper objectMapper = new ObjectMapper();
@@ -55,6 +58,8 @@ public class StaticDataLoader<T extends LoaderModel> {
             LOGGER.error("File: {} not exist or is corrupted", fileName);
         }
     }
+
+    //------------------------------------------------------------------------------------------------------------------
 
     public T getLoadedData() {
         return loadedData;

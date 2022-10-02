@@ -19,11 +19,7 @@
 package pl.miloszgilga.chessappbackend.network.newsletter_email.dto;
 
 import lombok.*;
-
-import javax.validation.constraints.Size;
-import javax.validation.constraints.Email;
-import javax.validation.constraints.Pattern;
-import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.*;
 
 import static pl.miloszgilga.chessappbackend.validator.RegexPattern.NAME_SURNAME_PATTERN;
 
@@ -35,6 +31,8 @@ public class EmailNewsletterReqDto {
     @NotBlank(message = "{jpa.validator.username.notBlank}")
     @Pattern(regexp = NAME_SURNAME_PATTERN, message = "{jpa.validator.username.regex}")
     private String userName;
+
+    //------------------------------------------------------------------------------------------------------------------
 
     @NotBlank(message = "{jpa.validator.emailAddress.notBlank}")
     @Email(message = "{jpa.validator.emailAddress.pattern}")

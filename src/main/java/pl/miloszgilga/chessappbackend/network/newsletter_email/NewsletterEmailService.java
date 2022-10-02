@@ -21,26 +21,24 @@ package pl.miloszgilga.chessappbackend.network.newsletter_email;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import org.javatuples.Pair;
 import org.springframework.stereotype.Service;
+
 import static org.springframework.http.HttpStatus.EXPECTATION_FAILED;
 
 import java.util.Optional;
 import javax.transaction.Transactional;
 
-import pl.miloszgilga.chessappbackend.mail.MailOutService;
-import pl.miloszgilga.chessappbackend.utils.StringManipulator;
-import pl.miloszgilga.chessappbackend.dto.SimpleJwtTokenReqDto;
-import pl.miloszgilga.chessappbackend.dto.SimpleOtaTokenReqDto;
-import pl.miloszgilga.chessappbackend.token.JsonWebTokenCreator;
-import pl.miloszgilga.chessappbackend.dto.SimpleServerMessageDto;
-import pl.miloszgilga.chessappbackend.token.JsonWebTokenVerificator;
+import pl.miloszgilga.chessappbackend.dto.*;
+import pl.miloszgilga.chessappbackend.utils.*;
+import pl.miloszgilga.chessappbackend.token.*;
+import pl.miloszgilga.chessappbackend.mail.IMailOutService;
+import pl.miloszgilga.chessappbackend.config.EnvironmentVars;
 import pl.miloszgilga.chessappbackend.exception.custom.EmailException.*;
 import pl.miloszgilga.chessappbackend.token.dto.ActivateServiceViaEmailTokenClaims;
 
-import pl.miloszgilga.chessappbackend.network.newsletter_email.dto.EmailNewsletterReqDto;
-import pl.miloszgilga.chessappbackend.network.newsletter_email.domain.NewsletterEmailModel;
-import pl.miloszgilga.chessappbackend.network.newsletter_email.dto.AttemptToUnsubscribeReqDto;
-import pl.miloszgilga.chessappbackend.network.newsletter_email.domain.INewsletterEmailRepository;
+import pl.miloszgilga.chessappbackend.network.newsletter_email.dto.*;
+import pl.miloszgilga.chessappbackend.network.newsletter_email.domain.*;
 
 //----------------------------------------------------------------------------------------------------------------------
 
@@ -68,6 +66,8 @@ class NewsletterEmailService implements INewsletterEmailService {
         this.manipulator = manipulator;
     }
 
+    //------------------------------------------------------------------------------------------------------------------
+
     @Override
     @Transactional
     public SimpleServerMessageDto subscribeNewsletter(final EmailNewsletterReqDto req) {
@@ -83,6 +83,8 @@ class NewsletterEmailService implements INewsletterEmailService {
         return new SimpleServerMessageDto(String.format("Email '%s' was succesfully added to newsletter.", emailAddress));
     }
 
+    //------------------------------------------------------------------------------------------------------------------
+
     @Override
     @Transactional
     public SimpleServerMessageDto attemptToUnsubscribeNewsletter(final AttemptToUnsubscribeReqDto req) {
@@ -96,6 +98,8 @@ class NewsletterEmailService implements INewsletterEmailService {
         return new SimpleServerMessageDto(String.format("Message has been send to the email '%s'.", email));
     }
 
+    //------------------------------------------------------------------------------------------------------------------
+
     @Override
     @Transactional
     public SimpleServerMessageDto unsubscribeNewsletterViaOta(final SimpleOtaTokenReqDto token) {
@@ -108,6 +112,8 @@ class NewsletterEmailService implements INewsletterEmailService {
         return new SimpleServerMessageDto(String.format("The newsletter subscription service from the email " +
                         "address '%s' has been successfully deleted.", emailAddress));
     }
+
+    //------------------------------------------------------------------------------------------------------------------
 
     @Override
     @Transactional

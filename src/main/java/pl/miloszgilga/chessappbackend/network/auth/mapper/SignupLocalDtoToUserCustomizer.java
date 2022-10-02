@@ -18,9 +18,7 @@
 
 package pl.miloszgilga.chessappbackend.network.auth.mapper;
 
-import ma.glasnost.orika.CustomMapper;
-import ma.glasnost.orika.MappingContext;
-
+import ma.glasnost.orika.*;
 import org.springframework.stereotype.Component;
 
 import pl.miloszgilga.chessappbackend.network.auth.AuthServiceHelper;
@@ -36,9 +34,13 @@ public class SignupLocalDtoToUserCustomizer extends CustomMapper<SignupViaLocalR
 
     private final AuthServiceHelper helper;
 
+    //------------------------------------------------------------------------------------------------------------------
+
     public SignupLocalDtoToUserCustomizer(AuthServiceHelper helper) {
         this.helper = helper;
     }
+
+    //------------------------------------------------------------------------------------------------------------------
 
     @Override
     public void mapAtoB(SignupViaLocalReqDto reqDto, LocalUserModel userModel, MappingContext context) {

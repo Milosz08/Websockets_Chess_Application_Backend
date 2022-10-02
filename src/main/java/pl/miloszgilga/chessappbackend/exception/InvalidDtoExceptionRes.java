@@ -29,6 +29,8 @@ class InvalidDtoExceptionRes extends ServerExceptionRes {
 
     private final List<String> errors;
 
+    //------------------------------------------------------------------------------------------------------------------
+
     InvalidDtoExceptionRes(ServerExceptionRes res, List<String> errors) {
         super(res.getServletTimestampUTC(), res.getStatusCode(), res.getStatusText(), res.getPath(), res.getMethod());
         this.errors = errors;

@@ -21,8 +21,7 @@ package pl.miloszgilga.chessappbackend.validator.constraint;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.validation.ConstraintValidator;
-import javax.validation.ConstraintValidatorContext;
+import javax.validation.*;
 
 import pl.miloszgilga.chessappbackend.exception.custom.EmailException;
 import pl.miloszgilga.chessappbackend.network.auth.dto.SignupViaLocalReqDto;
@@ -33,6 +32,8 @@ import pl.miloszgilga.chessappbackend.validator.annotation.ValidateSecondEmailNo
 public class SecondEmailNotRepeatValidator implements ConstraintValidator<ValidateSecondEmailNotRepeat, SignupViaLocalReqDto> {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(SecondEmailNotRepeatValidator.class);
+
+    //------------------------------------------------------------------------------------------------------------------
 
     @Override
     public boolean isValid(final SignupViaLocalReqDto req, final ConstraintValidatorContext context) {

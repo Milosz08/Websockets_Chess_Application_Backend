@@ -19,10 +19,7 @@
 package pl.miloszgilga.chessappbackend.network.newsletter_email.dto;
 
 import lombok.Data;
-
-import javax.validation.constraints.Size;
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.*;
 
 //----------------------------------------------------------------------------------------------------------------------
 

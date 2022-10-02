@@ -20,10 +20,7 @@ package pl.miloszgilga.chessappbackend.dto;
 
 import lombok.Data;
 
-import javax.validation.constraints.Size;
-import javax.validation.constraints.Email;
-import javax.validation.constraints.Pattern;
-import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.*;
 
 import static pl.miloszgilga.chessappbackend.validator.RegexPattern.OTA_TOKEN_PATTERN;
 
@@ -35,6 +32,8 @@ public class SimpleOtaTokenReqDto {
     @NotBlank(message = "{jpa.validator.otaToken.notBlank}")
     @Pattern(regexp = OTA_TOKEN_PATTERN, message = "{jpa.validator.otaToken.regex}")
     private String token;
+
+    //------------------------------------------------------------------------------------------------------------------
 
     @NotBlank(message = "{jpa.validator.emailAddress.notBlank}")
     @Email(message = "{jpa.validator.emailAddress.pattern}")

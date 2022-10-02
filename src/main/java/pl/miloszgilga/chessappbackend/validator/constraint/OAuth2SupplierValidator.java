@@ -21,11 +21,8 @@ package pl.miloszgilga.chessappbackend.validator.constraint;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.validation.ConstraintValidator;
-import javax.validation.ConstraintValidatorContext;
-
-import java.util.Set;
-import java.util.HashSet;
+import java.util.*;
+import javax.validation.*;
 
 import pl.miloszgilga.chessappbackend.oauth.CredentialsSupplier;
 import pl.miloszgilga.chessappbackend.validator.annotation.ValidateOAuth2Supplier;
@@ -38,10 +35,14 @@ public class OAuth2SupplierValidator implements ConstraintValidator<ValidateOAut
 
     private Set<String> availableSuppliers = new HashSet<>();
 
+    //------------------------------------------------------------------------------------------------------------------
+
     @Override
     public void initialize(ValidateOAuth2Supplier constraintAnnotation) {
         availableSuppliers = CredentialsSupplier.getOAuth2Suppliers();
     }
+
+    //------------------------------------------------------------------------------------------------------------------
 
     @Override
     public boolean isValid(String supplierName, ConstraintValidatorContext context) {

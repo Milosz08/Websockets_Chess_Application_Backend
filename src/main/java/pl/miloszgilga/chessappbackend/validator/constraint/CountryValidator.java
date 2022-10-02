@@ -21,11 +21,9 @@ package pl.miloszgilga.chessappbackend.validator.constraint;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.validation.ConstraintValidator;
-import javax.validation.ConstraintValidatorContext;
+import javax.validation.*;
 
-import java.util.List;
-import java.util.Locale;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import pl.miloszgilga.chessappbackend.validator.annotation.ValidateCountry;
@@ -40,9 +38,13 @@ public class CountryValidator implements ConstraintValidator<ValidateCountry, St
     private final CountryPropertiesLoader loader;
     private List<String> availableCountries;
 
+    //------------------------------------------------------------------------------------------------------------------
+
     public CountryValidator(CountryPropertiesLoader loader) {
         this.loader = loader;
     }
+
+    //------------------------------------------------------------------------------------------------------------------
 
     @Override
     public void initialize(ValidateCountry constraintAnnotation) {
@@ -50,6 +52,8 @@ public class CountryValidator implements ConstraintValidator<ValidateCountry, St
                 .map(x -> x.toLowerCase(Locale.ROOT))
                 .collect(Collectors.toList());
     }
+
+    //------------------------------------------------------------------------------------------------------------------
 
     @Override
     public boolean isValid(String countryName, ConstraintValidatorContext context) {

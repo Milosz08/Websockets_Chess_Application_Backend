@@ -18,9 +18,7 @@
 
 package pl.miloszgilga.chessappbackend.mail;
 
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Primary;
-import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.*;
 import org.springframework.ui.freemarker.FreeMarkerConfigurationFactoryBean;
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -29,6 +27,8 @@ import org.springframework.ui.freemarker.FreeMarkerConfigurationFactoryBean;
 public class MailConfigurationInjector {
 
     private static final String TEMPLATES_PATH = "classpath:/templates";
+
+    //------------------------------------------------------------------------------------------------------------------
 
     @Primary
     @Bean

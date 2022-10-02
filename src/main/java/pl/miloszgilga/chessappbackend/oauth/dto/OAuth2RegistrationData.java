@@ -18,11 +18,9 @@
 
 package pl.miloszgilga.chessappbackend.oauth.dto;
 
-import lombok.Data;
-import lombok.AllArgsConstructor;
+import lombok.*;
 
-import org.springframework.security.oauth2.core.oidc.OidcIdToken;
-import org.springframework.security.oauth2.core.oidc.OidcUserInfo;
+import org.springframework.security.oauth2.core.oidc.*;
 
 import java.util.Map;
 
@@ -37,6 +35,8 @@ public class OAuth2RegistrationData {
     private Map<String, Object> attributes;
     private OidcIdToken idToken;
     private OidcUserInfo userInfo;
+
+    //------------------------------------------------------------------------------------------------------------------
 
     public OAuth2RegistrationData(CredentialsSupplier supplier, Map<String, Object> attributes) {
         this.supplier = supplier;

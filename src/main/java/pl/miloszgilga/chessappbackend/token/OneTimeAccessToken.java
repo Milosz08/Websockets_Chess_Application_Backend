@@ -21,8 +21,7 @@ package pl.miloszgilga.chessappbackend.token;
 import org.springframework.stereotype.Component;
 
 import java.util.Random;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import java.util.regex.*;
 
 import pl.miloszgilga.chessappbackend.config.EnvironmentVars;
 
@@ -38,9 +37,13 @@ public class OneTimeAccessToken {
 
     private static final String SIGNS = "abcdefghijklmnoprstquvwxyzABCDEFGHIJKLMNOPRSTQUWXYZ0123456789";
 
+    //------------------------------------------------------------------------------------------------------------------
+
     public OneTimeAccessToken(EnvironmentVars environment) {
         this.environment = environment;
     }
+
+    //------------------------------------------------------------------------------------------------------------------
 
     public String generateToken(int tokenLength) {
         final var builder = new StringBuilder();
@@ -50,9 +53,13 @@ public class OneTimeAccessToken {
         return builder.toString();
     }
 
+    //------------------------------------------------------------------------------------------------------------------
+
     public String generateToken() {
         return generateToken(environment.getOtaTokenLenght());
     }
+
+    //------------------------------------------------------------------------------------------------------------------
 
     public boolean checkIsTokenIsValid(String token) {
         final Matcher matcher = PATTERN.matcher(token);

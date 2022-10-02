@@ -22,18 +22,16 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import org.springframework.stereotype.Service;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.core.userdetails.*;
 
 import javax.transaction.Transactional;
 
 import java.util.Optional;
 
 import pl.miloszgilga.chessappbackend.oauth.AuthUser;
+import pl.miloszgilga.chessappbackend.network.auth.domain.*;
 import pl.miloszgilga.chessappbackend.exception.custom.AuthException;
 import pl.miloszgilga.chessappbackend.token.dto.UserVerficationClaims;
-import pl.miloszgilga.chessappbackend.network.auth.domain.LocalUserModel;
-import pl.miloszgilga.chessappbackend.network.auth.domain.ILocalUserRepository;
 
 //----------------------------------------------------------------------------------------------------------------------
 
@@ -45,10 +43,14 @@ public class AuthUserDetailService implements UserDetailsService {
     private final ILocalUserRepository repository;
     private final SecurityHelper securityHelper;
 
+    //------------------------------------------------------------------------------------------------------------------
+
     public AuthUserDetailService(ILocalUserRepository repository, SecurityHelper securityHelper) {
         this.repository = repository;
         this.securityHelper = securityHelper;
     }
+
+    //------------------------------------------------------------------------------------------------------------------
 
     @Override
     @Transactional
@@ -64,6 +66,8 @@ public class AuthUserDetailService implements UserDetailsService {
         }
         return securityHelper.generateSecurityUserByModelData(foundUserByNickname.get());
     }
+
+    //------------------------------------------------------------------------------------------------------------------
 
     @Transactional
     public AuthUser loadUserByNicknameEmailAndId(UserVerficationClaims cred) {

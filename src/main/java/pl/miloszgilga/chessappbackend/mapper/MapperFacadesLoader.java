@@ -21,10 +21,9 @@ package pl.miloszgilga.chessappbackend.mapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import org.reflections.util.*;
 import org.reflections.Reflections;
 import org.reflections.scanners.Scanners;
-import org.reflections.util.ClasspathHelper;
-import org.reflections.util.ConfigurationBuilder;
 
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Configuration;
@@ -40,10 +39,14 @@ class MapperFacadesLoader {
     private static final Logger LOGGER = LoggerFactory.getLogger(MapperFacadesLoader.class);
     private final ApplicationContext applicationContext;
 
+    //------------------------------------------------------------------------------------------------------------------
+
     MapperFacadesLoader(ApplicationContext applicationContext) {
         this.applicationContext = applicationContext;
         loadMapperFacadeImplByReflection();
     }
+
+    //------------------------------------------------------------------------------------------------------------------
 
     private void loadMapperFacadeImplByReflection() {
         final org.reflections.Configuration configuration = new ConfigurationBuilder()

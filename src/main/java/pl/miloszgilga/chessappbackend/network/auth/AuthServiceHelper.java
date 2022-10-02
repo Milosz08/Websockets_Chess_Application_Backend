@@ -24,17 +24,15 @@ import org.slf4j.LoggerFactory;
 import org.javatuples.Pair;
 import org.springframework.stereotype.Component;
 
+import java.util.*;
 import javax.transaction.Transactional;
 
-import java.util.Set;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.Optional;
-
+import pl.miloszgilga.chessappbackend.token.*;
+import pl.miloszgilga.chessappbackend.mail.IMailOutService;
 import pl.miloszgilga.chessappbackend.network.auth.domain.*;
-import pl.miloszgilga.chessappbackend.token.JsonWebTokenCreator;
-import pl.miloszgilga.chessappbackend.exception.custom.AuthException;
 import pl.miloszgilga.chessappbackend.utils.StringManipulator;
+import pl.miloszgilga.chessappbackend.exception.custom.AuthException;
+import pl.miloszgilga.chessappbackend.network.newsletter_email.domain.*;
 
 import static pl.miloszgilga.chessappbackend.security.LocalUserRole.USER;
 

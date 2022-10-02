@@ -29,5 +29,7 @@ public enum OtaTokenType {
     RESET_PASSWORD("reset-password"),
     ACTIVATE_ACCOUNT("activate-account");
 
+    //------------------------------------------------------------------------------------------------------------------
+
     private final String otaTokenTypeName;
 }

@@ -18,15 +18,13 @@
 
 package pl.miloszgilga.chessappbackend.oauth;
 
+import org.springframework.security.oauth2.core.oidc.*;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.oauth2.core.user.OAuth2User;
-import org.springframework.security.oauth2.core.oidc.OidcIdToken;
-import org.springframework.security.oauth2.core.oidc.OidcUserInfo;
 import org.springframework.security.oauth2.core.oidc.user.OidcUser;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
-import java.util.Map;
-import java.util.List;
+import java.util.*;
 import java.io.Serializable;
 
 import pl.miloszgilga.chessappbackend.network.auth.domain.LocalUserModel;
@@ -41,9 +39,13 @@ public class AuthUser extends User implements OAuth2User, OidcUser, Serializable
     private final LocalUserModel userModel;
     private Map<String, Object> attributes;
 
+    //------------------------------------------------------------------------------------------------------------------
+
     public AuthUser(LocalUserModel userModel, List<SimpleGrantedAuthority> authorities) {
         this(userModel, authorities, null, null);
     }
+
+    //------------------------------------------------------------------------------------------------------------------
 
     AuthUser(LocalUserModel user, List<SimpleGrantedAuthority> authorities, OidcIdToken token, OidcUserInfo info) {
         super(user.getNickname(), user.getPassword(), user.getIsActivated(), true, true, !user.getIsBlocked(), authorities);
@@ -52,34 +54,48 @@ public class AuthUser extends User implements OAuth2User, OidcUser, Serializable
         this.oidcUserInfo = info;
     }
 
+    //------------------------------------------------------------------------------------------------------------------
+
     void setAttributes(Map<String, Object> attributes) {
         this.attributes = attributes;
     }
+
+    //------------------------------------------------------------------------------------------------------------------
 
     @Override
     public Map<String, Object> getClaims() {
         return this.attributes;
     }
 
+    //------------------------------------------------------------------------------------------------------------------
+
     @Override
     public OidcUserInfo getUserInfo() {
         return this.oidcUserInfo;
     }
+
+    //------------------------------------------------------------------------------------------------------------------
 
     @Override
     public OidcIdToken getIdToken() {
         return this.oidcIdToken;
     }
 
+    //------------------------------------------------------------------------------------------------------------------
+
     @Override
     public Map<String, Object> getAttributes() {
         return this.attributes;
     }
 
+    //------------------------------------------------------------------------------------------------------------------
+
     @Override
     public String getName() {
         return this.userModel.getNickname();
     }
+
+    //------------------------------------------------------------------------------------------------------------------
 
     public LocalUserModel getUserModel() {
         return userModel;

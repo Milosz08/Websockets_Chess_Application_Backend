@@ -30,9 +30,13 @@ public class CountryPropertiesLoader {
 
     private final StaticDataLoader<CountryPropertiesModel> loader;
 
+    //------------------------------------------------------------------------------------------------------------------
+
     public CountryPropertiesLoader() {
         this.loader = new StaticDataLoader<>(COUNTRY_STATIC_DATA, CountryPropertiesModel.class);
     }
+
+    //------------------------------------------------------------------------------------------------------------------
 
     public CountryPropertiesModel getLoadedData() {
         return loader.getLoadedData();

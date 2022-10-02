@@ -26,14 +26,11 @@ import org.springframework.web.util.UriComponentsBuilder;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
+import javax.servlet.http.*;
 import java.io.IOException;
 
 import pl.miloszgilga.chessappbackend.utils.CookieHelper;
 import pl.miloszgilga.chessappbackend.config.EnvironmentVars;
-
 
 //----------------------------------------------------------------------------------------------------------------------
 
@@ -45,10 +42,14 @@ public class OAuth2AuthFailureResolver extends SimpleUrlAuthenticationFailureHan
     private final CookieHelper cookieHelper;
     private final EnvironmentVars environment;
 
+    //------------------------------------------------------------------------------------------------------------------
+
     public OAuth2AuthFailureResolver(EnvironmentVars environment, CookieHelper cookieHelper) {
         this.environment = environment;
         this.cookieHelper = cookieHelper;
     }
+
+    //------------------------------------------------------------------------------------------------------------------
 
     @Override
     public void onAuthenticationFailure(HttpServletRequest req, HttpServletResponse res, AuthenticationException ex)
@@ -66,6 +67,8 @@ public class OAuth2AuthFailureResolver extends SimpleUrlAuthenticationFailureHan
 
         getRedirectStrategy().sendRedirect(req, res, rediretTargetUrl);
     }
+
+    //------------------------------------------------------------------------------------------------------------------
 
     private void deleteOAuth2AuthorizationRequestCookies(HttpServletRequest req, HttpServletResponse res) {
         cookieHelper.deleteCookie(req, res, environment.getOauth2SessionRememberCookieName());

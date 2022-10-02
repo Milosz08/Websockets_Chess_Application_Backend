@@ -18,9 +18,7 @@
 
 package pl.miloszgilga.chessappbackend.network.auth.domain;
 
-import lombok.Getter;
-import lombok.Setter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.Date;
 import java.io.Serializable;
@@ -56,6 +54,8 @@ public class LocalUserDetailsModel extends AuditableEntity implements Serializab
     @JoinColumn(name = "LOCAL_USER_ID", referencedColumnName = "ID")
     private LocalUserModel localUser;
 
+    //------------------------------------------------------------------------------------------------------------------
+
     public LocalUserDetailsModel(
             String secondEmailAddress, Date birthDate, String country, UserGenderSpecific gender, Boolean hasPhoto,
             String photoEmbedLink, Boolean hasNewsletterAccept, Boolean isDataFilled
@@ -69,6 +69,8 @@ public class LocalUserDetailsModel extends AuditableEntity implements Serializab
         this.hasNewsletterAccept = hasNewsletterAccept;
         this.isDataFilled = isDataFilled;
     }
+
+    //------------------------------------------------------------------------------------------------------------------
 
     @Override
     public String toString() {

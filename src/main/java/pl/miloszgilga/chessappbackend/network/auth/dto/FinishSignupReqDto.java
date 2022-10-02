@@ -20,14 +20,10 @@ package pl.miloszgilga.chessappbackend.network.auth.dto;
 
 import lombok.Data;
 
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Pattern;
-import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.*;
 
+import pl.miloszgilga.chessappbackend.validator.annotation.*;
 import pl.miloszgilga.chessappbackend.utils.UserGenderSpecific;
-import pl.miloszgilga.chessappbackend.validator.annotation.ValidateEnum;
-import pl.miloszgilga.chessappbackend.validator.annotation.ValidateCountry;
-import pl.miloszgilga.chessappbackend.validator.annotation.ValidateFutureTimeDate;
 
 import static pl.miloszgilga.chessappbackend.validator.RegexPattern.BIRTH_DATE_PATTERN;
 
@@ -41,13 +37,19 @@ public class FinishSignupReqDto {
     @ValidateFutureTimeDate(message = "{jpa.validator.birthDate.futureDate}")
     private String birthDate;
 
+    //------------------------------------------------------------------------------------------------------------------
+
     @NotBlank(message = "{jpa.validator.countryName.notBlank}")
     @ValidateCountry(message = "{jpa.validator.countryName.notExist}")
     private String countryName;
 
+    //------------------------------------------------------------------------------------------------------------------
+
     @NotBlank(message = "{jpa.validator.gender.notBlank}")
     @ValidateEnum(enumClazz = UserGenderSpecific.class, message = "{jpa.validator.gender.notExist}")
     private String gender;
+
+    //------------------------------------------------------------------------------------------------------------------
 
     @NotNull(message = "{jpa.validator.newsletterAccept.notNull}")
     private Boolean newsletterAccept;

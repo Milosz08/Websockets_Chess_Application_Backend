@@ -18,15 +18,13 @@
 
 package pl.miloszgilga.chessappbackend.mapper.custom_converter;
 
+import ma.glasnost.orika.*;
 import ma.glasnost.orika.metadata.Type;
-import ma.glasnost.orika.MappingContext;
-import ma.glasnost.orika.CustomConverter;
 
 import org.springframework.stereotype.Component;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import pl.miloszgilga.chessappbackend.mapper.IReflectConverter;
-import pl.miloszgilga.chessappbackend.mapper.InjectableMappingConverter;
+import pl.miloszgilga.chessappbackend.mapper.*;
 
 import static pl.miloszgilga.chessappbackend.mapper.Converter.HASH_PASSWORD;
 
@@ -38,14 +36,20 @@ public class HashPasswordConverter extends CustomConverter<String, String> imple
 
     private final PasswordEncoder passwordEncoder;
 
+    //------------------------------------------------------------------------------------------------------------------
+
     public HashPasswordConverter(PasswordEncoder passwordEncoder) {
         this.passwordEncoder = passwordEncoder;
     }
+
+    //------------------------------------------------------------------------------------------------------------------
 
     @Override
     public String convert(String source, Type<? extends String> destType, MappingContext mappingContext) {
         return passwordEncoder.encode(source);
     }
+
+    //------------------------------------------------------------------------------------------------------------------
 
     @Override
     public String getConverterType() {

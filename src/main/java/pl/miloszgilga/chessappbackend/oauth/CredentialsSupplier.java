@@ -21,12 +21,10 @@ package pl.miloszgilga.chessappbackend.oauth;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import lombok.Getter;
-import lombok.AllArgsConstructor;
+import lombok.*;
 
-import java.util.Set;
-import java.util.stream.Stream;
-import java.util.stream.Collectors;
+import java.util.*;
+import java.util.stream.*;
 
 import pl.miloszgilga.chessappbackend.exception.custom.AuthException;
 
@@ -39,8 +37,12 @@ public enum CredentialsSupplier {
     FACEBOOK("facebook"),
     LOCAL("local");
 
+    //------------------------------------------------------------------------------------------------------------------
+
     private final String name;
     private static final Logger LOGGER = LoggerFactory.getLogger(CredentialsSupplier.class);
+
+    //------------------------------------------------------------------------------------------------------------------
 
     public static Set<String> getAllSuppliers() {
         return Stream.of(CredentialsSupplier.values())
@@ -48,6 +50,8 @@ public enum CredentialsSupplier {
                 .map(CredentialsSupplier::getName)
                 .collect(Collectors.toSet());
     }
+
+    //------------------------------------------------------------------------------------------------------------------
 
     public static CredentialsSupplier findSupplierBasedRegistrationId(String registrationId) {
         return Stream.of(CredentialsSupplier.values())
@@ -59,6 +63,8 @@ public enum CredentialsSupplier {
                             "Passed registration id: %s is not valid credentials supplier name.", registrationId);
                 });
     }
+
+    //------------------------------------------------------------------------------------------------------------------
 
     public static Set<String> getOAuth2Suppliers() {
         return Stream.of(CredentialsSupplier.values())

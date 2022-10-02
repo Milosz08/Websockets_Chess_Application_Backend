@@ -20,13 +20,9 @@ package pl.miloszgilga.chessappbackend.network.expose_static_data;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
-import pl.miloszgilga.chessappbackend.network.expose_static_data.dto.SignupGenderDataResDto;
-import pl.miloszgilga.chessappbackend.network.expose_static_data.dto.SignupCountryDataResDto;
-import pl.miloszgilga.chessappbackend.network.expose_static_data.dto.SignupCalendarDataResDto;
+import pl.miloszgilga.chessappbackend.network.expose_static_data.dto.*;
 
 import static pl.miloszgilga.chessappbackend.config.ApplicationEndpoints.*;
 
@@ -38,19 +34,27 @@ class ExposeStaticDataController {
 
     private final ExposeStaticDataService service;
 
+    //------------------------------------------------------------------------------------------------------------------
+
     ExposeStaticDataController(ExposeStaticDataService service) {
         this.service = service;
     }
+
+    //------------------------------------------------------------------------------------------------------------------
 
     @GetMapping(SIGNUP_CALENDAR_DATA)
     ResponseEntity<SignupCalendarDataResDto> getSignupCalendarData() {
         return new ResponseEntity<>(service.getSignupCalendarData(), HttpStatus.OK);
     }
 
+    //------------------------------------------------------------------------------------------------------------------
+
     @GetMapping(SIGNUP_GENDER_DATA)
     ResponseEntity<SignupGenderDataResDto> getSignupGenderData() {
         return new ResponseEntity<>(service.getSignupGenderData(), HttpStatus.OK);
     }
+
+    //------------------------------------------------------------------------------------------------------------------
 
     @GetMapping(SIGNUP_COUNTRY_DATA)
     ResponseEntity<SignupCountryDataResDto> getSignupCountryData() {

@@ -20,10 +20,7 @@ package pl.miloszgilga.chessappbackend.network.ota_token;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import pl.miloszgilga.chessappbackend.dto.SimpleOtaTokenReqDto;
 import pl.miloszgilga.chessappbackend.dto.SimpleServerMessageDto;
@@ -38,9 +35,13 @@ class OtaTokenController {
 
     private final IOtaTokenService otaTokenService;
 
+    //------------------------------------------------------------------------------------------------------------------
+
     OtaTokenController(IOtaTokenService otaTokenService) {
         this.otaTokenService = otaTokenService;
     }
+
+    //------------------------------------------------------------------------------------------------------------------
 
     @PostMapping(CHANGE_PASSWORD)
     ResponseEntity<SimpleServerMessageDto> changePassword(@RequestBody SimpleOtaTokenReqDto req) {

@@ -23,8 +23,7 @@ import com.nimbusds.oauth2.sdk.util.StringUtils;
 import org.springframework.security.oauth2.core.endpoint.OAuth2AuthorizationRequest;
 import org.springframework.security.oauth2.client.web.AuthorizationRequestRepository;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.*;
 
 import pl.miloszgilga.chessappbackend.utils.CookieHelper;
 import pl.miloszgilga.chessappbackend.config.EnvironmentVars;
@@ -38,11 +37,15 @@ public class CookieOAuth2ReqRepository implements AuthorizationRequestRepository
     private final EnvironmentVars environment;
     private final int cookieExpInSec;
 
+    //------------------------------------------------------------------------------------------------------------------
+
     public CookieOAuth2ReqRepository(CookieHelper cookieHelper, EnvironmentVars environment) {
         this.cookieHelper = cookieHelper;
         this.environment = environment;
         this.cookieExpInSec = environment.getOauth2CookieExpiredMinutes() * 60;
     }
+
+    //------------------------------------------------------------------------------------------------------------------
 
     @Override
     public OAuth2AuthorizationRequest loadAuthorizationRequest(HttpServletRequest req) {
@@ -52,6 +55,8 @@ public class CookieOAuth2ReqRepository implements AuthorizationRequestRepository
                     throw new AuthException.OAuth2AuthenticationProcessingException("Unable to load account data.");
                 });
     }
+
+    //------------------------------------------------------------------------------------------------------------------
 
     @Override
     public void saveAuthorizationRequest(OAuth2AuthorizationRequest authReq, HttpServletRequest req, HttpServletResponse res) {
@@ -79,6 +84,8 @@ public class CookieOAuth2ReqRepository implements AuthorizationRequestRepository
             cookieHelper.addCookie(res, afterSignupRedirPathName, redirUriAfterSignup, cookieExpInSec);
         }
     }
+
+    //------------------------------------------------------------------------------------------------------------------
 
     @Override
     public OAuth2AuthorizationRequest removeAuthorizationRequest(HttpServletRequest req) {

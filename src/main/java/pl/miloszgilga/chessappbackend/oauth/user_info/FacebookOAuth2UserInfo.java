@@ -28,20 +28,28 @@ class FacebookOAuth2UserInfo extends OAuth2UserInfo {
         super(attributes);
     }
 
+    //------------------------------------------------------------------------------------------------------------------
+
     @Override
     public String getId() {
         return (String) attributes.get("id");
     }
+
+    //------------------------------------------------------------------------------------------------------------------
 
     @Override
     public String getUsername() {
         return (String) attributes.get("name");
     }
 
+    //------------------------------------------------------------------------------------------------------------------
+
     @Override
     public String getEmailAddress() {
         return (String) attributes.get("email");
     }
+
+    //------------------------------------------------------------------------------------------------------------------
 
     @Override
     @SuppressWarnings("unchecked")

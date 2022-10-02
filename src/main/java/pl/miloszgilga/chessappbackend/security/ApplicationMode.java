@@ -18,8 +18,7 @@
 
 package pl.miloszgilga.chessappbackend.security;
 
-import lombok.Getter;
-import lombok.AllArgsConstructor;
+import lombok.*;
 
 //----------------------------------------------------------------------------------------------------------------------
 
@@ -28,6 +27,8 @@ import lombok.AllArgsConstructor;
 enum ApplicationMode {
     DEV("dev"),
     PROD("prod");
+
+    //------------------------------------------------------------------------------------------------------------------
 
     private final String modeName;
 }

@@ -30,5 +30,7 @@ public enum StaticDataLoaderFileName {
     GENDER_STATIC_DATA("gender-static-data.json"),
     COUNTRY_STATIC_DATA("country-static-data.json");
 
+    //------------------------------------------------------------------------------------------------------------------
+
     private final String fileName;
 }

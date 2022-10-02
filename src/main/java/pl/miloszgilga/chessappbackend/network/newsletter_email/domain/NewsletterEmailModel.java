@@ -18,14 +18,9 @@
 
 package pl.miloszgilga.chessappbackend.network.newsletter_email.domain;
 
-import lombok.Getter;
-import lombok.Setter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
-import javax.persistence.Table;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-
+import javax.persistence.*;
 import java.io.Serializable;
 
 import pl.miloszgilga.chessappbackend.audit.AuditableEntity;
@@ -35,6 +30,7 @@ import pl.miloszgilga.chessappbackend.audit.AuditableEntity;
 @Entity
 @Table(name = "NEWSLETTER_EMAIL")
 @Getter @Setter
+@Builder
 @NoArgsConstructor
 public class NewsletterEmailModel extends AuditableEntity implements Serializable {
     private static final long serialVersionUID = 1L;
@@ -42,10 +38,14 @@ public class NewsletterEmailModel extends AuditableEntity implements Serializabl
     @Column(name = "USER_NAME")     private String userName;
     @Column(name = "USER_EMAIL")    private String userEmail;
 
+    //------------------------------------------------------------------------------------------------------------------
+
     public NewsletterEmailModel(String userName, String userEmail) {
         this.userName = userName;
         this.userEmail = userEmail;
     }
+
+    //------------------------------------------------------------------------------------------------------------------
 
     @Override
     public String toString() {

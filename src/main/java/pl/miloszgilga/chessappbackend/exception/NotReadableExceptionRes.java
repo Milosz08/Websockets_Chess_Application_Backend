@@ -27,6 +27,8 @@ class NotReadableExceptionRes extends ServerExceptionRes {
 
     private final String reason;
 
+    //------------------------------------------------------------------------------------------------------------------
+
     NotReadableExceptionRes(ServerExceptionRes res, String reason) {
         super(res.getServletTimestampUTC(), res.getStatusCode(), res.getStatusText(), res.getPath(), res.getMethod());
         this.reason = reason;

@@ -26,8 +26,7 @@ import org.springframework.security.oauth2.core.endpoint.OAuth2AccessTokenRespon
 import static org.springframework.security.oauth2.core.endpoint.OAuth2ParameterNames.*;
 
 import java.util.*;
-import java.util.stream.Stream;
-import java.util.stream.Collectors;
+import java.util.stream.*;
 
 //----------------------------------------------------------------------------------------------------------------------
 
@@ -35,6 +34,8 @@ public class OAuth2CustomTokenConverter implements Converter<Map<String, Object>
 
     private final OAuth2AccessToken.TokenType defAccessToken = OAuth2AccessToken.TokenType.BEARER;
     private final String[] tokenParameters = { ACCESS_TOKEN, TOKEN_TYPE, EXPIRES_IN, REFRESH_TOKEN, SCOPE };
+
+    //------------------------------------------------------------------------------------------------------------------
 
     @Override
     public OAuth2AccessTokenResponse convert(Map<String, Object> sourceParameters) {
@@ -59,6 +60,8 @@ public class OAuth2CustomTokenConverter implements Converter<Map<String, Object>
                 .additionalParameters(additionalParameters)
                 .build();
     }
+
+    //------------------------------------------------------------------------------------------------------------------
 
     private Set<String> getTokenResponseParameters() {
         return Stream.of(tokenParameters).collect(Collectors.toSet());

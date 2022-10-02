@@ -25,9 +25,8 @@ import io.jsonwebtoken.*;
 
 import org.springframework.stereotype.Component;
 
+import pl.miloszgilga.chessappbackend.token.dto.*;
 import pl.miloszgilga.chessappbackend.exception.custom.TokenException;
-import pl.miloszgilga.chessappbackend.token.dto.UserVerficationClaims;
-import pl.miloszgilga.chessappbackend.token.dto.ActivateServiceViaEmailTokenClaims;
 
 import static pl.miloszgilga.chessappbackend.token.JwtClaim.*;
 
@@ -39,9 +38,13 @@ public class JsonWebTokenVerificator {
     private static final Logger LOGGER = LoggerFactory.getLogger(JsonWebTokenVerificator.class);
     private final JsonWebToken jsonWebToken;
 
+    //------------------------------------------------------------------------------------------------------------------
+
     public JsonWebTokenVerificator(JsonWebToken jsonWebToken1) {
         this.jsonWebToken = jsonWebToken1;
     }
+
+    //------------------------------------------------------------------------------------------------------------------
 
     public ActivateServiceViaEmailTokenClaims validateActivatingServiceViaEmail(String token) {
         if (basicTokenIsMalformed(token)) {
@@ -56,6 +59,8 @@ public class JsonWebTokenVerificator {
         );
     }
 
+    //------------------------------------------------------------------------------------------------------------------
+
     public UserVerficationClaims validateUserJwtFilter(String token) {
         if (basicTokenIsMalformed(token)) return new UserVerficationClaims();
         Claims claims = extractClaimsFromRawToken(token);
@@ -66,6 +71,8 @@ public class JsonWebTokenVerificator {
         );
     }
 
+    //------------------------------------------------------------------------------------------------------------------
+
     private Claims extractClaimsFromRawToken(String token) {
         return Jwts.parserBuilder()
                 .setSigningKey(jsonWebToken.getSignatureKey())
@@ -73,6 +80,8 @@ public class JsonWebTokenVerificator {
                 .parseClaimsJws(token)
                 .getBody();
     }
+
+    //------------------------------------------------------------------------------------------------------------------
 
     public boolean basicTokenIsMalformed(String token) {
         try {

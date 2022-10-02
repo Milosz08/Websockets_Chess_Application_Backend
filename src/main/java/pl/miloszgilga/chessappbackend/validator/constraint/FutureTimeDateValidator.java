@@ -21,10 +21,8 @@ package pl.miloszgilga.chessappbackend.validator.constraint;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.validation.ConstraintValidator;
-import javax.validation.ConstraintValidatorContext;
-
 import java.util.Date;
+import javax.validation.*;
 
 import pl.miloszgilga.chessappbackend.utils.TimeHelper;
 import pl.miloszgilga.chessappbackend.validator.annotation.ValidateFutureTimeDate;
@@ -37,9 +35,13 @@ public class FutureTimeDateValidator implements ConstraintValidator<ValidateFutu
 
     private final TimeHelper timeHelper;
 
+    //------------------------------------------------------------------------------------------------------------------
+
     public FutureTimeDateValidator(TimeHelper timeHelper) {
         this.timeHelper = timeHelper;
     }
+
+    //------------------------------------------------------------------------------------------------------------------
 
     @Override
     public boolean isValid(String birthDateString, ConstraintValidatorContext context) {

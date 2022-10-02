@@ -24,8 +24,7 @@ import org.springframework.web.servlet.HandlerExceptionResolver;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.AuthenticationEntryPoint;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.*;
 
 //----------------------------------------------------------------------------------------------------------------------
 
@@ -34,9 +33,13 @@ public class AuthenticationRestEntryPoint implements AuthenticationEntryPoint {
 
     private final HandlerExceptionResolver resolver;
 
+    //------------------------------------------------------------------------------------------------------------------
+
     AuthenticationRestEntryPoint(@Qualifier("handlerExceptionResolver") HandlerExceptionResolver resolver) {
         this.resolver = resolver;
     }
+
+    //------------------------------------------------------------------------------------------------------------------
 
     @Override
     public void commence(HttpServletRequest req, HttpServletResponse res, AuthenticationException ex) {

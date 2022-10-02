@@ -29,9 +29,13 @@ public abstract class OAuth2UserInfo {
 
     protected final Map<String, Object> attributes;
 
+    //------------------------------------------------------------------------------------------------------------------
+
     OAuth2UserInfo(Map<String, Object> attributes) {
         this.attributes = attributes;
     }
+
+    //------------------------------------------------------------------------------------------------------------------
 
     public abstract String getId();
     public abstract String getUsername();

@@ -21,13 +21,10 @@ package pl.miloszgilga.chessappbackend.validator.constraint;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.validation.ConstraintValidator;
-import javax.validation.ConstraintValidatorContext;
+import javax.validation.*;
 
-import java.util.Set;
-import java.util.Locale;
-import java.util.stream.Stream;
-import java.util.stream.Collectors;
+import java.util.*;
+import java.util.stream.*;
 
 import pl.miloszgilga.chessappbackend.validator.annotation.ValidateEnum;
 
@@ -39,12 +36,16 @@ public class ValidateEnumValidator implements ConstraintValidator<ValidateEnum, 
 
     private Set<String> availableValues;
 
+    //------------------------------------------------------------------------------------------------------------------
+
     @Override
     public void initialize(final ValidateEnum constraintAnnotation) {
         this.availableValues = Stream.of(constraintAnnotation.enumClazz().getEnumConstants())
                 .map(v -> v.name().toLowerCase(Locale.ROOT))
                 .collect(Collectors.toSet());
     }
+
+    //------------------------------------------------------------------------------------------------------------------
 
     @Override
     public boolean isValid(final String value, final ConstraintValidatorContext context) {

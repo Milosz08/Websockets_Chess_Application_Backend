@@ -30,11 +30,15 @@ public class AuthException {
         }
     }
 
+    //------------------------------------------------------------------------------------------------------------------
+
     public static class RoleNotFoundException extends BasicServerException {
         public RoleNotFoundException(String message, Object... args) {
             super(HttpStatus.NOT_FOUND, message, args);
         }
     }
+
+    //------------------------------------------------------------------------------------------------------------------
 
     public static class OAuth2AuthenticationProcessingException extends BasicAuthenticationException {
         public OAuth2AuthenticationProcessingException(String message, Object... args) {
@@ -42,11 +46,15 @@ public class AuthException {
         }
     }
 
+    //------------------------------------------------------------------------------------------------------------------
+
     public static class OAuth2CredentialsSupplierMalformedException extends BasicAuthenticationException {
         public OAuth2CredentialsSupplierMalformedException(String message, Object... args) {
             super(HttpStatus.UNAUTHORIZED, message, args);
         }
     }
+
+    //------------------------------------------------------------------------------------------------------------------
 
     public static class OAuth2NotSupportedUriException extends BasicAuthenticationException {
         public OAuth2NotSupportedUriException(String message, Object... args) {
@@ -54,17 +62,23 @@ public class AuthException {
         }
     }
 
+    //------------------------------------------------------------------------------------------------------------------
+
     public static class AccountAlreadyExistException extends BasicAuthenticationException {
         public AccountAlreadyExistException(String message, Object... args) {
             super(HttpStatus.BAD_REQUEST, message, args);
         }
     }
 
+    //------------------------------------------------------------------------------------------------------------------
+
     public static class DifferentAuthenticationProviderException extends BasicServerException {
         public DifferentAuthenticationProviderException(String message, Object... args) {
             super(HttpStatus.UNAUTHORIZED, message, args);
         }
     }
+
+    //------------------------------------------------------------------------------------------------------------------
 
     public static class AccountIsAlreadyActivatedException extends BasicServerException {
         public AccountIsAlreadyActivatedException(String message, Object... args) {

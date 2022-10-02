@@ -30,17 +30,23 @@ public class EmailException {
         }
     }
 
+    //------------------------------------------------------------------------------------------------------------------
+
     public static class EmailNotFoundException extends BasicServerException {
         public EmailNotFoundException(String message, Object... args) {
             super(HttpStatus.NOT_FOUND, message, args);
         }
     }
 
+    //------------------------------------------------------------------------------------------------------------------
+
     public static class EmailSenderException extends BasicServerException {
         public EmailSenderException(String message, Object... args) {
             super(HttpStatus.SERVICE_UNAVAILABLE, message, args);
         }
     }
+
+    //------------------------------------------------------------------------------------------------------------------
 
     public static class EmailAndSecondEmailIdenticalException extends BasicServerException {
         public EmailAndSecondEmailIdenticalException(String message, Object... args) {

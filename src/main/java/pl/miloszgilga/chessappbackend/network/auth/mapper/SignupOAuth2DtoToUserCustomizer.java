@@ -18,20 +18,18 @@
 
 package pl.miloszgilga.chessappbackend.network.auth.mapper;
 
-import ma.glasnost.orika.CustomMapper;
-import ma.glasnost.orika.MappingContext;
-
 import org.javatuples.Pair;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.stereotype.Component;
+import ma.glasnost.orika.*;
 
+import org.springframework.stereotype.Component;
+import org.springframework.security.crypto.password.PasswordEncoder;
+
+import pl.miloszgilga.chessappbackend.oauth.user_info.*;
 import pl.miloszgilga.chessappbackend.config.EnvironmentVars;
 import pl.miloszgilga.chessappbackend.utils.StringManipulator;
 import pl.miloszgilga.chessappbackend.network.auth.AuthServiceHelper;
-import pl.miloszgilga.chessappbackend.oauth.user_info.OAuth2UserInfo;
 import pl.miloszgilga.chessappbackend.oauth.dto.OAuth2RegistrationData;
 import pl.miloszgilga.chessappbackend.network.auth.domain.LocalUserModel;
-import pl.miloszgilga.chessappbackend.oauth.user_info.OAuth2UserInfoFactory;
 
 //----------------------------------------------------------------------------------------------------------------------
 
@@ -42,8 +40,9 @@ public class SignupOAuth2DtoToUserCustomizer extends CustomMapper<OAuth2Registra
     private final EnvironmentVars environment;
     private final StringManipulator manipulator;
     private final PasswordEncoder passwordEncoder;
-
     private final OAuth2UserInfoFactory userInfoFactory;
+
+    //------------------------------------------------------------------------------------------------------------------
 
     public SignupOAuth2DtoToUserCustomizer(AuthServiceHelper helper, EnvironmentVars environment,
                                            StringManipulator manipulator, PasswordEncoder passwordEncoder,
@@ -54,6 +53,8 @@ public class SignupOAuth2DtoToUserCustomizer extends CustomMapper<OAuth2Registra
         this.passwordEncoder = passwordEncoder;
         this.userInfoFactory = userInfoFactory;
     }
+
+    //------------------------------------------------------------------------------------------------------------------
 
     @Override
     public void mapAtoB(OAuth2RegistrationData data, LocalUserModel userModel, MappingContext context) {

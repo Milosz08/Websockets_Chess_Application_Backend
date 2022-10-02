@@ -7,39 +7,39 @@ config:
     password-encoder-strength: 10
 
 spring:
-  h2.console.enabled: false
-  liquibase:
-    drop-first: false
-    change-log: classpath:db/changelog/db.changelog-prod.xml
-  datasource:
-    url: ${env.PROD_DB_CONNECTION_STRING}
-    username: ${env.PROD_DB_USERNAME}
-    password: ${env.PROD_DB_PASSWORD}
-    driver-class-name: com.mysql.cj.jdbc.Driver
-  mail:
-    protocol: smtp
-    port: 465
-    host: ${env.PROD_SMTP_MAIL_AGENT}
-    username: ${env.PROD_SMTP_MAIL_USERNAME}
-    password: ${env.PROD_SMTP_MAIL_PASSWORD}
-    properties:
-      smtp.starttls.required: true
-      mail.smtp:
-        ssl.enable: true
-        auth: true
-        starttls.enable: true
-  security.oauth2.client.registration:
-    google:
-      clientId: ${env.PROD_OAUTH2_GOOGLE_CLIENT_ID}
-      clientSecret: ${env.PROD_OAUTH2_GOOGLE_CLIENT_SECRET}
-    facebook:
-      clientId: ${env.PROD_OAUTH2_FACEBOOK_CLIENT_ID}
-      clientSecret: ${env.PROD_OAUTH2_FACEBOOK_CLIENT_SECRET}
+    h2.console.enabled: false
+    liquibase:
+        drop-first: false
+        change-log: classpath:db/changelog/db.changelog-prod.xml
+    datasource:
+        url: ${env.PROD_DB_CONNECTION_STRING}
+        username: ${env.PROD_DB_USERNAME}
+        password: ${env.PROD_DB_PASSWORD}
+        driver-class-name: com.mysql.cj.jdbc.Driver
+    mail:
+        protocol: smtp
+        port: 465
+        host: ${env.PROD_SMTP_MAIL_AGENT}
+        username: ${env.PROD_SMTP_MAIL_USERNAME}
+        password: ${env.PROD_SMTP_MAIL_PASSWORD}
+        properties:
+            smtp.starttls.required: true
+            mail.smtp:
+                ssl.enable: true
+                auth: true
+                starttls.enable: true
+    security.oauth2.client.registration:
+        google:
+            clientId: ${env.PROD_OAUTH2_GOOGLE_CLIENT_ID}
+            clientSecret: ${env.PROD_OAUTH2_GOOGLE_CLIENT_SECRET}
+        facebook:
+            clientId: ${env.PROD_OAUTH2_FACEBOOK_CLIENT_ID}
+            clientSecret: ${env.PROD_OAUTH2_FACEBOOK_CLIENT_SECRET}
 
 oauth2-custom:
-  token-secret: ${env.PROD_OAUTH2_TOKEN_SECRET}
-  token-expiration-hours: 12
-  redirect-uris: ${env.PROD_FRONTEND_CORS_AGENT}/oauth2/redirect,myandroidapp://oauth2/redirect,myiosapp://oauth2/redirect
+    token-secret: ${env.PROD_OAUTH2_TOKEN_SECRET}
+    token-expiration-hours: 12
+    redirect-uris: ${env.PROD_FRONTEND_CORS_AGENT}/oauth2/redirect,myandroidapp://oauth2/redirect,myiosapp://oauth2/redirect
 
 logging:
-  file.name: prod-logs/chessappbackend.log
+    file.name: prod-logs/chessappbackend.log

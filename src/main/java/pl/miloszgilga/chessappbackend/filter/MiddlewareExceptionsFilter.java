@@ -38,9 +38,13 @@ public class MiddlewareExceptionsFilter extends OncePerRequestFilter {
 
     private final HandlerExceptionResolver resolver;
 
+    //------------------------------------------------------------------------------------------------------------------
+
     public MiddlewareExceptionsFilter(@Qualifier("handlerExceptionResolver") HandlerExceptionResolver resolver) {
         this.resolver = resolver;
     }
+
+    //------------------------------------------------------------------------------------------------------------------
 
     @Override
     protected void doFilterInternal(HttpServletRequest req, HttpServletResponse res, FilterChain chain) {

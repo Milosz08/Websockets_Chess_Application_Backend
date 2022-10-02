@@ -18,9 +18,7 @@
 
 package pl.miloszgilga.chessappbackend.exception;
 
-import lombok.Getter;
-import lombok.Builder;
-import lombok.AllArgsConstructor;
+import lombok.*;
 
 //----------------------------------------------------------------------------------------------------------------------
 

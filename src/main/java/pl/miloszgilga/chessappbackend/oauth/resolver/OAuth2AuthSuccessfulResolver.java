@@ -26,8 +26,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.util.UriComponentsBuilder;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.*;
 
 import java.net.URI;
 import java.util.Optional;
@@ -50,12 +49,16 @@ public class OAuth2AuthSuccessfulResolver extends SimpleUrlAuthenticationSuccess
     private final EnvironmentVars environment;
     private final JsonWebTokenCreator webTokenCreator;
 
+    //------------------------------------------------------------------------------------------------------------------
+
     public OAuth2AuthSuccessfulResolver(EnvironmentVars environment, JsonWebTokenCreator webTokenCreator,
                                         CookieHelper cookieHelper) {
         this.environment = environment;
         this.cookieHelper = cookieHelper;
         this.webTokenCreator = webTokenCreator;
     }
+
+    //------------------------------------------------------------------------------------------------------------------
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest req, HttpServletResponse res, Authentication auth)
@@ -72,6 +75,8 @@ public class OAuth2AuthSuccessfulResolver extends SimpleUrlAuthenticationSuccess
 
         getRedirectStrategy().sendRedirect(req, res, targetUrl);
     }
+
+    //------------------------------------------------------------------------------------------------------------------
 
     @Override
     protected String determineTargetUrl(HttpServletRequest req, HttpServletResponse res, Authentication auth) {
@@ -95,6 +100,8 @@ public class OAuth2AuthSuccessfulResolver extends SimpleUrlAuthenticationSuccess
                 .build().toUriString();
     }
 
+    //------------------------------------------------------------------------------------------------------------------
+
     private boolean checkIfUserIsAuthorizedViaRequestUri(String uri) {
         final URI redirectClientUri = URI.create(uri);
         return environment.getOauth2RedirectUris().stream().noneMatch(reqUri -> {
@@ -103,6 +110,8 @@ public class OAuth2AuthSuccessfulResolver extends SimpleUrlAuthenticationSuccess
                     authorizedUri.getPort() == redirectClientUri.getPort();
         });
     }
+
+    //------------------------------------------------------------------------------------------------------------------
 
     private String checkIfRedirectUriIsValidAndReturn(HttpServletRequest req, String cookieName) {
         final Optional<String> redirectUri = cookieHelper.getCookieValue(req, cookieName);

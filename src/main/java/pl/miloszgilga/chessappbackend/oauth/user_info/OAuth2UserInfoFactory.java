@@ -37,6 +37,8 @@ public class OAuth2UserInfoFactory {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(OAuth2UserInfoFactory.class);
 
+    //------------------------------------------------------------------------------------------------------------------
+
     public OAuth2UserInfo getOAuth2UserInfo(CredentialsSupplier supplier, Map<String, Object> attributes) {
         switch(supplier) {
             case FACEBOOK:

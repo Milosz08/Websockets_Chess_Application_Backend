@@ -18,8 +18,7 @@
 
 package pl.miloszgilga.chessappbackend.token.dto;
 
-import lombok.Data;
-import lombok.AllArgsConstructor;
+import lombok.*;
 
 //----------------------------------------------------------------------------------------------------------------------
 

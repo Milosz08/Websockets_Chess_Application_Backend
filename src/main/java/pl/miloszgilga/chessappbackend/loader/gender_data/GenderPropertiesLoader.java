@@ -30,9 +30,13 @@ public class GenderPropertiesLoader {
 
     private final StaticDataLoader<GenderPropertiesModel> loader;
 
+    //------------------------------------------------------------------------------------------------------------------
+
     public GenderPropertiesLoader() {
         this.loader = new StaticDataLoader<>(GENDER_STATIC_DATA, GenderPropertiesModel.class);
     }
+
+    //------------------------------------------------------------------------------------------------------------------
 
     public GenderPropertiesModel getLoadedData() {
         return loader.getLoadedData();

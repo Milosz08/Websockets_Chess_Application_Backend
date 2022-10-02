@@ -18,9 +18,7 @@
 
 package pl.miloszgilga.chessappbackend.network.expose_static_data.dto;
 
-import lombok.Data;
-import lombok.AllArgsConstructor;
-
+import lombok.*;
 import java.util.List;
 
 import pl.miloszgilga.chessappbackend.dto.SimpleTupleDto;

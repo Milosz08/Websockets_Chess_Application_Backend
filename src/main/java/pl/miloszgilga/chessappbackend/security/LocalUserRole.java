@@ -18,13 +18,10 @@
 
 package pl.miloszgilga.chessappbackend.security;
 
-import lombok.Getter;
-import lombok.AllArgsConstructor;
+import lombok.*;
 
-import java.util.Set;
-import java.util.List;
-import java.util.stream.Stream;
-import java.util.stream.Collectors;
+import java.util.*;
+import java.util.stream.*;
 
 import pl.miloszgilga.chessappbackend.network.auth.domain.LocalUserRoleModel;
 
@@ -37,7 +34,11 @@ public enum LocalUserRole {
     MODERATOR("moderator"),
     USER("user");
 
+    //------------------------------------------------------------------------------------------------------------------
+
     private final String roleName;
+
+    //------------------------------------------------------------------------------------------------------------------
 
     public static LocalUserRole getEnumRoleBaseStringName(final String roleName) {
         return Stream.of(LocalUserRole.values())
@@ -45,6 +46,8 @@ public enum LocalUserRole {
                 .findFirst()
                 .orElseThrow(IllegalArgumentException::new);
     }
+
+    //------------------------------------------------------------------------------------------------------------------
 
     public static List<String> simplifyUserRoles(Set<LocalUserRoleModel> userRoles) {
         return userRoles.stream()

@@ -18,10 +18,8 @@
 
 package pl.miloszgilga.chessappbackend.exception;
 
+import java.util.*;
 import lombok.Getter;
-
-import java.util.List;
-import java.util.ArrayList;
 
 //----------------------------------------------------------------------------------------------------------------------
 
@@ -29,6 +27,8 @@ import java.util.ArrayList;
 public class BasicDataExceptionRes extends ServerExceptionRes {
 
     private final List<String> errors = new ArrayList<>();
+
+    //------------------------------------------------------------------------------------------------------------------
 
     public BasicDataExceptionRes(ServerExceptionRes res, String message) {
         super(res.getServletTimestampUTC(), res.getStatusCode(), res.getStatusText(), res.getPath(), res.getMethod());

@@ -18,9 +18,7 @@
 
 package pl.miloszgilga.chessappbackend.utils;
 
-import lombok.Getter;
-import lombok.AllArgsConstructor;
-
+import lombok.*;
 import java.util.stream.Stream;
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -32,7 +30,11 @@ public enum UserGenderSpecific {
     FEMALE("female"),
     OTHER("other");
 
+    //------------------------------------------------------------------------------------------------------------------
+
     private final String gender;
+
+    //------------------------------------------------------------------------------------------------------------------
 
     public static UserGenderSpecific findGenderByString(final String gender) {
         return Stream.of(UserGenderSpecific.values())

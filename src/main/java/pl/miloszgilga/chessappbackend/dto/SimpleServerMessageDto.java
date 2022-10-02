@@ -18,15 +18,12 @@
 
 package pl.miloszgilga.chessappbackend.dto;
 
-import lombok.Getter;
+import lombok.*;
 
 //----------------------------------------------------------------------------------------------------------------------
 
 @Getter
+@AllArgsConstructor
 public class SimpleServerMessageDto {
     private final String responseMessage;
-
-    public SimpleServerMessageDto(String responseMessage) {
-        this.responseMessage = responseMessage;
-    }
 }

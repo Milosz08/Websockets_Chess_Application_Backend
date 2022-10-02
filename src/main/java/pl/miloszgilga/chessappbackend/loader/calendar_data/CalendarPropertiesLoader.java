@@ -30,9 +30,13 @@ public class CalendarPropertiesLoader {
 
     private final StaticDataLoader<CalendarPropertiesModel> loader;
 
+    //------------------------------------------------------------------------------------------------------------------
+
     public CalendarPropertiesLoader() {
         this.loader = new StaticDataLoader<>(CALENDAR_STATIC_DATA, CalendarPropertiesModel.class);
     }
+
+    //------------------------------------------------------------------------------------------------------------------
 
     public CalendarPropertiesModel getLoadedData() {
         return loader.getLoadedData();

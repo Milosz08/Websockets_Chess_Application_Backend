@@ -26,27 +26,21 @@ import ma.glasnost.orika.MapperFacade;
 import org.springframework.stereotype.Service;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.authentication.*;
 
 import java.util.Optional;
 import org.javatuples.Pair;
 import javax.transaction.Transactional;
 
-import pl.miloszgilga.chessappbackend.oauth.AuthUser;
-import pl.miloszgilga.chessappbackend.oauth.AuthUserBuilder;
+import pl.miloszgilga.chessappbackend.oauth.*;
+import pl.miloszgilga.chessappbackend.oauth.user_info.*;
 import pl.miloszgilga.chessappbackend.token.JsonWebTokenCreator;
-import pl.miloszgilga.chessappbackend.oauth.CredentialsSupplier;
 import pl.miloszgilga.chessappbackend.dto.SimpleServerMessageDto;
 import pl.miloszgilga.chessappbackend.exception.custom.AuthException;
-import pl.miloszgilga.chessappbackend.oauth.user_info.OAuth2UserInfo;
 import pl.miloszgilga.chessappbackend.oauth.dto.OAuth2RegistrationData;
-import pl.miloszgilga.chessappbackend.oauth.user_info.OAuth2UserInfoFactory;
 
 import pl.miloszgilga.chessappbackend.network.auth.dto.*;
-import pl.miloszgilga.chessappbackend.network.auth.domain.LocalUserModel;
-import pl.miloszgilga.chessappbackend.network.auth.domain.ILocalUserRepository;
-import pl.miloszgilga.chessappbackend.network.auth.domain.LocalUserDetailsModel;
+import pl.miloszgilga.chessappbackend.network.auth.domain.*;
 
 import static pl.miloszgilga.chessappbackend.oauth.CredentialsSupplier.LOCAL;
 
@@ -64,6 +58,8 @@ public class AuthService implements IAuthService {
     private final JsonWebTokenCreator tokenCreator;
     private final OAuth2UserInfoFactory userInfoFactory;
     private final ILocalUserRepository localUserRepository;
+
+    //------------------------------------------------------------------------------------------------------------------
 
     AuthService(AuthUserBuilder userBuilder, MapperFacade mapperFacade, AuthenticationManager manager,
                 AuthServiceHelper helper, JsonWebTokenCreator tokenCreator, OAuth2UserInfoFactory userInfoFactory,

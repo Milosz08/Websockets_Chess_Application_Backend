@@ -18,9 +18,7 @@
 
 package pl.miloszgilga.chessappbackend.network.ota_token.domain;
 
-import lombok.Getter;
-import lombok.Setter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 
@@ -40,7 +38,9 @@ import pl.miloszgilga.chessappbackend.network.auth.domain.LocalUserModel;
 @Entity
 @Table(name = "OTA_TOKEN_STORAGE")
 @Getter @Setter
+@Builder
 @NoArgsConstructor
+@AllArgsConstructor
 public class OtaTokenModel extends AuditableEntity implements Serializable {
     private static final long serialVersionUID = 1L;
 
@@ -53,12 +53,16 @@ public class OtaTokenModel extends AuditableEntity implements Serializable {
     @JoinColumn(name = "LOCAL_USER_ID", referencedColumnName = "ID")
     private LocalUserModel localUser;
 
+    //------------------------------------------------------------------------------------------------------------------
+
     OtaTokenModel(String otaToken, Date expirationDate, OtaTokenType userFor, Boolean alreadyUsed) {
         this.otaToken = otaToken;
         this.expirationDate = expirationDate;
         this.userFor = userFor;
         this.alreadyUsed = alreadyUsed;
     }
+
+    //------------------------------------------------------------------------------------------------------------------
 
     @Override
     public String toString() {
