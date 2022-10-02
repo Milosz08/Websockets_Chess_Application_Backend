@@ -64,6 +64,7 @@ public class SecurityConfiguration {
             NEWSLETTER_EMAIL_ENDPOINT + "/**",
             AUTH_LOCAL_ENDPOINT + LOGIN_VIA_LOCAL + "/**",
             AUTH_LOCAL_ENDPOINT + SIGNUP_VIA_LOCAL + "/**",
+            OTA_TOKEN_ENDPOINT + "/**",
             EXPOSE_STATIC_DATA_ENDPOINT + "/**",
     };
 
