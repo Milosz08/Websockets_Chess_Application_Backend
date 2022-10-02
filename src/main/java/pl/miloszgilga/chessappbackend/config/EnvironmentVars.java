@@ -18,8 +18,7 @@
 
 package pl.miloszgilga.chessappbackend.config;
 
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import org.springframework.stereotype.Component;
 import org.springframework.context.annotation.Primary;
@@ -34,11 +33,11 @@ import java.util.List;
 @Component
 @NoArgsConstructor
 public class EnvironmentVars {
+    @Value("${config.base-url}")                                                        private String baseUrl;
     @Value("${config.authorization.jwt-key}")                                           private String jwtSecretKey;
     @Value("${authorization.one-time-access-token.token-length}")                       private Integer otaTokenLenght;
     @Value("${authorization.one-time-access-token.token-expired-minutes}")              private Integer otaTokenExpiredMinutes;
     @Value("${spring.profiles.active}")                                                 private String applicationMode;
-    @Value("${config.newsletter-unsubscribe-path}")                                     private String newsletterUnsubscribePath;
     @Value("${config.frontend-cors-url}")                                               private String frontEndUrl;
     @Value("${spring.mail.username}")                                                   private String serverMailClient;
     @Value("${config.frontend-name}")                                                   private String frontendName;
@@ -57,4 +56,7 @@ public class EnvironmentVars {
     @Value("${authorization.oauth2-custom.cookie-expired-minutes}")                     private Integer oauth2CookieExpiredMinutes;
     @Value("${authorization.refresh-token.token-expired-months}")                       private Integer refreshTokenExpiredMonths;
     @Value("${authorization.oauth2-custom.password-replacer}")                          private String oauth2PasswordReplacer;
+    @Value("${config.redirects.change-password-uri}")                                   private String changePasswordRedirectUri;
+    @Value("${config.redirects.activate-account-uri}")                                  private String activateAccountRedirectUri;
+    @Value("${config.redirects.unsubscribe-newsletter-uri}")                            private String unsubscribeNewsletterUri;
 }

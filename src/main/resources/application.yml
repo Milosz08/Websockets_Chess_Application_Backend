@@ -28,9 +28,12 @@ logging:
         max-size: 10MB
 
 config:
-  newsletter-unsubscribe-path: /unsubscribe-newsletter/
-  mail-helpdesk-agent: helpdesk
-  cors-max-age-seconds: 3600
+    mail-helpdesk-agent: helpdesk
+    cors-max-age-seconds: 3600
+    redirects:
+        change-password-uri: /change-password/
+        activate-account-uri: /activate-account/
+        unsubscribe-newsletter-uri: /unsubscribe-newsletter/
 
 authorization:
     one-time-access-token:

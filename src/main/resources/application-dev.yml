@@ -1,10 +1,11 @@
 config:
-  frontend-cors-url: http://localhost:4200
-  frontend-name: localhost
-  authorization:
-    jwt-key: daw94289vndq98198nkejfnkaendwef93892fnskjdenfkjeiwefibiu32983fnskjdfn
-    jwt-issuer: localhost
-    password-encoder-strength: 4
+    base-url: http://localhost:9595
+    frontend-cors-url: http://localhost:4200
+    frontend-name: localhost
+    authorization:
+        jwt-key: daw94289vndq98198nkejfnkaendwef93892fnskjdenfkjeiwefibiu32983fnskjdfn
+        jwt-issuer: localhost
+        password-encoder-strength: 4
 server:
     port: 9595
 
