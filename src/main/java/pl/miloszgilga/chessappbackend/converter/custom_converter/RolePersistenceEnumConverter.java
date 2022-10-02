@@ -1,8 +1,8 @@
 /*
  * Copyright (c) 2022 by MILOSZ GILGA <https://miloszgilga.pl>
  *
- * File name: CredentialsSupplierPersistenceConverter.java
- * Last modified: 11/09/2022, 02:52
+ * File name: RolePersistenceConverter.java
+ * Last modified: 02/10/2022, 00:02
  * Project name: chess-app-backend
  *
  * Licensed under the MIT license; you may not use this file except in compliance with the License.
@@ -16,32 +16,19 @@
  * COPIES OR SUBSTANTIAL PORTIONS OF THE SOFTWARE.
  */
 
-package pl.miloszgilga.chessappbackend.converter;
+package pl.miloszgilga.chessappbackend.converter.custom_converter;
 
 import javax.persistence.Converter;
-import javax.persistence.AttributeConverter;
 
-import java.util.stream.Stream;
-
-import pl.miloszgilga.chessappbackend.oauth.CredentialsSupplier;
+import pl.miloszgilga.chessappbackend.security.LocalUserRole;
+import pl.miloszgilga.chessappbackend.converter.BasicEnumConverter;
 
 //----------------------------------------------------------------------------------------------------------------------
 
 @Converter(autoApply = true)
-public class CredentialsSupplierPersistenceConverter implements AttributeConverter<CredentialsSupplier, String> {
+public class RolePersistenceEnumConverter extends BasicEnumConverter<LocalUserRole> {
 
-    @Override
-    public String convertToDatabaseColumn(CredentialsSupplier attribute) {
-        if (attribute == null) return null;
-        return attribute.getName();
-    }
-
-    @Override
-    public CredentialsSupplier convertToEntityAttribute(String supplierName) {
-        if (supplierName == null) return null;
-        return Stream.of(CredentialsSupplier.values())
-                .filter(s -> s.getName().equals(supplierName))
-                .findFirst()
-                .orElseThrow(IllegalArgumentException::new);
+    protected RolePersistenceEnumConverter() {
+        super(LocalUserRole.class);
     }
 }

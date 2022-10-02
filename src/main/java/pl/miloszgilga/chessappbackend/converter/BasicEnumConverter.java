@@ -1,8 +1,8 @@
 /*
  * Copyright (c) 2022 by MILOSZ GILGA <https://miloszgilga.pl>
  *
- * File name: OtaTokenType.java
- * Last modified: 26/09/2022, 23:32
+ * File name: BasicConverter.java
+ * Last modified: 01/10/2022, 23:42
  * Project name: chess-app-backend
  *
  * Licensed under the MIT license; you may not use this file except in compliance with the License.
@@ -16,29 +16,39 @@
  * COPIES OR SUBSTANTIAL PORTIONS OF THE SOFTWARE.
  */
 
-package pl.miloszgilga.chessappbackend.token;
+package pl.miloszgilga.chessappbackend.converter;
 
-import lombok.Getter;
-import lombok.AllArgsConstructor;
-
-import pl.miloszgilga.chessappbackend.converter.IBasicEnumConverter;
+import java.util.stream.Stream;
+import javax.persistence.AttributeConverter;
 
 //----------------------------------------------------------------------------------------------------------------------
 
-@Getter
-@AllArgsConstructor
-public enum OtaTokenType implements IBasicEnumConverter {
-    RESET_PASSWORD("reset-password"),
-    ACTIVATE_ACCOUNT("activate-account");
+public abstract class BasicEnumConverter<T extends IBasicEnumConverter> implements AttributeConverter<T, String> {
+
+    private final Class<T> enumClazz;
 
     //------------------------------------------------------------------------------------------------------------------
 
-    private final String otaTokenTypeName;
+    protected BasicEnumConverter(Class<T> enumClazz) {
+        this.enumClazz = enumClazz;
+    }
 
     //------------------------------------------------------------------------------------------------------------------
 
     @Override
-    public String getEnumName() {
-        return otaTokenTypeName;
+    public String convertToDatabaseColumn(T attribute) {
+        if (attribute == null) return null;
+        return attribute.getEnumName();
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+
+    @Override
+    public T convertToEntityAttribute(String dbData) {
+        if (dbData == null) return null;
+        return Stream.of(enumClazz.getEnumConstants())
+                .filter(g -> g.getEnumName().equals(dbData))
+                .findFirst()
+                .orElseThrow(IllegalArgumentException::new);
     }
 }

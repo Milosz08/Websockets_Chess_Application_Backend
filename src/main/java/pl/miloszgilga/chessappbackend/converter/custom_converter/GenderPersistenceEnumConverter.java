@@ -1,8 +1,8 @@
 /*
  * Copyright (c) 2022 by MILOSZ GILGA <https://miloszgilga.pl>
  *
- * File name: OtaTokenType.java
- * Last modified: 26/09/2022, 23:32
+ * File name: GenderPersistenceConverter.java
+ * Last modified: 01/10/2022, 23:58
  * Project name: chess-app-backend
  *
  * Licensed under the MIT license; you may not use this file except in compliance with the License.
@@ -16,29 +16,19 @@
  * COPIES OR SUBSTANTIAL PORTIONS OF THE SOFTWARE.
  */
 
-package pl.miloszgilga.chessappbackend.token;
+package pl.miloszgilga.chessappbackend.converter.custom_converter;
 
-import lombok.Getter;
-import lombok.AllArgsConstructor;
+import javax.persistence.Converter;
 
-import pl.miloszgilga.chessappbackend.converter.IBasicEnumConverter;
+import pl.miloszgilga.chessappbackend.utils.UserGenderSpecific;
+import pl.miloszgilga.chessappbackend.converter.BasicEnumConverter;
 
 //----------------------------------------------------------------------------------------------------------------------
 
-@Getter
-@AllArgsConstructor
-public enum OtaTokenType implements IBasicEnumConverter {
-    RESET_PASSWORD("reset-password"),
-    ACTIVATE_ACCOUNT("activate-account");
+@Converter(autoApply = true)
+public class GenderPersistenceEnumConverter extends BasicEnumConverter<UserGenderSpecific> {
 
-    //------------------------------------------------------------------------------------------------------------------
-
-    private final String otaTokenTypeName;
-
-    //------------------------------------------------------------------------------------------------------------------
-
-    @Override
-    public String getEnumName() {
-        return otaTokenTypeName;
+    protected GenderPersistenceEnumConverter() {
+        super(UserGenderSpecific.class);
     }
 }

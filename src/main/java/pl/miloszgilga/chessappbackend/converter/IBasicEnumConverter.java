@@ -1,8 +1,8 @@
 /*
  * Copyright (c) 2022 by MILOSZ GILGA <https://miloszgilga.pl>
  *
- * File name: SexPersistenceConverter.java
- * Last modified: 11/09/2022, 02:19
+ * File name: IBasicConverter.java
+ * Last modified: 01/10/2022, 23:44
  * Project name: chess-app-backend
  *
  * Licensed under the MIT license; you may not use this file except in compliance with the License.
@@ -18,30 +18,8 @@
 
 package pl.miloszgilga.chessappbackend.converter;
 
-import javax.persistence.Converter;
-import javax.persistence.AttributeConverter;
-
-import java.util.stream.Stream;
-
-import pl.miloszgilga.chessappbackend.utils.UserGenderSpecific;
-
 //----------------------------------------------------------------------------------------------------------------------
 
-@Converter(autoApply = true)
-public class GenderPersistenceConverter implements AttributeConverter<UserGenderSpecific, String> {
-
-    @Override
-    public String convertToDatabaseColumn(UserGenderSpecific attribute) {
-        if (attribute == null) return null;
-        return attribute.getGender();
-    }
-
-    @Override
-    public UserGenderSpecific convertToEntityAttribute(String genderValue) {
-        if (genderValue == null) return null;
-        return Stream.of(UserGenderSpecific.values())
-                .filter(g -> g.getGender().equals(genderValue))
-                .findFirst()
-                .orElseThrow(IllegalArgumentException::new);
-    }
+public interface IBasicEnumConverter {
+    String getEnumName();
 }

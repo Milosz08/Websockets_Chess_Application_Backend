@@ -26,13 +26,14 @@ import lombok.*;
 import java.util.*;
 import java.util.stream.*;
 
+import pl.miloszgilga.chessappbackend.converter.IBasicEnumConverter;
 import pl.miloszgilga.chessappbackend.exception.custom.AuthException;
 
 //----------------------------------------------------------------------------------------------------------------------
 
 @Getter
 @AllArgsConstructor
-public enum CredentialsSupplier {
+public enum CredentialsSupplier implements IBasicEnumConverter {
     GOOGLE("google"),
     FACEBOOK("facebook"),
     LOCAL("local");
@@ -71,5 +72,12 @@ public enum CredentialsSupplier {
                 .filter(s -> !s.equals(LOCAL))
                 .map(CredentialsSupplier::getName)
                 .collect(Collectors.toSet());
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+
+    @Override
+    public String getEnumName() {
+        return name;
     }
 }

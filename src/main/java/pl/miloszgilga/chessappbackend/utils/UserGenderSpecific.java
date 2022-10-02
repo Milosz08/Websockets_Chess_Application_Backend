@@ -21,11 +21,13 @@ package pl.miloszgilga.chessappbackend.utils;
 import lombok.*;
 import java.util.stream.Stream;
 
+import pl.miloszgilga.chessappbackend.converter.IBasicEnumConverter;
+
 //----------------------------------------------------------------------------------------------------------------------
 
 @Getter
 @AllArgsConstructor
-public enum UserGenderSpecific {
+public enum UserGenderSpecific implements IBasicEnumConverter {
     MALE("male"),
     FEMALE("female"),
     OTHER("other");
@@ -41,5 +43,12 @@ public enum UserGenderSpecific {
                 .filter(r -> r.getGender().equals(gender))
                 .findFirst()
                 .orElse(UserGenderSpecific.OTHER);
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+
+    @Override
+    public String getEnumName() {
+        return gender;
     }
 }

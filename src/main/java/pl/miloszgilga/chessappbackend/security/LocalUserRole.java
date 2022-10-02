@@ -23,13 +23,14 @@ import lombok.*;
 import java.util.*;
 import java.util.stream.*;
 
+import pl.miloszgilga.chessappbackend.converter.IBasicEnumConverter;
 import pl.miloszgilga.chessappbackend.network.auth.domain.LocalUserRoleModel;
 
 //----------------------------------------------------------------------------------------------------------------------
 
 @Getter
 @AllArgsConstructor
-public enum LocalUserRole {
+public enum LocalUserRole implements IBasicEnumConverter {
     ADMIN("admin"),
     MODERATOR("moderator"),
     USER("user");
@@ -53,5 +54,12 @@ public enum LocalUserRole {
         return userRoles.stream()
                 .map(r -> r.getRoleName().getRoleName())
                 .collect(Collectors.toList());
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+
+    @Override
+    public String getEnumName() {
+        return roleName;
     }
 }
