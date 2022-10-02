@@ -1,8 +1,8 @@
 /*
  * Copyright (c) 2022 by MILOSZ GILGA <https://miloszgilga.pl>
  *
- * File name: IRenewCredentialsRepository.java
- * Last modified: 11/09/2022, 01:58
+ * File name: AttemptToChangePasswordReqDto.java
+ * Last modified: 02/10/2022, 21:10
  * Project name: chess-app-backend
  *
  * Licensed under the MIT license; you may not use this file except in compliance with the License.
@@ -16,13 +16,19 @@
  * COPIES OR SUBSTANTIAL PORTIONS OF THE SOFTWARE.
  */
 
-package pl.miloszgilga.chessappbackend.network.renew_credentials.domain;
+package pl.miloszgilga.chessappbackend.network.renew_credentials.dto;
 
-import org.springframework.stereotype.Repository;
-import org.springframework.data.jpa.repository.JpaRepository;
+import lombok.Data;
+
+import javax.validation.constraints.Size;
+import javax.validation.constraints.NotBlank;
 
 //----------------------------------------------------------------------------------------------------------------------
 
-@Repository
-public interface IRenewCredentialsOtaTokenRepository extends JpaRepository<RenewCredentialsOtaTokenModel, Long> {
+@Data
+public class AttemptToChangePasswordReqDto {
+
+    @NotBlank(message = "{jpa.validator.usernameEmail.notBlank}")
+    @Size(max = 100, message = "{jpa.validator.usernameEmail.size}")
+    private String usernameEmailAddress;
 }

@@ -1,8 +1,8 @@
 /*
  * Copyright (c) 2022 by MILOSZ GILGA <https://miloszgilga.pl>
  *
- * File name: RenewCredentialsController.java
- * Last modified: 10/09/2022, 19:13
+ * File name: IRenewCredentialsService.java
+ * Last modified: 02/10/2022, 21:13
  * Project name: chess-app-backend
  *
  * Licensed under the MIT license; you may not use this file except in compliance with the License.
@@ -18,30 +18,11 @@
 
 package pl.miloszgilga.chessappbackend.network.renew_credentials;
 
-import org.springframework.http.*;
-import org.springframework.web.bind.annotation.*;
-
-import javax.validation.Valid;
-
 import pl.miloszgilga.chessappbackend.dto.SimpleServerMessageDto;
 import pl.miloszgilga.chessappbackend.network.renew_credentials.dto.AttemptToChangePasswordReqDto;
 
-import static pl.miloszgilga.chessappbackend.config.ApplicationEndpoints.*;
-
 //----------------------------------------------------------------------------------------------------------------------
 
-@RestController
-@RequestMapping(RENEW_CREDETIALS_LOCAL)
-class RenewCredentialsController {
-
-    private final IRenewCredentialsService service;
-
-    RenewCredentialsController(IRenewCredentialsService service) {
-        this.service = service;
-    }
-
-    @PostMapping(ATTEMPT_TO_CHANGE_PASSWORD)
-    ResponseEntity<SimpleServerMessageDto> attemptToChangePassword(@RequestBody @Valid AttemptToChangePasswordReqDto req) {
-        return new ResponseEntity<>(service.attemptToChangePassword(req), HttpStatus.OK);
-    }
+interface IRenewCredentialsService {
+    SimpleServerMessageDto attemptToChangePassword(AttemptToChangePasswordReqDto req);
 }
