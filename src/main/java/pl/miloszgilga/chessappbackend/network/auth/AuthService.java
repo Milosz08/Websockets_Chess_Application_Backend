@@ -43,6 +43,7 @@ import pl.miloszgilga.chessappbackend.network.auth.dto.*;
 import pl.miloszgilga.chessappbackend.network.auth.domain.*;
 
 import static pl.miloszgilga.chessappbackend.oauth.CredentialsSupplier.LOCAL;
+import static pl.miloszgilga.chessappbackend.token.OtaTokenType.ACTIVATE_ACCOUNT;
 
 //----------------------------------------------------------------------------------------------------------------------
 
@@ -120,7 +121,7 @@ public class AuthService implements IAuthService {
         userDetailsModel.setLocalUser(userModel);
         helper.addUserToNewsletter(userModel, req.getHasNewsletterAccept());
         localUserRepository.save(userModel);
-        helper.sendEmailMessageForActivateAccount(userModel);
+        helper.sendEmailMessageForActivateAccount(userModel, ACTIVATE_ACCOUNT);
 
         LOGGER.info("Create new user in database via LOCAL interface. User data: {}", userModel);
         final SuccessedAttemptToFinishSignupResDto resDto = SuccessedAttemptToFinishSignupResDto.builder()
@@ -162,7 +163,7 @@ public class AuthService implements IAuthService {
         validateUser.getLocalUserDetails().setIsDataFilled(true);
         helper.addUserToNewsletter(validateUser, req.getNewsletterAccept());
         localUserRepository.save(validateUser);
-        helper.sendEmailMessageForActivateAccount(validateUser);
+        helper.sendEmailMessageForActivateAccount(validateUser, ACTIVATE_ACCOUNT);
         LOGGER.info("Update new user data in database via OAUTH2 interface. User data: {}", req);
         return new SimpleServerMessageDto("Your account details information has been successfully updated.");
     }
@@ -214,6 +215,9 @@ public class AuthService implements IAuthService {
         userDetails.setHasPhoto(!userInfo.getUserImageUrl().isEmpty());
         userDetails.setPhotoEmbedLink(userInfo.getUserImageUrl().isEmpty() ? null : userInfo.getUserImageUrl());
 
+        if (!foundUser.getIsActivated() && foundUser.getLocalUserDetails().getIsDataFilled()) {
+            helper.sendEmailMessageForActivateAccount(foundUser, ACTIVATE_ACCOUNT);
+        }
         localUserRepository.save(foundUser);
         LOGGER.info("Update user via {} OAuth2 provider. User data: {}", data.getSupplier().getName(), foundUser);
         return userBuilder.build(foundUser, data);
