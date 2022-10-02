@@ -26,6 +26,7 @@ import java.util.HashMap;
 
 import pl.miloszgilga.chessappbackend.utils.TimeHelper;
 import pl.miloszgilga.chessappbackend.config.EnvironmentVars;
+import pl.miloszgilga.chessappbackend.utils.StringManipulator;
 import pl.miloszgilga.chessappbackend.token.JsonWebTokenCreator;
 import pl.miloszgilga.chessappbackend.network.auth.domain.LocalUserModel;
 
@@ -38,17 +39,21 @@ import static pl.miloszgilga.chessappbackend.config.ApplicationEndpoints.NEWSLET
 @Service
 public class MailOutService implements IMailOutService {
 
-    private final MailService mailService;
     private final TimeHelper timeHelper;
-    private final JsonWebTokenCreator creator;
+    private final MailService mailService;
     private final EnvironmentVars environment;
+    private final JsonWebTokenCreator creator;
+    private final StringManipulator manipulator;
+
+    //------------------------------------------------------------------------------------------------------------------
 
     public MailOutService(MailService mailService, TimeHelper timeHelper, JsonWebTokenCreator creator,
-                          EnvironmentVars environment) {
+                          EnvironmentVars environment, StringManipulator manipulator) {
         this.mailService = mailService;
         this.timeHelper = timeHelper;
         this.creator = creator;
         this.environment = environment;
+        this.manipulator = manipulator;
     }
 
     //------------------------------------------------------------------------------------------------------------------
@@ -61,10 +66,23 @@ public class MailOutService implements IMailOutService {
         parameters.put("userName", userName);
         parameters.put("emailAddress", email);
         parameters.put("otaToken", otaToken);
-        parameters.put("tokensExpiredMinutes", environment.getOtaTokenExpiredMinutes());
-        parameters.put("mailHelpdeskAgent", environment.getMailHelpdeskAgent() + "@" + environment.getFrontendName());
-        parameters.put("buttonLink", computeBearer(bearer));
-        mailService.generalEmailSender(request, parameters, MailTemplate.UNSUBSCRIBE_NEWSLETTER);
+        parameters.put("bearerButtonLink", computeBearer(bearer, NEWSLETTER_UNSUBSCRIBE_VIA_LINK));
+        mailService.generalEmailSender(request, parameters, UNSUBSCRIBE_NEWSLETTER);
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+
+    @Override
+    public void activateAccount(Long id, String email, LocalUserModel userModel, String bearer, String otaToken) {
+        final String messageTitle = String.format("(%s) Chess Online: Activate account for %s (%s)",
+                id, manipulator.generateFullName(userModel), userModel.getNickname());
+        final var request = new MailRequestDto(List.of(email), environment.getServerMailClient(), messageTitle);
+        final Map<String, Object> parameters = new HashMap<>(extendsParametersWithDef(email));
+        parameters.put("userName", userModel.getFirstName());
+        parameters.put("emailAddress", userModel.getEmailAddress());
+        parameters.put("otaToken", otaToken);
+        parameters.put("bearerButtonLink", computeBearer(bearer, ACTIVATE_ACCOUNT_VIA_LINK));
+        mailService.generalEmailSender(request, parameters, ACTIVATE_ACCOUNT);
     }
 
     //------------------------------------------------------------------------------------------------------------------
@@ -72,13 +90,23 @@ public class MailOutService implements IMailOutService {
     private Map<String, Object> extendsParametersWithDef(String email) {
         final Map<String, Object> parameters = new HashMap<>();
         parameters.put("servletTime", timeHelper.getCurrentUTC());
+        parameters.put("tokensExpiredMinutes", environment.getOtaTokenExpiredMinutes());
         parameters.put("unsubscribeEndlessLink", computeBearer(creator.createNonExpUnsubscribeNewsletterToken(email)));
+        parameters.put("mailHelpdeskAgent", environment.getMailHelpdeskAgent() + "@" + environment.getFrontendName());
         parameters.put("applicationLink", environment.getFrontEndUrl());
         parameters.put("applicationName", environment.getFrontendName());
         return parameters;
     }
 
+    //------------------------------------------------------------------------------------------------------------------
+
+    private String computeBearer(String bearer, String redirectUri) {
+        return environment.getBaseUrl() + NEWSLETTER_EMAIL_ENDPOINT + redirectUri + bearer;
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+
     private String computeBearer(String bearer) {
-        return environment.getFrontEndUrl() + environment.getNewsletterUnsubscribePath() + bearer;
+        return environment.getBaseUrl() + environment.getUnsubscribeNewsletterUri() + bearer;
     }
 }

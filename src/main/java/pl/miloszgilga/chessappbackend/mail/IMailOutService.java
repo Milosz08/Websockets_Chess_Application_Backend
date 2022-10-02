@@ -18,8 +18,11 @@
 
 package pl.miloszgilga.chessappbackend.mail;
 
+import pl.miloszgilga.chessappbackend.network.auth.domain.LocalUserModel;
+
 //----------------------------------------------------------------------------------------------------------------------
 
-interface IMailOutService {
-    void unsubscribeNewsletter(long id, String userName, String email, String bearer, String otaToken);
+public interface IMailOutService {
+    void unsubscribeNewsletter(Long id, String userName, String email, String bearer, String otaToken);
+    void activateAccount(Long id, String email, LocalUserModel userModel, String bearer, String otaToken);
 }

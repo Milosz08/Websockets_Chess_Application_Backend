@@ -25,7 +25,10 @@ import lombok.*;
 @Getter
 @AllArgsConstructor
 enum MailTemplate {
-    UNSUBSCRIBE_NEWSLETTER("unsubscribe-newsletter.template.ftl");
+    UNSUBSCRIBE_NEWSLETTER("unsubscribe-newsletter.template.ftl"),
+    ACTIVATE_ACCOUNT("activate-account.template.ftl");
+
+    //------------------------------------------------------------------------------------------------------------------
 
     private final String templateName;
 }
