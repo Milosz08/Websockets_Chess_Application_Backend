@@ -25,11 +25,33 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;
 
+import pl.miloszgilga.chessappbackend.token.OtaTokenType;
+
 //----------------------------------------------------------------------------------------------------------------------
 
 @Repository
 public interface IOtaTokenRepository extends JpaRepository<OtaTokenModel, Long> {
 
-    @Query(value = "SELECT m FROM OtaTokenModel m WHERE m.localUser.emailAddress=:emailAddress")
-    Optional<OtaTokenModel> findTokenByUserEmail(@Param("emailAddress") String emailAddress);
+    @Query(value = "SELECT m FROM OtaTokenModel m INNER JOIN m.localUser u INNER JOIN m.localUser.localUserDetails d " +
+            "WHERE m.alreadyUsed=false " +
+            "AND m.otaToken=:otaToken " +
+            "AND m.userFor=:usedFor " +
+            "AND (u.emailAddress=:emailAddress OR d.secondEmailAddress=:emailAddress)")
+    Optional<OtaTokenModel> findTokenByUserEmailOrSecondEmailAddress(@Param("emailAddress") String emailAddress,
+                                                                     @Param("usedFor") OtaTokenType usedFor,
+                                                                     @Param("otaToken") String otaToken);
+
+    //------------------------------------------------------------------------------------------------------------------
+
+    @Query(value = "SELECT COUNT(m) > 0 FROM OtaTokenModel m " +
+            "WHERE m.otaToken=:token " +
+            "AND m.userFor=:usedFor")
+    Boolean checkIfOtaTokenExist(@Param("token") String token, @Param("usedFor") OtaTokenType usedFor);
+
+    //------------------------------------------------------------------------------------------------------------------
+
+    @Query(value = "SELECT m FROM OtaTokenModel m " +
+            "WHERE m.otaToken=:token " +
+            "AND m.userFor=:usedFor")
+    Optional<OtaTokenModel> findTokenBasedValueAndUsed(@Param("token") String token, @Param("usedFor") OtaTokenType usedFor);
 }

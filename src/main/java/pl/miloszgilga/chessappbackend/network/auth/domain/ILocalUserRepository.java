@@ -40,11 +40,27 @@ public interface ILocalUserRepository extends JpaRepository<LocalUserModel, Long
     //------------------------------------------------------------------------------------------------------------------
 
     @Query(value = "SELECT m FROM LocalUserModel m WHERE m.emailAddress=:emailAddress")
-    Optional<LocalUserModel> findUserByEmailAddress(String emailAddress);
+    Optional<LocalUserModel> findUserByEmailAddress(@Param("emailAddress") String emailAddress);
 
-    @Query(value = "SELECT count(m) > 0 FROM LocalUserModel m WHERE m.emailAddress=:emailAddress")
-    Boolean checkIfUserByEmailAddressExist(String emailAddress);
+    //------------------------------------------------------------------------------------------------------------------
 
-    @Query(value = "SELECT m FROM LocalUserModel m WHERE m.emailAddress=:emailAddress AND m.nickname=:nickname AND m.id=:id")
-    Optional<LocalUserModel> findUserByEmailAddressNicknameAndId(String emailAddress, String nickname, Long id);
+    @Query(value = "SELECT COUNT(m) > 0 FROM LocalUserModel m WHERE m.emailAddress=:emailAddress")
+    Boolean checkIfUserByEmailAddressExist(@Param("emailAddress") String emailAddress);
+
+    //------------------------------------------------------------------------------------------------------------------
+
+    @Query(value = "SELECT m FROM LocalUserModel m " +
+            "WHERE m.emailAddress=:emailAddress " +
+            "AND m.nickname=:nickname " +
+            "AND m.id=:id")
+    Optional<LocalUserModel> findUserByEmailAddressNicknameAndId(@Param("emailAddress") String emailAddress,
+                                                                 @Param("nickname") String nickname,
+                                                                 @Param("id") Long id);
+
+    //------------------------------------------------------------------------------------------------------------------
+
+    @Query(value = "SELECT COUNT(m) > 0 FROM LocalUserModel m INNER JOIN m.localUserDetails d " +
+            "WHERE m.emailAddress=:emailAddress " +
+            "OR d.secondEmailAddress=:emailAddress")
+    Boolean checkIfUserHasEmailOrSecondEmail(@Param("emailAddress") String emailAddress);
 }

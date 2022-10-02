@@ -20,7 +20,7 @@ package pl.miloszgilga.chessappbackend.network.auth.domain;
 
 import lombok.*;
 
-import java.util.Set;
+import java.util.*;
 import java.io.Serializable;
 
 import javax.persistence.*;
@@ -31,7 +31,7 @@ import static javax.persistence.CascadeType.PERSIST;
 
 import pl.miloszgilga.chessappbackend.audit.AuditableEntity;
 import pl.miloszgilga.chessappbackend.oauth.CredentialsSupplier;
-import pl.miloszgilga.chessappbackend.network.renew_credentials.domain.RenewCredentialsOtaTokenModel;
+import pl.miloszgilga.chessappbackend.network.ota_token.domain.OtaTokenModel;
 
 //----------------------------------------------------------------------------------------------------------------------
 
@@ -55,8 +55,8 @@ public class LocalUserModel extends AuditableEntity implements Serializable {
     @OneToOne(fetch = LAZY, mappedBy = "localUser", cascade = { PERSIST, MERGE })
     private RefreshTokenModel refreshToken;
 
-    @OneToOne(fetch = LAZY, mappedBy = "localUser", cascade = { PERSIST, MERGE })
-    private RenewCredentialsOtaTokenModel renewCredentials;
+    @OneToMany(fetch = LAZY, mappedBy = "localUser", cascade = { PERSIST, MERGE })
+    private Set<OtaTokenModel> otaTokens = new HashSet<>();
 
     @OneToOne(fetch = LAZY, mappedBy = "localUser", cascade = { PERSIST, MERGE })
     private LocalUserDetailsModel localUserDetails;

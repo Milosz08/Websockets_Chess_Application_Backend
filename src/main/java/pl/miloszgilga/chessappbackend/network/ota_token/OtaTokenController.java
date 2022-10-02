@@ -22,9 +22,12 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import pl.miloszgilga.chessappbackend.dto.SimpleOtaTokenReqDto;
-import pl.miloszgilga.chessappbackend.dto.SimpleServerMessageDto;
+import java.net.URI;
 
+import pl.miloszgilga.chessappbackend.dto.SimpleServerMessageDto;
+import pl.miloszgilga.chessappbackend.network.ota_token.dto.OtaTokenMultipleEmailsReqDto;
+
+import static pl.miloszgilga.chessappbackend.config.RedirectEndpoints.*;
 import static pl.miloszgilga.chessappbackend.config.ApplicationEndpoints.*;
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -44,12 +47,34 @@ class OtaTokenController {
     //------------------------------------------------------------------------------------------------------------------
 
     @PostMapping(CHANGE_PASSWORD)
-    ResponseEntity<SimpleServerMessageDto> changePassword(@RequestBody SimpleOtaTokenReqDto req) {
+    ResponseEntity<SimpleServerMessageDto> changePassword(@RequestBody OtaTokenMultipleEmailsReqDto req) {
         return new ResponseEntity<>(otaTokenService.changePassword(req), HttpStatus.OK);
     }
 
+    //------------------------------------------------------------------------------------------------------------------
+
+    @GetMapping(CHANGE_PASSWORD_VIA_LINK + "{bearer}")
+    ResponseEntity<Void> changePasswordViaLink(@PathVariable String bearer) {
+        URI redirectUri = otaTokenService.changePasswordViaLink(bearer);
+        return ResponseEntity.status(HttpStatus.FOUND)
+                .location(redirectUri)
+                .build();
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+
     @PostMapping(ACTIVATE_ACCOUNT)
-    ResponseEntity<SimpleServerMessageDto> activateAccount(@RequestBody SimpleOtaTokenReqDto req) {
+    ResponseEntity<SimpleServerMessageDto> activateAccount(@RequestBody OtaTokenMultipleEmailsReqDto req) {
         return new ResponseEntity<>(otaTokenService.activateAccount(req), HttpStatus.OK);
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+
+    @GetMapping(ACTIVATE_ACCOUNT_VIA_LINK + "{bearer}")
+    ResponseEntity<Void> activateAccountViaLink(@PathVariable String bearer) {
+        URI redirectUri = otaTokenService.activateAccountViaLink(bearer);
+        return ResponseEntity.status(HttpStatus.FOUND)
+                .location(redirectUri)
+                .build();
     }
 }

@@ -18,4 +18,7 @@
     <include file="migrations/2022-09-migrations/V11__2022-09-26__change-datetime-to-date-sql-type.xml" relativeToChangelogFile="true"/>
     <include file="migrations/2022-09-migrations/V12__2022-09-26__add-data-filled-column-in-user-details-schema.xml" relativeToChangelogFile="true"/>
 
+    <include file="migrations/2022-10-migrations/V13__2022-10-01__create-ota-token-schema.xml" relativeToChangelogFile="true"/>
+    <include file="migrations/2022-10-migrations/V14__2022-10-02__change-newsletter-name-varchar-length.xml" relativeToChangelogFile="true"/>
+
 </databaseChangeLog>

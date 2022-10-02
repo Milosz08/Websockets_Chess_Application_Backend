@@ -1,8 +1,8 @@
 /*
  * Copyright (c) 2022 by MILOSZ GILGA <https://miloszgilga.pl>
  *
- * File name: IOtaTokenService.java
- * Last modified: 26/09/2022, 23:08
+ * File name: RedirectEndpoints.java
+ * Last modified: 02/10/2022, 16:09
  * Project name: chess-app-backend
  *
  * Licensed under the MIT license; you may not use this file except in compliance with the License.
@@ -16,18 +16,13 @@
  * COPIES OR SUBSTANTIAL PORTIONS OF THE SOFTWARE.
  */
 
-package pl.miloszgilga.chessappbackend.network.ota_token;
-
-import pl.miloszgilga.chessappbackend.dto.SimpleServerMessageDto;
-import pl.miloszgilga.chessappbackend.network.ota_token.dto.OtaTokenMultipleEmailsReqDto;
-
-import java.net.URI;
+package pl.miloszgilga.chessappbackend.config;
 
 //----------------------------------------------------------------------------------------------------------------------
 
-interface IOtaTokenService {
-    SimpleServerMessageDto changePassword(final OtaTokenMultipleEmailsReqDto req);
-    URI changePasswordViaLink(final String bearer);
-    SimpleServerMessageDto activateAccount(final OtaTokenMultipleEmailsReqDto req);
-    URI activateAccountViaLink(final String bearer);
+public class RedirectEndpoints {
+
+    public static final String CHANGE_PASSWORD_VIA_LINK = "/change-password-via-link/";
+    public static final String ACTIVATE_ACCOUNT_VIA_LINK = "/activate-account-via-link/";
+    public static final String NEWSLETTER_UNSUBSCRIBE_VIA_LINK = "/unsubscribe-via-link/";
 }

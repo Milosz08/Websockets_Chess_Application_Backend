@@ -1,8 +1,8 @@
 /*
  * Copyright (c) 2022 by MILOSZ GILGA <https://miloszgilga.pl>
  *
- * File name: IOtaTokenService.java
- * Last modified: 26/09/2022, 23:08
+ * File name: TokenLinkValidationData.java
+ * Last modified: 02/10/2022, 18:39
  * Project name: chess-app-backend
  *
  * Licensed under the MIT license; you may not use this file except in compliance with the License.
@@ -16,18 +16,21 @@
  * COPIES OR SUBSTANTIAL PORTIONS OF THE SOFTWARE.
  */
 
-package pl.miloszgilga.chessappbackend.network.ota_token;
+package pl.miloszgilga.chessappbackend.network.ota_token.dto;
 
-import pl.miloszgilga.chessappbackend.dto.SimpleServerMessageDto;
-import pl.miloszgilga.chessappbackend.network.ota_token.dto.OtaTokenMultipleEmailsReqDto;
+import lombok.*;
 
-import java.net.URI;
+import pl.miloszgilga.chessappbackend.token.OtaTokenType;
 
 //----------------------------------------------------------------------------------------------------------------------
 
-interface IOtaTokenService {
-    SimpleServerMessageDto changePassword(final OtaTokenMultipleEmailsReqDto req);
-    URI changePasswordViaLink(final String bearer);
-    SimpleServerMessageDto activateAccount(final OtaTokenMultipleEmailsReqDto req);
-    URI activateAccountViaLink(final String bearer);
+@Data
+@Builder
+@AllArgsConstructor
+public class TokenLinkValidationData {
+    private String bearer;
+    private OtaTokenType type;
+    private String successMessage;
+    private String failureMessage;
+    private String redirectUri;
 }

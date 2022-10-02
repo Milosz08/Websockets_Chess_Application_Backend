@@ -49,7 +49,7 @@ public class OtaTokenModel extends AuditableEntity implements Serializable {
     @Column(name = "USED_FOR")          private OtaTokenType userFor;
     @Column(name = "ALREADY_USED")      private Boolean alreadyUsed;
 
-    @OneToOne(cascade = { MERGE, PERSIST }, fetch = LAZY)
+    @ManyToOne(cascade = { MERGE, PERSIST }, fetch = LAZY)
     @JoinColumn(name = "LOCAL_USER_ID", referencedColumnName = "ID")
     private LocalUserModel localUser;
 

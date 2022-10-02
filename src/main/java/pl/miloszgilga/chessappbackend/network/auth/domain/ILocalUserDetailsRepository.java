@@ -18,11 +18,19 @@
 
 package pl.miloszgilga.chessappbackend.network.auth.domain;
 
+import org.springframework.data.jpa.repository.*;
 import org.springframework.stereotype.Repository;
-import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.repository.query.Param;
+
+import java.util.Optional;
 
 //----------------------------------------------------------------------------------------------------------------------
 
 @Repository
 public interface ILocalUserDetailsRepository extends JpaRepository<LocalUserDetailsModel, Long> {
+
+    @Query(value = "SELECT m FROM LocalUserDetailsModel m INNER JOIN m.localUser u " +
+            "WHERE m.hasNewsletterAccept=true " +
+            "AND u.emailAddress=:emailAddress")
+    Optional<LocalUserDetailsModel> findDetailsByUserEmail(@Param("emailAddress") String emailAddress);
 }
