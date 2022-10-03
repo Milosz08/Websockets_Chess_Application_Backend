@@ -83,6 +83,22 @@ public class JsonWebTokenVerificator {
 
     //------------------------------------------------------------------------------------------------------------------
 
+    public Long validateExpiredTokenToRefreshToken(String expiredToken) {
+        Long userId;
+        try {
+            final Claims claimsJws = extractClaimsFromRawToken(expiredToken);
+            userId = claimsJws.get(USER_ID.getClaimName(), Long.class);
+        } catch (ExpiredJwtException ex) {
+            userId = ex.getClaims().get(USER_ID.getClaimName(), Long.class);
+        } catch (Exception ex) {
+            LOGGER.error("Attempt to extract refresh token with malformed expired bearer token. Token {}", expiredToken);
+            throw new TokenException.JwtMalformedTokenException("Expired jwt token is malformed. Try again with another.");
+        }
+        return userId;
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+
     public boolean basicTokenIsMalformed(String token) {
         try {
             Jwts.parserBuilder().setSigningKey(jsonWebToken.getSignatureKey()).build().parseClaimsJws(token);

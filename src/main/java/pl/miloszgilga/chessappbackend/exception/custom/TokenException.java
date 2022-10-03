@@ -45,4 +45,12 @@ public class TokenException {
             super(HttpStatus.UNAUTHORIZED, message, args);
         }
     }
+
+    //------------------------------------------------------------------------------------------------------------------
+
+    public static class RefreshTokenNotExistException extends BasicAuthenticationException {
+        public RefreshTokenNotExistException(String message, Object... args) {
+            super(HttpStatus.NOT_FOUND, message, args);
+        }
+    }
 }

@@ -18,14 +18,15 @@
 
 package pl.miloszgilga.chessappbackend.network.auth;
 
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import javax.servlet.http.HttpServletRequest;
 
 import pl.miloszgilga.chessappbackend.oauth.AuthUser;
 import pl.miloszgilga.chessappbackend.network.auth.dto.*;
+import pl.miloszgilga.chessappbackend.utils.NetworkHelper;
 import pl.miloszgilga.chessappbackend.security.CurrentUser;
 import pl.miloszgilga.chessappbackend.dto.SimpleServerMessageDto;
 
@@ -37,19 +38,23 @@ import static pl.miloszgilga.chessappbackend.config.ApplicationEndpoints.*;
 @RequestMapping(AUTH_LOCAL_ENDPOINT)
 class AuthController {
 
-    private final AuthService service;
+    private final LoginService loginService;
+    private final NetworkHelper networkHelper;
+    private final SignupService signupService;
 
     //------------------------------------------------------------------------------------------------------------------
 
-    AuthController(AuthService service) {
-        this.service = service;
+    AuthController(LoginService loginService, NetworkHelper networkHelper, SignupService signupService) {
+        this.loginService = loginService;
+        this.networkHelper = networkHelper;
+        this.signupService = signupService;
     }
 
     //------------------------------------------------------------------------------------------------------------------
 
     @PostMapping(LOGIN_VIA_LOCAL)
     ResponseEntity<SuccessedLoginResDto> loginViaLocal(@Valid @RequestBody LoginViaLocalReqDto req) {
-        return new ResponseEntity<>(service.loginViaLocal(req), HttpStatus.OK);
+        return new ResponseEntity<>(loginService.loginViaLocal(req), HttpStatus.OK);
     }
 
     //------------------------------------------------------------------------------------------------------------------
@@ -57,14 +62,30 @@ class AuthController {
     @PostMapping(LOGIN_VIA_OAUTH2)
     ResponseEntity<SuccessedLoginResDto> loginViaOAuth2(@Valid @RequestBody LoginSignupViaOAuth2ReqDto req,
                                                         @CurrentUser AuthUser user) {
-        return new ResponseEntity<>(service.loginViaOAuth2(req, user.getUserModel().getId()), HttpStatus.OK);
+        return new ResponseEntity<>(loginService.loginViaOAuth2(req, user.getUserModel().getId()), HttpStatus.OK);
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+
+    @PostMapping(LOGOUT)
+    ResponseEntity<Void> logout(@CurrentUser AuthUser user) {
+        loginService.logout(user.getUserModel().getId());
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+
+    @PostMapping(REFRESH_TOKEN)
+    ResponseEntity<RefreshTokenResDto> refreshToken(HttpServletRequest req) {
+        final String token = networkHelper.extractJwtTokenFromRequest(req);
+        return new ResponseEntity<>(loginService.refreshToken(token), HttpStatus.OK);
     }
 
     //------------------------------------------------------------------------------------------------------------------
 
     @PostMapping(SIGNUP_VIA_LOCAL)
     ResponseEntity<SuccessedAttemptToFinishSignupResDto> signupViaLocal(@Valid @RequestBody SignupViaLocalReqDto req) {
-        return new ResponseEntity<>(service.signupViaLocal(req), HttpStatus.CREATED);
+        return new ResponseEntity<>(signupService.signupViaLocal(req), HttpStatus.CREATED);
     }
 
     //------------------------------------------------------------------------------------------------------------------
@@ -73,7 +94,7 @@ class AuthController {
     ResponseEntity<SuccessedAttemptToFinishSignupResDto> attemptToFinishSignup(
             @Valid @RequestBody LoginSignupViaOAuth2ReqDto req, @CurrentUser AuthUser user
     ) {
-        return new ResponseEntity<>(service.attemptToFinishSignup(req, user.getUserModel().getId()), HttpStatus.OK);
+        return new ResponseEntity<>(signupService.attemptToFinishSignup(req, user.getUserModel().getId()), HttpStatus.OK);
     }
 
     //------------------------------------------------------------------------------------------------------------------
@@ -81,6 +102,6 @@ class AuthController {
     @PostMapping(FINISH_SIGNUP_VIA_OAUTH2)
     ResponseEntity<SimpleServerMessageDto> finishSignup(@Valid @RequestBody FinishSignupReqDto req,
                                                         @CurrentUser AuthUser user) {
-        return new ResponseEntity<>(service.finishSignup(req, user.getUserModel().getId()), HttpStatus.OK);
+        return new ResponseEntity<>(signupService.finishSignup(req, user.getUserModel().getId()), HttpStatus.OK);
     }
 }

@@ -1,8 +1,8 @@
 /*
  * Copyright (c) 2022 by MILOSZ GILGA <https://miloszgilga.pl>
  *
- * File name: IRefreshTokenRepository.java
- * Last modified: 11/09/2022, 01:55
+ * File name: RefreshTokenResDto.java
+ * Last modified: 03/10/2022, 13:11
  * Project name: chess-app-backend
  *
  * Licensed under the MIT license; you may not use this file except in compliance with the License.
@@ -16,19 +16,16 @@
  * COPIES OR SUBSTANTIAL PORTIONS OF THE SOFTWARE.
  */
 
-package pl.miloszgilga.chessappbackend.network.auth.domain;
+package pl.miloszgilga.chessappbackend.network.auth.dto;
 
-import org.springframework.data.jpa.repository.*;
-import org.springframework.stereotype.Repository;
-import org.springframework.data.repository.query.Param;
-
-import java.util.Optional;
+import lombok.*;
 
 //----------------------------------------------------------------------------------------------------------------------
 
-@Repository
-public interface IRefreshTokenRepository extends JpaRepository<RefreshTokenModel, Long> {
-
-    @Query(value = "SELECT m FROM RefreshTokenModel m INNER JOIN m.localUser u WHERE u.id=:userId")
-    Optional<RefreshTokenModel> findRefreshTokenByUserId(@Param("userId") Long userId);
+@Data
+@Builder
+@AllArgsConstructor
+public class RefreshTokenResDto {
+    private String token;
+    private String refreshToken;
 }

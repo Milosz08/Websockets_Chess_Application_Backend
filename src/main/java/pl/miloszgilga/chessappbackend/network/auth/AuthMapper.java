@@ -45,6 +45,7 @@ public class AuthMapper {
     private final UserToAttemptSignupResDtoCustomizer userToAttemptSignupResDtoCustomizer;
     private final SignupOAuth2DtoToUserCustomizer signupOAuth2DtoToUserCustomizer;
     private final SignupOAuth2DtoToUserDetailsCustomizer signupOAuth2DtoToUserDetailsCustomizer;
+    private final UserToSuccessedLoginResDtoCustomizer userToSuccessedLoginResDtoCustomizer;
     private final FilledSignupDataToUserDetailsCustomizer filledSignupDataToUserDetailsCustomizer;
 
     //------------------------------------------------------------------------------------------------------------------
@@ -90,6 +91,13 @@ public class AuthMapper {
                 .customize(filledSignupDataToUserDetailsCustomizer)
                 .fieldMap("birthDate").converter(DATE_FROM_STRING_TO_OBJECT.getName()).add()
                 .field("countryName", "country")
+                .byDefault()
+                .register();
+
+        mapperFactory.classMap(LocalUserModel.class, SuccessedLoginResDto.class)
+                .field("localUserDetails.hasPhoto", "ifHasPhoto")
+                .field("localUserDetails.photoEmbedLink", "photoUrl")
+                .customize(userToSuccessedLoginResDtoCustomizer)
                 .byDefault()
                 .register();
     }
