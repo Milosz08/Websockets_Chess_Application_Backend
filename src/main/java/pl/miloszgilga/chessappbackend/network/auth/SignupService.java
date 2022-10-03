@@ -24,17 +24,12 @@ import org.slf4j.LoggerFactory;
 import ma.glasnost.orika.MapperFacade;
 
 import org.springframework.stereotype.Service;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.authentication.*;
 
 import java.util.Optional;
-import org.javatuples.Pair;
 import javax.transaction.Transactional;
 
 import pl.miloszgilga.chessappbackend.oauth.*;
 import pl.miloszgilga.chessappbackend.oauth.user_info.*;
-import pl.miloszgilga.chessappbackend.token.JsonWebTokenCreator;
 import pl.miloszgilga.chessappbackend.dto.SimpleServerMessageDto;
 import pl.miloszgilga.chessappbackend.exception.custom.AuthException;
 import pl.miloszgilga.chessappbackend.oauth.dto.OAuth2RegistrationData;
@@ -48,65 +43,25 @@ import static pl.miloszgilga.chessappbackend.token.OtaTokenType.ACTIVATE_ACCOUNT
 //----------------------------------------------------------------------------------------------------------------------
 
 @Service
-public class AuthService implements IAuthService {
+public class SignupService implements ISignupService {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(AuthService.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(SignupService.class);
 
     private final AuthServiceHelper helper;
     private final MapperFacade mapperFacade;
     private final AuthUserBuilder userBuilder;
-    private final AuthenticationManager manager;
-    private final JsonWebTokenCreator tokenCreator;
     private final OAuth2UserInfoFactory userInfoFactory;
     private final ILocalUserRepository localUserRepository;
 
     //------------------------------------------------------------------------------------------------------------------
 
-    AuthService(AuthUserBuilder userBuilder, MapperFacade mapperFacade, AuthenticationManager manager,
-                AuthServiceHelper helper, JsonWebTokenCreator tokenCreator, OAuth2UserInfoFactory userInfoFactory,
-                ILocalUserRepository localUserRepository) {
+    SignupService(AuthUserBuilder userBuilder, MapperFacade mapperFacade, AuthServiceHelper helper,
+                  OAuth2UserInfoFactory userInfoFactory, ILocalUserRepository localUserRepository) {
+        this.helper = helper;
         this.userBuilder = userBuilder;
         this.mapperFacade = mapperFacade;
-        this.manager = manager;
-        this.helper = helper;
-        this.tokenCreator = tokenCreator;
         this.userInfoFactory = userInfoFactory;
         this.localUserRepository = localUserRepository;
-    }
-
-    //------------------------------------------------------------------------------------------------------------------
-
-    @Override
-    @Transactional
-    public SuccessedLoginResDto loginViaLocal(LoginViaLocalReqDto req) {
-        final var userCredentials = new UsernamePasswordAuthenticationToken(req.getUsernameEmail(), req.getPassword());
-        final Authentication authentication = manager.authenticate(userCredentials);
-        final AuthUser authUser = (AuthUser) authentication.getPrincipal();
-        if (!authUser.getUserModel().getCredentialsSupplier().equals(LOCAL)) {
-            LOGGER.error("Attempt to log in on OAuth2 account provider via local account login form. Req: {}", req);
-            throw new AuthException.DifferentAuthenticationProviderException("This account is not managed locally. " +
-                    "Try login via outside supplier.");
-        }
-        SecurityContextHolder.getContext().setAuthentication(authentication);
-
-        // TODO: generate jwt and refresh token
-
-        final String jsonWebToken = tokenCreator.createUserCredentialsToken(authentication);
-        LOGGER.info("User with id: {} and email: {} was successfuly logged.",
-                authUser.getUserModel().getId(), authUser.getUserModel().getEmailAddress());
-        return SuccessedLoginResDto.factoryBuilder(new Pair<>(authUser.getUserModel(), jsonWebToken));
-    }
-
-    //------------------------------------------------------------------------------------------------------------------
-
-    @Override
-    @Transactional
-    public SuccessedLoginResDto loginViaOAuth2(LoginSignupViaOAuth2ReqDto req, Long userId) {
-        final LocalUserModel userModel = helper.findUserAndReturnUserData(userId);
-
-        // TODO: map userModel to ReqDto object + generate jwt and refresh token
-
-        return null;
     }
 
     //------------------------------------------------------------------------------------------------------------------

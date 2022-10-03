@@ -1,8 +1,8 @@
 /*
  * Copyright (c) 2022 by MILOSZ GILGA <https://miloszgilga.pl>
  *
- * File name: IAuthLocalService.java
- * Last modified: 11/09/2022, 01:38
+ * File name: ILoginService.java
+ * Last modified: 03/10/2022, 13:00
  * Project name: chess-app-backend
  *
  * Licensed under the MIT license; you may not use this file except in compliance with the License.
@@ -18,18 +18,13 @@
 
 package pl.miloszgilga.chessappbackend.network.auth;
 
-import pl.miloszgilga.chessappbackend.oauth.AuthUser;
 import pl.miloszgilga.chessappbackend.network.auth.dto.*;
-import pl.miloszgilga.chessappbackend.dto.SimpleServerMessageDto;
-import pl.miloszgilga.chessappbackend.oauth.dto.OAuth2RegistrationData;
 
 //----------------------------------------------------------------------------------------------------------------------
 
-interface IAuthService {
-    SuccessedLoginResDto loginViaLocal(LoginViaLocalReqDto req);
-    SuccessedLoginResDto loginViaOAuth2(LoginSignupViaOAuth2ReqDto req, Long userId);
-    SuccessedAttemptToFinishSignupResDto signupViaLocal(SignupViaLocalReqDto req);
-    SuccessedAttemptToFinishSignupResDto attemptToFinishSignup(LoginSignupViaOAuth2ReqDto req, Long userId);
-    SimpleServerMessageDto finishSignup(FinishSignupReqDto req, Long userId);
-    AuthUser registrationProcessingFactory(OAuth2RegistrationData registrationData);
+interface ILoginService {
+    SuccessedLoginResDto loginViaLocal(final LoginViaLocalReqDto req);
+    SuccessedLoginResDto loginViaOAuth2(final LoginSignupViaOAuth2ReqDto req, final Long userId);
+    void logout(final Long userId);
+    RefreshTokenResDto refreshToken(final String expiredBearer);
 }
