@@ -21,6 +21,7 @@ package pl.miloszgilga.chessappbackend.mail;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import org.javatuples.Pair;
 import freemarker.template.*;
 
 import org.springframework.mail.javamail.*;
@@ -28,14 +29,20 @@ import org.springframework.stereotype.Service;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.ui.freemarker.FreeMarkerTemplateUtils;
 
-import java.util.Map;
+import java.util.*;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 
+import pl.miloszgilga.chessappbackend.utils.TimeHelper;
+import pl.miloszgilga.chessappbackend.config.EnvironmentVars;
+import pl.miloszgilga.chessappbackend.token.JsonWebTokenCreator;
 import pl.miloszgilga.chessappbackend.exception.custom.EmailException;
+
+import static pl.miloszgilga.chessappbackend.config.ApplicationEndpoints.OTA_TOKEN_ENDPOINT;
+import static pl.miloszgilga.chessappbackend.config.RedirectEndpoints.NEWSLETTER_UNSUBSCRIBE_VIA_LINK;
 
 //----------------------------------------------------------------------------------------------------------------------
 
@@ -46,12 +53,19 @@ class MailService {
     private static final String APP_LOGO = "static/gfx/app-logo.png";
 
     private final JavaMailSender sender;
+    private final TimeHelper timeHelper;
+    private final JsonWebTokenCreator creator;
+    private final EnvironmentVars environment;
     private final Configuration freemakerConfig;
 
     //------------------------------------------------------------------------------------------------------------------
 
-    public MailService(JavaMailSender sender, Configuration freemakerConfig) {
+    public MailService(JavaMailSender sender, JsonWebTokenCreator creator, EnvironmentVars environment,
+                       Configuration freemakerConfig, TimeHelper timeHelper) {
         this.sender = sender;
+        this.creator = creator;
+        this.timeHelper = timeHelper;
+        this.environment = environment;
         this.freemakerConfig = freemakerConfig;
     }
 
@@ -89,5 +103,32 @@ class MailService {
             LOGGER.error("Email sender malfunction: {}", ex.getMessage());
             throw new EmailException.EmailSenderException("Unable connect to SMTP mail server. Try again later.");
         }
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+
+    Pair<MailRequestDto, Map<String, Object>> generateBasicMailParameters(String title, String sender) {
+        final Map<String, Object> parameters = new HashMap<>();
+        parameters.put("servletTime", timeHelper.getCurrentUTC());
+        parameters.put("tokensExpiredMinutes", environment.getOtaTokenExpiredMinutes());
+        parameters.put("unsubscribeEndlessLink", unsNewsPath(creator.createNonExpUnsubscribeNewsletterToken(sender)));
+        parameters.put("mailHelpdeskAgent", environment.getMailHelpdeskAgent() + "@" + environment.getFrontendName());
+        parameters.put("applicationLink", environment.getFrontEndUrl());
+        parameters.put("applicationName", environment.getFrontendName());
+        final var request = new MailRequestDto(List.of(sender), environment.getServerMailClient(), title);
+        final Map<String, Object> extendsParameters = new HashMap<>(parameters);
+        return new Pair<>(request, extendsParameters);
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+
+    private String unsNewsPath(String bearer) {
+        return environment.getBaseUrl() + OTA_TOKEN_ENDPOINT + NEWSLETTER_UNSUBSCRIBE_VIA_LINK + bearer;
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+
+    String otaTokenBearerPath(String bearer, String subdomain) {
+        return environment.getBaseUrl() + OTA_TOKEN_ENDPOINT + subdomain + bearer;
     }
 }
