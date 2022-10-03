@@ -144,6 +144,9 @@ public class AuthService implements IAuthService {
             throw new AuthException.AccountIsAlreadyActivatedException("Your account has been already activated.");
         }
 
+        if (!userModel.getIsActivated() && userModel.getLocalUserDetails().getIsDataFilled()) {
+            helper.sendEmailMessageForActivateAccount(userModel, ACTIVATE_ACCOUNT);
+        }
         final SuccessedAttemptToFinishSignupResDto resDto = SuccessedAttemptToFinishSignupResDto.builder()
                 .authSupplier(userModel.getCredentialsSupplier().getName())
                 .responseMessage("Your account has already filled with additional data, but not activated.")
@@ -215,9 +218,6 @@ public class AuthService implements IAuthService {
         userDetails.setHasPhoto(!userInfo.getUserImageUrl().isEmpty());
         userDetails.setPhotoEmbedLink(userInfo.getUserImageUrl().isEmpty() ? null : userInfo.getUserImageUrl());
 
-        if (!foundUser.getIsActivated() && foundUser.getLocalUserDetails().getIsDataFilled()) {
-            helper.sendEmailMessageForActivateAccount(foundUser, ACTIVATE_ACCOUNT);
-        }
         localUserRepository.save(foundUser);
         LOGGER.info("Update user via {} OAuth2 provider. User data: {}", data.getSupplier().getName(), foundUser);
         return userBuilder.build(foundUser, data);

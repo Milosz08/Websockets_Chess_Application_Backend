@@ -98,6 +98,7 @@ public class AuthServiceHelper {
     //------------------------------------------------------------------------------------------------------------------
 
     void sendEmailMessageForActivateAccount(LocalUserModel user, OtaTokenType tokenType) {
+        if (user.getIsActivated()) return;
         final String otaToken = otaTokenUserService.generateAndSaveUserOtaToken(tokenType, user);
         final String token = tokenCreator.createAcitivateServiceViaEmailToken(user, otaToken);
         mailOutService.activateAccount(user.getId(), user.getEmailAddress(), user, token, otaToken);

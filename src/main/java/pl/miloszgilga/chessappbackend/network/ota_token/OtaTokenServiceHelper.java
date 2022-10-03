@@ -72,6 +72,7 @@ class OtaTokenServiceHelper {
                         throw new TokenException.JwtMalformedTokenException(data.getFailureMessage());
                     });
             otaToken.setAlreadyUsed(true);
+            otaToken.getLocalUser().setIsActivated(true);
             queryMessage = data.getSuccessMessage();
         } catch (Exception ex) {
             queryMessage = ex.getMessage();
