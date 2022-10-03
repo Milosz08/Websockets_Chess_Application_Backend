@@ -69,10 +69,9 @@ public class LocalUserModel extends AuditableEntity implements Serializable {
 
     //------------------------------------------------------------------------------------------------------------------
 
-    public LocalUserModel(
-            String nickname, String firstName, String lastName, String emailAddress, String password,
-            CredentialsSupplier credentialsSupplier, String supplierUserId, Boolean isActivated, Boolean isBlocked
-    ) {
+    public LocalUserModel(String nickname, String firstName, String lastName, String emailAddress, String password,
+                          CredentialsSupplier credentialsSupplier, String supplierUserId, Boolean isActivated,
+                          Boolean isBlocked) {
         this.nickname = nickname;
         this.firstName = firstName;
         this.lastName = lastName;

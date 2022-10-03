@@ -18,17 +18,12 @@
 
 package pl.miloszgilga.chessappbackend.network.auth.dto;
 
-import lombok.Data;
-import lombok.AllArgsConstructor;
-
-import org.javatuples.Pair;
-
-import pl.miloszgilga.chessappbackend.network.auth.domain.LocalUserModel;
-import pl.miloszgilga.chessappbackend.network.auth.domain.LocalUserDetailsModel;
+import lombok.*;
 
 //----------------------------------------------------------------------------------------------------------------------
 
 @Data
+@NoArgsConstructor
 @AllArgsConstructor
 public class SuccessedLoginResDto {
     private String nickname;
@@ -38,14 +33,4 @@ public class SuccessedLoginResDto {
     private String photoUrl;
     private String jwtToken;
     private String refreshToken;
-
-    public static SuccessedLoginResDto factoryBuilder(Pair<LocalUserModel, String> userWithToken) {
-        final LocalUserModel userModel = userWithToken.getValue0();
-        final LocalUserDetailsModel userDetailsModel = userModel.getLocalUserDetails();
-        return new SuccessedLoginResDto(
-                userModel.getNickname(), userModel.getFirstName(), userModel.getLastName(),
-                userDetailsModel.getHasPhoto(), userDetailsModel.getPhotoEmbedLink(), userWithToken.getValue1(),
-                userModel.getRefreshToken().getRefreshToken()
-        );
-    }
 }

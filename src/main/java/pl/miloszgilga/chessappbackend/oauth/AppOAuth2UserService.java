@@ -27,7 +27,7 @@ import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
 
 import java.util.*;
 
-import pl.miloszgilga.chessappbackend.network.auth.AuthService;
+import pl.miloszgilga.chessappbackend.network.auth.SignupService;
 import pl.miloszgilga.chessappbackend.exception.custom.AuthException;
 import pl.miloszgilga.chessappbackend.oauth.dto.OAuth2RegistrationData;
 
@@ -38,11 +38,11 @@ import static pl.miloszgilga.chessappbackend.oauth.CredentialsSupplier.findSuppl
 @Service
 public class AppOAuth2UserService extends DefaultOAuth2UserService {
 
-    private final AuthService authService;
+    private final SignupService authService;
 
     //------------------------------------------------------------------------------------------------------------------
 
-    public AppOAuth2UserService(@Lazy AuthService authService) {
+    public AppOAuth2UserService(@Lazy SignupService authService) {
         this.authService = authService;
     }
 

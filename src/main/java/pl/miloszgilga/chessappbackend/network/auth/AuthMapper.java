@@ -18,6 +18,7 @@
 
 package pl.miloszgilga.chessappbackend.network.auth;
 
+import lombok.AllArgsConstructor;
 import ma.glasnost.orika.MapperFactory;
 
 import org.springframework.stereotype.Component;
@@ -35,6 +36,7 @@ import static pl.miloszgilga.chessappbackend.mapper.Converter.*;
 
 @Component
 @Primary
+@AllArgsConstructor
 public class AuthMapper {
 
     private final MapperFactory mapperFactory;
@@ -44,23 +46,6 @@ public class AuthMapper {
     private final SignupOAuth2DtoToUserCustomizer signupOAuth2DtoToUserCustomizer;
     private final SignupOAuth2DtoToUserDetailsCustomizer signupOAuth2DtoToUserDetailsCustomizer;
     private final FilledSignupDataToUserDetailsCustomizer filledSignupDataToUserDetailsCustomizer;
-
-    //------------------------------------------------------------------------------------------------------------------
-
-    public AuthMapper(MapperFactory mapperFactory, SignupLocalDtoToUserCustomizer signupLocalDtoToUserCustomizer,
-                      SignupLocalDtoToUserDetailsCustomizer signupLocalDtoToUserDetailsCustomizer,
-                      UserToAttemptSignupResDtoCustomizer userToAttemptSignupResDtoCustomizer,
-                      SignupOAuth2DtoToUserCustomizer signupOAuth2DtoToUserCustomizer,
-                      SignupOAuth2DtoToUserDetailsCustomizer signupOAuth2DtoToUserDetailsCustomizer,
-                      FilledSignupDataToUserDetailsCustomizer filledSignupDataToUserDetailsCustomizer) {
-        this.mapperFactory = mapperFactory;
-        this.signupLocalDtoToUserCustomizer = signupLocalDtoToUserCustomizer;
-        this.signupLocalDtoToUserDetailsCustomizer = signupLocalDtoToUserDetailsCustomizer;
-        this.userToAttemptSignupResDtoCustomizer = userToAttemptSignupResDtoCustomizer;
-        this.signupOAuth2DtoToUserCustomizer = signupOAuth2DtoToUserCustomizer;
-        this.signupOAuth2DtoToUserDetailsCustomizer = signupOAuth2DtoToUserDetailsCustomizer;
-        this.filledSignupDataToUserDetailsCustomizer = filledSignupDataToUserDetailsCustomizer;
-    }
 
     //------------------------------------------------------------------------------------------------------------------
 

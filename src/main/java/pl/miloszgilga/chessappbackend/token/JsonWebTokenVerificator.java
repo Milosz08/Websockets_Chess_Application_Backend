@@ -73,7 +73,7 @@ public class JsonWebTokenVerificator {
 
     //------------------------------------------------------------------------------------------------------------------
 
-    private Claims extractClaimsFromRawToken(String token) {
+    public Claims extractClaimsFromRawToken(String token) {
         return Jwts.parserBuilder()
                 .setSigningKey(jsonWebToken.getSignatureKey())
                 .build()

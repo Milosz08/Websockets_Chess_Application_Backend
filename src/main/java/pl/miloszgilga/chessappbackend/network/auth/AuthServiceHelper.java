@@ -97,17 +97,6 @@ public class AuthServiceHelper {
 
     //------------------------------------------------------------------------------------------------------------------
 
-    public RefreshTokenModel generateRefreshTokenModel(LocalUserModel userModel) {
-        final Pair<String, Date> refreshTokenParams = tokenCreator.createUserRefreshToken(userModel);
-        return RefreshTokenModel.builder()
-                .refreshToken(refreshTokenParams.getValue0())
-                .expiredAt(refreshTokenParams.getValue1())
-                .localUser(userModel)
-                .build();
-    }
-
-    //------------------------------------------------------------------------------------------------------------------
-
     void sendEmailMessageForActivateAccount(LocalUserModel user, OtaTokenType tokenType) {
         final String otaToken = otaTokenUserService.generateAndSaveUserOtaToken(tokenType, user);
         final String token = tokenCreator.createAcitivateServiceViaEmailToken(user, otaToken);
