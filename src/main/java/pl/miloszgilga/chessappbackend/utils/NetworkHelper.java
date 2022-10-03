@@ -19,17 +19,23 @@
 package pl.miloszgilga.chessappbackend.utils;
 
 import org.javatuples.Pair;
+
+import org.springframework.util.StringUtils;
 import org.springframework.stereotype.Component;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import pl.miloszgilga.chessappbackend.config.EnvironmentVars;
-
 import java.net.URI;
+import javax.servlet.http.HttpServletRequest;
+
+import pl.miloszgilga.chessappbackend.config.EnvironmentVars;
 
 //----------------------------------------------------------------------------------------------------------------------
 
 @Component
 public class NetworkHelper {
+
+    public static final String TOKEN_HEADER = "Authorization";
+    public static final String TOKEN_PREFIX = "Bearer ";
 
     private final EnvironmentVars environment;
 
@@ -47,5 +53,15 @@ public class NetworkHelper {
                 .queryParam("error", Boolean.toString(ifError))
                 .build()
                 .toUri();
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+
+    public String extractJwtTokenFromRequest(HttpServletRequest req) {
+        final String bearerToken = req.getHeader(TOKEN_HEADER);
+        if (StringUtils.hasText(bearerToken) && bearerToken.startsWith(TOKEN_PREFIX)) {
+            return bearerToken.substring(TOKEN_PREFIX.length());
+        }
+        return "";
     }
 }

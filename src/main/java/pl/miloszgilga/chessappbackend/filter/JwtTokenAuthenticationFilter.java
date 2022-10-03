@@ -32,6 +32,7 @@ import javax.servlet.http.*;
 import java.util.Arrays;
 import java.io.IOException;
 
+import pl.miloszgilga.chessappbackend.utils.NetworkHelper;
 import pl.miloszgilga.chessappbackend.token.JsonWebTokenVerificator;
 import pl.miloszgilga.chessappbackend.security.AuthUserDetailService;
 import pl.miloszgilga.chessappbackend.token.dto.UserVerficationClaims;
@@ -43,15 +44,15 @@ import static pl.miloszgilga.chessappbackend.security.SecurityConfiguration.DISA
 @Component
 public class JwtTokenAuthenticationFilter extends OncePerRequestFilter {
 
-    private static final String TOKEN_HEADER = "Authorization";
-    private static final String TOKEN_PREFIX = "Bearer ";
-
+    private final NetworkHelper networkHelper;
     private final JsonWebTokenVerificator verificator;
     private final AuthUserDetailService userDetailService;
 
     //------------------------------------------------------------------------------------------------------------------
 
-    public JwtTokenAuthenticationFilter(AuthUserDetailService userDetailService, JsonWebTokenVerificator verificator) {
+    public JwtTokenAuthenticationFilter(NetworkHelper networkHelper, AuthUserDetailService userDetailService,
+                                        JsonWebTokenVerificator verificator) {
+        this.networkHelper = networkHelper;
         this.verificator = verificator;
         this.userDetailService = userDetailService;
     }
@@ -61,7 +62,7 @@ public class JwtTokenAuthenticationFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest req, HttpServletResponse res, FilterChain filterChain)
             throws IOException, ServletException {
-        final String token = extractJwtTokenFromRequest(req);
+        final String token = networkHelper.extractJwtTokenFromRequest(req);
         if (StringUtils.hasText(token) && !verificator.basicTokenIsMalformed(token)) {
             final UserVerficationClaims verficationClaims = verificator.validateUserJwtFilter(token);
             final UserDetails authUser = userDetailService.loadUserByNicknameEmailAndId(verficationClaims);
@@ -78,15 +79,5 @@ public class JwtTokenAuthenticationFilter extends OncePerRequestFilter {
     protected boolean shouldNotFilter(HttpServletRequest req) {
         final AntPathMatcher matcher = new AntPathMatcher();
         return Arrays.stream(DISABLE_PATHS_FOR_JWT_FILTERING).anyMatch(p -> matcher.match(p, req.getServletPath()));
-    }
-
-    //------------------------------------------------------------------------------------------------------------------
-
-    private String extractJwtTokenFromRequest(HttpServletRequest req) {
-        final String bearerToken = req.getHeader(TOKEN_HEADER);
-        if (StringUtils.hasText(bearerToken) && bearerToken.startsWith(TOKEN_PREFIX)) {
-            return bearerToken.substring(TOKEN_PREFIX.length());
-        }
-        return "";
     }
 }
