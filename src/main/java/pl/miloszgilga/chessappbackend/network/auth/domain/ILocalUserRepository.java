@@ -63,4 +63,11 @@ public interface ILocalUserRepository extends JpaRepository<LocalUserModel, Long
             "WHERE m.emailAddress=:emailAddress " +
             "OR d.secondEmailAddress=:emailAddress")
     Boolean checkIfUserHasEmailOrSecondEmail(@Param("emailAddress") String emailAddress);
+
+    //------------------------------------------------------------------------------------------------------------------
+
+    @Query(value = "SELECT m FROM LocalUserModel m " +
+            "WHERE m.nickname=:nicknameOrEmail " +
+            "OR m.emailAddress=:nicknameOrEmail")
+    Optional<LocalUserModel> findUserByNickOrEmail(@Param("nicknameOrEmail") String nicknameOrEmail);
 }

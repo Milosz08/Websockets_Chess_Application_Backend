@@ -57,6 +57,7 @@ public class UserToSuccessedLoginResDtoCustomizer extends CustomMapper<LocalUser
     public void mapAtoB(LocalUserModel userModel, SuccessedLoginResDto resDto, MappingContext context) {
         resDto.setJwtToken(tokenCreator.createUserCredentialsToken(userModel));
         resDto.setRefreshToken(generateAndSaveRefreshToken(userModel));
+        resDto.setActivated(userModel.getIsActivated());
     }
 
     //------------------------------------------------------------------------------------------------------------------

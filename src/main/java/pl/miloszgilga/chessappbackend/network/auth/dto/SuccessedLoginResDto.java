@@ -23,6 +23,7 @@ import lombok.*;
 //----------------------------------------------------------------------------------------------------------------------
 
 @Data
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class SuccessedLoginResDto {
@@ -33,4 +34,5 @@ public class SuccessedLoginResDto {
     private String photoUrl;
     private String jwtToken;
     private String refreshToken;
+    private boolean isActivated;
 }

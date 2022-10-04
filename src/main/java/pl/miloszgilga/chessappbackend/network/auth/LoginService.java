@@ -27,6 +27,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.security.authentication.*;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.core.context.SecurityContextHolder;
 
 import java.util.*;
@@ -50,20 +51,25 @@ public class LoginService implements ILoginService {
     private final AuthServiceHelper helper;
     private final MapperFacade mapperFacade;
     private final AuthenticationManager manager;
+    private final PasswordEncoder passwordEncoder;
     private final JsonWebTokenCreator tokenCreator;
     private final JsonWebTokenVerificator tokenVerificator;
+    private final ILocalUserRepository localUserRepository;
     private final IRefreshTokenRepository refreshTokenRepository;
 
     //------------------------------------------------------------------------------------------------------------------
 
     public LoginService(AuthServiceHelper helper, MapperFacade mapperFacade, AuthenticationManager manager,
-                        JsonWebTokenCreator tokenCreator, JsonWebTokenVerificator tokenVerificator,
+                        PasswordEncoder passwordEncoder, JsonWebTokenCreator tokenCreator,
+                        JsonWebTokenVerificator tokenVerificator, ILocalUserRepository localUserRepository,
                         IRefreshTokenRepository refreshTokenRepository) {
         this.helper = helper;
         this.mapperFacade = mapperFacade;
         this.manager = manager;
+        this.passwordEncoder = passwordEncoder;
         this.tokenCreator = tokenCreator;
         this.tokenVerificator = tokenVerificator;
+        this.localUserRepository = localUserRepository;
         this.refreshTokenRepository = refreshTokenRepository;
     }
 
@@ -72,10 +78,23 @@ public class LoginService implements ILoginService {
     @Override
     @Transactional
     public SuccessedLoginResDto loginViaLocal(final LoginViaLocalReqDto req) {
+        final Optional<LocalUserModel> userOrNull = localUserRepository.findUserByNickOrEmail(req.getUsernameEmail());
+        if (userOrNull.isEmpty() || !passwordEncoder.matches(req.getPassword(), userOrNull.get().getPassword())) {
+            LOGGER.error("Attemt to login on local account with non existing user data. Login data: {}", req);
+            throw new AuthException.UserNotFoundException("User with this credentials does not exist.");
+        }
+        final LocalUserModel user = userOrNull.get();
+        if (!user.getIsActivated()) {
+            LOGGER.info("User with email: {} attempt to login on not activated account.", user.getEmailAddress());
+            return SuccessedLoginResDto.builder()
+                    .jwtToken(tokenCreator.createUserCredentialsToken(user))
+                    .build();
+        }
         final var userCredentials = new UsernamePasswordAuthenticationToken(req.getUsernameEmail(), req.getPassword());
         final Authentication authentication = manager.authenticate(userCredentials);
         final AuthUser authUser = (AuthUser) authentication.getPrincipal();
         final LocalUserModel userModel = authUser.getUserModel();
+        final SuccessedLoginResDto res = mapperFacade.map(userModel, SuccessedLoginResDto.class);
         if (!userModel.getCredentialsSupplier().equals(LOCAL)) {
             LOGGER.error("Attempt to log in on OAuth2 account provider via local account login form. Req: {}", req);
             throw new AuthException.DifferentAuthenticationProviderException("This account is not managed locally. " +
@@ -84,7 +103,7 @@ public class LoginService implements ILoginService {
         SecurityContextHolder.getContext().setAuthentication(authentication);
         LOGGER.info("User with email: {} successfuly logged via {} credentials supplier.", userModel.getEmailAddress(),
                 userModel.getCredentialsSupplier());
-        return mapperFacade.map(userModel, SuccessedLoginResDto.class);
+        return res;
     }
 
     //------------------------------------------------------------------------------------------------------------------
