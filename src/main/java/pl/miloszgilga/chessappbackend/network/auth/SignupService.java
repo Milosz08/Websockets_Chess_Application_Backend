@@ -88,6 +88,7 @@ public class SignupService implements ISignupService {
         LOGGER.info("Create new user in database via LOCAL interface. User data: {}", userModel);
         final SuccessedAttemptToFinishSignupResDto resDto = SuccessedAttemptToFinishSignupResDto.builder()
                 .authSupplier(LOCAL.getName())
+                .jwtToken(tokenCreator.createUserCredentialsToken(userModel))
                 .isDataFilled(true)
                 .responseMessage("Your account was successfuly created, but not activated.")
                 .build();
@@ -99,13 +100,8 @@ public class SignupService implements ISignupService {
 
     @Override
     @Transactional
-    public SuccessedAttemptToFinishSignupResDto attemptToFinishSignup(LoginSignupViaOAuth2ReqDto req, Long userId) {
-        final LocalUserModel userModel = helper.findUserAndReturnUserData(userId);
-        if (userModel.getIsActivated()) {
-            LOGGER.warn("Attempt to re-activate account. Account data: {}", userModel);
-            throw new AuthException.AccountIsAlreadyActivatedException("Your account has been already activated.");
-        }
-
+    public SuccessedAttemptToFinishSignupResDto attemptToFinishSignup(Long userId) {
+        final LocalUserModel userModel = helper.checkIfAccountIsAlreadyActivated(userId);
         if (!userModel.getIsActivated() && userModel.getLocalUserDetails().getIsDataFilled()) {
             helper.sendEmailMessageForActivateAccount(userModel, ACTIVATE_ACCOUNT);
         }
@@ -114,6 +110,23 @@ public class SignupService implements ISignupService {
                 .responseMessage("Your account has already filled with additional data, but not activated.")
                 .isDataFilled(userModel.getLocalUserDetails().getIsDataFilled())
                 .build();
+        mapperFacade.map(userModel, resDto);
+        return resDto;
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+
+    @Override
+    @Transactional
+    public SuccessedAttemptToFinishSignupResDto attemptToActivateAccount(Long userId) {
+        final LocalUserModel userModel = helper.checkIfAccountIsAlreadyActivated(userId);
+        final SuccessedAttemptToFinishSignupResDto resDto = SuccessedAttemptToFinishSignupResDto.builder()
+                .jwtToken(tokenCreator.createUserCredentialsToken(userModel))
+                .authSupplier(LOCAL.getName())
+                .responseMessage("Before you will be using, please activate your account.")
+                .isDataFilled(true)
+                .build();
+        helper.sendEmailMessageForActivateAccount(userModel, ACTIVATE_ACCOUNT);
         mapperFacade.map(userModel, resDto);
         return resDto;
     }

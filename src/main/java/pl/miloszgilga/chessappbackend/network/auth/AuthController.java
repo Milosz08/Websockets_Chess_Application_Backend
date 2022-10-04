@@ -60,9 +60,15 @@ class AuthController {
     //------------------------------------------------------------------------------------------------------------------
 
     @PostMapping(LOGIN_VIA_OAUTH2)
-    ResponseEntity<SuccessedLoginResDto> loginViaOAuth2(@Valid @RequestBody LoginSignupViaOAuth2ReqDto req,
-                                                        @CurrentUser AuthUser user) {
-        return new ResponseEntity<>(loginService.loginViaOAuth2(req, user.getUserModel().getId()), HttpStatus.OK);
+    ResponseEntity<SuccessedLoginResDto> loginViaOAuth2(@CurrentUser AuthUser user) {
+        return new ResponseEntity<>(loginService.loginViaOAuth2(user.getUserModel().getId()), HttpStatus.OK);
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+
+    @PostMapping(ATTEMPT_ACTIVATE_ACCOUNT)
+    ResponseEntity<SuccessedAttemptToFinishSignupResDto> attemptActivateAccount(@CurrentUser AuthUser user) {
+        return new ResponseEntity<>(signupService.attemptToActivateAccount(user.getUserModel().getId()), HttpStatus.OK);
     }
 
     //------------------------------------------------------------------------------------------------------------------

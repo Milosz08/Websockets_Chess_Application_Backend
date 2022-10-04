@@ -123,4 +123,16 @@ public class AuthServiceHelper {
         userModel.getLocalUserDetails().setHasNewsletterAccept(true);
         newsletterEmailRepository.save(newsletterModel);
     }
+
+    //------------------------------------------------------------------------------------------------------------------
+
+    @Transactional
+    LocalUserModel checkIfAccountIsAlreadyActivated(Long userId) {
+        final LocalUserModel userModel = findUserAndReturnUserData(userId);
+        if (userModel.getIsActivated()) {
+            LOGGER.warn("Attempt to re-activate account. Account data: {}", userModel);
+            throw new AuthException.AccountIsAlreadyActivatedException("Your account has been already activated.");
+        }
+        return userModel;
+    }
 }
