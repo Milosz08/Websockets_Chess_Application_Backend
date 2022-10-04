@@ -106,16 +106,6 @@ public class AuthServiceHelper {
 
     //------------------------------------------------------------------------------------------------------------------
 
-    public Pair<String, String> extractUserDataFromUsername(String username) {
-        final String[] firstWithLast = username.contains(" ") ? username.split(" ") : new String[] { username, null };
-        return new Pair<>(
-                manipulator.capitalised(firstWithLast[0]),
-                manipulator.capitalised(firstWithLast[1])
-        );
-    }
-
-    //------------------------------------------------------------------------------------------------------------------
-
     @Transactional
     void addUserToNewsletter(LocalUserModel userModel, boolean hasNewsletterAccept) {
         if (!hasNewsletterAccept) return;

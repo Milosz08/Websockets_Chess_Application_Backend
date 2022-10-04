@@ -68,4 +68,10 @@ public class TimeHelper {
     public String getCurrentUTC() {
         return dateTimeFormatter.format(new Date());
     }
+
+    //------------------------------------------------------------------------------------------------------------------
+
+    public boolean isExpired(Date checkingDate) {
+        return checkingDate.after(new Date());
+    }
 }

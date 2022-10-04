@@ -30,6 +30,8 @@ import javax.transaction.Transactional;
 
 import pl.miloszgilga.chessappbackend.oauth.*;
 import pl.miloszgilga.chessappbackend.oauth.user_info.*;
+import pl.miloszgilga.chessappbackend.utils.StringManipulator;
+import pl.miloszgilga.chessappbackend.token.JsonWebTokenCreator;
 import pl.miloszgilga.chessappbackend.dto.SimpleServerMessageDto;
 import pl.miloszgilga.chessappbackend.exception.custom.AuthException;
 import pl.miloszgilga.chessappbackend.oauth.dto.OAuth2RegistrationData;
@@ -50,16 +52,21 @@ public class SignupService implements ISignupService {
     private final AuthServiceHelper helper;
     private final MapperFacade mapperFacade;
     private final AuthUserBuilder userBuilder;
+    private final StringManipulator manipulator;
+    private final JsonWebTokenCreator tokenCreator;
     private final OAuth2UserInfoFactory userInfoFactory;
     private final ILocalUserRepository localUserRepository;
 
     //------------------------------------------------------------------------------------------------------------------
 
     SignupService(AuthUserBuilder userBuilder, MapperFacade mapperFacade, AuthServiceHelper helper,
-                  OAuth2UserInfoFactory userInfoFactory, ILocalUserRepository localUserRepository) {
+                  StringManipulator manipulator, JsonWebTokenCreator tokenCreator, OAuth2UserInfoFactory userInfoFactory,
+                  ILocalUserRepository localUserRepository) {
         this.helper = helper;
         this.userBuilder = userBuilder;
         this.mapperFacade = mapperFacade;
+        this.manipulator = manipulator;
+        this.tokenCreator = tokenCreator;
         this.userInfoFactory = userInfoFactory;
         this.localUserRepository = localUserRepository;
     }
@@ -168,8 +175,8 @@ public class SignupService implements ISignupService {
                     foundUser.getEmailAddress());
         }
 
-        foundUser.setFirstName(helper.extractUserDataFromUsername(userInfo.getUsername()).getValue0());
-        foundUser.setLastName(helper.extractUserDataFromUsername(userInfo.getUsername()).getValue1());
+        foundUser.setFirstName(manipulator.extractUserDataFromUsername(userInfo.getUsername()).getValue0());
+        foundUser.setLastName(manipulator.extractUserDataFromUsername(userInfo.getUsername()).getValue1());
         userDetails.setHasPhoto(!userInfo.getUserImageUrl().isEmpty());
         userDetails.setPhotoEmbedLink(userInfo.getUserImageUrl().isEmpty() ? null : userInfo.getUserImageUrl());
 

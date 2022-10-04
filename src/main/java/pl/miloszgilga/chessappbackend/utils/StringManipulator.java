@@ -18,6 +18,7 @@
 
 package pl.miloszgilga.chessappbackend.utils;
 
+import org.javatuples.Pair;
 import org.springframework.stereotype.Component;
 
 import java.util.*;
@@ -72,5 +73,12 @@ public class StringManipulator {
 
     public String generateFullName(LocalUserModel userModel) {
         return capitalised(userModel.getFirstName()) + " " + capitalised(userModel.getLastName());
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+
+    public Pair<String, String> extractUserDataFromUsername(String username) {
+        final String[] firstWithLast = username.contains(" ") ? username.split(" ") : new String[] { username, null };
+        return new Pair<>(capitalised(firstWithLast[0]), capitalised(firstWithLast[1]));
     }
 }

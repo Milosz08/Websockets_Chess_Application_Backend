@@ -59,7 +59,7 @@ public class SignupOAuth2DtoToUserCustomizer extends CustomMapper<OAuth2Registra
     @Override
     public void mapAtoB(OAuth2RegistrationData data, LocalUserModel userModel, MappingContext context) {
         final OAuth2UserInfo userInfo = userInfoFactory.getOAuth2UserInfo(data.getSupplier(), data.getAttributes());
-        final Pair<String, String> userExtractedData = helper.extractUserDataFromUsername(userInfo.getUsername());
+        final Pair<String, String> userExtractedData = manipulator.extractUserDataFromUsername(userInfo.getUsername());
         final String nickname = userInfo.getUsername().toLowerCase().replaceAll(" ", "");
         userModel.setNickname(manipulator.generateUserDefNickname(nickname));
         userModel.setFirstName(userExtractedData.getValue0());
