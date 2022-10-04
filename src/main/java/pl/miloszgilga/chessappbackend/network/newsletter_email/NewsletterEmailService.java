@@ -85,7 +85,7 @@ class NewsletterEmailService implements INewsletterEmailService {
         }
         final NewsletterEmailModel saved = repository.save(new NewsletterEmailModel(userName, emailAddress));
         LOGGER.info("Added to newsletter: {}", saved);
-        return new SimpleServerMessageDto(String.format("Email '%s' was succesfully added to newsletter.", emailAddress));
+        return new SimpleServerMessageDto(String.format("Email %s was succesfully added to newsletter.", emailAddress));
     }
 
     //------------------------------------------------------------------------------------------------------------------
@@ -100,7 +100,7 @@ class NewsletterEmailService implements INewsletterEmailService {
         final String bearerToken = creator.createAcitivateServiceViaEmailToken(email, otaToken);
         mailService.unsubscribeNewsletter(model.getId(), model.getUserName(), email, bearerToken, otaToken);
 
-        return new SimpleServerMessageDto(String.format("Message has been send to the email '%s'.", email));
+        return new SimpleServerMessageDto(String.format("Message has been send to the email %s.", email));
     }
 
     //------------------------------------------------------------------------------------------------------------------
@@ -116,7 +116,7 @@ class NewsletterEmailService implements INewsletterEmailService {
         repository.delete(model);
         LOGGER.info("Email address {} was successfully removed from newsletter via OTA form", emailAddress);
         return new SimpleServerMessageDto(String.format("The newsletter subscription service from the email " +
-                        "address '%s' has been successfully deleted.", emailAddress));
+                        "address %s has been successfully deleted.", emailAddress));
     }
 
     //------------------------------------------------------------------------------------------------------------------
@@ -137,7 +137,7 @@ class NewsletterEmailService implements INewsletterEmailService {
             helper.unsubscribeNewsletterFromUserDatatable(emailAddress);
             repository.delete(model);
             LOGGER.info("Email address {} was successfully removed from newsletter via email message", emailAddress);
-            queryMessage = String.format("The newsletter subscription service from the email address '%s' " +
+            queryMessage = String.format("The newsletter subscription service from the email address %s " +
                     "has been successfully deleted. You can return to the start page using the button below.", emailAddress);
         } catch (EmailNotFoundException ex) {
             queryMessage = ex.getMessage();

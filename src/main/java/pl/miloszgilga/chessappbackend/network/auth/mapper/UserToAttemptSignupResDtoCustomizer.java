@@ -23,8 +23,7 @@ import ma.glasnost.orika.MappingContext;
 
 import org.springframework.stereotype.Component;
 
-import java.util.Set;
-import java.util.HashSet;
+import java.util.*;
 
 import pl.miloszgilga.chessappbackend.security.SecurityHelper;
 import pl.miloszgilga.chessappbackend.utils.StringManipulator;

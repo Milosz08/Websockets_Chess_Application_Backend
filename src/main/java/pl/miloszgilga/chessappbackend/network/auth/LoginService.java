@@ -91,7 +91,7 @@ public class LoginService implements ILoginService {
 
     @Override
     @Transactional
-    public SuccessedLoginResDto loginViaOAuth2(final LoginSignupViaOAuth2ReqDto req, final Long userId) {
+    public SuccessedLoginResDto loginViaOAuth2(final Long userId) {
         final LocalUserModel userModel = helper.findUserAndReturnUserData(userId);
         LOGGER.info("User with email: {} successfuly logged via local credentials supplier.", userModel.getEmailAddress());
         return mapperFacade.map(userModel, SuccessedLoginResDto.class);

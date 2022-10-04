@@ -91,10 +91,8 @@ class AuthController {
     //------------------------------------------------------------------------------------------------------------------
 
     @PostMapping(ATTEMPT_FINISH_SIGNUP_VIA_OAUTH2)
-    ResponseEntity<SuccessedAttemptToFinishSignupResDto> attemptToFinishSignup(
-            @Valid @RequestBody LoginSignupViaOAuth2ReqDto req, @CurrentUser AuthUser user
-    ) {
-        return new ResponseEntity<>(signupService.attemptToFinishSignup(req, user.getUserModel().getId()), HttpStatus.OK);
+    ResponseEntity<SuccessedAttemptToFinishSignupResDto> attemptToFinishSignup(@CurrentUser AuthUser user) {
+        return new ResponseEntity<>(signupService.attemptToFinishSignup(user.getUserModel().getId()), HttpStatus.OK);
     }
 
     //------------------------------------------------------------------------------------------------------------------
