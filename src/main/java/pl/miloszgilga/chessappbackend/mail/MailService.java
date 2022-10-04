@@ -41,6 +41,7 @@ import pl.miloszgilga.chessappbackend.config.EnvironmentVars;
 import pl.miloszgilga.chessappbackend.token.JsonWebTokenCreator;
 import pl.miloszgilga.chessappbackend.exception.custom.EmailException;
 
+import static pl.miloszgilga.chessappbackend.config.ApplicationEndpoints.NEWSLETTER_EMAIL_ENDPOINT;
 import static pl.miloszgilga.chessappbackend.config.ApplicationEndpoints.OTA_TOKEN_ENDPOINT;
 import static pl.miloszgilga.chessappbackend.config.RedirectEndpoints.NEWSLETTER_UNSUBSCRIBE_VIA_LINK;
 
@@ -123,7 +124,7 @@ class MailService {
     //------------------------------------------------------------------------------------------------------------------
 
     private String unsNewsPath(String bearer) {
-        return environment.getBaseUrl() + OTA_TOKEN_ENDPOINT + NEWSLETTER_UNSUBSCRIBE_VIA_LINK + bearer;
+        return environment.getBaseUrl() + NEWSLETTER_EMAIL_ENDPOINT + NEWSLETTER_UNSUBSCRIBE_VIA_LINK + bearer;
     }
 
     //------------------------------------------------------------------------------------------------------------------

@@ -88,12 +88,10 @@ public class AuthServiceHelper {
             LOGGER.error("Passed user ID is null. Nulls in indexes are strictly prohibited.");
             throw new AuthException.UserNotFoundException("Unable to load user data. Try again later.");
         }
-        final Optional<LocalUserModel> findingUser = localUserRepository.findById(userId);
-        if (findingUser.isEmpty()) {
+        return localUserRepository.findById(userId).orElseThrow(() -> {
             LOGGER.error("Unable to load user based id req data. Id: {}", userId);
             throw new AuthException.UserNotFoundException("User based passed data not exist.");
-        }
-        return findingUser.get();
+        });
     }
 
     //------------------------------------------------------------------------------------------------------------------
