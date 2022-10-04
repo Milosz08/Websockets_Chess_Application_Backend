@@ -21,20 +21,21 @@ package pl.miloszgilga.chessappbackend.network.auth;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import org.javatuples.Pair;
 import org.springframework.stereotype.Component;
 
 import java.util.*;
 import javax.transaction.Transactional;
 
 import pl.miloszgilga.chessappbackend.token.*;
+import pl.miloszgilga.chessappbackend.utils.TimeHelper;
 import pl.miloszgilga.chessappbackend.mail.IMailOutService;
 import pl.miloszgilga.chessappbackend.network.auth.domain.*;
-import pl.miloszgilga.chessappbackend.utils.StringManipulator;
 import pl.miloszgilga.chessappbackend.exception.custom.AuthException;
 import pl.miloszgilga.chessappbackend.network.newsletter_email.domain.*;
+import pl.miloszgilga.chessappbackend.network.ota_token.domain.OtaTokenModel;
 
 import static pl.miloszgilga.chessappbackend.security.LocalUserRole.USER;
+import static pl.miloszgilga.chessappbackend.token.OtaTokenType.ACTIVATE_ACCOUNT;
 
 //----------------------------------------------------------------------------------------------------------------------
 
@@ -43,7 +44,7 @@ public class AuthServiceHelper {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(AuthServiceHelper.class);
 
-    private final StringManipulator manipulator;
+    private final TimeHelper timeHelper;
     private final IMailOutService mailOutService;
     private final JsonWebTokenCreator tokenCreator;
     private final ILocalUserRoleRepository roleRepository;
@@ -53,10 +54,10 @@ public class AuthServiceHelper {
 
     //------------------------------------------------------------------------------------------------------------------
 
-    AuthServiceHelper(StringManipulator manipulator, IMailOutService mailOutService, JsonWebTokenCreator tokenCreator,
+    AuthServiceHelper(TimeHelper timeHelper, IMailOutService mailOutService, JsonWebTokenCreator tokenCreator,
                       ILocalUserRoleRepository roleRepository, OtaTokenUserService otaTokenUserService,
                       ILocalUserRepository localUserRepository, INewsletterEmailRepository newsletterEmailRepository) {
-        this.manipulator = manipulator;
+        this.timeHelper = timeHelper;
         this.tokenCreator = tokenCreator;
         this.mailOutService = mailOutService;
         this.roleRepository = roleRepository;
@@ -98,7 +99,11 @@ public class AuthServiceHelper {
     //------------------------------------------------------------------------------------------------------------------
 
     void sendEmailMessageForActivateAccount(LocalUserModel user, OtaTokenType tokenType) {
-        if (user.getIsActivated()) return;
+        final Optional<OtaTokenModel> findOtaToken = user.getOtaTokens().stream()
+                .filter(t -> !t.getAlreadyUsed() && timeHelper.isExpired(t.getExpirationDate())
+                        && t.getUserFor().equals(ACTIVATE_ACCOUNT))
+                .findFirst();
+        if (user.getIsActivated() || findOtaToken.isPresent()) return;
         final String otaToken = otaTokenUserService.generateAndSaveUserOtaToken(tokenType, user);
         final String token = tokenCreator.createAcitivateServiceViaEmailToken(user, otaToken);
         mailOutService.activateAccount(user.getId(), user.getEmailAddress(), user, token, otaToken);
