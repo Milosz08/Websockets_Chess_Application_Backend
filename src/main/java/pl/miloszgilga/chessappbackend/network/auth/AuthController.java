@@ -73,7 +73,7 @@ class AuthController {
 
     //------------------------------------------------------------------------------------------------------------------
 
-    @PostMapping(LOGOUT)
+    @DeleteMapping(LOGOUT)
     ResponseEntity<Void> logout(@CurrentUser AuthUser user) {
         loginService.logout(user.getUserModel().getId());
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);

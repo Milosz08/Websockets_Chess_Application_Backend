@@ -30,6 +30,7 @@ import java.util.*;
 import javax.transaction.Transactional;
 
 import pl.miloszgilga.chessappbackend.network.auth.domain.*;
+import pl.miloszgilga.chessappbackend.utils.StringManipulator;
 import pl.miloszgilga.chessappbackend.token.JsonWebTokenCreator;
 import pl.miloszgilga.chessappbackend.network.auth.dto.SuccessedLoginResDto;
 
@@ -40,12 +41,15 @@ public class UserToSuccessedLoginResDtoCustomizer extends CustomMapper<LocalUser
 
     private static final Logger LOGGER = LoggerFactory.getLogger(UserToSuccessedLoginResDtoCustomizer.class);
 
+    private final StringManipulator manipulator;
     private final JsonWebTokenCreator tokenCreator;
     private final IRefreshTokenRepository repository;
 
     //------------------------------------------------------------------------------------------------------------------
 
-    public UserToSuccessedLoginResDtoCustomizer(JsonWebTokenCreator tokenCreator, IRefreshTokenRepository repository) {
+    public UserToSuccessedLoginResDtoCustomizer(StringManipulator manipulator, JsonWebTokenCreator tokenCreator,
+                                                IRefreshTokenRepository repository) {
+        this.manipulator = manipulator;
         this.tokenCreator = tokenCreator;
         this.repository = repository;
     }
@@ -58,6 +62,9 @@ public class UserToSuccessedLoginResDtoCustomizer extends CustomMapper<LocalUser
         resDto.setJwtToken(tokenCreator.createUserCredentialsToken(userModel));
         resDto.setRefreshToken(generateAndSaveRefreshToken(userModel));
         resDto.setActivated(userModel.getIsActivated());
+        resDto.setFullName(userModel.getFirstName() + " " + userModel.getLastName());
+        resDto.setInitials(manipulator.generateInitials(userModel));
+        resDto.setCredentialsSupplier(userModel.getCredentialsSupplier().getName());
     }
 
     //------------------------------------------------------------------------------------------------------------------

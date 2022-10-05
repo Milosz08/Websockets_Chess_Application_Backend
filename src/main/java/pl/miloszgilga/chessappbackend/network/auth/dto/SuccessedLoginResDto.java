@@ -28,9 +28,10 @@ import lombok.*;
 @AllArgsConstructor
 public class SuccessedLoginResDto {
     private String nickname;
-    private String firstName;
-    private String lastName;
+    private String fullName;
+    private String initials;
     private boolean ifHasPhoto;
+    private String credentialsSupplier;
     private String photoUrl;
     private String jwtToken;
     private String refreshToken;
