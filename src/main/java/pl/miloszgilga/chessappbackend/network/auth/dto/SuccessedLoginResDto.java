@@ -27,6 +27,7 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 public class SuccessedLoginResDto {
+    private Long userId;
     private String nickname;
     private String fullName;
     private String initials;

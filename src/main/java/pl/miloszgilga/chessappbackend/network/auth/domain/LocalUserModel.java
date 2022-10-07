@@ -26,8 +26,7 @@ import java.io.Serializable;
 import javax.persistence.*;
 
 import static javax.persistence.FetchType.LAZY;
-import static javax.persistence.CascadeType.MERGE;
-import static javax.persistence.CascadeType.PERSIST;
+import static javax.persistence.CascadeType.*;
 
 import pl.miloszgilga.chessappbackend.audit.AuditableEntity;
 import pl.miloszgilga.chessappbackend.oauth.CredentialsSupplier;

@@ -95,6 +95,7 @@ public class AuthMapper {
                 .register();
 
         mapperFactory.classMap(LocalUserModel.class, SuccessedLoginResDto.class)
+                .field("id", "userId")
                 .field("localUserDetails.hasPhoto", "ifHasPhoto")
                 .field("localUserDetails.photoEmbedLink", "photoUrl")
                 .customize(userToSuccessedLoginResDtoCustomizer)
