@@ -70,4 +70,11 @@ public interface ILocalUserRepository extends JpaRepository<LocalUserModel, Long
             "WHERE m.nickname=:nicknameOrEmail " +
             "OR m.emailAddress=:nicknameOrEmail")
     Optional<LocalUserModel> findUserByNickOrEmail(@Param("nicknameOrEmail") String nicknameOrEmail);
+
+    //------------------------------------------------------------------------------------------------------------------
+
+    @Query(value = "SELECT COUNT(m) > 0 FROM LocalUserModel m " +
+            "WHERE m.id=:userId " +
+            "AND m.nickname=:nickname")
+    Boolean checkIfUserByIdAndNicknameExist(@Param("userId") Long userId, @Param("nickname") String nickname);
 }

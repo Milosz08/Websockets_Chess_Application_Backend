@@ -22,8 +22,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import pl.miloszgilga.chessappbackend.network.expose_static_data.dto.*;
+import java.util.Set;
+import javax.validation.Valid;
 
+import pl.miloszgilga.chessappbackend.network.expose_static_data.dto.*;
 import static pl.miloszgilga.chessappbackend.config.ApplicationEndpoints.*;
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -59,5 +61,12 @@ class ExposeStaticDataController {
     @GetMapping(SIGNUP_COUNTRY_DATA)
     ResponseEntity<SignupCountryDataResDto> getSignupCountryData() {
         return new ResponseEntity<>(service.getSignupCountryData(), HttpStatus.OK);
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+
+    @PostMapping(REMEMBER_ACCOUNTS)
+    ResponseEntity<Set<RememberAccountResDto>> getAllRememberAccounts(@Valid @RequestBody RememberAccountsDataReqDto req) {
+        return new ResponseEntity<>(service.getAllRememberAccounts(req), HttpStatus.OK);
     }
 }

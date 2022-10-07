@@ -49,6 +49,7 @@ public class ApplicationEndpoints {
     public static final String SIGNUP_CALENDAR_DATA = "/signup-calendar-data";
     public static final String SIGNUP_GENDER_DATA = "/signup-gender-data";
     public static final String SIGNUP_COUNTRY_DATA = "/signup-country-data";
+    public static final String REMEMBER_ACCOUNTS = "/remember-accounts";
 
     public static final String OTA_TOKEN_ENDPOINT = BASIC_ENDPOINT + "ota-token";
     public static final String CHANGE_PASSWORD = "/change-password";

@@ -1,8 +1,8 @@
 /*
  * Copyright (c) 2022 by MILOSZ GILGA <https://miloszgilga.pl>
  *
- * File name: IExposeStaticDataService.java
- * Last modified: 15/09/2022, 17:35
+ * File name: RememberAccountsDataReqDto.java
+ * Last modified: 07/10/2022, 21:05
  * Project name: chess-app-backend
  *
  * Licensed under the MIT license; you may not use this file except in compliance with the License.
@@ -16,17 +16,17 @@
  * COPIES OR SUBSTANTIAL PORTIONS OF THE SOFTWARE.
  */
 
-package pl.miloszgilga.chessappbackend.network.expose_static_data;
+package pl.miloszgilga.chessappbackend.network.expose_static_data.dto;
 
-import java.util.Set;
+import lombok.Data;
+import java.util.*;
 
-import pl.miloszgilga.chessappbackend.network.expose_static_data.dto.*;
+import pl.miloszgilga.chessappbackend.validator.annotation.ValidateUserNicknameAndIdExisting;
 
 //----------------------------------------------------------------------------------------------------------------------
 
-interface IExposeStaticDataService {
-    SignupCalendarDataResDto getSignupCalendarData();
-    SignupGenderDataResDto getSignupGenderData();
-    SignupCountryDataResDto getSignupCountryData();
-    Set<RememberAccountResDto> getAllRememberAccounts(final RememberAccountsDataReqDto req);
+@Data
+@ValidateUserNicknameAndIdExisting(message = "{jpa.validator.userAccountsIdAndLogin.notExist}")
+public class RememberAccountsDataReqDto {
+    private Set<RememberAccountReqDto> accounts = new HashSet<>();
 }

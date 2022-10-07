@@ -1,8 +1,8 @@
 /*
  * Copyright (c) 2022 by MILOSZ GILGA <https://miloszgilga.pl>
  *
- * File name: IExposeStaticDataService.java
- * Last modified: 15/09/2022, 17:35
+ * File name: AutoLoginReqDto.java
+ * Last modified: 07/10/2022, 17:22
  * Project name: chess-app-backend
  *
  * Licensed under the MIT license; you may not use this file except in compliance with the License.
@@ -16,17 +16,16 @@
  * COPIES OR SUBSTANTIAL PORTIONS OF THE SOFTWARE.
  */
 
-package pl.miloszgilga.chessappbackend.network.expose_static_data;
+package pl.miloszgilga.chessappbackend.network.auth.dto;
 
-import java.util.Set;
-
-import pl.miloszgilga.chessappbackend.network.expose_static_data.dto.*;
+import lombok.Data;
+import javax.validation.constraints.NotBlank;
 
 //----------------------------------------------------------------------------------------------------------------------
 
-interface IExposeStaticDataService {
-    SignupCalendarDataResDto getSignupCalendarData();
-    SignupGenderDataResDto getSignupGenderData();
-    SignupCountryDataResDto getSignupCountryData();
-    Set<RememberAccountResDto> getAllRememberAccounts(final RememberAccountsDataReqDto req);
+@Data
+public class AutoLoginReqDto {
+
+    @NotBlank(message = "{jpa.validator.jwtToken.notBlank}")
+    private String refreshToken;
 }

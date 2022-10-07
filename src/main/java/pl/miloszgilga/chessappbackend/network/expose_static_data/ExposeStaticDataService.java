@@ -18,11 +18,14 @@
 
 package pl.miloszgilga.chessappbackend.network.expose_static_data;
 
+import ma.glasnost.orika.MapperFacade;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
 import java.util.stream.*;
 
+import pl.miloszgilga.chessappbackend.network.auth.domain.ILocalUserRepository;
+import pl.miloszgilga.chessappbackend.network.auth.domain.LocalUserModel;
 import pl.miloszgilga.chessappbackend.utils.TimeHelper;
 import pl.miloszgilga.chessappbackend.dto.SimpleTupleDto;
 import pl.miloszgilga.chessappbackend.loader.gender_data.*;
@@ -37,20 +40,24 @@ import pl.miloszgilga.chessappbackend.network.expose_static_data.dto.*;
 class ExposeStaticDataService implements IExposeStaticDataService {
 
     private final TimeHelper timeHelper;
+    private final MapperFacade mapperFacade;
     private final GenderPropertiesLoader genderLoader;
-    private final CalendarPropertiesLoader calendarLoader;
     private final CountryPropertiesLoader countryLoader;
+    private final CalendarPropertiesLoader calendarLoader;
+    private final ILocalUserRepository localUserRepository;
 
     //------------------------------------------------------------------------------------------------------------------
 
     ExposeStaticDataService(
-            TimeHelper timeHelper, GenderPropertiesLoader genderLoader, CalendarPropertiesLoader calendarLoader,
-            CountryPropertiesLoader countryLoader
-    ) {
+            TimeHelper timeHelper, MapperFacade mapperFacade, GenderPropertiesLoader genderLoader,
+            CalendarPropertiesLoader calendarLoader, CountryPropertiesLoader countryLoader,
+            ILocalUserRepository localUserRepository) {
         this.timeHelper = timeHelper;
+        this.mapperFacade = mapperFacade;
         this.genderLoader = genderLoader;
         this.calendarLoader = calendarLoader;
         this.countryLoader = countryLoader;
+        this.localUserRepository = localUserRepository;
     }
 
     //------------------------------------------------------------------------------------------------------------------
@@ -83,6 +90,19 @@ class ExposeStaticDataService implements IExposeStaticDataService {
                 .sorted()
                 .collect(Collectors.toList());
         return new SignupCountryDataResDto(allCountryNames);
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+
+    @Override
+    public Set<RememberAccountResDto> getAllRememberAccounts(final RememberAccountsDataReqDto req) {
+        final Set<RememberAccountResDto> allRememberAccounts = new HashSet<>();
+        for (final RememberAccountReqDto account : req.getAccounts()) {
+            final Optional<LocalUserModel> userModel = localUserRepository.findUserByNickname(account.getUserLogin());
+            if (userModel.isEmpty()) break;
+            allRememberAccounts.add(mapperFacade.map(userModel.get(), RememberAccountResDto.class));
+        }
+        return allRememberAccounts;
     }
 
     //------------------------------------------------------------------------------------------------------------------

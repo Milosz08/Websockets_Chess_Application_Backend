@@ -85,4 +85,12 @@ public class AuthException {
             super(HttpStatus.BAD_REQUEST, message, args);
         }
     }
+
+    //------------------------------------------------------------------------------------------------------------------
+
+    public static class SessionIsNotStartedException extends BasicServerException {
+        public SessionIsNotStartedException(String message, Object... args) {
+            super(HttpStatus.UNAUTHORIZED, message, args);
+        }
+    }
 }
