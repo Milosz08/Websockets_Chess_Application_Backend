@@ -31,4 +31,7 @@ public interface IRefreshTokenRepository extends JpaRepository<RefreshTokenModel
 
     @Query(value = "SELECT m FROM RefreshTokenModel m INNER JOIN m.localUser u WHERE u.id=:userId")
     Optional<RefreshTokenModel> findRefreshTokenByUserId(@Param("userId") Long userId);
+
+    @Query(value = "SELECT m.localUser FROM RefreshTokenModel m WHERE m.refreshToken=:refreshToken")
+    Optional<LocalUserModel> findUserByMatchedRefreshToken(@Param("refreshToken") String refreshToken);
 }

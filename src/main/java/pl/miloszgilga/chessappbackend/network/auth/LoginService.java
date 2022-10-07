@@ -120,6 +120,21 @@ public class LoginService implements ILoginService {
 
     @Override
     @Transactional
+    public SuccessedLoginResDto autoLogin(AutoLoginReqDto req) {
+        final LocalUserModel userModel = refreshTokenRepository
+                .findUserByMatchedRefreshToken(req.getRefreshToken())
+                .orElseThrow(() -> {
+                    LOGGER.error("Attempt to auto login user with no initialized session before. Bearer: {}", req);
+                    throw new AuthException.SessionIsNotStartedException("Session expired. Please login again.");
+                });
+        LOGGER.info("User with email: {} was logged automatically. User data: {}", userModel.getEmailAddress(), userModel);
+        return mapperFacade.map(userModel, SuccessedLoginResDto.class);
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+
+    @Override
+    @Transactional
     public void logout(final Long userId) {
         final Optional<RefreshTokenModel> refreshTokenModel = refreshTokenRepository.findRefreshTokenByUserId(userId);
         refreshTokenModel.ifPresent(refreshTokenRepository::delete);

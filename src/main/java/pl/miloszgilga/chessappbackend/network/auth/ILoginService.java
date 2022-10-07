@@ -25,6 +25,7 @@ import pl.miloszgilga.chessappbackend.network.auth.dto.*;
 interface ILoginService {
     SuccessedLoginResDto loginViaLocal(final LoginViaLocalReqDto req);
     SuccessedLoginResDto loginViaOAuth2(final Long userId);
+    SuccessedLoginResDto autoLogin(AutoLoginReqDto req);
     void logout(final Long userId);
     RefreshTokenResDto refreshToken(final String expiredBearer);
 }

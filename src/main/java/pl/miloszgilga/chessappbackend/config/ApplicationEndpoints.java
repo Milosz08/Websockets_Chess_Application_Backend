@@ -34,6 +34,7 @@ public class ApplicationEndpoints {
     public static final String AUTH_ENDPOINT = BASIC_ENDPOINT + "auth";
     public static final String LOGIN_VIA_LOCAL = "/login-via-local";
     public static final String LOGIN_VIA_OAUTH2 = "/login-via-oauth";
+    public static final String AUTO_LOGIN = "/auto-login";
     public static final String LOGOUT = "/logout";
     public static final String REFRESH_TOKEN = "/refresh-token";
     public static final String ATTEMPT_ACTIVATE_ACCOUNT = "/attempt-activate-account";

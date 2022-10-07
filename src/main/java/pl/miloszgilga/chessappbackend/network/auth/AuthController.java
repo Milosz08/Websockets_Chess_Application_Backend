@@ -66,6 +66,13 @@ class AuthController {
 
     //------------------------------------------------------------------------------------------------------------------
 
+    @PostMapping(AUTO_LOGIN)
+    ResponseEntity<SuccessedLoginResDto> autoLogin(@Valid @RequestBody AutoLoginReqDto req) {
+        return new ResponseEntity<>(loginService.autoLogin(req), HttpStatus.OK);
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+
     @PostMapping(ATTEMPT_ACTIVATE_ACCOUNT)
     ResponseEntity<SuccessedAttemptToFinishSignupResDto> attemptActivateAccount(@CurrentUser AuthUser user) {
         return new ResponseEntity<>(signupService.attemptToActivateAccount(user.getUserModel().getId()), HttpStatus.OK);
