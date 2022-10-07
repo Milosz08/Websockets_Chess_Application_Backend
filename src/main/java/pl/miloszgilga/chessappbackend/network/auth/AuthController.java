@@ -35,7 +35,7 @@ import static pl.miloszgilga.chessappbackend.config.ApplicationEndpoints.*;
 //----------------------------------------------------------------------------------------------------------------------
 
 @RestController
-@RequestMapping(AUTH_LOCAL_ENDPOINT)
+@RequestMapping(AUTH_ENDPOINT)
 class AuthController {
 
     private final LoginService loginService;

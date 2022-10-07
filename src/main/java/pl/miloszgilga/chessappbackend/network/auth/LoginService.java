@@ -131,8 +131,8 @@ public class LoginService implements ILoginService {
 
     @Override
     @Transactional
-    public RefreshTokenResDto refreshToken(final String expiredBearer) {
-        final Long userId = tokenVerificator.validateExpiredTokenToRefreshToken(expiredBearer);
+    public RefreshTokenResDto refreshToken(final String token) {
+        final Long userId = tokenVerificator.validateExpiredTokenToRefreshToken(token);
         final RefreshTokenModel refreshToken = refreshTokenRepository.findRefreshTokenByUserId(userId).orElseThrow(() -> {
             LOGGER.error("Attempt to extract refresh token from non existing token. User id {}", userId);
             throw new TokenException.RefreshTokenNotExistException("Unable to find refresh token for provided user.");

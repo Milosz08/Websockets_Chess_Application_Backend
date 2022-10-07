@@ -31,7 +31,7 @@ public class ApplicationEndpoints {
     public static final String NEWSLETTER_ATTEMPT_UNSUBSCRIBE = "/attempt-unsubscribe";
     public static final String NEWSLETTER_UNSUBSCRIBE_VIA_OTA = "/unsubscribe-via-ota";
 
-    public static final String AUTH_LOCAL_ENDPOINT = BASIC_ENDPOINT + "auth-local";
+    public static final String AUTH_ENDPOINT = BASIC_ENDPOINT + "auth";
     public static final String LOGIN_VIA_LOCAL = "/login-via-local";
     public static final String LOGIN_VIA_OAUTH2 = "/login-via-oauth";
     public static final String LOGOUT = "/logout";
