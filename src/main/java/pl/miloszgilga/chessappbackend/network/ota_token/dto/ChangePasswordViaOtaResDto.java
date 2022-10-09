@@ -1,8 +1,8 @@
 /*
  * Copyright (c) 2022 by MILOSZ GILGA <https://miloszgilga.pl>
  *
- * File name: IOtaTokenService.java
- * Last modified: 26/09/2022, 23:08
+ * File name: ChangePasswordViaOtaResDto.java
+ * Last modified: 09/10/2022, 17:35
  * Project name: chess-app-backend
  *
  * Licensed under the MIT license; you may not use this file except in compliance with the License.
@@ -16,17 +16,16 @@
  * COPIES OR SUBSTANTIAL PORTIONS OF THE SOFTWARE.
  */
 
-package pl.miloszgilga.chessappbackend.network.ota_token;
+package pl.miloszgilga.chessappbackend.network.ota_token.dto;
 
-import java.net.URI;
-
-import pl.miloszgilga.chessappbackend.network.ota_token.dto.*;
-import pl.miloszgilga.chessappbackend.dto.SimpleServerMessageDto;
+import lombok.*;
 
 //----------------------------------------------------------------------------------------------------------------------
 
-interface IOtaTokenService {
-    ChangePasswordViaOtaResDto changePassword(final OtaTokenNicknameEmailReqDto req);
-    SimpleServerMessageDto activateAccount(final OtaTokenMultipleEmailsReqDto req);
-    URI activateAccountViaLink(final String bearer);
+@Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+public class ChangePasswordViaOtaResDto {
+    private String bearerToken;
 }

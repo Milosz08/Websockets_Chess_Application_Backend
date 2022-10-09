@@ -28,8 +28,8 @@ import java.util.Date;
 import java.util.stream.Collectors;
 import javax.transaction.Transactional;
 
+import pl.miloszgilga.chessappbackend.token.*;
 import pl.miloszgilga.chessappbackend.exception.custom.*;
-import pl.miloszgilga.chessappbackend.token.OtaTokenType;
 import pl.miloszgilga.chessappbackend.config.EnvironmentVars;
 import pl.miloszgilga.chessappbackend.dto.SimpleServerMessageDto;
 
@@ -48,15 +48,18 @@ class OtaTokenService implements IOtaTokenService {
 
     private final EnvironmentVars environment;
     private final OtaTokenServiceHelper helper;
+    private final JsonWebTokenCreator tokenCreator;
     private final ILocalUserRepository userRepository;
     private final IOtaTokenRepository otaTokenRepository;
 
     //------------------------------------------------------------------------------------------------------------------
 
-    OtaTokenService(EnvironmentVars environment, OtaTokenServiceHelper helper, ILocalUserRepository userRepository,
+    OtaTokenService(EnvironmentVars environment, OtaTokenServiceHelper helper,
+                    JsonWebTokenCreator tokenCreator, ILocalUserRepository userRepository,
                     IOtaTokenRepository otaTokenRepository) {
         this.environment = environment;
         this.helper = helper;
+        this.tokenCreator = tokenCreator;
         this.userRepository = userRepository;
         this.otaTokenRepository = otaTokenRepository;
     }
@@ -64,26 +67,19 @@ class OtaTokenService implements IOtaTokenService {
     //------------------------------------------------------------------------------------------------------------------
 
     @Override
-    public SimpleServerMessageDto changePassword(final OtaTokenMultipleEmailsReqDto req) {
-
-        // TODO: Implement checking password OTA token from email
-
-        return new SimpleServerMessageDto("change password via ota token service");
-    }
-
-    //------------------------------------------------------------------------------------------------------------------
-
-    @Override
     @Transactional
-    public URI changePasswordViaLink(final String bearer) {
-        final TokenLinkValidationData data = TokenLinkValidationData.builder()
-                .bearer(bearer)
-                .type(RESET_PASSWORD)
-                .redirectUri(environment.getChangePasswordRedirectUri())
-                .successMessage("Your password is successfuly changed. Now you can login via pressing the login button below.")
-                .failureMessage("Unable to change password via passed token. Token probably is malformed.")
+    public ChangePasswordViaOtaResDto changePassword(final OtaTokenNicknameEmailReqDto req) {
+        final OtaTokenModel otaToken = otaTokenRepository
+                .findUserByTokenAndNicknameEmail(req.getToken(), RESET_PASSWORD, req.getNicknameEmail())
+                .orElseThrow(() -> {
+                    LOGGER.error("Attempt to change password via malformed/not existing OTA token. Req: {}", req);
+                    throw new TokenException.OtaTokenNotExistException("Passed token is invalid. Try with another token.");
+                });
+
+        verifyOtaTokenDetailsAndSetAlreadyUsed(otaToken);
+        return ChangePasswordViaOtaResDto.builder()
+                .bearerToken(tokenCreator.createUserCredentialsToken(otaToken.getLocalUser()))
                 .build();
-        return helper.checkBearerTokenFromLinkWithOtaToken(data);
     }
 
     //------------------------------------------------------------------------------------------------------------------

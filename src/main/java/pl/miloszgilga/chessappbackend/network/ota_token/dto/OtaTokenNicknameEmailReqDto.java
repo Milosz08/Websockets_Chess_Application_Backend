@@ -1,8 +1,8 @@
 /*
  * Copyright (c) 2022 by MILOSZ GILGA <https://miloszgilga.pl>
  *
- * File name: IOtaTokenService.java
- * Last modified: 26/09/2022, 23:08
+ * File name: OtaTokenNicknameEmailReqDto.java
+ * Last modified: 09/10/2022, 17:18
  * Project name: chess-app-backend
  *
  * Licensed under the MIT license; you may not use this file except in compliance with the License.
@@ -16,17 +16,25 @@
  * COPIES OR SUBSTANTIAL PORTIONS OF THE SOFTWARE.
  */
 
-package pl.miloszgilga.chessappbackend.network.ota_token;
+package pl.miloszgilga.chessappbackend.network.ota_token.dto;
 
-import java.net.URI;
+import lombok.Data;
+import javax.validation.constraints.*;
 
-import pl.miloszgilga.chessappbackend.network.ota_token.dto.*;
-import pl.miloszgilga.chessappbackend.dto.SimpleServerMessageDto;
+import static pl.miloszgilga.chessappbackend.validator.RegexPattern.OTA_TOKEN_PATTERN;
 
 //----------------------------------------------------------------------------------------------------------------------
 
-interface IOtaTokenService {
-    ChangePasswordViaOtaResDto changePassword(final OtaTokenNicknameEmailReqDto req);
-    SimpleServerMessageDto activateAccount(final OtaTokenMultipleEmailsReqDto req);
-    URI activateAccountViaLink(final String bearer);
+@Data
+public class OtaTokenNicknameEmailReqDto {
+
+    @NotBlank(message = "{jpa.validator.otaToken.notBlank}")
+    @Pattern(regexp = OTA_TOKEN_PATTERN, message = "{jpa.validator.otaToken.regex}")
+    private String token;
+
+    //------------------------------------------------------------------------------------------------------------------
+
+    @NotEmpty(message = "{jpa.validator.usernameEmail.notBlank}")
+    @Size(max = 100, message = "{jpa.validator.usernameEmail.size}")
+    private String nicknameEmail;
 }
