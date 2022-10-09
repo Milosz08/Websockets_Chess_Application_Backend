@@ -19,9 +19,8 @@
 package pl.miloszgilga.chessappbackend.network.ota_token.domain;
 
 import org.springframework.stereotype.Repository;
-import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.jpa.repository.*;
 import org.springframework.data.repository.query.Param;
-import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;
 
@@ -45,13 +44,28 @@ public interface IOtaTokenRepository extends JpaRepository<OtaTokenModel, Long> 
 
     @Query(value = "SELECT COUNT(m) > 0 FROM OtaTokenModel m " +
             "WHERE m.otaToken=:token " +
-            "AND m.userFor=:usedFor")
-    Boolean checkIfOtaTokenExist(@Param("token") String token, @Param("usedFor") OtaTokenType usedFor);
+            "AND m.userFor=:usedFor " +
+            "AND m.alreadyUsed=false")
+    Boolean checkIfOtaTokenExist(@Param("token") String token,
+                                 @Param("usedFor") OtaTokenType usedFor);
 
     //------------------------------------------------------------------------------------------------------------------
 
     @Query(value = "SELECT m FROM OtaTokenModel m " +
             "WHERE m.otaToken=:token " +
+            "AND m.userFor=:usedFor " +
+            "AND m.alreadyUsed=false")
+    Optional<OtaTokenModel> findTokenBasedValueAndUsed(@Param("token") String token,
+                                                       @Param("usedFor") OtaTokenType usedFor);
+
+    //------------------------------------------------------------------------------------------------------------------
+
+    @Query(value = "SELECT m FROM OtaTokenModel m INNER JOIN m.localUser u " +
+            "WHERE m.otaToken=:token " +
+            "AND (u.emailAddress=:nicknameEmail OR u.nickname=:nicknameEmail) " +
+            "AND m.alreadyUsed=false " +
             "AND m.userFor=:usedFor")
-    Optional<OtaTokenModel> findTokenBasedValueAndUsed(@Param("token") String token, @Param("usedFor") OtaTokenType usedFor);
+    Optional<OtaTokenModel> findUserByTokenAndNicknameEmail(@Param("token") String token,
+                                                             @Param("usedFor") OtaTokenType usedFor,
+                                                             @Param("nicknameEmail") String nicknameEmail);
 }

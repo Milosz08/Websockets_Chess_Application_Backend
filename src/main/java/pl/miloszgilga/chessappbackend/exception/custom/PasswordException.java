@@ -29,4 +29,10 @@ public class PasswordException {
             super(HttpStatus.BAD_REQUEST, message, args);
         }
     }
+
+    public static class PasswordHasAlreadyUsedException extends BasicServerException {
+        public PasswordHasAlreadyUsedException(String message, Object... args) {
+            super(HttpStatus.BAD_REQUEST, message, args);
+        }
+    }
 }

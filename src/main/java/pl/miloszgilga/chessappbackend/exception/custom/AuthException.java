@@ -93,4 +93,12 @@ public class AuthException {
             super(HttpStatus.UNAUTHORIZED, message, args);
         }
     }
+
+    //------------------------------------------------------------------------------------------------------------------
+
+    public static class ChangePasswordProhibitedActionException extends BasicServerException {
+        public ChangePasswordProhibitedActionException(String message, Object... args) {
+            super(HttpStatus.BAD_REQUEST, message, args);
+        }
+    }
 }

@@ -97,7 +97,7 @@ class OtaTokenService implements IOtaTokenService {
             LOGGER.warn("Attempt to re-activate account. Account activation data: {}", req);
             throw new AuthException.AccountIsAlreadyActivatedException("Your account has been already activated.");
         }
-        if (verifyOtaTokenDetails(tokenModel)) {
+        if (verifyOtaTokenDetailsAndSetAlreadyUsed(tokenModel)) {
             localUserModel.setIsActivated(true);
             userRepository.save(localUserModel);
         }
@@ -118,7 +118,7 @@ class OtaTokenService implements IOtaTokenService {
                 .successMessage("Your account is successful activated. Now you can login via pressing the login button below.")
                 .failureMessage("Unable to activate account with passed token. Token probaby is malformed.")
                 .build();
-        return helper.checkBearerTokenFromLinkWithOtaToken(data);
+        return helper.checkBearerTokenFromLinkWithOtaToken(data, true);
     }
 
     //------------------------------------------------------------------------------------------------------------------
@@ -138,14 +138,10 @@ class OtaTokenService implements IOtaTokenService {
     //------------------------------------------------------------------------------------------------------------------
 
     @Transactional
-    boolean verifyOtaTokenDetails(final OtaTokenModel tokenModel) {
+    boolean verifyOtaTokenDetailsAndSetAlreadyUsed(final OtaTokenModel tokenModel) {
         if (tokenModel.getExpirationDate().before(new Date())) {
             LOGGER.error("OTA token is expired. Token: {}", tokenModel);
             throw new TokenException.OtaTokenExpiredException("Passed token is valid, but it has already expired.");
-        }
-        if (tokenModel.getAlreadyUsed()) {
-            LOGGER.error("OTA token is already used. Token: {}", tokenModel);
-            throw new TokenException.OtaTokenExpiredException("OTA tokens reusage is strictly prohibited.");
         }
         tokenModel.setAlreadyUsed(true);
         return true;

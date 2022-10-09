@@ -31,7 +31,7 @@ config:
     mail-helpdesk-agent: helpdesk
     cors-max-age-seconds: 3600
     redirects:
-        change-password-uri: /change-password/
+        change-password-uri: /auth/change-password
         activate-account-uri: /activate-account/
         unsubscribe-newsletter-uri: /unsubscribe-newsletter/
 

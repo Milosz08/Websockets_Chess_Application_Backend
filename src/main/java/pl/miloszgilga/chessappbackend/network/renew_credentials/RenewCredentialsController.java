@@ -40,6 +40,8 @@ class RenewCredentialsController {
         this.service = service;
     }
 
+    //------------------------------------------------------------------------------------------------------------------
+
     @PostMapping(ATTEMPT_TO_CHANGE_PASSWORD)
     ResponseEntity<SimpleServerMessageDto> attemptToChangePassword(@RequestBody @Valid AttemptToChangePasswordReqDto req) {
         return new ResponseEntity<>(service.attemptToChangePassword(req), HttpStatus.OK);

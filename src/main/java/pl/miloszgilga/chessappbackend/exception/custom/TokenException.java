@@ -48,6 +48,14 @@ public class TokenException {
 
     //------------------------------------------------------------------------------------------------------------------
 
+    public static class OtaTokenNotExistException extends BasicAuthenticationException {
+        public OtaTokenNotExistException(String message, Object... args) {
+            super(HttpStatus.NOT_FOUND, message, args);
+        }
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+
     public static class RefreshTokenNotExistException extends BasicAuthenticationException {
         public RefreshTokenNotExistException(String message, Object... args) {
             super(HttpStatus.NOT_FOUND, message, args);

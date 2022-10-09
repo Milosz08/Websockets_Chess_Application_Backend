@@ -97,7 +97,7 @@ class NewsletterEmailService implements INewsletterEmailService {
         final String email = model.getUserEmail();
 
         final String otaToken = helper.generateAndSaveOtaToken(email);
-        final String bearerToken = creator.createAcitivateServiceViaEmailToken(email, otaToken);
+        final String bearerToken = creator.createAcitivateServiceViaEmailToken(email, model.getId(), otaToken);
         mailService.unsubscribeNewsletter(model.getId(), model.getUserName(), email, bearerToken, otaToken);
 
         return new SimpleServerMessageDto(String.format("Message has been send to the email %s.", email));

@@ -19,7 +19,7 @@
 package pl.miloszgilga.chessappbackend.network.renew_credentials;
 
 import pl.miloszgilga.chessappbackend.dto.SimpleServerMessageDto;
-import pl.miloszgilga.chessappbackend.network.renew_credentials.dto.AttemptToChangePasswordReqDto;
+import pl.miloszgilga.chessappbackend.network.renew_credentials.dto.*;
 
 //----------------------------------------------------------------------------------------------------------------------
 

@@ -18,10 +18,10 @@
 
 package pl.miloszgilga.chessappbackend.network.ota_token;
 
-import pl.miloszgilga.chessappbackend.dto.SimpleServerMessageDto;
-import pl.miloszgilga.chessappbackend.network.ota_token.dto.OtaTokenMultipleEmailsReqDto;
-
 import java.net.URI;
+
+import pl.miloszgilga.chessappbackend.network.ota_token.dto.*;
+import pl.miloszgilga.chessappbackend.dto.SimpleServerMessageDto;
 
 //----------------------------------------------------------------------------------------------------------------------
 
