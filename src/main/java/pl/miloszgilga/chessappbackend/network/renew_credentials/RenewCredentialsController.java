@@ -22,9 +22,11 @@ import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import javax.servlet.http.HttpServletRequest;
 
+import pl.miloszgilga.chessappbackend.utils.NetworkHelper;
 import pl.miloszgilga.chessappbackend.dto.SimpleServerMessageDto;
-import pl.miloszgilga.chessappbackend.network.renew_credentials.dto.AttemptToChangePasswordReqDto;
+import pl.miloszgilga.chessappbackend.network.renew_credentials.dto.*;
 
 import static pl.miloszgilga.chessappbackend.config.ApplicationEndpoints.*;
 
@@ -34,16 +36,37 @@ import static pl.miloszgilga.chessappbackend.config.ApplicationEndpoints.*;
 @RequestMapping(RENEW_CREDETIALS_LOCAL)
 class RenewCredentialsController {
 
+    private final NetworkHelper networkHelper;
     private final IRenewCredentialsService service;
 
-    RenewCredentialsController(IRenewCredentialsService service) {
+    //------------------------------------------------------------------------------------------------------------------
+
+    RenewCredentialsController(NetworkHelper networkHelper, IRenewCredentialsService service) {
+        this.networkHelper = networkHelper;
         this.service = service;
     }
 
     //------------------------------------------------------------------------------------------------------------------
 
     @PostMapping(ATTEMPT_TO_CHANGE_PASSWORD)
-    ResponseEntity<SimpleServerMessageDto> attemptToChangePassword(@RequestBody @Valid AttemptToChangePasswordReqDto req) {
+    ResponseEntity<ChangePasswordEmaiAddressesResDto> attemptToChangePassword(@RequestBody @Valid AttemptToChangePasswordReqDto req) {
         return new ResponseEntity<>(service.attemptToChangePassword(req), HttpStatus.OK);
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+
+    @PostMapping(CHANGE_PASSWORD_CHECK_JWT)
+    ResponseEntity<ChangePasswordUserDetailsResDto> checkJwtBeforeChangePassword(HttpServletRequest req) {
+        final String jwtToken = networkHelper.extractJwtTokenFromRequest(req);
+        return new ResponseEntity<>(service.checkJwtBeforeChangePassword(jwtToken), HttpStatus.OK);
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+
+    @PostMapping(CHANGE_FORGOTTEN_PASSWORD)
+    ResponseEntity<SimpleServerMessageDto> changeForgottenPassword(@RequestBody @Valid ChangeForgottenPasswordReqDto reqDto,
+                                                                   HttpServletRequest req) {
+        final String jwtToken = networkHelper.extractJwtTokenFromRequest(req);
+        return new ResponseEntity<>(service.changeForgottenPassword(reqDto, jwtToken), HttpStatus.OK);
     }
 }

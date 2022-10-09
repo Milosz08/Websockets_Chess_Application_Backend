@@ -1,8 +1,8 @@
 /*
  * Copyright (c) 2022 by MILOSZ GILGA <https://miloszgilga.pl>
  *
- * File name: IRenewCredentialsService.java
- * Last modified: 02/10/2022, 21:13
+ * File name: ChangePasswordUserDetailsResDto.java
+ * Last modified: 09/10/2022, 19:46
  * Project name: chess-app-backend
  *
  * Licensed under the MIT license; you may not use this file except in compliance with the License.
@@ -16,15 +16,20 @@
  * COPIES OR SUBSTANTIAL PORTIONS OF THE SOFTWARE.
  */
 
-package pl.miloszgilga.chessappbackend.network.renew_credentials;
+package pl.miloszgilga.chessappbackend.network.renew_credentials.dto;
 
-import pl.miloszgilga.chessappbackend.dto.SimpleServerMessageDto;
-import pl.miloszgilga.chessappbackend.network.renew_credentials.dto.*;
+import lombok.*;
 
 //----------------------------------------------------------------------------------------------------------------------
 
-interface IRenewCredentialsService {
-    ChangePasswordEmaiAddressesResDto attemptToChangePassword(final AttemptToChangePasswordReqDto req);
-    ChangePasswordUserDetailsResDto checkJwtBeforeChangePassword(final String jwtToken);
-    SimpleServerMessageDto changeForgottenPassword(final ChangeForgottenPasswordReqDto req, final String jwtToken);
+@Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+public class ChangePasswordUserDetailsResDto {
+    private String fullName;
+    private Long userId;
+    private String initials;
+    private boolean ifHasPhoto;
+    private String photoUrl;
 }

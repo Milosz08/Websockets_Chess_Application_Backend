@@ -44,6 +44,8 @@ public class ApplicationEndpoints {
 
     public static final String RENEW_CREDETIALS_LOCAL = BASIC_ENDPOINT + "renew-credentials";
     public static final String ATTEMPT_TO_CHANGE_PASSWORD = "/attempt-to-change-password";
+    public static final String CHANGE_PASSWORD_CHECK_JWT = "/change-password-check-jwt";
+    public static final String CHANGE_FORGOTTEN_PASSWORD = "/change-forgotten-password";
 
     public static final String EXPOSE_STATIC_DATA_ENDPOINT = BASIC_ENDPOINT + "static-data";
     public static final String SIGNUP_CALENDAR_DATA = "/signup-calendar-data";
