@@ -27,6 +27,7 @@ import freemarker.template.*;
 import org.springframework.mail.javamail.*;
 import org.springframework.stereotype.Service;
 import org.springframework.core.io.ClassPathResource;
+import org.springframework.web.util.UriComponentsBuilder;
 import org.springframework.ui.freemarker.FreeMarkerTemplateUtils;
 
 import java.util.*;
@@ -131,5 +132,14 @@ class MailService {
 
     String otaTokenBearerPath(String bearer, String subdomain) {
         return environment.getBaseUrl() + OTA_TOKEN_ENDPOINT + subdomain + bearer;
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+
+    String otaTokenChangePasswordPath(String bearer) {
+        return UriComponentsBuilder
+                .fromPath(environment.getFrontEndUrl() + environment.getChangePasswordRedirectUri())
+                .queryParam("token", bearer)
+                .toUriString();
     }
 }

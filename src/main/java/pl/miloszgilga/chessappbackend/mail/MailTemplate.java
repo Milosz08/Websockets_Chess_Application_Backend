@@ -26,7 +26,8 @@ import lombok.*;
 @AllArgsConstructor
 enum MailTemplate {
     UNSUBSCRIBE_NEWSLETTER("unsubscribe-newsletter.template.ftl"),
-    ACTIVATE_ACCOUNT("activate-account.template.ftl");
+    ACTIVATE_ACCOUNT("activate-account.template.ftl"),
+    CHANGE_PASSWORD("change-password.template.ftl");
 
     //------------------------------------------------------------------------------------------------------------------
 

@@ -25,4 +25,5 @@ import pl.miloszgilga.chessappbackend.network.auth.domain.LocalUserModel;
 public interface IMailOutService {
     void unsubscribeNewsletter(Long id, String userName, String email, String bearer, String otaToken);
     void activateAccount(Long id, String email, LocalUserModel userModel, String bearer, String otaToken);
+    void changePassword(Long id, String email, LocalUserModel userModel, String bearer, String otaToken);
 }

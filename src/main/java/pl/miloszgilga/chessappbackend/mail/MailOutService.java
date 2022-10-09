@@ -73,4 +73,19 @@ public class MailOutService implements IMailOutService {
         parameters.put("bearerButtonLink", mailService.otaTokenBearerPath(bearer, ACTIVATE_ACCOUNT_VIA_LINK));
         mailService.generalEmailSender(basicMailData.getValue0(), parameters, ACTIVATE_ACCOUNT);
     }
+
+    //------------------------------------------------------------------------------------------------------------------
+
+    @Override
+    public void changePassword(Long id, String email, LocalUserModel userModel, String bearer, String otaToken) {
+        final Pair<MailRequestDto, Map<String, Object>> basicMailData = mailService.generateBasicMailParameters(
+                String.format("(%s) Chess Online: Change password for %s (%s)", id,
+                        manipulator.generateFullName(userModel), userModel.getNickname()), email);
+        final Map<String, Object> parameters = basicMailData.getValue1();
+        parameters.put("userName", userModel.getFirstName());
+        parameters.put("emailAddress", email);
+        parameters.put("otaToken", otaToken);
+        parameters.put("bearerButtonLink", mailService.otaTokenChangePasswordPath(bearer));
+        mailService.generalEmailSender(basicMailData.getValue0(), parameters, CHANGE_PASSWORD);
+    }
 }
