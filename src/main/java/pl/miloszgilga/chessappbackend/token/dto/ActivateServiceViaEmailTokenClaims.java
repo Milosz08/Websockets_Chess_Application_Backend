@@ -25,6 +25,7 @@ import lombok.*;
 @Data
 @AllArgsConstructor
 public class ActivateServiceViaEmailTokenClaims {
+    private Long userId;
     private String emailAddress;
     private boolean isExpired;
     private String otaToken;

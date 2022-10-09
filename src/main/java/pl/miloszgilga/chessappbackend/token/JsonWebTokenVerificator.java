@@ -53,6 +53,7 @@ public class JsonWebTokenVerificator {
         }
         Claims claims = extractClaimsFromRawToken(token);
         return new ActivateServiceViaEmailTokenClaims(
+                claims.get(USER_ID.getClaimName(), Long.class),
                 claims.get(EMAIL.getClaimName(), String.class),
                 claims.get(IS_EXPIRED.getClaimName(), Boolean.class),
                 claims.get(OTA_TOKEN.getClaimName(), String.class)
@@ -107,8 +108,8 @@ public class JsonWebTokenVerificator {
             LOGGER.error("Passed JSON Web Token is malformed. Token: {}", token);
         } catch (ExpiredJwtException ex) {
             LOGGER.error("Passed JSON Web Token is expired. Token: {}", token);
-            throw new TokenException.JwtTokenExpiredException("Token is expired. Before insert any changes " +
-                    "please login again.");
+            throw new TokenException.JwtTokenExpiredException("Token is expired. Before insert any changes please " +
+                    "enter new token.");
         } catch (JwtException ex) {
             LOGGER.error("Passed JSON Web Token is invalid. Token: {}", token);
         } catch (IllegalArgumentException ex) {

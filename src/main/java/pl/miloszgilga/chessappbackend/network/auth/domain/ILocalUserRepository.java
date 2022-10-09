@@ -66,6 +66,11 @@ public interface ILocalUserRepository extends JpaRepository<LocalUserModel, Long
 
     //------------------------------------------------------------------------------------------------------------------
 
+    @Query(value = "SELECT m FROM LocalUserModel m WHERE m.id=:userId")
+    Optional<LocalUserModel> findUserById(@Param("userId") Long userId);
+
+    //------------------------------------------------------------------------------------------------------------------
+
     @Query(value = "SELECT m FROM LocalUserModel m " +
             "WHERE m.nickname=:nicknameOrEmail " +
             "OR m.emailAddress=:nicknameOrEmail")

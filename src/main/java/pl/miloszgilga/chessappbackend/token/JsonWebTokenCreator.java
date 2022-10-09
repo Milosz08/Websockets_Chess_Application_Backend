@@ -53,8 +53,9 @@ public class JsonWebTokenCreator {
 
     //------------------------------------------------------------------------------------------------------------------
 
-    public String createAcitivateServiceViaEmailToken(String email, String otaToken) {
+    public String createAcitivateServiceViaEmailToken(String email, Long id, String otaToken) {
         final Claims claims = Jwts.claims();
+        claims.put(USER_ID.getClaimName(), id);
         claims.put(EMAIL.getClaimName(), email);
         claims.put(OTA_TOKEN.getClaimName(), otaToken);
         claims.put(IS_EXPIRED.getClaimName(), true);
@@ -65,7 +66,7 @@ public class JsonWebTokenCreator {
     //------------------------------------------------------------------------------------------------------------------
 
     public String createAcitivateServiceViaEmailToken(LocalUserModel userModel, String otaToken) {
-        return createAcitivateServiceViaEmailToken(userModel.getEmailAddress(), otaToken);
+        return createAcitivateServiceViaEmailToken(userModel.getEmailAddress(), userModel.getId(), otaToken);
     }
 
     //------------------------------------------------------------------------------------------------------------------
