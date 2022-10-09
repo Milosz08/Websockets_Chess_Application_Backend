@@ -58,7 +58,7 @@ class OtaTokenServiceHelper {
     //------------------------------------------------------------------------------------------------------------------
 
     @Transactional
-    URI checkBearerTokenFromLinkWithOtaToken(final TokenLinkValidationData data) {
+    URI checkBearerTokenFromLinkWithOtaToken(final TokenLinkValidationData data, final boolean isAccountActivation) {
         String queryMessage;
         boolean ifError = false;
         try {
