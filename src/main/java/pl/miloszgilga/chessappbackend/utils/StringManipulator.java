@@ -65,6 +65,7 @@ public class StringManipulator {
     //------------------------------------------------------------------------------------------------------------------
 
     public String addExtraDotOnFinishIfNotExist(String sequence) {
+        if (sequence == null) return "";
         if (sequence.charAt(sequence.length() - 1) == '.') return sequence;
         return sequence + ".";
     }
