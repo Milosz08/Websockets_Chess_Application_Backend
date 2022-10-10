@@ -24,8 +24,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.net.URI;
-import java.util.Date;
-import java.util.stream.Collectors;
 import javax.transaction.Transactional;
 
 import pl.miloszgilga.chessappbackend.token.*;
@@ -76,7 +74,7 @@ class OtaTokenService implements IOtaTokenService {
                     throw new TokenException.OtaTokenNotExistException("Passed token is invalid. Try with another token.");
                 });
 
-        verifyOtaTokenDetailsAndSetAlreadyUsed(otaToken);
+        helper.verifyOtaTokenDetailsAndSetAlreadyUsed(otaToken);
         return ChangePasswordViaOtaResDto.builder()
                 .bearerToken(tokenCreator.createUserCredentialsToken(otaToken.getLocalUser()))
                 .build();
@@ -87,13 +85,13 @@ class OtaTokenService implements IOtaTokenService {
     @Override
     @Transactional
     public SimpleServerMessageDto activateAccount(final OtaTokenMultipleEmailsReqDto req) {
-        final OtaTokenModel tokenModel = findTokenBasedEmailsAndTokenAndCompare(req, ACTIVATE_ACCOUNT);
+        final OtaTokenModel tokenModel = helper.findTokenBasedEmailsAndTokenAndCompare(req, ACTIVATE_ACCOUNT);
         final LocalUserModel localUserModel = tokenModel.getLocalUser();
         if (localUserModel.getIsActivated()) {
             LOGGER.warn("Attempt to re-activate account. Account activation data: {}", req);
             throw new AuthException.AccountIsAlreadyActivatedException("Your account has been already activated.");
         }
-        if (verifyOtaTokenDetailsAndSetAlreadyUsed(tokenModel)) {
+        if (helper.verifyOtaTokenDetailsAndSetAlreadyUsed(tokenModel)) {
             localUserModel.setIsActivated(true);
             userRepository.save(localUserModel);
         }
@@ -115,31 +113,5 @@ class OtaTokenService implements IOtaTokenService {
                 .failureMessage("Unable to activate account with passed token. Token probaby is malformed.")
                 .build();
         return helper.checkBearerTokenFromLinkWithOtaToken(data, true);
-    }
-
-    //------------------------------------------------------------------------------------------------------------------
-
-    @Transactional
-    OtaTokenModel findTokenBasedEmailsAndTokenAndCompare(final OtaTokenMultipleEmailsReqDto req, final OtaTokenType tokenType) {
-        return req.getEmailAddresses().stream().map(e -> otaTokenRepository
-            .findTokenByUserEmailOrSecondEmailAddress(e, tokenType, req.getToken())
-            .orElseThrow(() -> {
-                LOGGER.error("Attempt to activate account with non existing token. Emails: {}", req.getEmailAddresses());
-                throw new AuthException.UserNotFoundException("Unable to find OTA token. Please try again.");
-            }))
-            .collect(Collectors.toList())
-            .get(0);
-    }
-
-    //------------------------------------------------------------------------------------------------------------------
-
-    @Transactional
-    boolean verifyOtaTokenDetailsAndSetAlreadyUsed(final OtaTokenModel tokenModel) {
-        if (tokenModel.getExpirationDate().before(new Date())) {
-            LOGGER.error("OTA token is expired. Token: {}", tokenModel);
-            throw new TokenException.OtaTokenExpiredException("Passed token is valid, but it has already expired.");
-        }
-        tokenModel.setAlreadyUsed(true);
-        return true;
     }
 }

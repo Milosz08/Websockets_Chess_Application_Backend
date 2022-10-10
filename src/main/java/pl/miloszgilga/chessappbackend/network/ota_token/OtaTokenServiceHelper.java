@@ -25,8 +25,13 @@ import org.javatuples.Pair;
 import org.springframework.stereotype.Component;
 
 import java.net.URI;
+import java.util.Date;
+import java.util.stream.Collectors;
 import javax.transaction.Transactional;
 
+import pl.miloszgilga.chessappbackend.exception.custom.AuthException;
+import pl.miloszgilga.chessappbackend.network.ota_token.dto.OtaTokenMultipleEmailsReqDto;
+import pl.miloszgilga.chessappbackend.token.OtaTokenType;
 import pl.miloszgilga.chessappbackend.utils.NetworkHelper;
 import pl.miloszgilga.chessappbackend.token.JsonWebTokenVerificator;
 import pl.miloszgilga.chessappbackend.exception.custom.TokenException;
@@ -84,5 +89,31 @@ class OtaTokenServiceHelper {
                 new Pair<>("message", queryMessage),
                 data.getRedirectUri(),
                 ifError);
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+
+    @Transactional
+    OtaTokenModel findTokenBasedEmailsAndTokenAndCompare(final OtaTokenMultipleEmailsReqDto req, final OtaTokenType tokenType) {
+        return req.getEmailAddresses().stream().map(e -> otaTokenRepository
+            .findTokenByUserEmailOrSecondEmailAddress(e, tokenType, req.getToken())
+            .orElseThrow(() -> {
+                LOGGER.error("Attempt to activate account with non existing token. Emails: {}", req.getEmailAddresses());
+                throw new AuthException.UserNotFoundException("Unable to find OTA token. Please try again.");
+            }))
+            .collect(Collectors.toList())
+            .get(0);
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+
+    @Transactional
+    boolean verifyOtaTokenDetailsAndSetAlreadyUsed(final OtaTokenModel tokenModel) {
+        if (tokenModel.getExpirationDate().before(new Date())) {
+            LOGGER.error("OTA token is expired. Token: {}", tokenModel);
+            throw new TokenException.OtaTokenExpiredException("Passed token is valid, but it has already expired.");
+        }
+        tokenModel.setAlreadyUsed(true);
+        return true;
     }
 }
