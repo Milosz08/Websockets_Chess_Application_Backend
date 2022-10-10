@@ -37,4 +37,5 @@ public class SuccessedAttemptToFinishSignupResDto {
     private String authSupplier;
     private String jwtToken;
     private Set<EmailHashWithNormalDto> userEmailAddresses;
+    private String userPrimaryEmailAddress;
 }

@@ -72,6 +72,7 @@ public class AuthMapper {
         mapperFactory.classMap(LocalUserModel.class, SuccessedAttemptToFinishSignupResDto.class)
                 .field("localUserDetails.photoEmbedLink", "photoUrl")
                 .field("localUserDetails.isDataFilled", "isDataFilled")
+                .field("emailAddress", "userPrimaryEmailAddress")
                 .customize(userToAttemptSignupResDtoCustomizer)
                 .byDefault()
                 .register();

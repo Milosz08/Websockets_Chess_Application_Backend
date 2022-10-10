@@ -23,10 +23,11 @@ import ma.glasnost.orika.MapperFacade;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.transaction.Transactional;
-
 import org.springframework.stereotype.Service;
 import org.springframework.security.crypto.password.PasswordEncoder;
+
+import java.util.Date;
+import javax.transaction.Transactional;
 
 import pl.miloszgilga.chessappbackend.token.*;
 import pl.miloszgilga.chessappbackend.exception.custom.*;
@@ -101,6 +102,7 @@ class RenewCredentialsService implements IRenewCredentialsService {
 
         LOGGER.info("Successful send request to reset password for user: {}", user);
         return ChangePasswordEmaiAddressesResDto.builder()
+                .primaryEmailAddress(user.getEmailAddress())
                 .responseMessage("A message verifying your account was sent to your mailbox. Click on " +
                         "the link or rewrite the code in the form below to continue.")
                 .emailAddresses(helper.hashUserEmails(user))

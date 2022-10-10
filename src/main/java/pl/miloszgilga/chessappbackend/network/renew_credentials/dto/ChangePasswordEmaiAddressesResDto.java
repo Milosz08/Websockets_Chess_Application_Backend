@@ -21,11 +21,14 @@ package pl.miloszgilga.chessappbackend.network.renew_credentials.dto;
 import lombok.*;
 import java.util.Set;
 
+import pl.miloszgilga.chessappbackend.network.auth.dto.EmailHashWithNormalDto;
+
 //----------------------------------------------------------------------------------------------------------------------
 
 @Data
 @Builder
 public class ChangePasswordEmaiAddressesResDto {
-    private Set<String> emailAddresses;
+    private String primaryEmailAddress;
+    private Set<EmailHashWithNormalDto> emailAddresses;
     private String responseMessage;
 }
