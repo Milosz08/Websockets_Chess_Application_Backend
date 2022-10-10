@@ -146,4 +146,28 @@ class NewsletterEmailService implements INewsletterEmailService {
         return networkHelper.generateRedirectUri(
                 new Pair<>("message", queryMessage), environment.getUnsubscribeNewsletterUri(), ifError);
     }
+
+    //------------------------------------------------------------------------------------------------------------------
+
+    @Override
+    @Transactional
+    public SimpleServerMessageDto resendVerificationEmailLink(final ResendEmailMessageReqDto req) {
+        final UnsubscribeOtaTokenModel token = otaTokenRepository.findTokenBasedEmail(req.getEmailAddress())
+                .stream()
+                .filter(t -> t.getTokenExpired().after(new Date()))
+                .findFirst()
+                .orElseThrow(() -> {
+                    LOGGER.error("Attempt to resend verification email for activate account without OTA token");
+                    throw new TokenException.OtaTokenNotExistException("Unable to find token. Please regenerate token.");
+                });
+
+        final String email = req.getEmailAddress();
+        final NewsletterEmailModel user = token.getNewsletterUser();
+        final String bearerToken = creator.createAcitivateServiceViaEmailToken(email, user.getId(), token.getToken());
+        mailService.unsubscribeNewsletter(user.getId(), user.getUserName(), email, bearerToken, token.getToken());
+
+        LOGGER.info("Successful resend verification email for unsubscribe newsletter for user: {}", user);
+        return new SimpleServerMessageDto("Successful resend verification email message for unsubscribe newsletter. " +
+                "Check your mailbox account.");
+    }
 }

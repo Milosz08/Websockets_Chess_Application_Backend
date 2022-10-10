@@ -66,6 +66,7 @@ public class SecurityConfiguration {
             AUTH_ENDPOINT + SIGNUP_VIA_LOCAL + "/**",
             AUTH_ENDPOINT + AUTO_LOGIN + "/**",
             AUTH_ENDPOINT + REFRESH_TOKEN + "/**",
+            AUTH_ENDPOINT + ATTEMPT_FINISH_SIGNUP_RESEND_EMAIL + "/**",
             OTA_TOKEN_ENDPOINT + "/**",
             RENEW_CREDETIALS_LOCAL + "/**",
             EXPOSE_STATIC_DATA_ENDPOINT + "/**",

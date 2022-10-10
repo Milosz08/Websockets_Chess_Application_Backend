@@ -30,6 +30,7 @@ public class ApplicationEndpoints {
     public static final String NEWSLETTER_SUBSCRIBE = "/subscribe";
     public static final String NEWSLETTER_ATTEMPT_UNSUBSCRIBE = "/attempt-unsubscribe";
     public static final String NEWSLETTER_UNSUBSCRIBE_VIA_OTA = "/unsubscribe-via-ota";
+    public static final String NEWSLETTER_UNSUBSCRIBE_RESEND_EMAIL = "/unsubscribe-resend-email";
 
     public static final String AUTH_ENDPOINT = BASIC_ENDPOINT + "auth";
     public static final String LOGIN_VIA_LOCAL = "/login-via-local";
@@ -41,11 +42,13 @@ public class ApplicationEndpoints {
     public static final String ATTEMPT_FINISH_SIGNUP_VIA_OAUTH2 = "/attempt-finish-signup-via-oauth";
     public static final String FINISH_SIGNUP_VIA_OAUTH2 = "/finish-signup-via-oauth";
     public static final String SIGNUP_VIA_LOCAL = "/signup-via-local";
+    public static final String ATTEMPT_FINISH_SIGNUP_RESEND_EMAIL = "/attempt-finish-signup-resend-email";
 
     public static final String RENEW_CREDETIALS_LOCAL = BASIC_ENDPOINT + "renew-credentials";
     public static final String ATTEMPT_TO_CHANGE_PASSWORD = "/attempt-to-change-password";
     public static final String CHANGE_PASSWORD_CHECK_JWT = "/change-password-check-jwt";
     public static final String CHANGE_FORGOTTEN_PASSWORD = "/change-forgotten-password";
+    public static final String CHANGE_PASSWORD_RESEND_EMAIL = "/change-password-resend-email";
 
     public static final String EXPOSE_STATIC_DATA_ENDPOINT = BASIC_ENDPOINT + "static-data";
     public static final String SIGNUP_CALENDAR_DATA = "/signup-calendar-data";

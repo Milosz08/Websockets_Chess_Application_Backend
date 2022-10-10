@@ -75,4 +75,11 @@ class NewsletterEmailController {
                 .location(redirectUri)
                 .build();
     }
+
+    //------------------------------------------------------------------------------------------------------------------
+
+    @PostMapping(NEWSLETTER_UNSUBSCRIBE_RESEND_EMAIL)
+    ResponseEntity<SimpleServerMessageDto> resendVerificationEmailLink(@Valid @RequestBody ResendEmailMessageReqDto req) {
+        return new ResponseEntity<>(service.resendVerificationEmailLink(req), HttpStatus.OK);
+    }
 }

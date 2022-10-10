@@ -25,19 +25,22 @@ import ma.glasnost.orika.MapperFacade;
 
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.Optional;
 import javax.transaction.Transactional;
 
+import pl.miloszgilga.chessappbackend.dto.*;
 import pl.miloszgilga.chessappbackend.oauth.*;
 import pl.miloszgilga.chessappbackend.oauth.user_info.*;
+import pl.miloszgilga.chessappbackend.exception.custom.*;
+import pl.miloszgilga.chessappbackend.mail.IMailOutService;
 import pl.miloszgilga.chessappbackend.utils.StringManipulator;
 import pl.miloszgilga.chessappbackend.token.JsonWebTokenCreator;
-import pl.miloszgilga.chessappbackend.dto.SimpleServerMessageDto;
-import pl.miloszgilga.chessappbackend.exception.custom.AuthException;
 import pl.miloszgilga.chessappbackend.oauth.dto.OAuth2RegistrationData;
 
 import pl.miloszgilga.chessappbackend.network.auth.dto.*;
 import pl.miloszgilga.chessappbackend.network.auth.domain.*;
+import pl.miloszgilga.chessappbackend.network.ota_token.domain.*;
 
 import static pl.miloszgilga.chessappbackend.oauth.CredentialsSupplier.LOCAL;
 import static pl.miloszgilga.chessappbackend.token.OtaTokenType.ACTIVATE_ACCOUNT;
@@ -53,21 +56,26 @@ public class SignupService implements ISignupService {
     private final MapperFacade mapperFacade;
     private final AuthUserBuilder userBuilder;
     private final StringManipulator manipulator;
+    private final IMailOutService mailOutService;
     private final JsonWebTokenCreator tokenCreator;
     private final OAuth2UserInfoFactory userInfoFactory;
+    private final IOtaTokenRepository otaTokenRepository;
     private final ILocalUserRepository localUserRepository;
 
     //------------------------------------------------------------------------------------------------------------------
 
     SignupService(AuthUserBuilder userBuilder, MapperFacade mapperFacade, AuthServiceHelper helper,
-                  StringManipulator manipulator, JsonWebTokenCreator tokenCreator, OAuth2UserInfoFactory userInfoFactory,
+                  StringManipulator manipulator, IMailOutService mailOutService, JsonWebTokenCreator tokenCreator,
+                  OAuth2UserInfoFactory userInfoFactory, IOtaTokenRepository otaTokenRepository,
                   ILocalUserRepository localUserRepository) {
         this.helper = helper;
         this.userBuilder = userBuilder;
         this.mapperFacade = mapperFacade;
         this.manipulator = manipulator;
+        this.mailOutService = mailOutService;
         this.tokenCreator = tokenCreator;
         this.userInfoFactory = userInfoFactory;
+        this.otaTokenRepository = otaTokenRepository;
         this.localUserRepository = localUserRepository;
     }
 
@@ -164,8 +172,31 @@ public class SignupService implements ISignupService {
 
     //------------------------------------------------------------------------------------------------------------------
 
+    @Override
     @Transactional
-    AuthUser registerNewUserViaOAuth2(OAuth2RegistrationData data, String supplierName) {
+    public SimpleServerMessageDto resendVerificationEmailLink(final ResendEmailMessageReqDto req) {
+        final OtaTokenModel token = otaTokenRepository.findTokenByUserEmail(ACTIVATE_ACCOUNT, req.getEmailAddress())
+                .stream()
+                .filter(t -> t.getExpirationDate().after(new Date()))
+                .findFirst()
+                .orElseThrow(() -> {
+                    LOGGER.error("Attempt to resend verification email for activate account without OTA token");
+                    throw new TokenException.OtaTokenNotExistException("Unable to find token. Please regenerate token.");
+                });
+
+        final LocalUserModel user = token.getLocalUser();
+        final String bearerToken = tokenCreator.createAcitivateServiceViaEmailToken(user, token.getOtaToken());
+        mailOutService.activateAccount(user.getId(), req.getEmailAddress(), user, bearerToken, token.getOtaToken());
+
+        LOGGER.info("Successful resend verification email for activate account for user: {}", user);
+        return new SimpleServerMessageDto("Successful resend verification email message for activate account. " +
+                "Check your mailbox account.");
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+
+    @Transactional
+    AuthUser registerNewUserViaOAuth2(final OAuth2RegistrationData data, final String supplierName) {
         final LocalUserModel userModel = mapperFacade.map(data, LocalUserModel.class);
         final LocalUserDetailsModel userDetailsModel = mapperFacade.map(data, LocalUserDetailsModel.class);
         userDetailsModel.setLocalUser(userModel);

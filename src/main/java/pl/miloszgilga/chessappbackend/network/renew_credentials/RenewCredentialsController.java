@@ -24,8 +24,8 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import javax.servlet.http.HttpServletRequest;
 
+import pl.miloszgilga.chessappbackend.dto.*;
 import pl.miloszgilga.chessappbackend.utils.NetworkHelper;
-import pl.miloszgilga.chessappbackend.dto.SimpleServerMessageDto;
 import pl.miloszgilga.chessappbackend.network.renew_credentials.dto.*;
 
 import static pl.miloszgilga.chessappbackend.config.ApplicationEndpoints.*;
@@ -68,5 +68,12 @@ class RenewCredentialsController {
                                                                    HttpServletRequest req) {
         final String jwtToken = networkHelper.extractJwtTokenFromRequest(req);
         return new ResponseEntity<>(service.changeForgottenPassword(reqDto, jwtToken), HttpStatus.OK);
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+
+    @PostMapping(CHANGE_PASSWORD_RESEND_EMAIL)
+    ResponseEntity<SimpleServerMessageDto> resendEmailVerificationLink(@RequestBody @Valid ResendEmailMessageReqDto req) {
+        return new ResponseEntity<>(service.resendVerificationEmailLink(req), HttpStatus.OK);
     }
 }

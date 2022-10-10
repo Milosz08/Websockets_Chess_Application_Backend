@@ -1,8 +1,8 @@
 /*
  * Copyright (c) 2022 by MILOSZ GILGA <https://miloszgilga.pl>
  *
- * File name: INewsletterService.java
- * Last modified: 31/08/2022, 15:21
+ * File name: ResendEmailMessageReqDto.java
+ * Last modified: 10/10/2022, 14:25
  * Project name: chess-app-backend
  *
  * Licensed under the MIT license; you may not use this file except in compliance with the License.
@@ -16,19 +16,18 @@
  * COPIES OR SUBSTANTIAL PORTIONS OF THE SOFTWARE.
  */
 
-package pl.miloszgilga.chessappbackend.network.newsletter_email;
+package pl.miloszgilga.chessappbackend.dto;
 
-import java.net.URI;
-
-import pl.miloszgilga.chessappbackend.dto.*;
-import pl.miloszgilga.chessappbackend.network.newsletter_email.dto.*;
+import lombok.Data;
+import javax.validation.constraints.*;
 
 //----------------------------------------------------------------------------------------------------------------------
 
-interface INewsletterEmailService {
-    SimpleServerMessageDto subscribeNewsletter(final EmailNewsletterReqDto emailAddress);
-    SimpleServerMessageDto attemptToUnsubscribeNewsletter(final AttemptToUnsubscribeReqDto email);
-    SimpleServerMessageDto unsubscribeNewsletterViaOta(final SimpleOtaTokenReqDto token);
-    URI unsubscribeNewsletterViaLink(final String bearer);
-    SimpleServerMessageDto resendVerificationEmailLink(final ResendEmailMessageReqDto req);
+@Data
+public class ResendEmailMessageReqDto {
+
+    @NotBlank(message = "{jpa.validator.emailAddress.notBlank}")
+    @Email(message = "{jpa.validator.emailAddress.pattern}")
+    @Size(max = 100, message = "{jpa.validator.emailAddress.size}")
+    private String emailAddress;
 }

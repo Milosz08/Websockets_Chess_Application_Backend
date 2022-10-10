@@ -24,11 +24,11 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import javax.servlet.http.HttpServletRequest;
 
+import pl.miloszgilga.chessappbackend.dto.*;
 import pl.miloszgilga.chessappbackend.oauth.AuthUser;
 import pl.miloszgilga.chessappbackend.network.auth.dto.*;
 import pl.miloszgilga.chessappbackend.utils.NetworkHelper;
 import pl.miloszgilga.chessappbackend.security.CurrentUser;
-import pl.miloszgilga.chessappbackend.dto.SimpleServerMessageDto;
 
 import static pl.miloszgilga.chessappbackend.config.ApplicationEndpoints.*;
 
@@ -114,5 +114,12 @@ class AuthController {
     ResponseEntity<SimpleServerMessageDto> finishSignup(@Valid @RequestBody FinishSignupReqDto req,
                                                         @CurrentUser AuthUser user) {
         return new ResponseEntity<>(signupService.finishSignup(req, user.getUserModel().getId()), HttpStatus.OK);
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+
+    @PostMapping(ATTEMPT_FINISH_SIGNUP_RESEND_EMAIL)
+    ResponseEntity<SimpleServerMessageDto> resendEmailVerificationLink(@Valid @RequestBody ResendEmailMessageReqDto req) {
+        return new ResponseEntity<>(signupService.resendVerificationEmailLink(req), HttpStatus.OK);
     }
 }

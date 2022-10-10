@@ -18,7 +18,7 @@
 
 package pl.miloszgilga.chessappbackend.network.renew_credentials;
 
-import pl.miloszgilga.chessappbackend.dto.SimpleServerMessageDto;
+import pl.miloszgilga.chessappbackend.dto.*;
 import pl.miloszgilga.chessappbackend.network.renew_credentials.dto.*;
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -27,4 +27,5 @@ interface IRenewCredentialsService {
     ChangePasswordEmaiAddressesResDto attemptToChangePassword(final AttemptToChangePasswordReqDto req);
     ChangePasswordUserDetailsResDto checkJwtBeforeChangePassword(final String jwtToken);
     SimpleServerMessageDto changeForgottenPassword(final ChangeForgottenPasswordReqDto req, final String jwtToken);
+    SimpleServerMessageDto resendVerificationEmailLink(final ResendEmailMessageReqDto req);
 }

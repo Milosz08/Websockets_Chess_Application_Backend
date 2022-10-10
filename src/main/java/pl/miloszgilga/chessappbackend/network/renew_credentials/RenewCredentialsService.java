@@ -32,11 +32,12 @@ import pl.miloszgilga.chessappbackend.token.*;
 import pl.miloszgilga.chessappbackend.exception.custom.*;
 import pl.miloszgilga.chessappbackend.mail.IMailOutService;
 import pl.miloszgilga.chessappbackend.dto.SimpleServerMessageDto;
+import pl.miloszgilga.chessappbackend.dto.ResendEmailMessageReqDto;
 import pl.miloszgilga.chessappbackend.token.dto.ActivateServiceViaEmailTokenClaims;
 
 import pl.miloszgilga.chessappbackend.network.auth.domain.*;
+import pl.miloszgilga.chessappbackend.network.ota_token.domain.*;
 import pl.miloszgilga.chessappbackend.network.renew_credentials.dto.*;
-import pl.miloszgilga.chessappbackend.network.ota_token.domain.IOtaTokenRepository;
 
 import static pl.miloszgilga.chessappbackend.oauth.CredentialsSupplier.LOCAL;
 import static pl.miloszgilga.chessappbackend.token.OtaTokenType.RESET_PASSWORD;
@@ -145,5 +146,28 @@ class RenewCredentialsService implements IRenewCredentialsService {
         LOGGER.info("Successful change forgotten password for user {}", user);
         return new SimpleServerMessageDto("Your password has been successfully changed. You can proceed to login " +
                 "using the button below.");
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+
+    @Override
+    @Transactional
+    public SimpleServerMessageDto resendVerificationEmailLink(final ResendEmailMessageReqDto req) {
+        final OtaTokenModel token = otaTokenRepository.findTokenByUserEmail(RESET_PASSWORD, req.getEmailAddress())
+                .stream()
+                .filter(t -> t.getExpirationDate().after(new Date()))
+                .findFirst()
+                .orElseThrow(() -> {
+                    LOGGER.error("Attempt to resend verification email for reset password without OTA token");
+                    throw new TokenException.OtaTokenNotExistException("Unable to find token. Please regenerate token.");
+                });
+
+        final LocalUserModel user = token.getLocalUser();
+        final String bearerToken = tokenCreator.createAcitivateServiceViaEmailToken(user, token.getOtaToken());
+        mailOutService.changePassword(user.getId(), req.getEmailAddress(), user, bearerToken, token.getOtaToken());
+
+        LOGGER.info("Successful resend verification email for change password for user: {}", user);
+        return new SimpleServerMessageDto("Successful resend verification email message for change password. " +
+                "Check your mailbox account.");
     }
 }

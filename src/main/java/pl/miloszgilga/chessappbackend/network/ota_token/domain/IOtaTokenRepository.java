@@ -68,4 +68,13 @@ public interface IOtaTokenRepository extends JpaRepository<OtaTokenModel, Long> 
     Optional<OtaTokenModel> findUserByTokenAndNicknameEmail(@Param("token") String token,
                                                              @Param("usedFor") OtaTokenType usedFor,
                                                              @Param("nicknameEmail") String nicknameEmail);
+
+    //------------------------------------------------------------------------------------------------------------------
+
+    @Query(value = "SELECT m FROM OtaTokenModel m INNER JOIN m.localUser u " +
+            "WHERE m.alreadyUsed=false " +
+            "AND m.usedFor=:usedFor " +
+            "AND u.emailAddress=:emailAddress")
+    Set<OtaTokenModel> findTokenByUserEmail(@Param("usedFor") OtaTokenType usedFor,
+                                            @Param("emailAddress") String emailAddress);
 }

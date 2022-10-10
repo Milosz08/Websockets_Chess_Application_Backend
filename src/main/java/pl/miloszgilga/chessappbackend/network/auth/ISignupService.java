@@ -18,17 +18,18 @@
 
 package pl.miloszgilga.chessappbackend.network.auth;
 
+import pl.miloszgilga.chessappbackend.dto.*;
 import pl.miloszgilga.chessappbackend.oauth.AuthUser;
 import pl.miloszgilga.chessappbackend.network.auth.dto.*;
-import pl.miloszgilga.chessappbackend.dto.SimpleServerMessageDto;
 import pl.miloszgilga.chessappbackend.oauth.dto.OAuth2RegistrationData;
 
 //----------------------------------------------------------------------------------------------------------------------
 
 interface ISignupService {
-    SuccessedAttemptToFinishSignupResDto signupViaLocal(SignupViaLocalReqDto req);
-    SuccessedAttemptToFinishSignupResDto attemptToFinishSignup(Long userId);
-    SuccessedAttemptToFinishSignupResDto attemptToActivateAccount(Long userId);
-    SimpleServerMessageDto finishSignup(FinishSignupReqDto req, Long userId);
-    AuthUser registrationProcessingFactory(OAuth2RegistrationData registrationData);
+    SuccessedAttemptToFinishSignupResDto signupViaLocal(final SignupViaLocalReqDto req);
+    SuccessedAttemptToFinishSignupResDto attemptToFinishSignup(final Long userId);
+    SuccessedAttemptToFinishSignupResDto attemptToActivateAccount(final Long userId);
+    SimpleServerMessageDto finishSignup(final FinishSignupReqDto req, final Long userId);
+    AuthUser registrationProcessingFactory(final OAuth2RegistrationData registrationData);
+    SimpleServerMessageDto resendVerificationEmailLink(final ResendEmailMessageReqDto req);
 }
