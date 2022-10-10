@@ -76,7 +76,7 @@ class OtaTokenService implements IOtaTokenService {
 
         helper.verifyOtaTokenDetailsAndSetAlreadyUsed(otaToken);
         return ChangePasswordViaOtaResDto.builder()
-                .bearerToken(tokenCreator.createUserCredentialsToken(otaToken.getLocalUser()))
+                .bearerToken(tokenCreator.createAcitivateServiceViaEmailToken(otaToken.getLocalUser(), otaToken.getOtaToken()))
                 .build();
     }
 
