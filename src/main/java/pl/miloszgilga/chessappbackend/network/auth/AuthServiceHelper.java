@@ -99,7 +99,7 @@ public class AuthServiceHelper {
     void sendEmailMessageForActivateAccount(LocalUserModel user, OtaTokenType tokenType) {
         final Optional<OtaTokenModel> findOtaToken = user.getOtaTokens().stream()
                 .filter(t -> !t.getAlreadyUsed() && timeHelper.isExpired(t.getExpirationDate())
-                        && t.getUserFor().equals(ACTIVATE_ACCOUNT))
+                        && t.getUsedFor().equals(ACTIVATE_ACCOUNT))
                 .findFirst();
         if (user.getIsActivated() || findOtaToken.isPresent()) return;
         final String otaToken = otaTokenUserService.generateAndSaveUserOtaToken(tokenType, user);

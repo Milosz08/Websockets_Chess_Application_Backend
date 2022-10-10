@@ -120,7 +120,7 @@ public class LoginService implements ILoginService {
 
     @Override
     @Transactional
-    public SuccessedLoginResDto autoLogin(AutoLoginReqDto req) {
+    public SuccessedLoginResDto autoLogin(final AutoLoginReqDto req) {
         final LocalUserModel userModel = refreshTokenRepository
                 .findUserByMatchedRefreshToken(req.getRefreshToken())
                 .orElseThrow(() -> {

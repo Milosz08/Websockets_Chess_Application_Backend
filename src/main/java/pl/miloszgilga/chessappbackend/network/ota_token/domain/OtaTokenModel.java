@@ -46,7 +46,7 @@ public class OtaTokenModel extends AuditableEntity implements Serializable {
 
     @Column(name = "OTA_TOKEN")         private String otaToken;
     @Column(name = "EXPIRATION_DATE")   private Date expirationDate;
-    @Column(name = "USED_FOR")          private OtaTokenType userFor;
+    @Column(name = "USED_FOR")          private OtaTokenType usedFor;
     @Column(name = "ALREADY_USED")      private Boolean alreadyUsed;
 
     @ManyToOne(cascade = { MERGE, PERSIST }, fetch = LAZY)
@@ -55,10 +55,10 @@ public class OtaTokenModel extends AuditableEntity implements Serializable {
 
     //------------------------------------------------------------------------------------------------------------------
 
-    OtaTokenModel(String otaToken, Date expirationDate, OtaTokenType userFor, Boolean alreadyUsed) {
+    OtaTokenModel(String otaToken, Date expirationDate, OtaTokenType usedFor, Boolean alreadyUsed) {
         this.otaToken = otaToken;
         this.expirationDate = expirationDate;
-        this.userFor = userFor;
+        this.usedFor = usedFor;
         this.alreadyUsed = alreadyUsed;
     }
 
@@ -69,7 +69,7 @@ public class OtaTokenModel extends AuditableEntity implements Serializable {
         return "OtaTokenModel{" +
                 "otaToken='" + otaToken + '\'' +
                 ", expirationDate=" + expirationDate +
-                ", usedFor=" + userFor.getOtaTokenTypeName() +
+                ", usedFor=" + usedFor.getOtaTokenTypeName() +
                 ", alreadyUsed=" + alreadyUsed +
                 ", userId=" + localUser.getId() +
                 "} " + super.toString();

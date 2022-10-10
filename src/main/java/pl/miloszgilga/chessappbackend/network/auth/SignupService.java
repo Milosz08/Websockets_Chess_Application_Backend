@@ -83,7 +83,7 @@ public class SignupService implements ISignupService {
 
     @Override
     @Transactional
-    public SuccessedAttemptToFinishSignupResDto signupViaLocal(SignupViaLocalReqDto req) {
+    public SuccessedAttemptToFinishSignupResDto signupViaLocal(final SignupViaLocalReqDto req) {
         final LocalUserModel userModel = mapperFacade.map(req, LocalUserModel.class);
         final LocalUserDetailsModel userDetailsModel = mapperFacade.map(req, LocalUserDetailsModel.class);
 
@@ -108,7 +108,7 @@ public class SignupService implements ISignupService {
 
     @Override
     @Transactional
-    public SuccessedAttemptToFinishSignupResDto attemptToFinishSignup(Long userId) {
+    public SuccessedAttemptToFinishSignupResDto attemptToFinishSignup(final Long userId) {
         final LocalUserModel userModel = helper.checkIfAccountIsAlreadyActivated(userId);
         if (!userModel.getIsActivated() && userModel.getLocalUserDetails().getIsDataFilled()) {
             helper.sendEmailMessageForActivateAccount(userModel, ACTIVATE_ACCOUNT);
@@ -126,7 +126,7 @@ public class SignupService implements ISignupService {
 
     @Override
     @Transactional
-    public SuccessedAttemptToFinishSignupResDto attemptToActivateAccount(Long userId) {
+    public SuccessedAttemptToFinishSignupResDto attemptToActivateAccount(final Long userId) {
         final LocalUserModel userModel = helper.checkIfAccountIsAlreadyActivated(userId);
         final SuccessedAttemptToFinishSignupResDto resDto = SuccessedAttemptToFinishSignupResDto.builder()
                 .jwtToken(tokenCreator.createUserCredentialsToken(userModel))
@@ -143,7 +143,7 @@ public class SignupService implements ISignupService {
 
     @Override
     @Transactional
-    public SimpleServerMessageDto finishSignup(FinishSignupReqDto req, Long userId) {
+    public SimpleServerMessageDto finishSignup(final FinishSignupReqDto req, final Long userId) {
         final LocalUserModel validateUser = helper.findUserAndReturnUserData(userId);
         mapperFacade.map(req, validateUser.getLocalUserDetails());
         validateUser.getLocalUserDetails().setIsDataFilled(true);
@@ -158,7 +158,7 @@ public class SignupService implements ISignupService {
 
     @Override
     @Transactional
-    public AuthUser registrationProcessingFactory(OAuth2RegistrationData data) {
+    public AuthUser registrationProcessingFactory(final OAuth2RegistrationData data) {
         final OAuth2UserInfo userInfo = userInfoFactory.getOAuth2UserInfo(data.getSupplier(), data.getAttributes());
         final String supplierName = data.getSupplier().getName();
         if (userInfo.getUsername().equals("") || userInfo.getEmailAddress().equals("")) {
@@ -209,7 +209,7 @@ public class SignupService implements ISignupService {
     //------------------------------------------------------------------------------------------------------------------
 
     @Transactional
-    AuthUser updateAlreadyExistUserViaOAuth2(OAuth2RegistrationData data, LocalUserModel foundUser) {
+    AuthUser updateAlreadyExistUserViaOAuth2(final OAuth2RegistrationData data, final LocalUserModel foundUser) {
         final OAuth2UserInfo userInfo = userInfoFactory.getOAuth2UserInfo(data.getSupplier(), data.getAttributes());
         final CredentialsSupplier supplier = foundUser.getCredentialsSupplier();
         final LocalUserDetailsModel userDetails = foundUser.getLocalUserDetails();

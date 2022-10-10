@@ -65,7 +65,7 @@ public class OtaTokenUserService {
                 .otaToken(token)
                 .alreadyUsed(false)
                 .expirationDate(timeHelper.addMinutesToCurrentDate(environment.getOtaTokenExpiredMinutes()))
-                .userFor(tokenType)
+                .usedFor(tokenType)
                 .localUser(userModel)
                 .build();
 

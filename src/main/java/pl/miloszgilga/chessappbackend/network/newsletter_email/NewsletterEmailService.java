@@ -27,14 +27,15 @@ import org.springframework.stereotype.Service;
 import static org.springframework.http.HttpStatus.EXPECTATION_FAILED;
 
 import java.net.URI;
+import java.util.Date;
 import javax.transaction.Transactional;
 
 import pl.miloszgilga.chessappbackend.dto.*;
 import pl.miloszgilga.chessappbackend.utils.*;
 import pl.miloszgilga.chessappbackend.token.*;
+import pl.miloszgilga.chessappbackend.exception.custom.*;
 import pl.miloszgilga.chessappbackend.mail.IMailOutService;
 import pl.miloszgilga.chessappbackend.config.EnvironmentVars;
-import pl.miloszgilga.chessappbackend.exception.custom.EmailException.*;
 import pl.miloszgilga.chessappbackend.token.dto.ActivateServiceViaEmailTokenClaims;
 
 import pl.miloszgilga.chessappbackend.network.newsletter_email.dto.*;
@@ -55,12 +56,14 @@ class NewsletterEmailService implements INewsletterEmailService {
     private final NewsletterEmailServiceHelper helper;
     private final JsonWebTokenVerificator verificator;
     private final INewsletterEmailRepository repository;
+    private final IUnsubscribeOtaTokenRepository otaTokenRepository;
 
     //------------------------------------------------------------------------------------------------------------------
 
     NewsletterEmailService(INewsletterEmailRepository repository, JsonWebTokenCreator creator,
                            JsonWebTokenVerificator verificator, IMailOutService mailService, StringManipulator manipulator,
-                           NetworkHelper networkHelper, EnvironmentVars environment, NewsletterEmailServiceHelper helper) {
+                           NetworkHelper networkHelper, EnvironmentVars environment, NewsletterEmailServiceHelper helper,
+                           IUnsubscribeOtaTokenRepository otaTokenRepository) {
         this.helper = helper;
         this.creator = creator;
         this.repository = repository;
@@ -69,6 +72,7 @@ class NewsletterEmailService implements INewsletterEmailService {
         this.environment = environment;
         this.manipulator = manipulator;
         this.networkHelper = networkHelper;
+        this.otaTokenRepository = otaTokenRepository;
     }
 
     //------------------------------------------------------------------------------------------------------------------
@@ -80,8 +84,8 @@ class NewsletterEmailService implements INewsletterEmailService {
         final String emailAddress = req.getEmailAddress();
         if (repository.findNewsletterModelsByEmail(emailAddress).isPresent()) {
             LOGGER.error("Attempt to add already exist email: {} to newsletter list", emailAddress);
-            throw new EmailAlreadyExistException(EXPECTATION_FAILED, "Email '%s' is already on the newsletter list.",
-                    emailAddress);
+            throw new EmailException.EmailAlreadyExistException(EXPECTATION_FAILED,
+                    "Email '%s' is already on the newsletter list.", emailAddress);
         }
         final NewsletterEmailModel saved = repository.save(new NewsletterEmailModel(userName, emailAddress));
         LOGGER.info("Added to newsletter: {}", saved);
@@ -139,7 +143,7 @@ class NewsletterEmailService implements INewsletterEmailService {
             LOGGER.info("Email address {} was successfully removed from newsletter via email message", emailAddress);
             queryMessage = String.format("The newsletter subscription service from the email address %s " +
                     "has been successfully deleted. You can return to the start page using the button below.", emailAddress);
-        } catch (EmailNotFoundException ex) {
+        } catch (EmailException.EmailNotFoundException ex) {
             queryMessage = ex.getMessage();
             ifError = true;
         }

@@ -22,7 +22,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.data.jpa.repository.*;
 import org.springframework.data.repository.query.Param;
 
-import java.util.Optional;
+import java.util.*;
 
 import pl.miloszgilga.chessappbackend.token.OtaTokenType;
 
@@ -34,7 +34,7 @@ public interface IOtaTokenRepository extends JpaRepository<OtaTokenModel, Long> 
     @Query(value = "SELECT m FROM OtaTokenModel m INNER JOIN m.localUser u INNER JOIN m.localUser.localUserDetails d " +
             "WHERE m.alreadyUsed=false " +
             "AND m.otaToken=:otaToken " +
-            "AND m.userFor=:usedFor " +
+            "AND m.usedFor=:usedFor " +
             "AND (u.emailAddress=:emailAddress OR d.secondEmailAddress=:emailAddress)")
     Optional<OtaTokenModel> findTokenByUserEmailOrSecondEmailAddress(@Param("emailAddress") String emailAddress,
                                                                      @Param("usedFor") OtaTokenType usedFor,
@@ -44,7 +44,7 @@ public interface IOtaTokenRepository extends JpaRepository<OtaTokenModel, Long> 
 
     @Query(value = "SELECT COUNT(m) > 0 FROM OtaTokenModel m " +
             "WHERE m.otaToken=:token " +
-            "AND m.userFor=:usedFor " +
+            "AND m.usedFor=:usedFor " +
             "AND m.alreadyUsed=false")
     Boolean checkIfOtaTokenExist(@Param("token") String token,
                                  @Param("usedFor") OtaTokenType usedFor);
@@ -53,7 +53,7 @@ public interface IOtaTokenRepository extends JpaRepository<OtaTokenModel, Long> 
 
     @Query(value = "SELECT m FROM OtaTokenModel m " +
             "WHERE m.otaToken=:token " +
-            "AND m.userFor=:usedFor " +
+            "AND m.usedFor=:usedFor " +
             "AND m.alreadyUsed=false")
     Optional<OtaTokenModel> findTokenBasedValueAndUsed(@Param("token") String token,
                                                        @Param("usedFor") OtaTokenType usedFor);
@@ -64,7 +64,7 @@ public interface IOtaTokenRepository extends JpaRepository<OtaTokenModel, Long> 
             "WHERE m.otaToken=:token " +
             "AND (u.emailAddress=:nicknameEmail OR u.nickname=:nicknameEmail) " +
             "AND m.alreadyUsed=false " +
-            "AND m.userFor=:usedFor")
+            "AND m.usedFor=:usedFor")
     Optional<OtaTokenModel> findUserByTokenAndNicknameEmail(@Param("token") String token,
                                                              @Param("usedFor") OtaTokenType usedFor,
                                                              @Param("nicknameEmail") String nicknameEmail);

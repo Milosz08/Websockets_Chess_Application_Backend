@@ -77,10 +77,10 @@ class NewsletterEmailServiceHelper {
 
     @Transactional
     void unsubscribeNewsletterFromUserDatatable(final String email) {
-        final Optional<LocalUserDetailsModel> details = detailsRepository.findDetailsByUserEmail(email);
-        if (details.isEmpty()) return;
-        details.get().setHasNewsletterAccept(false);
-        detailsRepository.save(details.get());
+       detailsRepository.findDetailsByUserEmail(email).ifPresent(userDetails -> {
+           userDetails.setHasNewsletterAccept(false);
+           detailsRepository.save(userDetails);
+       });
     }
 
     //------------------------------------------------------------------------------------------------------------------
