@@ -50,7 +50,7 @@ public class MailOutService implements IMailOutService {
     @Override
     public void unsubscribeNewsletter(Long id, String userName, String email, String bearer, String otaToken) {
         final Pair<MailRequestDto, Map<String, Object>> basicMailData = mailService.generateBasicMailParameters(
-                String.format("(%s) Chess Online: unsubscribe newsletter for %s", id, userName), email);
+                String.format("(%s) Chess Online: unsubscribe newsletter for %s (%s)", id, userName, otaToken), email);
         final Map<String, Object> parameters = basicMailData.getValue1();
         parameters.put("userName", userName);
         parameters.put("emailAddress", email);
@@ -65,7 +65,7 @@ public class MailOutService implements IMailOutService {
     public void activateAccount(Long id, String email, LocalUserModel userModel, String bearer, String otaToken) {
         final Pair<MailRequestDto, Map<String, Object>> basicMailData = mailService.generateBasicMailParameters(
                 String.format("(%s) Chess Online: Activate account for %s (%s)", id,
-                        manipulator.generateFullName(userModel), userModel.getNickname()), email);
+                        manipulator.generateFullName(userModel), otaToken), email);
         final Map<String, Object> parameters = basicMailData.getValue1();
         parameters.put("userName", userModel.getFirstName());
         parameters.put("emailAddress", userModel.getEmailAddress());
@@ -80,7 +80,7 @@ public class MailOutService implements IMailOutService {
     public void changePassword(Long id, String email, LocalUserModel userModel, String bearer, String otaToken) {
         final Pair<MailRequestDto, Map<String, Object>> basicMailData = mailService.generateBasicMailParameters(
                 String.format("(%s) Chess Online: Change password for %s (%s)", id,
-                        manipulator.generateFullName(userModel), userModel.getNickname()), email);
+                        manipulator.generateFullName(userModel), otaToken), email);
         final Map<String, Object> parameters = basicMailData.getValue1();
         parameters.put("userName", userModel.getFirstName());
         parameters.put("emailAddress", email);
