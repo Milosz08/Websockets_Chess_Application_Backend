@@ -31,6 +31,7 @@ import pl.miloszgilga.chessappbackend.network.auth.domain.*;
 import pl.miloszgilga.chessappbackend.security.SecurityHelper;
 import pl.miloszgilga.chessappbackend.token.JsonWebTokenVerificator;
 import pl.miloszgilga.chessappbackend.exception.custom.AuthException;
+import pl.miloszgilga.chessappbackend.network.auth.dto.EmailHashWithNormalDto;
 import pl.miloszgilga.chessappbackend.token.dto.ActivateServiceViaEmailTokenClaims;
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -77,9 +78,9 @@ class RenewCredentialsServiceHelper {
 
     //------------------------------------------------------------------------------------------------------------------
 
-    Set<String> hashUserEmails(LocalUserModel userModel) {
+    Set<EmailHashWithNormalDto> hashUserEmails(LocalUserModel userModel) {
         return extractUserEmails(userModel).stream()
-                .map(e -> securityHelper.hashingStringValue(e, '*'))
+                .map(e -> new EmailHashWithNormalDto(securityHelper.hashingStringValue(e, '*'), e))
                 .collect(Collectors.toSet());
     }
 }
