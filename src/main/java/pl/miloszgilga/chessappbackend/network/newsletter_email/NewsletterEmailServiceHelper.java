@@ -93,7 +93,13 @@ class NewsletterEmailServiceHelper {
         } while (otaTokenRepository.findExistingToken(token));
 
         final Date tokenExpired = timeHelper.addMinutesToCurrentDate(environment.getOtaTokenExpiredMinutes());
-        final var otaToken = new UnsubscribeOtaTokenModel(email, token, tokenExpired);
+        final NewsletterEmailModel emailModel = newsletterRepository.findNewsletterModelsByEmail(email).orElseThrow(() -> {
+            LOGGER.error("Attempt to generate OTA token for non-existing newsletter email.");
+            throw new AuthException.UserNotFoundException("Newsletter user with passed email not exist.");
+        });
+
+        final var otaToken = new UnsubscribeOtaTokenModel(token, tokenExpired);
+        otaToken.setNewsletterUser(emailModel);
         otaTokenRepository.save(otaToken);
 
         LOGGER.info("Successfully generated OTA ({} min exp) token for unsubscribe newsletter: {}",

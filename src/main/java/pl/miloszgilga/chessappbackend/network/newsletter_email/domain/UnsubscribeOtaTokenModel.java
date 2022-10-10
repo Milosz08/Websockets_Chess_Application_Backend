@@ -27,6 +27,9 @@ import javax.persistence.*;
 
 import pl.miloszgilga.chessappbackend.audit.AuditableEntity;
 
+import static javax.persistence.CascadeType.*;
+import static javax.persistence.FetchType.LAZY;
+
 //----------------------------------------------------------------------------------------------------------------------
 
 @Entity
@@ -36,15 +39,17 @@ import pl.miloszgilga.chessappbackend.audit.AuditableEntity;
 public class UnsubscribeOtaTokenModel extends AuditableEntity implements Serializable {
     private static final long serialVersionUID = 1L;
 
-    @Column(name = "USER_EMAIL")        private String userEmail;
     @Column(name = "TOKEN")             private String token;
     @Column(name = "TOKEN_EXPIRED")     private Date tokenExpired;
     @Column(name = "ALREADY_USED")      private boolean alreadyUsed;
 
+    @ManyToOne(cascade = { MERGE, PERSIST, REMOVE }, fetch = LAZY)
+    @JoinColumn(name = "NEWSLETTER_USER_ID", referencedColumnName = "ID")
+    private NewsletterEmailModel newsletterUser;
+
     //------------------------------------------------------------------------------------------------------------------
 
-    public UnsubscribeOtaTokenModel(String userEmail, String token, Date tokenExpired) {
-        this.userEmail = userEmail;
+    public UnsubscribeOtaTokenModel(String token, Date tokenExpired) {
         this.token = token;
         this.tokenExpired = tokenExpired;
     }
@@ -54,8 +59,7 @@ public class UnsubscribeOtaTokenModel extends AuditableEntity implements Seriali
     @Override
     public String toString() {
         return "UnsubscribeOtaTokenModel{" +
-                "userEmail='" + userEmail + '\'' +
-                ", token='" + token + '\'' +
+                "token='" + token + '\'' +
                 ", tokenExpired=" + tokenExpired +
                 ", alreadyUsed=" + alreadyUsed +
                 "} " + super.toString();

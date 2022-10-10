@@ -20,10 +20,14 @@ package pl.miloszgilga.chessappbackend.network.newsletter_email.domain;
 
 import lombok.*;
 
+import java.util.*;
 import javax.persistence.*;
 import java.io.Serializable;
 
 import pl.miloszgilga.chessappbackend.audit.AuditableEntity;
+
+import static javax.persistence.CascadeType.*;
+import static javax.persistence.FetchType.LAZY;
 
 //----------------------------------------------------------------------------------------------------------------------
 
@@ -32,11 +36,15 @@ import pl.miloszgilga.chessappbackend.audit.AuditableEntity;
 @Getter @Setter
 @Builder
 @NoArgsConstructor
+@AllArgsConstructor
 public class NewsletterEmailModel extends AuditableEntity implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @Column(name = "USER_NAME")     private String userName;
     @Column(name = "USER_EMAIL")    private String userEmail;
+
+    @OneToMany(fetch = LAZY, mappedBy = "newsletterUser", cascade = { PERSIST, MERGE, REMOVE })
+    private Set<UnsubscribeOtaTokenModel> otaTokens = new HashSet<>();
 
     //------------------------------------------------------------------------------------------------------------------
 

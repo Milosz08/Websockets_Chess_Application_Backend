@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.4.xsd">
+
+    <changeSet id="23" author="Milosz08">
+        <dropColumn tableName="UNSUBSCRIBE_NEWSLETTER_OTA" columnName="USER_EMAIL"/>
+
+        <addColumn tableName="UNSUBSCRIBE_NEWSLETTER_OTA">
+            <column name="NEWSLETTER_USER_ID" type="bigint">
+                <constraints
+                        unique="false"
+                        nullable="false"
+                        referencedColumnNames="ID"
+                        foreignKeyName="FK_NEWSLETTER_USER_OTA_TOKEN"
+                        referencedTableName="NEWSLETTER_EMAIL"/>
+            </column>
+        </addColumn>
+    </changeSet>
+</databaseChangeLog>

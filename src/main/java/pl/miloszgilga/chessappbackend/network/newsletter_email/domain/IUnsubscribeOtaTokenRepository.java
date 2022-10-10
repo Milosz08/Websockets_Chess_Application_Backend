@@ -34,9 +34,9 @@ public interface IUnsubscribeOtaTokenRepository extends JpaRepository<Unsubscrib
 
     //------------------------------------------------------------------------------------------------------------------
 
-    @Query(value = "SELECT m FROM UnsubscribeOtaTokenModel m " +
+    @Query(value = "SELECT m FROM UnsubscribeOtaTokenModel m INNER JOIN m.newsletterUser u " +
             "WHERE m.token=:token " +
-            "AND m.userEmail=:email " +
+            "AND u.userEmail=:email " +
             "AND m.alreadyUsed=false")
     Optional<UnsubscribeOtaTokenModel> checkIfTokenExist(@Param("token") String token, @Param("email") String email);
 
