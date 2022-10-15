@@ -23,6 +23,7 @@ import lombok.*;
 //----------------------------------------------------------------------------------------------------------------------
 
 @Data
+@Builder
 @AllArgsConstructor
 public class ActivateServiceViaEmailTokenClaims {
     private Long userId;

@@ -21,7 +21,6 @@ package pl.miloszgilga.chessappbackend.network.ota_token;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import org.javatuples.Pair;
 import org.springframework.stereotype.Component;
 
 import java.net.URI;
