@@ -1,8 +1,8 @@
 /*
  * Copyright (c) 2022 by MILOSZ GILGA <https://miloszgilga.pl>
  *
- * File name: IBasicConverter.java
- * Last modified: 01/10/2022, 23:44
+ * File name: OtaTokenTypeEnumConverter.java
+ * Last modified: 02/10/2022, 12:49
  * Project name: chess-app-backend
  *
  * Licensed under the MIT license; you may not use this file except in compliance with the License.
@@ -18,8 +18,17 @@
 
 package pl.miloszgilga.chessappbackend.converter;
 
+import javax.persistence.Converter;
+
+import pl.miloszgilga.chessappbackend.token.OtaTokenType;
+import pl.miloszgilga.lib.jmpsl.util.converter.BasicEnumConverter;
+
 //----------------------------------------------------------------------------------------------------------------------
 
-public interface IBasicEnumConverter {
-    String getEnumName();
+@Converter(autoApply = true)
+public class OtaTokenTypeEnumConverter extends BasicEnumConverter<OtaTokenType> {
+
+    protected OtaTokenTypeEnumConverter() {
+        super(OtaTokenType.class);
+    }
 }

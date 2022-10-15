@@ -26,7 +26,7 @@ import lombok.*;
 import java.util.*;
 import java.util.stream.*;
 
-import pl.miloszgilga.chessappbackend.converter.IBasicEnumConverter;
+import pl.miloszgilga.lib.jmpsl.util.converter.IBasicEnumConverter;
 import pl.miloszgilga.chessappbackend.exception.custom.AuthException;
 
 //----------------------------------------------------------------------------------------------------------------------

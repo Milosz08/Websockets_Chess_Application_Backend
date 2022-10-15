@@ -1,8 +1,8 @@
 /*
  * Copyright (c) 2022 by MILOSZ GILGA <https://miloszgilga.pl>
  *
- * File name: RolePersistenceConverter.java
- * Last modified: 02/10/2022, 00:02
+ * File name: GenderPersistenceEnumConverter.java
+ * Last modified: 03/10/2022, 19:20
  * Project name: chess-app-backend
  *
  * Licensed under the MIT license; you may not use this file except in compliance with the License.
@@ -16,19 +16,19 @@
  * COPIES OR SUBSTANTIAL PORTIONS OF THE SOFTWARE.
  */
 
-package pl.miloszgilga.chessappbackend.converter.custom_converter;
+package pl.miloszgilga.chessappbackend.converter;
 
 import javax.persistence.Converter;
 
-import pl.miloszgilga.chessappbackend.security.LocalUserRole;
-import pl.miloszgilga.chessappbackend.converter.BasicEnumConverter;
+import pl.miloszgilga.chessappbackend.utils.UserGenderSpecific;
+import pl.miloszgilga.lib.jmpsl.util.converter.BasicEnumConverter;
 
 //----------------------------------------------------------------------------------------------------------------------
 
 @Converter(autoApply = true)
-public class RolePersistenceEnumConverter extends BasicEnumConverter<LocalUserRole> {
+public class GenderPersistenceEnumConverter extends BasicEnumConverter<UserGenderSpecific> {
 
-    protected RolePersistenceEnumConverter() {
-        super(LocalUserRole.class);
+    protected GenderPersistenceEnumConverter() {
+        super(UserGenderSpecific.class);
     }
 }

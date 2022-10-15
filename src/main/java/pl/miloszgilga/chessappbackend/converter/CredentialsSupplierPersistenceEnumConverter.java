@@ -1,8 +1,8 @@
 /*
  * Copyright (c) 2022 by MILOSZ GILGA <https://miloszgilga.pl>
  *
- * File name: CredentialsSupplierPersistenceConverter.java
- * Last modified: 01/10/2022, 23:57
+ * File name: CredentialsSupplierPersistenceEnumConverter.java
+ * Last modified: 02/10/2022, 12:50
  * Project name: chess-app-backend
  *
  * Licensed under the MIT license; you may not use this file except in compliance with the License.
@@ -16,12 +16,12 @@
  * COPIES OR SUBSTANTIAL PORTIONS OF THE SOFTWARE.
  */
 
-package pl.miloszgilga.chessappbackend.converter.custom_converter;
+package pl.miloszgilga.chessappbackend.converter;
 
 import javax.persistence.Converter;
 
 import pl.miloszgilga.chessappbackend.oauth.CredentialsSupplier;
-import pl.miloszgilga.chessappbackend.converter.BasicEnumConverter;
+import pl.miloszgilga.lib.jmpsl.util.converter.BasicEnumConverter;
 
 //----------------------------------------------------------------------------------------------------------------------
 

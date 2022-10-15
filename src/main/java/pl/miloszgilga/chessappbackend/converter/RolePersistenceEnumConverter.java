@@ -1,8 +1,8 @@
 /*
  * Copyright (c) 2022 by MILOSZ GILGA <https://miloszgilga.pl>
  *
- * File name: OtaTokenTypeConverter.java
- * Last modified: 02/10/2022, 00:01
+ * File name: RolePersistenceEnumConverter.java
+ * Last modified: 02/10/2022, 12:49
  * Project name: chess-app-backend
  *
  * Licensed under the MIT license; you may not use this file except in compliance with the License.
@@ -16,19 +16,19 @@
  * COPIES OR SUBSTANTIAL PORTIONS OF THE SOFTWARE.
  */
 
-package pl.miloszgilga.chessappbackend.converter.custom_converter;
+package pl.miloszgilga.chessappbackend.converter;
 
 import javax.persistence.Converter;
 
-import pl.miloszgilga.chessappbackend.token.OtaTokenType;
-import pl.miloszgilga.chessappbackend.converter.BasicEnumConverter;
+import pl.miloszgilga.chessappbackend.security.LocalUserRole;
+import pl.miloszgilga.lib.jmpsl.util.converter.BasicEnumConverter;
 
 //----------------------------------------------------------------------------------------------------------------------
 
 @Converter(autoApply = true)
-public class OtaTokenTypeEnumConverter extends BasicEnumConverter<OtaTokenType> {
+public class RolePersistenceEnumConverter extends BasicEnumConverter<LocalUserRole> {
 
-    protected OtaTokenTypeEnumConverter() {
-        super(OtaTokenType.class);
+    protected RolePersistenceEnumConverter() {
+        super(LocalUserRole.class);
     }
 }

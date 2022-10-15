@@ -19,8 +19,7 @@
 package pl.miloszgilga.chessappbackend.token;
 
 import lombok.*;
-
-import pl.miloszgilga.chessappbackend.converter.IBasicEnumConverter;
+import pl.miloszgilga.lib.jmpsl.util.converter.IBasicEnumConverter;
 
 //----------------------------------------------------------------------------------------------------------------------
 
