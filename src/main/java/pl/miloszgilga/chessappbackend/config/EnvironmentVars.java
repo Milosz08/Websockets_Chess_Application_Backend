@@ -34,15 +34,12 @@ import java.util.List;
 @NoArgsConstructor
 public class EnvironmentVars {
     @Value("${config.base-url}")                                                        private String baseUrl;
-    @Value("${config.authorization.jwt-key}")                                           private String jwtSecretKey;
-    @Value("${authorization.one-time-access-token.token-length}")                       private Integer otaTokenLenght;
     @Value("${authorization.one-time-access-token.token-expired-minutes}")              private Integer otaTokenExpiredMinutes;
     @Value("${spring.profiles.active}")                                                 private String applicationMode;
     @Value("${config.frontend-cors-url}")                                               private String frontEndUrl;
     @Value("${spring.mail.username}")                                                   private String serverMailClient;
     @Value("${config.frontend-name}")                                                   private String frontendName;
     @Value("${config.mail-helpdesk-agent}")                                             private String mailHelpdeskAgent;
-    @Value("${config.authorization.jwt-issuer}")                                        private String jwtIssuer;
     @Value("${config.cors-max-age-seconds}")                                            private Integer corsMaxAgeSeconds;
     @Value("${config.authorization.password-encoder-strength}")                         private Integer passwordEncoderStrength;
     @Value("${authorization.bearer-token.token-expired-minutes}")                       private Integer bearerTokenExpiredMinutes;

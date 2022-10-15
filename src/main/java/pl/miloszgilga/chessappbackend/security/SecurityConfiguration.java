@@ -34,7 +34,6 @@ import org.springframework.security.config.annotation.authentication.configurati
 import pl.miloszgilga.chessappbackend.oauth.*;
 import pl.miloszgilga.chessappbackend.filter.*;
 import pl.miloszgilga.chessappbackend.oauth.resolver.*;
-import pl.miloszgilga.chessappbackend.utils.CookieHelper;
 import pl.miloszgilga.chessappbackend.config.EnvironmentVars;
 
 import static pl.miloszgilga.chessappbackend.config.ApplicationEndpoints.*;
@@ -45,7 +44,6 @@ import static pl.miloszgilga.chessappbackend.config.ApplicationEndpoints.*;
 @EnableWebSecurity
 public class SecurityConfiguration {
 
-    private final CookieHelper cookieHelper;
     private final EnvironmentVars environment;
     private final SecurityHelper securityHelper;
     private final AuthenticationRestEntryPoint restEntryPoint;
@@ -75,14 +73,13 @@ public class SecurityConfiguration {
     //------------------------------------------------------------------------------------------------------------------
 
     public SecurityConfiguration(EnvironmentVars environment, JwtTokenAuthenticationFilter authFilter,
-                                 AuthenticationRestEntryPoint restPoint, AppOidcUserService oidc, CookieHelper cookie,
+                                 AuthenticationRestEntryPoint restPoint, AppOidcUserService oidc,
                                  MiddlewareExceptionsFilter exFilter, AppOAuth2UserService oauth2,
                                  SecurityHelper security, OAuth2AuthSuccessfulResolver successfulResolver,
                                  OAuth2AuthFailureResolver failureResolver) {
         this.environment = environment;
         this.middlewareExceptionsFilter = exFilter;
         this.securityHelper = security;
-        this.cookieHelper = cookie;
         this.authenticationFilter = authFilter;
         this.restEntryPoint = restPoint;
         this.appOidcUserService = oidc;
@@ -134,7 +131,7 @@ public class SecurityConfiguration {
 
     @Bean
     public CookieOAuth2ReqRepository cookieOAuth2ReqRepository() {
-        return new CookieOAuth2ReqRepository(cookieHelper, environment);
+        return new CookieOAuth2ReqRepository(environment);
     }
 
     //------------------------------------------------------------------------------------------------------------------

@@ -33,12 +33,15 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import java.util.*;
 import javax.transaction.Transactional;
 
+import pl.miloszgilga.lib.jmpsl.auth.jwt.JwtServlet;
+
 import pl.miloszgilga.chessappbackend.token.*;
 import pl.miloszgilga.chessappbackend.oauth.AuthUser;
 import pl.miloszgilga.chessappbackend.network.auth.dto.*;
 import pl.miloszgilga.chessappbackend.exception.custom.*;
 import pl.miloszgilga.chessappbackend.network.auth.domain.*;
 
+import static pl.miloszgilga.chessappbackend.token.JwtClaim.USER_ID;
 import static pl.miloszgilga.chessappbackend.oauth.CredentialsSupplier.LOCAL;
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -48,27 +51,26 @@ public class LoginService implements ILoginService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(LoginService.class);
 
+    private final JwtServlet jwtServlet;
     private final AuthServiceHelper helper;
     private final MapperFacade mapperFacade;
     private final AuthenticationManager manager;
     private final PasswordEncoder passwordEncoder;
     private final JsonWebTokenCreator tokenCreator;
-    private final JsonWebTokenVerificator tokenVerificator;
     private final ILocalUserRepository localUserRepository;
     private final IRefreshTokenRepository refreshTokenRepository;
 
     //------------------------------------------------------------------------------------------------------------------
 
-    public LoginService(AuthServiceHelper helper, MapperFacade mapperFacade, AuthenticationManager manager,
+    public LoginService(JwtServlet jwtServlet, AuthServiceHelper helper, MapperFacade mapperFacade, AuthenticationManager manager,
                         PasswordEncoder passwordEncoder, JsonWebTokenCreator tokenCreator,
-                        JsonWebTokenVerificator tokenVerificator, ILocalUserRepository localUserRepository,
-                        IRefreshTokenRepository refreshTokenRepository) {
+                        ILocalUserRepository localUserRepository, IRefreshTokenRepository refreshTokenRepository) {
+        this.jwtServlet = jwtServlet;
         this.helper = helper;
         this.mapperFacade = mapperFacade;
         this.manager = manager;
         this.passwordEncoder = passwordEncoder;
         this.tokenCreator = tokenCreator;
-        this.tokenVerificator = tokenVerificator;
         this.localUserRepository = localUserRepository;
         this.refreshTokenRepository = refreshTokenRepository;
     }
@@ -147,7 +149,10 @@ public class LoginService implements ILoginService {
     @Override
     @Transactional
     public RefreshTokenResDto refreshToken(final String token) {
-        final Long userId = tokenVerificator.validateExpiredTokenToRefreshToken(token);
+        final Long userId = jwtServlet.validateRefreshToken(token, USER_ID.getClaimName()).orElseThrow(() -> {
+            LOGGER.error("Attempt to extract refresh token with malformed expired bearer token. Token {}", token);
+            throw new TokenException.JwtMalformedTokenException("Expired jwt token is malformed. Try again with another.");
+        });
         final RefreshTokenModel refreshToken = refreshTokenRepository.findRefreshTokenByUserId(userId).orElseThrow(() -> {
             LOGGER.error("Attempt to extract refresh token from non existing token. User id {}", userId);
             throw new TokenException.RefreshTokenNotExistException("Unable to find refresh token for provided user.");

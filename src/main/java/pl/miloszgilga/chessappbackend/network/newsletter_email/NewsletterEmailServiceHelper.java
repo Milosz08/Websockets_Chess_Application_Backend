@@ -27,11 +27,12 @@ import java.util.Date;
 import java.util.Optional;
 import javax.transaction.Transactional;
 
-import pl.miloszgilga.chessappbackend.utils.TimeHelper;
+import pl.miloszgilga.lib.jmpsl.auth.OtaToken;
+import pl.miloszgilga.lib.jmpsl.util.TimeUtil;
+
 import pl.miloszgilga.chessappbackend.exception.custom.*;
 import pl.miloszgilga.chessappbackend.network.auth.domain.*;
 import pl.miloszgilga.chessappbackend.config.EnvironmentVars;
-import pl.miloszgilga.chessappbackend.token.OneTimeAccessToken;
 import pl.miloszgilga.chessappbackend.network.newsletter_email.domain.*;
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -41,21 +42,20 @@ class NewsletterEmailServiceHelper {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(NewsletterEmailServiceHelper.class);
 
-    private final TimeHelper timeHelper;
+    private final OtaToken otaToken;
     private final EnvironmentVars environment;
-    private final OneTimeAccessToken otaService;
     private final ILocalUserDetailsRepository detailsRepository;
     private final INewsletterEmailRepository newsletterRepository;
     private final IUnsubscribeOtaTokenRepository otaTokenRepository;
 
     //------------------------------------------------------------------------------------------------------------------
 
-    public NewsletterEmailServiceHelper(TimeHelper timeHelper, EnvironmentVars environment, OneTimeAccessToken otaService,
-                                        ILocalUserDetailsRepository detailsRepository, INewsletterEmailRepository newsletterRepository,
+    public NewsletterEmailServiceHelper(OtaToken otaToken, EnvironmentVars environment,
+                                        ILocalUserDetailsRepository detailsRepository,
+                                        INewsletterEmailRepository newsletterRepository,
                                         IUnsubscribeOtaTokenRepository otaTokenRepository) {
-        this.timeHelper = timeHelper;
+        this.otaToken = otaToken;
         this.environment = environment;
-        this.otaService = otaService;
         this.detailsRepository = detailsRepository;
         this.newsletterRepository = newsletterRepository;
         this.otaTokenRepository = otaTokenRepository;
@@ -89,10 +89,10 @@ class NewsletterEmailServiceHelper {
     public String generateAndSaveOtaToken(String email) {
         String token;
         do {
-            token = otaService.generateToken();
+            token = otaToken.generateToken();
         } while (otaTokenRepository.findExistingToken(token));
 
-        final Date tokenExpired = timeHelper.addMinutesToCurrentDate(environment.getOtaTokenExpiredMinutes());
+        final Date tokenExpired = TimeUtil.addMinutes(environment.getOtaTokenExpiredMinutes());
         final NewsletterEmailModel emailModel = newsletterRepository.findNewsletterModelsByEmail(email).orElseThrow(() -> {
             LOGGER.error("Attempt to generate OTA token for non-existing newsletter email.");
             throw new AuthException.UserNotFoundException("Newsletter user with passed email not exist.");
@@ -112,7 +112,7 @@ class NewsletterEmailServiceHelper {
     @Transactional
     public void validateOtaToken(String token, String email) {
         final Optional<UnsubscribeOtaTokenModel> probablyValidToken = otaTokenRepository.checkIfTokenExist(token, email);
-        if (probablyValidToken.isEmpty() || !otaService.checkIsTokenIsValid(probablyValidToken.get().getToken())) {
+        if (probablyValidToken.isEmpty() || !otaToken.isValid(probablyValidToken.get().getToken())) {
             LOGGER.error("OTA token from JWT is not the same as from DB. Token: {}", token);
             throw new TokenException.JwtMalformedTokenException(
                     "Data could not be verified due to an incorrect, already used or corrupted token.");

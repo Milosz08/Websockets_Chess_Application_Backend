@@ -3,9 +3,13 @@ config:
     frontend-cors-url: ${env.PROD_FRONTEND_CORS_AGENT}
     frontend-name: ${env.PROD_FRONTEND_WITH_JWT_ISSUER}
     authorization:
-        jwt-key: ${env.PROD_JWT_KEY}
-        jwt-issuer: ${env.PROD_FRONTEND_WITH_JWT_ISSUER}
         password-encoder-strength: 10
+
+jmpsl:
+    auth:
+        jwt:
+            secret: ${env.PROD_JWT_KEY}
+            issuer: ${env.PROD_FRONTEND_WITH_JWT_ISSUER}
 
 spring:
     h2.console.enabled: false

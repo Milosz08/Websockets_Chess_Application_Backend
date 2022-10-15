@@ -23,17 +23,19 @@ import org.slf4j.LoggerFactory;
 
 import org.springframework.stereotype.Component;
 import org.springframework.security.core.Authentication;
-import org.springframework.web.util.UriComponentsBuilder;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
 
 import javax.servlet.http.*;
 
 import java.net.URI;
+import java.util.Set;
 import java.util.Optional;
 import java.io.IOException;
 
+import pl.miloszgilga.lib.jmpsl.util.ServletPathUtil;
+import pl.miloszgilga.lib.jmpsl.util.cookie.CookieUtil;
+
 import pl.miloszgilga.chessappbackend.oauth.AuthUser;
-import pl.miloszgilga.chessappbackend.utils.CookieHelper;
 import pl.miloszgilga.chessappbackend.config.EnvironmentVars;
 import pl.miloszgilga.chessappbackend.token.JsonWebTokenCreator;
 import pl.miloszgilga.chessappbackend.exception.custom.AuthException;
@@ -45,16 +47,13 @@ public class OAuth2AuthSuccessfulResolver extends SimpleUrlAuthenticationSuccess
 
     private static final Logger LOGGER = LoggerFactory.getLogger(OAuth2AuthSuccessfulResolver.class);
 
-    private final CookieHelper cookieHelper;
     private final EnvironmentVars environment;
     private final JsonWebTokenCreator webTokenCreator;
 
     //------------------------------------------------------------------------------------------------------------------
 
-    public OAuth2AuthSuccessfulResolver(EnvironmentVars environment, JsonWebTokenCreator webTokenCreator,
-                                        CookieHelper cookieHelper) {
+    public OAuth2AuthSuccessfulResolver(EnvironmentVars environment, JsonWebTokenCreator webTokenCreator) {
         this.environment = environment;
-        this.cookieHelper = cookieHelper;
         this.webTokenCreator = webTokenCreator;
     }
 
@@ -69,9 +68,9 @@ public class OAuth2AuthSuccessfulResolver extends SimpleUrlAuthenticationSuccess
             return;
         }
         clearAuthenticationAttributes(req);
-        cookieHelper.deleteCookie(req, res, environment.getOauth2SessionRememberCookieName());
-        cookieHelper.deleteCookie(req, res, environment.getOauth2AfterLoginRedirectUriCookieName());
-        cookieHelper.deleteCookie(req, res, environment.getOauth2AfterSignupRedirectUriCookieName());
+        CookieUtil.deleteMultipleCookies(req, res, Set.of(environment.getOauth2SessionRememberCookieName(),
+                environment.getOauth2AfterLoginRedirectUriCookieName(),
+                environment.getOauth2AfterSignupRedirectUriCookieName()));
 
         getRedirectStrategy().sendRedirect(req, res, targetUrl);
     }
@@ -87,17 +86,13 @@ public class OAuth2AuthSuccessfulResolver extends SimpleUrlAuthenticationSuccess
         if (localAuthUser.getUserModel().getIsActivated()) {
             final String redirectLoginUri = checkIfRedirectUriIsValidAndReturn(req,
                     environment.getOauth2AfterLoginRedirectUriCookieName());
-            return UriComponentsBuilder.fromUriString(redirectLoginUri)
-                    .queryParam("token", token)
-                    .queryParam("supplier", credentialsSupplier)
-                    .build().toUriString();
+
+            return ServletPathUtil.redirectTokenUri(token, redirectLoginUri, credentialsSupplier).toString();
         }
         final String redirectSignupUri = checkIfRedirectUriIsValidAndReturn(req,
                 environment.getOauth2AfterSignupRedirectUriCookieName());
-        return UriComponentsBuilder.fromUriString(redirectSignupUri)
-                .queryParam("token", token)
-                .queryParam("supplier", credentialsSupplier)
-                .build().toUriString();
+
+        return ServletPathUtil.redirectTokenUri(token, redirectSignupUri, credentialsSupplier).toString();
     }
 
     //------------------------------------------------------------------------------------------------------------------
@@ -114,7 +109,7 @@ public class OAuth2AuthSuccessfulResolver extends SimpleUrlAuthenticationSuccess
     //------------------------------------------------------------------------------------------------------------------
 
     private String checkIfRedirectUriIsValidAndReturn(HttpServletRequest req, String cookieName) {
-        final Optional<String> redirectUri = cookieHelper.getCookieValue(req, cookieName);
+        final Optional<String> redirectUri = CookieUtil.getCookieValue(req, cookieName);
         if (redirectUri.isEmpty() || checkIfUserIsAuthorizedViaRequestUri(redirectUri.get())) {
             LOGGER.error("Attempt to authenticate via OAuth2 by not supported URI.");
             throw new AuthException.OAuth2NotSupportedUriException("Redirect URI is not supported by OAuth2 service.");

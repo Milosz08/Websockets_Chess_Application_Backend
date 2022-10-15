@@ -18,14 +18,13 @@
 
 package pl.miloszgilga.chessappbackend.mapper.custom_converter;
 
+import ma.glasnost.orika.*;
 import ma.glasnost.orika.metadata.Type;
-import ma.glasnost.orika.MappingContext;
-import ma.glasnost.orika.CustomConverter;
 
 import org.springframework.stereotype.Component;
 
 import pl.miloszgilga.chessappbackend.mapper.*;
-import pl.miloszgilga.chessappbackend.utils.StringManipulator;
+import pl.miloszgilga.lib.jmpsl.util.StringUtil;
 
 import static pl.miloszgilga.chessappbackend.mapper.Converter.CAPITALIZED_FIRST_LETTER;
 
@@ -35,19 +34,9 @@ import static pl.miloszgilga.chessappbackend.mapper.Converter.CAPITALIZED_FIRST_
 @InjectableMappingConverter
 public class CapitalizedFirstLetterConverter extends CustomConverter<String, String> implements IReflectConverter {
 
-    private final StringManipulator manipulator;
-
-    //------------------------------------------------------------------------------------------------------------------
-
-    public CapitalizedFirstLetterConverter(StringManipulator manipulator) {
-        this.manipulator = manipulator;
-    }
-
-    //------------------------------------------------------------------------------------------------------------------
-
     @Override
     public String convert(String source, Type<? extends String> destinationType, MappingContext mappingContext) {
-        return manipulator.capitalised(source);
+        return StringUtil.capitalize(source);
     }
 
     //------------------------------------------------------------------------------------------------------------------

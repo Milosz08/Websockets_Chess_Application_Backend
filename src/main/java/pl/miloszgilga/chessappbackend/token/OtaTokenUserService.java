@@ -24,9 +24,10 @@ import org.slf4j.LoggerFactory;
 import javax.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
-import pl.miloszgilga.chessappbackend.utils.TimeHelper;
-import pl.miloszgilga.chessappbackend.config.EnvironmentVars;
+import pl.miloszgilga.lib.jmpsl.auth.OtaToken;
+import pl.miloszgilga.lib.jmpsl.util.TimeUtil;
 
+import pl.miloszgilga.chessappbackend.config.EnvironmentVars;
 import pl.miloszgilga.chessappbackend.network.ota_token.domain.*;
 import pl.miloszgilga.chessappbackend.network.auth.domain.LocalUserModel;
 
@@ -37,18 +38,15 @@ public class OtaTokenUserService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(OtaTokenUserService.class);
 
-    private final TimeHelper timeHelper;
+    private final OtaToken otaToken;
     private final EnvironmentVars environment;
-    private final OneTimeAccessToken otaService;
     private final IOtaTokenRepository repository;
 
     //------------------------------------------------------------------------------------------------------------------
 
-    public OtaTokenUserService(TimeHelper timeHelper, EnvironmentVars environment, OneTimeAccessToken otaService,
-                               IOtaTokenRepository repository) {
-        this.timeHelper = timeHelper;
+    public OtaTokenUserService(OtaToken otaToken, EnvironmentVars environment, IOtaTokenRepository repository) {
+        this.otaToken = otaToken;
         this.environment = environment;
-        this.otaService = otaService;
         this.repository = repository;
     }
 
@@ -58,13 +56,13 @@ public class OtaTokenUserService {
     public String generateAndSaveUserOtaToken(OtaTokenType tokenType, LocalUserModel userModel) {
         String token;
         do {
-            token = otaService.generateToken();
+            token = otaToken.generateToken();
         } while (repository.checkIfOtaTokenExist(token, tokenType) || token.equals(""));
 
         final OtaTokenModel otaTokenModel = OtaTokenModel.builder()
                 .otaToken(token)
                 .alreadyUsed(false)
-                .expirationDate(timeHelper.addMinutesToCurrentDate(environment.getOtaTokenExpiredMinutes()))
+                .expirationDate(TimeUtil.addMinutes(environment.getOtaTokenExpiredMinutes()))
                 .usedFor(tokenType)
                 .localUser(userModel)
                 .build();

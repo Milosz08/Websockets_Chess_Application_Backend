@@ -24,6 +24,8 @@ import ma.glasnost.orika.*;
 import org.springframework.stereotype.Component;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import pl.miloszgilga.lib.jmpsl.util.RndSeqGenerator;
+
 import pl.miloszgilga.chessappbackend.oauth.user_info.*;
 import pl.miloszgilga.chessappbackend.config.EnvironmentVars;
 import pl.miloszgilga.chessappbackend.utils.StringManipulator;
@@ -61,7 +63,7 @@ public class SignupOAuth2DtoToUserCustomizer extends CustomMapper<OAuth2Registra
         final OAuth2UserInfo userInfo = userInfoFactory.getOAuth2UserInfo(data.getSupplier(), data.getAttributes());
         final Pair<String, String> userExtractedData = manipulator.extractUserDataFromUsername(userInfo.getUsername());
         final String nickname = userInfo.getUsername().toLowerCase().replaceAll(" ", "");
-        userModel.setNickname(manipulator.generateUserDefNickname(nickname));
+        userModel.setNickname(RndSeqGenerator.addEndRndSeq(nickname));
         userModel.setFirstName(userExtractedData.getValue0());
         userModel.setLastName(userExtractedData.getValue1());
         userModel.setEmailAddress(userInfo.getEmailAddress());

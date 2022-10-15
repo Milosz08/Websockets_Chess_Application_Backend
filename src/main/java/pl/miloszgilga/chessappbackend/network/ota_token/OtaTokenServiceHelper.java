@@ -29,13 +29,14 @@ import java.util.Date;
 import java.util.stream.Collectors;
 import javax.transaction.Transactional;
 
-import pl.miloszgilga.chessappbackend.exception.custom.AuthException;
-import pl.miloszgilga.chessappbackend.network.ota_token.dto.OtaTokenMultipleEmailsReqDto;
+import pl.miloszgilga.lib.jmpsl.util.ServletPathUtil;
+
 import pl.miloszgilga.chessappbackend.token.OtaTokenType;
-import pl.miloszgilga.chessappbackend.utils.NetworkHelper;
 import pl.miloszgilga.chessappbackend.token.JsonWebTokenVerificator;
+import pl.miloszgilga.chessappbackend.exception.custom.AuthException;
 import pl.miloszgilga.chessappbackend.exception.custom.TokenException;
 import pl.miloszgilga.chessappbackend.token.dto.ActivateServiceViaEmailTokenClaims;
+import pl.miloszgilga.chessappbackend.network.ota_token.dto.OtaTokenMultipleEmailsReqDto;
 
 import pl.miloszgilga.chessappbackend.network.ota_token.domain.*;
 import pl.miloszgilga.chessappbackend.network.ota_token.dto.TokenLinkValidationData;
@@ -47,15 +48,12 @@ class OtaTokenServiceHelper {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(OtaTokenServiceHelper.class);
 
-    private final NetworkHelper networkHelper;
     private final IOtaTokenRepository otaTokenRepository;
     private final JsonWebTokenVerificator tokenVerificator;
 
     //------------------------------------------------------------------------------------------------------------------
 
-    OtaTokenServiceHelper(IOtaTokenRepository otaTokenRepository, JsonWebTokenVerificator tokenVerificator,
-                          NetworkHelper networkHelper) {
-        this.networkHelper = networkHelper;
+    OtaTokenServiceHelper(IOtaTokenRepository otaTokenRepository, JsonWebTokenVerificator tokenVerificator) {
         this.otaTokenRepository = otaTokenRepository;
         this.tokenVerificator = tokenVerificator;
     }
@@ -85,10 +83,7 @@ class OtaTokenServiceHelper {
         }
         LOGGER.info("Successed activate service: {} via bearer token: {}. Redirect to: {}.",
                 data.getType(), data.getBearer(), data.getRedirectUri());
-        return networkHelper.generateRedirectUri(
-                new Pair<>("message", queryMessage),
-                data.getRedirectUri(),
-                ifError);
+        return ServletPathUtil.redirectMessageUri(queryMessage, data.getRedirectUri(), ifError);
     }
 
     //------------------------------------------------------------------------------------------------------------------

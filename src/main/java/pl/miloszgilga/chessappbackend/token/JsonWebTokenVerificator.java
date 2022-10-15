@@ -18,12 +18,11 @@
 
 package pl.miloszgilga.chessappbackend.token;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import io.jsonwebtoken.*;
+import java.util.Optional;
 
 import org.springframework.stereotype.Component;
+import pl.miloszgilga.lib.jmpsl.auth.jwt.JwtServlet;
 
 import pl.miloszgilga.chessappbackend.token.dto.*;
 import pl.miloszgilga.chessappbackend.exception.custom.TokenException;
@@ -35,86 +34,39 @@ import static pl.miloszgilga.chessappbackend.token.JwtClaim.*;
 @Component
 public class JsonWebTokenVerificator {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(JsonWebTokenVerificator.class);
-    private final JsonWebToken jsonWebToken;
+    private final JwtServlet jwtServlet;
 
     //------------------------------------------------------------------------------------------------------------------
 
-    public JsonWebTokenVerificator(JsonWebToken jsonWebToken1) {
-        this.jsonWebToken = jsonWebToken1;
+    public JsonWebTokenVerificator(JwtServlet jwtServlet) {
+        this.jwtServlet = jwtServlet;
     }
 
     //------------------------------------------------------------------------------------------------------------------
 
-    public ActivateServiceViaEmailTokenClaims validateActivatingServiceViaEmail(String token) {
-        if (basicTokenIsMalformed(token)) {
+    public ActivateServiceViaEmailTokenClaims validateActivatingServiceViaEmail(final String token) {
+        final Claims extractedClaims = jwtServlet.extractClaims(token).orElseThrow(() -> {
             throw new TokenException.JwtMalformedTokenException(
                     "Data could not be verified due to an incorrect, expired or corrupted token.");
-        }
-        Claims claims = extractClaimsFromRawToken(token);
-        return new ActivateServiceViaEmailTokenClaims(
-                claims.get(USER_ID.getClaimName(), Long.class),
-                claims.get(EMAIL.getClaimName(), String.class),
-                claims.get(IS_EXPIRED.getClaimName(), Boolean.class),
-                claims.get(OTA_TOKEN.getClaimName(), String.class)
-        );
+        });
+        return ActivateServiceViaEmailTokenClaims.builder()
+                .userId(extractedClaims.get(USER_ID.getClaimName(), Long.class))
+                .emailAddress(extractedClaims.get(EMAIL.getClaimName(), String.class))
+                .otaToken(extractedClaims.get(OTA_TOKEN.getClaimName(), String.class))
+                .isExpired(extractedClaims.get(IS_EXPIRED.getClaimName(), Boolean.class))
+                .build();
     }
 
     //------------------------------------------------------------------------------------------------------------------
 
     public UserVerficationClaims validateUserJwtFilter(String token) {
-        if (basicTokenIsMalformed(token)) return new UserVerficationClaims();
-        Claims claims = extractClaimsFromRawToken(token);
-        return new UserVerficationClaims(
-                claims.get(USER_ID.getClaimName(), Long.class),
-                claims.get(NICKNAME.getClaimName(), String.class),
-                claims.get(EMAIL.getClaimName(), String.class)
-        );
-    }
-
-    //------------------------------------------------------------------------------------------------------------------
-
-    public Claims extractClaimsFromRawToken(String token) {
-        return Jwts.parserBuilder()
-                .setSigningKey(jsonWebToken.getSignatureKey())
-                .build()
-                .parseClaimsJws(token)
-                .getBody();
-    }
-
-    //------------------------------------------------------------------------------------------------------------------
-
-    public Long validateExpiredTokenToRefreshToken(String expiredToken) {
-        Long userId;
-        try {
-            final Claims claimsJws = extractClaimsFromRawToken(expiredToken);
-            userId = claimsJws.get(USER_ID.getClaimName(), Long.class);
-        } catch (ExpiredJwtException ex) {
-            userId = ex.getClaims().get(USER_ID.getClaimName(), Long.class);
-        } catch (Exception ex) {
-            LOGGER.error("Attempt to extract refresh token with malformed expired bearer token. Token {}", expiredToken);
-            throw new TokenException.JwtMalformedTokenException("Expired jwt token is malformed. Try again with another.");
-        }
-        return userId;
-    }
-
-    //------------------------------------------------------------------------------------------------------------------
-
-    public boolean basicTokenIsMalformed(String token) {
-        try {
-            Jwts.parserBuilder().setSigningKey(jsonWebToken.getSignatureKey()).build().parseClaimsJws(token);
-            return false;
-        } catch (MalformedJwtException ex) {
-            LOGGER.error("Passed JSON Web Token is malformed. Token: {}", token);
-        } catch (ExpiredJwtException ex) {
-            LOGGER.error("Passed JSON Web Token is expired. Token: {}", token);
-            throw new TokenException.JwtTokenExpiredException("Token is expired. Before insert any changes please " +
-                    "enter new token.");
-        } catch (JwtException ex) {
-            LOGGER.error("Passed JSON Web Token is invalid. Token: {}", token);
-        } catch (IllegalArgumentException ex) {
-            LOGGER.error("Some of the JSON Web Token claims are nullable. Token: {}", token);
-        }
-        return true;
+        final Optional<Claims> extractedClaims = jwtServlet.extractClaims(token);
+        if (extractedClaims.isEmpty()) return new UserVerficationClaims();
+        final Claims claims = extractedClaims.get();
+        return UserVerficationClaims.builder()
+                .id(claims.get(USER_ID.getClaimName(), Long.class))
+                .nickname(claims.get(NICKNAME.getClaimName(), String.class))
+                .emailAddress(claims.get(EMAIL.getClaimName(), String.class))
+                .build();
     }
 }

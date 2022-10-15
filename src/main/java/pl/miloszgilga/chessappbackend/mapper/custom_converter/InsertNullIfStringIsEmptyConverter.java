@@ -24,7 +24,7 @@ import ma.glasnost.orika.metadata.Type;
 import org.springframework.stereotype.Component;
 
 import pl.miloszgilga.chessappbackend.mapper.*;
-import pl.miloszgilga.chessappbackend.utils.StringManipulator;
+import pl.miloszgilga.lib.jmpsl.util.StringUtil;
 
 import static pl.miloszgilga.chessappbackend.mapper.Converter.INSERT_NULL_IF_STRING_IS_EMPTY;
 
@@ -34,19 +34,9 @@ import static pl.miloszgilga.chessappbackend.mapper.Converter.INSERT_NULL_IF_STR
 @InjectableMappingConverter
 public class InsertNullIfStringIsEmptyConverter extends CustomConverter<String, String> implements IReflectConverter {
 
-    private final StringManipulator manipulator;
-
-    //------------------------------------------------------------------------------------------------------------------
-
-    public InsertNullIfStringIsEmptyConverter(StringManipulator manipulator) {
-        this.manipulator = manipulator;
-    }
-
-    //------------------------------------------------------------------------------------------------------------------
-
     @Override
     public String convert(String source, Type<? extends String> destinationType, MappingContext mappingContext) {
-        return manipulator.emptyStringRetNull(source);
+        return StringUtil.onEmptyNull(source);
     }
 
     //------------------------------------------------------------------------------------------------------------------

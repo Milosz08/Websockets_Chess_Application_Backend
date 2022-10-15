@@ -24,22 +24,22 @@ import org.springframework.stereotype.Service;
 import java.util.*;
 import java.util.stream.*;
 
-import pl.miloszgilga.chessappbackend.network.auth.domain.ILocalUserRepository;
-import pl.miloszgilga.chessappbackend.network.auth.domain.LocalUserModel;
-import pl.miloszgilga.chessappbackend.utils.TimeHelper;
+import pl.miloszgilga.lib.jmpsl.util.TimeUtil;
+
 import pl.miloszgilga.chessappbackend.dto.SimpleTupleDto;
 import pl.miloszgilga.chessappbackend.loader.gender_data.*;
 import pl.miloszgilga.chessappbackend.loader.country_data.*;
 import pl.miloszgilga.chessappbackend.loader.calendar_data.*;
 
 import pl.miloszgilga.chessappbackend.network.expose_static_data.dto.*;
+import pl.miloszgilga.chessappbackend.network.auth.domain.LocalUserModel;
+import pl.miloszgilga.chessappbackend.network.auth.domain.ILocalUserRepository;
 
 //----------------------------------------------------------------------------------------------------------------------
 
 @Service
 class ExposeStaticDataService implements IExposeStaticDataService {
 
-    private final TimeHelper timeHelper;
     private final MapperFacade mapperFacade;
     private final GenderPropertiesLoader genderLoader;
     private final CountryPropertiesLoader countryLoader;
@@ -48,11 +48,9 @@ class ExposeStaticDataService implements IExposeStaticDataService {
 
     //------------------------------------------------------------------------------------------------------------------
 
-    ExposeStaticDataService(
-            TimeHelper timeHelper, MapperFacade mapperFacade, GenderPropertiesLoader genderLoader,
-            CalendarPropertiesLoader calendarLoader, CountryPropertiesLoader countryLoader,
-            ILocalUserRepository localUserRepository) {
-        this.timeHelper = timeHelper;
+    ExposeStaticDataService(MapperFacade mapperFacade, GenderPropertiesLoader genderLoader,
+                            CalendarPropertiesLoader calendarLoader, CountryPropertiesLoader countryLoader,
+                            ILocalUserRepository localUserRepository) {
         this.mapperFacade = mapperFacade;
         this.genderLoader = genderLoader;
         this.calendarLoader = calendarLoader;
@@ -68,7 +66,7 @@ class ExposeStaticDataService implements IExposeStaticDataService {
         return new SignupCalendarDataResDto(
                 generateData(1, 32, d -> String.format("%01d", d)),
                 generateData(1, loadedData.getMonthsShort().size() + 1, m -> loadedData.getMonthsShort().get(m - 1)),
-                generateData(1900, timeHelper.currentYearMinusAcceptableAge(), Integer::toString)
+                generateData(1900, TimeUtil.currYearMinusAcceptableAge(10), Integer::toString)
         );
     }
 

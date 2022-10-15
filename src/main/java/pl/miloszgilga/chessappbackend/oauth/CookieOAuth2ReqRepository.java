@@ -23,9 +23,12 @@ import com.nimbusds.oauth2.sdk.util.StringUtils;
 import org.springframework.security.oauth2.core.endpoint.OAuth2AuthorizationRequest;
 import org.springframework.security.oauth2.client.web.AuthorizationRequestRepository;
 
+import java.util.Set;
 import javax.servlet.http.*;
 
-import pl.miloszgilga.chessappbackend.utils.CookieHelper;
+import pl.miloszgilga.lib.jmpsl.util.cookie.CookieUtil;
+import pl.miloszgilga.lib.jmpsl.util.cookie.AddedCookiePayload;
+
 import pl.miloszgilga.chessappbackend.config.EnvironmentVars;
 import pl.miloszgilga.chessappbackend.exception.custom.AuthException;
 
@@ -33,14 +36,12 @@ import pl.miloszgilga.chessappbackend.exception.custom.AuthException;
 
 public class CookieOAuth2ReqRepository implements AuthorizationRequestRepository<OAuth2AuthorizationRequest> {
 
-    private final CookieHelper cookieHelper;
     private final EnvironmentVars environment;
     private final int cookieExpInSec;
 
     //------------------------------------------------------------------------------------------------------------------
 
-    public CookieOAuth2ReqRepository(CookieHelper cookieHelper, EnvironmentVars environment) {
-        this.cookieHelper = cookieHelper;
+    public CookieOAuth2ReqRepository(EnvironmentVars environment) {
         this.environment = environment;
         this.cookieExpInSec = environment.getOauth2CookieExpiredMinutes() * 60;
     }
@@ -49,8 +50,8 @@ public class CookieOAuth2ReqRepository implements AuthorizationRequestRepository
 
     @Override
     public OAuth2AuthorizationRequest loadAuthorizationRequest(HttpServletRequest req) {
-        return cookieHelper.getCookie(req, environment.getOauth2SessionRememberCookieName())
-                .map(c -> cookieHelper.deserializeCookieObjectData(c, OAuth2AuthorizationRequest.class))
+        return CookieUtil.getCookie(req, environment.getOauth2SessionRememberCookieName())
+                .map(c -> CookieUtil.deserializeCookieValue(c, OAuth2AuthorizationRequest.class))
                 .orElseThrow(() -> {
                     throw new AuthException.OAuth2AuthenticationProcessingException("Unable to load account data.");
                 });
@@ -65,23 +66,22 @@ public class CookieOAuth2ReqRepository implements AuthorizationRequestRepository
         final String afterSignupRedirPathName = environment.getOauth2AfterSignupRedirectUriCookieName();
 
         if (authReq == null) {
-            cookieHelper.deleteCookie(req, res, environment.getOauth2SessionRememberCookieName());
-            cookieHelper.deleteCookie(req, res, afterLoginRedirPathName);
-            cookieHelper.deleteCookie(req, res, afterSignupRedirPathName);
+            CookieUtil.deleteMultipleCookies(req, res, Set.of(environment.getOauth2SessionRememberCookieName(),
+                    afterLoginRedirPathName, afterSignupRedirPathName));
             return;
         }
 
-        cookieHelper.addCookie(res, environment.getOauth2SessionRememberCookieName(),
-                cookieHelper.serializeCookieObjectData(authReq), cookieExpInSec);
+        CookieUtil.addCookie(res, new AddedCookiePayload(environment.getOauth2SessionRememberCookieName(),
+                CookieUtil.serializeCookieValue(authReq), cookieExpInSec));
 
         final String redirUriBase = req.getParameter(baseRedirPathName);
         if (StringUtils.isNotBlank(req.getParameter(afterLoginRedirPathName))) {
-            final String redirUriAfterLogin = redirUriBase + "/" + req.getParameter(afterLoginRedirPathName);
-            cookieHelper.addCookie(res, afterLoginRedirPathName, redirUriAfterLogin, cookieExpInSec);
+            CookieUtil.addCookie(res, new AddedCookiePayload(afterLoginRedirPathName,
+                    redirUriBase + "/" + req.getParameter(afterLoginRedirPathName), cookieExpInSec));
         }
         if (StringUtils.isNotBlank(req.getParameter(afterSignupRedirPathName))) {
-            final String redirUriAfterSignup = redirUriBase + "/" + req.getParameter(afterSignupRedirPathName);
-            cookieHelper.addCookie(res, afterSignupRedirPathName, redirUriAfterSignup, cookieExpInSec);
+            CookieUtil.addCookie(res, new AddedCookiePayload(afterSignupRedirPathName,
+                    redirUriBase + "/" + req.getParameter(afterSignupRedirPathName), cookieExpInSec));
         }
     }
 

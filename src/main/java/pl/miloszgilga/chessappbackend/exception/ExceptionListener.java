@@ -29,7 +29,9 @@ import org.springframework.http.converter.HttpMessageNotReadableException;
 import java.util.*;
 import javax.servlet.http.*;
 
-import pl.miloszgilga.chessappbackend.utils.*;
+import pl.miloszgilga.lib.jmpsl.util.TimeUtil;
+import pl.miloszgilga.lib.jmpsl.util.StringUtil;
+
 import pl.miloszgilga.chessappbackend.exception.custom.BasicServerException;
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -37,16 +39,12 @@ import pl.miloszgilga.chessappbackend.exception.custom.BasicServerException;
 @RestControllerAdvice
 public class ExceptionListener {
 
-    private final TimeHelper timeHelper;
     private final MessageSource messageSource;
-    private final StringManipulator manipulator;
 
     //------------------------------------------------------------------------------------------------------------------
 
-    public ExceptionListener(TimeHelper timeHelper, MessageSource messageSource, StringManipulator manipulator) {
-        this.timeHelper = timeHelper;
+    public ExceptionListener(MessageSource messageSource) {
         this.messageSource = messageSource;
-        this.manipulator = manipulator;
     }
 
     //------------------------------------------------------------------------------------------------------------------
@@ -99,7 +97,7 @@ public class ExceptionListener {
                                                                HttpServletResponse res) {
         final var resData = basicExceptionRes(HttpStatus.BAD_REQUEST, req);
         res.setStatus(HttpStatus.BAD_REQUEST.value());
-        final String messageWithDot = manipulator.addExtraDotOnFinishIfNotExist(ex.getMessage());
+        final String messageWithDot = StringUtil.addDot(ex.getMessage());
         return new BasicDataExceptionRes(resData, mappingAuthorizationExceptionMessages(messageWithDot));
     }
 
@@ -111,7 +109,7 @@ public class ExceptionListener {
                 .method(req.getMethod())
                 .statusCode(status.value())
                 .statusText(status.name())
-                .servletTimestampUTC(timeHelper.getCurrentUTC())
+                .servletTimestampUTC(TimeUtil.serializedUTC())
                 .build();
     }
 

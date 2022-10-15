@@ -21,12 +21,11 @@ package pl.miloszgilga.chessappbackend.mapper.custom_converter;
 import ma.glasnost.orika.*;
 import ma.glasnost.orika.metadata.Type;
 
+import java.util.Date;
 import org.springframework.stereotype.Component;
 
-import java.util.Date;
-
+import pl.miloszgilga.lib.jmpsl.util.TimeUtil;
 import pl.miloszgilga.chessappbackend.mapper.*;
-import pl.miloszgilga.chessappbackend.utils.TimeHelper;
 
 import static pl.miloszgilga.chessappbackend.mapper.Converter.DATE_FROM_STRING_TO_OBJECT;
 
@@ -36,19 +35,9 @@ import static pl.miloszgilga.chessappbackend.mapper.Converter.DATE_FROM_STRING_T
 @InjectableMappingConverter
 public class DateFromStringToObjectConverter extends CustomConverter<String, Date> implements IReflectConverter {
 
-    private final TimeHelper timeHelper;
-
-    //------------------------------------------------------------------------------------------------------------------
-
-    public DateFromStringToObjectConverter(TimeHelper timeHelper) {
-        this.timeHelper = timeHelper;
-    }
-
-    //------------------------------------------------------------------------------------------------------------------
-
     @Override
     public Date convert(String source, Type<? extends Date> destType, MappingContext context) {
-        return timeHelper.convertStringDateToDateObject(source);
+        return TimeUtil.deserialize(source).orElse(new Date());
     }
 
     //------------------------------------------------------------------------------------------------------------------

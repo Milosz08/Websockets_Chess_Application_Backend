@@ -22,14 +22,16 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import org.springframework.stereotype.Component;
-import org.springframework.web.util.UriComponentsBuilder;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler;
 
+import java.util.Set;
 import javax.servlet.http.*;
 import java.io.IOException;
 
-import pl.miloszgilga.chessappbackend.utils.CookieHelper;
+import pl.miloszgilga.lib.jmpsl.util.ServletPathUtil;
+import pl.miloszgilga.lib.jmpsl.util.cookie.CookieUtil;
+
 import pl.miloszgilga.chessappbackend.config.EnvironmentVars;
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -39,14 +41,12 @@ public class OAuth2AuthFailureResolver extends SimpleUrlAuthenticationFailureHan
 
     private static final Logger LOGGER = LoggerFactory.getLogger(OAuth2AuthFailureResolver.class);
 
-    private final CookieHelper cookieHelper;
     private final EnvironmentVars environment;
 
     //------------------------------------------------------------------------------------------------------------------
 
-    public OAuth2AuthFailureResolver(EnvironmentVars environment, CookieHelper cookieHelper) {
+    public OAuth2AuthFailureResolver(EnvironmentVars environment) {
         this.environment = environment;
-        this.cookieHelper = cookieHelper;
     }
 
     //------------------------------------------------------------------------------------------------------------------
@@ -54,25 +54,22 @@ public class OAuth2AuthFailureResolver extends SimpleUrlAuthenticationFailureHan
     @Override
     public void onAuthenticationFailure(HttpServletRequest req, HttpServletResponse res, AuthenticationException ex)
             throws IOException {
-        final String targetUrl = cookieHelper
+        final String targetUrl = CookieUtil
                 .getCookieValue(req, environment.getOauth2AfterLoginRedirectUriCookieName())
                 .orElse("/");
 
         LOGGER.error("OAuth2 authorization failure: Error: {}", ex.getMessage());
         deleteOAuth2AuthorizationRequestCookies(req, res);
 
-        final String rediretTargetUrl = UriComponentsBuilder.fromUriString(targetUrl)
-                .queryParam("error", ex.getLocalizedMessage())
-                .build().toUriString();
-
-        getRedirectStrategy().sendRedirect(req, res, rediretTargetUrl);
+        final String redirectPath = ServletPathUtil.redirectErrorUri(ex.getLocalizedMessage(), targetUrl).toString();
+        getRedirectStrategy().sendRedirect(req, res, redirectPath);
     }
 
     //------------------------------------------------------------------------------------------------------------------
 
     private void deleteOAuth2AuthorizationRequestCookies(HttpServletRequest req, HttpServletResponse res) {
-        cookieHelper.deleteCookie(req, res, environment.getOauth2SessionRememberCookieName());
-        cookieHelper.deleteCookie(req, res, environment.getOauth2AfterLoginRedirectUriCookieName());
-        cookieHelper.deleteCookie(req, res, environment.getOauth2AfterSignupRedirectUriCookieName());
+        CookieUtil.deleteMultipleCookies(req, res, Set.of(environment.getOauth2SessionRememberCookieName(),
+                environment.getOauth2AfterLoginRedirectUriCookieName(),
+                environment.getOauth2AfterSignupRedirectUriCookieName()));
     }
 }

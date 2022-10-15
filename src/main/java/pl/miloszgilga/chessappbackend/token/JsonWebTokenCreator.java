@@ -26,8 +26,10 @@ import org.springframework.security.core.Authentication;
 
 import java.util.Date;
 
+import pl.miloszgilga.lib.jmpsl.util.TimeUtil;
+import pl.miloszgilga.lib.jmpsl.auth.jwt.JwtServlet;
+
 import pl.miloszgilga.chessappbackend.oauth.AuthUser;
-import pl.miloszgilga.chessappbackend.utils.TimeHelper;
 import pl.miloszgilga.chessappbackend.config.EnvironmentVars;
 import pl.miloszgilga.chessappbackend.security.LocalUserRole;
 import pl.miloszgilga.chessappbackend.network.auth.domain.LocalUserModel;
@@ -39,16 +41,14 @@ import static pl.miloszgilga.chessappbackend.token.JwtClaim.*;
 @Component
 public class JsonWebTokenCreator {
 
-    private final TimeHelper timeHelper;
-    private final JsonWebToken jsonWebToken;
+    private final JwtServlet jwtServlet;
     private final EnvironmentVars environment;
 
     //------------------------------------------------------------------------------------------------------------------
 
-    public JsonWebTokenCreator(TimeHelper timeHelper, EnvironmentVars environment, JsonWebToken jsonWebToken) {
-        this.timeHelper = timeHelper;
+    public JsonWebTokenCreator(JwtServlet jwtServlet, EnvironmentVars environment) {
+        this.jwtServlet = jwtServlet;
         this.environment = environment;
-        this.jsonWebToken = jsonWebToken;
     }
 
     //------------------------------------------------------------------------------------------------------------------
@@ -59,8 +59,8 @@ public class JsonWebTokenCreator {
         claims.put(EMAIL.getClaimName(), email);
         claims.put(OTA_TOKEN.getClaimName(), otaToken);
         claims.put(IS_EXPIRED.getClaimName(), true);
-        claims.setExpiration(timeHelper.addMinutesToCurrentDate(environment.getOtaTokenExpiredMinutes()));
-        return basicJwtToken("unsubscribe-newsletter-token", claims);
+        claims.setExpiration(TimeUtil.addMinutes(environment.getOtaTokenExpiredMinutes()));
+        return jwtServlet.generateToken("unsubscribe-newsletter-token", claims);
     }
 
     //------------------------------------------------------------------------------------------------------------------
@@ -80,17 +80,17 @@ public class JsonWebTokenCreator {
 
     public String createUserCredentialsToken(LocalUserModel user) {
         final Claims claims = createBasicAuthTokenWithoutExpired(user);
-        claims.setExpiration(timeHelper.addMinutesToCurrentDate(environment.getBearerTokenExpiredMinutes()));
-        return basicJwtToken("user-credentials", claims);
+        claims.setExpiration(TimeUtil.addMinutes(environment.getBearerTokenExpiredMinutes()));
+        return jwtServlet.generateToken("user-credentials", claims);
     }
 
     //------------------------------------------------------------------------------------------------------------------
 
     public Pair<String, Date> createUserRefreshToken(LocalUserModel user) {
         final Claims claims = createBasicAuthTokenWithoutExpired(user);
-        final Date expirationDate = timeHelper.addMonthsToCurrentDate(environment.getRefreshTokenExpiredMonths());
+        final Date expirationDate = TimeUtil.addMonths(environment.getRefreshTokenExpiredMonths());
         claims.setExpiration(expirationDate);
-        return new Pair<>(basicJwtToken("user-refresh-token", claims), expirationDate);
+        return new Pair<>(jwtServlet.generateToken("user-refresh-token", claims), expirationDate);
     }
 
     //------------------------------------------------------------------------------------------------------------------
@@ -110,17 +110,6 @@ public class JsonWebTokenCreator {
         final Claims claims = Jwts.claims();
         claims.put(EMAIL.getClaimName(), email);
         claims.put(IS_EXPIRED.getClaimName(), false);
-        return basicJwtToken("non-expired-unsubscribe-newsletter-token", claims);
-    }
-
-    //------------------------------------------------------------------------------------------------------------------
-
-    private String basicJwtToken(String subject, Claims claims) {
-        return Jwts.builder()
-                .setIssuer(environment.getJwtIssuer())
-                .setSubject(subject)
-                .setClaims(claims)
-                .signWith(jsonWebToken.getSignatureKey())
-                .compact();
+        return jwtServlet.generateToken("non-expired-unsubscribe-newsletter-token", claims);
     }
 }

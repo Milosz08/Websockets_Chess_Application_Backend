@@ -24,10 +24,11 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import javax.servlet.http.HttpServletRequest;
 
+import pl.miloszgilga.lib.jmpsl.auth.jwt.JwtServlet;
+
 import pl.miloszgilga.chessappbackend.dto.*;
 import pl.miloszgilga.chessappbackend.oauth.AuthUser;
 import pl.miloszgilga.chessappbackend.network.auth.dto.*;
-import pl.miloszgilga.chessappbackend.utils.NetworkHelper;
 import pl.miloszgilga.chessappbackend.security.CurrentUser;
 
 import static pl.miloszgilga.chessappbackend.config.ApplicationEndpoints.*;
@@ -38,15 +39,15 @@ import static pl.miloszgilga.chessappbackend.config.ApplicationEndpoints.*;
 @RequestMapping(AUTH_ENDPOINT)
 class AuthController {
 
+    private final JwtServlet jwtServlet;
     private final LoginService loginService;
-    private final NetworkHelper networkHelper;
     private final SignupService signupService;
 
     //------------------------------------------------------------------------------------------------------------------
 
-    AuthController(LoginService loginService, NetworkHelper networkHelper, SignupService signupService) {
+    AuthController(JwtServlet jwtServlet, LoginService loginService, SignupService signupService) {
+        this.jwtServlet = jwtServlet;
         this.loginService = loginService;
-        this.networkHelper = networkHelper;
         this.signupService = signupService;
     }
 
@@ -90,7 +91,7 @@ class AuthController {
 
     @PostMapping(REFRESH_TOKEN)
     ResponseEntity<RefreshTokenResDto> refreshToken(HttpServletRequest req) {
-        final String token = networkHelper.extractJwtTokenFromRequest(req);
+        final String token = jwtServlet.extractToken(req);
         return new ResponseEntity<>(loginService.refreshToken(token), HttpStatus.OK);
     }
 

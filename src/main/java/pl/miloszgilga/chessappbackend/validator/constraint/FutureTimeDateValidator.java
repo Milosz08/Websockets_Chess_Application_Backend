@@ -22,9 +22,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.Date;
+import java.util.Optional;
 import javax.validation.*;
 
-import pl.miloszgilga.chessappbackend.utils.TimeHelper;
+import static java.util.Objects.isNull;
+
+import pl.miloszgilga.lib.jmpsl.util.TimeUtil;
 import pl.miloszgilga.chessappbackend.validator.annotation.ValidateFutureTimeDate;
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -33,20 +36,13 @@ public class FutureTimeDateValidator implements ConstraintValidator<ValidateFutu
 
     private static final Logger LOGGER = LoggerFactory.getLogger(FutureTimeDateValidator.class);
 
-    private final TimeHelper timeHelper;
-
-    //------------------------------------------------------------------------------------------------------------------
-
-    public FutureTimeDateValidator(TimeHelper timeHelper) {
-        this.timeHelper = timeHelper;
-    }
-
     //------------------------------------------------------------------------------------------------------------------
 
     @Override
     public boolean isValid(String birthDateString, ConstraintValidatorContext context) {
-        final Date birthDate = timeHelper.convertStringDateToDateObject(birthDateString);
-        if (birthDateString == null || birthDate.after(new Date())) {
+        final Optional<Date> birthDate = TimeUtil.deserialize(birthDateString);
+        if (birthDate.isEmpty()) return false;
+        if (isNull(birthDateString) ||birthDate.get().after(new Date())) {
             LOGGER.error("Attempt to add birth date which is after the current date.");
             return false;
         }

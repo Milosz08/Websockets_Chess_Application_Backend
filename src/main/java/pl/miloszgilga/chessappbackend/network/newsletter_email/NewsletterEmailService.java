@@ -21,7 +21,6 @@ package pl.miloszgilga.chessappbackend.network.newsletter_email;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import org.javatuples.Pair;
 import org.springframework.stereotype.Service;
 
 import static org.springframework.http.HttpStatus.EXPECTATION_FAILED;
@@ -30,8 +29,10 @@ import java.net.URI;
 import java.util.Date;
 import javax.transaction.Transactional;
 
+import pl.miloszgilga.lib.jmpsl.util.StringUtil;
+import pl.miloszgilga.lib.jmpsl.util.ServletPathUtil;
+
 import pl.miloszgilga.chessappbackend.dto.*;
-import pl.miloszgilga.chessappbackend.utils.*;
 import pl.miloszgilga.chessappbackend.token.*;
 import pl.miloszgilga.chessappbackend.exception.custom.*;
 import pl.miloszgilga.chessappbackend.mail.IMailOutService;
@@ -49,10 +50,8 @@ class NewsletterEmailService implements INewsletterEmailService {
     private static final Logger LOGGER = LoggerFactory.getLogger(NewsletterEmailService.class);
 
     private final JsonWebTokenCreator creator;
-    private final NetworkHelper networkHelper;
     private final IMailOutService mailService;
     private final EnvironmentVars environment;
-    private final StringManipulator manipulator;
     private final NewsletterEmailServiceHelper helper;
     private final JsonWebTokenVerificator verificator;
     private final INewsletterEmailRepository repository;
@@ -61,17 +60,14 @@ class NewsletterEmailService implements INewsletterEmailService {
     //------------------------------------------------------------------------------------------------------------------
 
     NewsletterEmailService(INewsletterEmailRepository repository, JsonWebTokenCreator creator,
-                           JsonWebTokenVerificator verificator, IMailOutService mailService, StringManipulator manipulator,
-                           NetworkHelper networkHelper, EnvironmentVars environment, NewsletterEmailServiceHelper helper,
-                           IUnsubscribeOtaTokenRepository otaTokenRepository) {
+                           JsonWebTokenVerificator verificator, IMailOutService mailService, EnvironmentVars environment,
+                           NewsletterEmailServiceHelper helper, IUnsubscribeOtaTokenRepository otaTokenRepository) {
         this.helper = helper;
         this.creator = creator;
         this.repository = repository;
         this.verificator = verificator;
         this.mailService = mailService;
         this.environment = environment;
-        this.manipulator = manipulator;
-        this.networkHelper = networkHelper;
         this.otaTokenRepository = otaTokenRepository;
     }
 
@@ -80,7 +76,7 @@ class NewsletterEmailService implements INewsletterEmailService {
     @Override
     @Transactional
     public SimpleServerMessageDto subscribeNewsletter(final EmailNewsletterReqDto req) {
-        final String userName = manipulator.capitalised(req.getUserName());
+        final String userName = StringUtil.capitalize(req.getUserName());
         final String emailAddress = req.getEmailAddress();
         if (repository.findNewsletterModelsByEmail(emailAddress).isPresent()) {
             LOGGER.error("Attempt to add already exist email: {} to newsletter list", emailAddress);
@@ -147,8 +143,7 @@ class NewsletterEmailService implements INewsletterEmailService {
             queryMessage = ex.getMessage();
             ifError = true;
         }
-        return networkHelper.generateRedirectUri(
-                new Pair<>("message", queryMessage), environment.getUnsubscribeNewsletterUri(), ifError);
+        return ServletPathUtil.redirectMessageUri(queryMessage, environment.getUnsubscribeNewsletterUri(), ifError);
     }
 
     //------------------------------------------------------------------------------------------------------------------

@@ -24,8 +24,9 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import javax.servlet.http.HttpServletRequest;
 
+import pl.miloszgilga.lib.jmpsl.auth.jwt.JwtServlet;
+
 import pl.miloszgilga.chessappbackend.dto.*;
-import pl.miloszgilga.chessappbackend.utils.NetworkHelper;
 import pl.miloszgilga.chessappbackend.network.renew_credentials.dto.*;
 
 import static pl.miloszgilga.chessappbackend.config.ApplicationEndpoints.*;
@@ -36,14 +37,14 @@ import static pl.miloszgilga.chessappbackend.config.ApplicationEndpoints.*;
 @RequestMapping(RENEW_CREDETIALS_LOCAL)
 class RenewCredentialsController {
 
-    private final NetworkHelper networkHelper;
+    private final JwtServlet jwtServlet;
     private final IRenewCredentialsService service;
 
     //------------------------------------------------------------------------------------------------------------------
 
-    RenewCredentialsController(NetworkHelper networkHelper, IRenewCredentialsService service) {
-        this.networkHelper = networkHelper;
+    RenewCredentialsController(IRenewCredentialsService service, JwtServlet jwtServlet) {
         this.service = service;
+        this.jwtServlet = jwtServlet;
     }
 
     //------------------------------------------------------------------------------------------------------------------
@@ -57,7 +58,7 @@ class RenewCredentialsController {
 
     @PostMapping(CHANGE_PASSWORD_CHECK_JWT)
     ResponseEntity<ChangePasswordUserDetailsResDto> checkJwtBeforeChangePassword(HttpServletRequest req) {
-        final String jwtToken = networkHelper.extractJwtTokenFromRequest(req);
+        final String jwtToken = jwtServlet.extractToken(req);
         return new ResponseEntity<>(service.checkJwtBeforeChangePassword(jwtToken), HttpStatus.OK);
     }
 
@@ -66,7 +67,7 @@ class RenewCredentialsController {
     @PostMapping(CHANGE_FORGOTTEN_PASSWORD)
     ResponseEntity<SimpleServerMessageDto> changeForgottenPassword(@RequestBody @Valid ChangeForgottenPasswordReqDto reqDto,
                                                                    HttpServletRequest req) {
-        final String jwtToken = networkHelper.extractJwtTokenFromRequest(req);
+        final String jwtToken = jwtServlet.extractToken(req);
         return new ResponseEntity<>(service.changeForgottenPassword(reqDto, jwtToken), HttpStatus.OK);
     }
 

@@ -21,6 +21,8 @@ package pl.miloszgilga.chessappbackend.network.renew_credentials.mapper;
 import ma.glasnost.orika.*;
 import org.springframework.stereotype.Component;
 
+import pl.miloszgilga.lib.jmpsl.util.StringUtil;
+
 import pl.miloszgilga.chessappbackend.utils.StringManipulator;
 import pl.miloszgilga.chessappbackend.network.auth.domain.LocalUserModel;
 import pl.miloszgilga.chessappbackend.network.renew_credentials.dto.ChangePasswordUserDetailsResDto;
@@ -42,7 +44,7 @@ public class UserToChangePasswordUserDetailsCustomizer extends CustomMapper<Loca
 
     @Override
     public void mapAtoB(LocalUserModel userModel, ChangePasswordUserDetailsResDto resDto, MappingContext context) {
-        resDto.setInitials(manipulator.generateInitials(userModel));
+        resDto.setInitials(StringUtil.initials(userModel.getFirstName(), userModel.getLastName()));
         resDto.setFullName(manipulator.generateFullName(userModel));
     }
 }

@@ -26,8 +26,9 @@ import org.springframework.stereotype.Component;
 import java.util.*;
 import javax.transaction.Transactional;
 
+import pl.miloszgilga.lib.jmpsl.util.TimeUtil;
+
 import pl.miloszgilga.chessappbackend.token.*;
-import pl.miloszgilga.chessappbackend.utils.TimeHelper;
 import pl.miloszgilga.chessappbackend.mail.IMailOutService;
 import pl.miloszgilga.chessappbackend.network.auth.domain.*;
 import pl.miloszgilga.chessappbackend.exception.custom.AuthException;
@@ -44,7 +45,6 @@ public class AuthServiceHelper {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(AuthServiceHelper.class);
 
-    private final TimeHelper timeHelper;
     private final IMailOutService mailOutService;
     private final JsonWebTokenCreator tokenCreator;
     private final ILocalUserRoleRepository roleRepository;
@@ -54,10 +54,9 @@ public class AuthServiceHelper {
 
     //------------------------------------------------------------------------------------------------------------------
 
-    AuthServiceHelper(TimeHelper timeHelper, IMailOutService mailOutService, JsonWebTokenCreator tokenCreator,
-                      ILocalUserRoleRepository roleRepository, OtaTokenUserService otaTokenUserService,
-                      ILocalUserRepository localUserRepository, INewsletterEmailRepository newsletterEmailRepository) {
-        this.timeHelper = timeHelper;
+    AuthServiceHelper(IMailOutService mailOutService, JsonWebTokenCreator tokenCreator, ILocalUserRoleRepository roleRepository,
+                      OtaTokenUserService otaTokenUserService, ILocalUserRepository localUserRepository,
+                      INewsletterEmailRepository newsletterEmailRepository) {
         this.tokenCreator = tokenCreator;
         this.mailOutService = mailOutService;
         this.roleRepository = roleRepository;
@@ -98,7 +97,7 @@ public class AuthServiceHelper {
 
     void sendEmailMessageForActivateAccount(LocalUserModel user, OtaTokenType tokenType) {
         final Optional<OtaTokenModel> findOtaToken = user.getOtaTokens().stream()
-                .filter(t -> !t.getAlreadyUsed() && timeHelper.isExpired(t.getExpirationDate())
+                .filter(t -> !t.getAlreadyUsed() && TimeUtil.isExpired(t.getExpirationDate())
                         && t.getUsedFor().equals(ACTIVATE_ACCOUNT))
                 .findFirst();
         if (user.getIsActivated() || findOtaToken.isPresent()) return;

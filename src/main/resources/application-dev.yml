@@ -3,11 +3,16 @@ config:
     frontend-cors-url: http://localhost:4200
     frontend-name: localhost
     authorization:
-        jwt-key: daw94289vndq98198nkejfnkaendwef93892fnskjdenfkjeiwefibiu32983fnskjdfn
-        jwt-issuer: localhost
         password-encoder-strength: 4
+
 server:
     port: 9595
+
+jmpsl:
+    auth:
+        jwt:
+            secret: daw94289vndq98198nkejfnkaendwef93892fnskjdenfkjeiwefibiu32983fnskjdfn
+            issuer: localhost
 
 spring:
     devtools.livereload.port: 35731
@@ -21,16 +26,16 @@ spring:
         driver-class-name: org.h2.Driver
     mail:
         protocol: smtp
-        port: 25
-        host: localhost
-        username: noreply-dev@localhost
-        password: admin
+        port: 465
+        host: ${env.PROD_SMTP_MAIL_AGENT}
+        username: ${env.PROD_SMTP_MAIL_USERNAME}
+        password: ${env.PROD_SMTP_MAIL_PASSWORD}
         properties:
-            smtp.starttls.required: false
+            smtp.starttls.required: true
             mail.smtp:
-                ssl.enable: false
+                ssl.enable: true
                 auth: true
-                starttls.enable: false
+                starttls.enable: true
     security.oauth2.client.registration:
         google:
             clientId: ${env.DEV_OAUTH2_GOOGLE_CLIENT_ID}

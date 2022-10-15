@@ -27,8 +27,9 @@ import org.slf4j.LoggerFactory;
 import javax.transaction.Transactional;
 import org.springframework.stereotype.Component;
 
+import pl.miloszgilga.lib.jmpsl.util.StringUtil;
+
 import pl.miloszgilga.chessappbackend.network.auth.domain.*;
-import pl.miloszgilga.chessappbackend.security.SecurityHelper;
 import pl.miloszgilga.chessappbackend.token.JsonWebTokenVerificator;
 import pl.miloszgilga.chessappbackend.exception.custom.AuthException;
 import pl.miloszgilga.chessappbackend.network.auth.dto.EmailHashWithNormalDto;
@@ -41,15 +42,12 @@ class RenewCredentialsServiceHelper {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(RenewCredentialsServiceHelper.class);
 
-    private final SecurityHelper securityHelper;
     private final JsonWebTokenVerificator tokenVerificator;
     private final ILocalUserRepository localUserRepository;
 
     //------------------------------------------------------------------------------------------------------------------
 
-    RenewCredentialsServiceHelper(SecurityHelper securityHelper, JsonWebTokenVerificator tokenVerificator,
-                                  ILocalUserRepository localUserRepository) {
-        this.securityHelper = securityHelper;
+    RenewCredentialsServiceHelper(JsonWebTokenVerificator tokenVerificator, ILocalUserRepository localUserRepository) {
         this.tokenVerificator = tokenVerificator;
         this.localUserRepository = localUserRepository;
     }
@@ -80,7 +78,7 @@ class RenewCredentialsServiceHelper {
 
     Set<EmailHashWithNormalDto> hashUserEmails(LocalUserModel userModel) {
         return extractUserEmails(userModel).stream()
-                .map(e -> new EmailHashWithNormalDto(securityHelper.hashingStringValue(e, '*'), e))
+                .map(e -> new EmailHashWithNormalDto(StringUtil.hashValue(e), e))
                 .collect(Collectors.toSet());
     }
 }

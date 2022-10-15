@@ -18,6 +18,8 @@
 
 package pl.miloszgilga.chessappbackend.filter;
 
+import org.javatuples.Pair;
+
 import org.springframework.util.*;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -32,9 +34,13 @@ import javax.servlet.http.*;
 import java.util.Arrays;
 import java.io.IOException;
 
-import pl.miloszgilga.chessappbackend.utils.NetworkHelper;
+import pl.miloszgilga.lib.jmpsl.auth.jwt.JwtServlet;
+import pl.miloszgilga.lib.jmpsl.auth.jwt.JwtValidationType;
+import static pl.miloszgilga.lib.jmpsl.auth.jwt.JwtValidationType.EXPIRED;
+
 import pl.miloszgilga.chessappbackend.token.JsonWebTokenVerificator;
 import pl.miloszgilga.chessappbackend.security.AuthUserDetailService;
+import pl.miloszgilga.chessappbackend.exception.custom.TokenException;
 import pl.miloszgilga.chessappbackend.token.dto.UserVerficationClaims;
 
 import static pl.miloszgilga.chessappbackend.security.SecurityConfiguration.DISABLE_PATHS_FOR_JWT_FILTERING;
@@ -44,15 +50,15 @@ import static pl.miloszgilga.chessappbackend.security.SecurityConfiguration.DISA
 @Component
 public class JwtTokenAuthenticationFilter extends OncePerRequestFilter {
 
-    private final NetworkHelper networkHelper;
+    private final JwtServlet jwtServlet;
     private final JsonWebTokenVerificator verificator;
     private final AuthUserDetailService userDetailService;
 
     //------------------------------------------------------------------------------------------------------------------
 
-    public JwtTokenAuthenticationFilter(NetworkHelper networkHelper, AuthUserDetailService userDetailService,
+    public JwtTokenAuthenticationFilter(JwtServlet jwtServlet, AuthUserDetailService userDetailService,
                                         JsonWebTokenVerificator verificator) {
-        this.networkHelper = networkHelper;
+        this.jwtServlet = jwtServlet;
         this.verificator = verificator;
         this.userDetailService = userDetailService;
     }
@@ -62,13 +68,19 @@ public class JwtTokenAuthenticationFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest req, HttpServletResponse res, FilterChain filterChain)
             throws IOException, ServletException {
-        final String token = networkHelper.extractJwtTokenFromRequest(req);
-        if (StringUtils.hasText(token) && !verificator.basicTokenIsMalformed(token)) {
-            final UserVerficationClaims verficationClaims = verificator.validateUserJwtFilter(token);
-            final UserDetails authUser = userDetailService.loadUserByNicknameEmailAndId(verficationClaims);
-            final var authToken = new UsernamePasswordAuthenticationToken(authUser, null, authUser.getAuthorities());
-            authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(req));
-            SecurityContextHolder.getContext().setAuthentication(authToken);
+        final String token = jwtServlet.extractToken(req);
+        if (StringUtils.hasText(token)) {
+            final Pair<Boolean, JwtValidationType> validatedToken = jwtServlet.isValid(token);
+            if (!validatedToken.getValue0() && validatedToken.getValue1().equals(EXPIRED)) {
+                throw new TokenException.JwtTokenExpiredException("Token is expired. Before insert any changes please " +
+                        "enter new token.");
+            } else if(validatedToken.getValue0()) {
+                final UserVerficationClaims verficationClaims = verificator.validateUserJwtFilter(token);
+                final UserDetails authUser = userDetailService.loadUserByNicknameEmailAndId(verficationClaims);
+                final var authToken = new UsernamePasswordAuthenticationToken(authUser, null, authUser.getAuthorities());
+                authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(req));
+                SecurityContextHolder.getContext().setAuthentication(authToken);
+            }
         }
         filterChain.doFilter(req, res);
     }

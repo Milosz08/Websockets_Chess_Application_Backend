@@ -16,6 +16,7 @@ configurations {
 }
 
 repositories {
+    mavenLocal()
     mavenCentral()
 }
 
@@ -32,6 +33,7 @@ extra.apply {
     set("h2DatabaseVersion", "1.4.200")
     set("orikaMapperVersion", "1.6.0")
     set("reflectionsApiVersion", "0.10.2")
+    set("jmpslVersion", "1.0.2")
 }
 
 dependencies {
@@ -47,6 +49,9 @@ dependencies {
     implementation("me.paulschwarz:spring-dotenv:${rootProject.extra.get("dotEnvVersion") as String}")
     implementation("net.rakugakibox.spring.boot:orika-spring-boot-starter:${rootProject.extra.get("orikaMapperVersion") as String}")
     implementation("com.fasterxml.jackson.core:jackson-databind:${rootProject.extra.get("xmlBinderVersion") as String}")
+
+    implementation("pl.miloszgilga:jmpsl-auth:${rootProject.extra.get("jmpslVersion") as String}")
+    implementation("pl.miloszgilga:jmpsl-util:${rootProject.extra.get("jmpslVersion") as String}")
 
     implementation("org.springframework.boot:spring-boot-starter-web:${rootProject.extra.get("springVersion") as String}")
     implementation("org.springframework.boot:spring-boot-starter-mail:${rootProject.extra.get("springVersion") as String}")

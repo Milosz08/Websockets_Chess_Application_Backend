@@ -18,15 +18,12 @@
 
 package pl.miloszgilga.chessappbackend.network.auth.mapper;
 
-import ma.glasnost.orika.CustomMapper;
-import ma.glasnost.orika.MappingContext;
-
+import ma.glasnost.orika.*;
 import org.springframework.stereotype.Component;
 
 import java.util.*;
 
-import pl.miloszgilga.chessappbackend.security.SecurityHelper;
-import pl.miloszgilga.chessappbackend.utils.StringManipulator;
+import pl.miloszgilga.lib.jmpsl.util.StringUtil;
 
 import pl.miloszgilga.chessappbackend.network.auth.dto.*;
 import pl.miloszgilga.chessappbackend.network.auth.domain.LocalUserModel;
@@ -36,24 +33,10 @@ import pl.miloszgilga.chessappbackend.network.auth.domain.LocalUserModel;
 @Component
 public class UserToAttemptSignupResDtoCustomizer extends CustomMapper<LocalUserModel, SuccessedAttemptToFinishSignupResDto> {
 
-    private static final char DELIMITER_HASH = '*';
-
-    private final StringManipulator manipulator;
-    private final SecurityHelper securityHelper;
-
-    //------------------------------------------------------------------------------------------------------------------
-
-    public UserToAttemptSignupResDtoCustomizer(StringManipulator manipulator, SecurityHelper securityHelper) {
-        this.manipulator = manipulator;
-        this.securityHelper = securityHelper;
-    }
-
-    //------------------------------------------------------------------------------------------------------------------
-
     @Override
     public void mapAtoB(LocalUserModel user, SuccessedAttemptToFinishSignupResDto resDto, MappingContext context) {
-        resDto.setFullName(manipulator.capitalised(user.getFirstName()) + " " + manipulator.capitalised(user.getLastName()));
-        resDto.setInitials(manipulator.generateInitials(user));
+        resDto.setFullName(StringUtil.capitalize(user.getFirstName()) + " " + StringUtil.capitalize(user.getLastName()));
+        resDto.setInitials(StringUtil.initials(user.getFirstName(), user.getLastName()));
         resDto.setUserEmailAddresses(generatedHashedEmails(user));
     }
 
@@ -62,16 +45,10 @@ public class UserToAttemptSignupResDtoCustomizer extends CustomMapper<LocalUserM
     private Set<EmailHashWithNormalDto> generatedHashedEmails(LocalUserModel user) {
         final Set<EmailHashWithNormalDto> hashedEmails = new HashSet<>();
         if (user.getLocalUserDetails().getSecondEmailAddress() != null) {
-            final String hashed = hashValue(user.getLocalUserDetails().getSecondEmailAddress());
+            final String hashed = StringUtil.hashValue(user.getLocalUserDetails().getSecondEmailAddress());
             hashedEmails.add(new EmailHashWithNormalDto(hashed, user.getLocalUserDetails().getSecondEmailAddress()));
         }
-        hashedEmails.add(new EmailHashWithNormalDto(hashValue(user.getEmailAddress()), user.getEmailAddress()));
+        hashedEmails.add(new EmailHashWithNormalDto(StringUtil.hashValue(user.getEmailAddress()), user.getEmailAddress()));
         return hashedEmails;
-    }
-
-    //------------------------------------------------------------------------------------------------------------------
-
-    private String hashValue(String value) {
-        return securityHelper.hashingStringValue(value, DELIMITER_HASH);
     }
 }

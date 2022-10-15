@@ -37,10 +37,11 @@ import java.nio.charset.StandardCharsets;
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 
-import pl.miloszgilga.chessappbackend.utils.TimeHelper;
 import pl.miloszgilga.chessappbackend.config.EnvironmentVars;
 import pl.miloszgilga.chessappbackend.token.JsonWebTokenCreator;
 import pl.miloszgilga.chessappbackend.exception.custom.EmailException;
+
+import pl.miloszgilga.lib.jmpsl.util.TimeUtil;
 
 import static pl.miloszgilga.chessappbackend.config.ApplicationEndpoints.NEWSLETTER_EMAIL_ENDPOINT;
 import static pl.miloszgilga.chessappbackend.config.ApplicationEndpoints.OTA_TOKEN_ENDPOINT;
@@ -55,7 +56,6 @@ class MailService {
     private static final String APP_LOGO = "static/gfx/app-logo.png";
 
     private final JavaMailSender sender;
-    private final TimeHelper timeHelper;
     private final JsonWebTokenCreator creator;
     private final EnvironmentVars environment;
     private final Configuration freemakerConfig;
@@ -63,10 +63,9 @@ class MailService {
     //------------------------------------------------------------------------------------------------------------------
 
     public MailService(JavaMailSender sender, JsonWebTokenCreator creator, EnvironmentVars environment,
-                       Configuration freemakerConfig, TimeHelper timeHelper) {
+                       Configuration freemakerConfig) {
         this.sender = sender;
         this.creator = creator;
-        this.timeHelper = timeHelper;
         this.environment = environment;
         this.freemakerConfig = freemakerConfig;
     }
@@ -111,7 +110,7 @@ class MailService {
 
     Pair<MailRequestDto, Map<String, Object>> generateBasicMailParameters(String title, String sender) {
         final Map<String, Object> parameters = new HashMap<>();
-        parameters.put("servletTime", timeHelper.getCurrentUTC());
+        parameters.put("servletTime", TimeUtil.serializedUTC());
         parameters.put("tokensExpiredMinutes", environment.getOtaTokenExpiredMinutes());
         parameters.put("unsubscribeEndlessLink", unsNewsPath(creator.createNonExpUnsubscribeNewsletterToken(sender)));
         parameters.put("mailHelpdeskAgent", environment.getMailHelpdeskAgent() + "@" + environment.getFrontendName());

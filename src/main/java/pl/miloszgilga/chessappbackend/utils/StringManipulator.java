@@ -21,9 +21,7 @@ package pl.miloszgilga.chessappbackend.utils;
 import org.javatuples.Pair;
 import org.springframework.stereotype.Component;
 
-import java.util.*;
-import java.util.stream.*;
-
+import pl.miloszgilga.lib.jmpsl.util.StringUtil;
 import pl.miloszgilga.chessappbackend.network.auth.domain.LocalUserModel;
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -31,55 +29,14 @@ import pl.miloszgilga.chessappbackend.network.auth.domain.LocalUserModel;
 @Component
 public class StringManipulator {
 
-    private static final Random RANDOM = new Random();
-
-    //------------------------------------------------------------------------------------------------------------------
-
-    public String capitalised(String textToCapitalised) {
-        final String normalized = textToCapitalised.trim().toLowerCase(Locale.ROOT);
-        return Character.toString(normalized.charAt(0)).toUpperCase(Locale.ROOT) + normalized.substring(1);
-    }
-
-    //------------------------------------------------------------------------------------------------------------------
-
-    public String emptyStringRetNull(String text) {
-        return text.equals("") ? null : text;
-    }
-
-    //------------------------------------------------------------------------------------------------------------------
-
-    public String generateInitials(LocalUserModel userModel) {
-        return (userModel.getFirstName().charAt(0) + Character.toString(userModel.getLastName().charAt(0)))
-                .toUpperCase(Locale.ROOT);
-    }
-
-    //------------------------------------------------------------------------------------------------------------------
-
-    public String generateUserDefNickname(String nickname) {
-        String numbersSequence = IntStream.generate(() -> RANDOM.nextInt(10)).limit(3)
-                .mapToObj(Integer::toString)
-                .collect(Collectors.joining());
-        return nickname.toLowerCase(Locale.ROOT) + numbersSequence;
-    }
-
-    //------------------------------------------------------------------------------------------------------------------
-
-    public String addExtraDotOnFinishIfNotExist(String sequence) {
-        if (sequence == null) return "";
-        if (sequence.charAt(sequence.length() - 1) == '.') return sequence;
-        return sequence + ".";
-    }
-
-    //------------------------------------------------------------------------------------------------------------------
-
     public String generateFullName(LocalUserModel userModel) {
-        return capitalised(userModel.getFirstName()) + " " + capitalised(userModel.getLastName());
+        return StringUtil.capitalize(userModel.getFirstName()) + " " + StringUtil.capitalize(userModel.getLastName());
     }
 
     //------------------------------------------------------------------------------------------------------------------
 
     public Pair<String, String> extractUserDataFromUsername(String username) {
         final String[] firstWithLast = username.contains(" ") ? username.split(" ") : new String[] { username, null };
-        return new Pair<>(capitalised(firstWithLast[0]), capitalised(firstWithLast[1]));
+        return new Pair<>(StringUtil.capitalize(firstWithLast[0]), StringUtil.capitalize(firstWithLast[1]));
     }
 }
