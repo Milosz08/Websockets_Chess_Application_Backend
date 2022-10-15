@@ -21,6 +21,7 @@ package pl.miloszgilga.chessappbackend.network.auth.dto;
 import lombok.Data;
 
 import javax.validation.constraints.*;
+import pl.miloszgilga.lib.jmpsl.util.validator.*;
 
 import pl.miloszgilga.chessappbackend.validator.annotation.*;
 import pl.miloszgilga.chessappbackend.utils.UserGenderSpecific;
@@ -34,7 +35,7 @@ public class FinishSignupReqDto {
 
     @NotBlank(message = "{jpa.validator.birthDate.notBlank}")
     @Pattern(regexp = BIRTH_DATE_PATTERN, message = "{jpa.validator.birthDate.regex}")
-    @ValidateFutureTimeDate(message = "{jpa.validator.birthDate.futureDate}")
+    @DateIsBefore(message = "{jpa.validator.birthDate.futureDate}")
     private String birthDate;
 
     //------------------------------------------------------------------------------------------------------------------
@@ -46,7 +47,7 @@ public class FinishSignupReqDto {
     //------------------------------------------------------------------------------------------------------------------
 
     @NotBlank(message = "{jpa.validator.gender.notBlank}")
-    @ValidateEnum(enumClazz = UserGenderSpecific.class, message = "{jpa.validator.gender.notExist}")
+    @EnumIsValid(enumClazz = UserGenderSpecific.class, message = "{jpa.validator.gender.notExist}")
     private String gender;
 
     //------------------------------------------------------------------------------------------------------------------
