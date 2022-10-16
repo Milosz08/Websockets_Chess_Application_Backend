@@ -31,7 +31,7 @@ extra.apply {
     set("dotEnvVersion", "2.5.4")
     set("xmlBinderVersion", "2.13.4")
     set("h2DatabaseVersion", "1.4.200")
-    set("orikaMapperVersion", "1.6.0")
+    set("orikaMapperVersion", "1.5.4")
     set("reflectionsApiVersion", "0.10.2")
     set("jmpslVersion", "1.0.2")
 }
@@ -47,7 +47,7 @@ dependencies {
     implementation("io.jsonwebtoken:jjwt-jackson:${rootProject.extra.get("jjwtVersion") as String}")
     implementation("mysql:mysql-connector-java:${rootProject.extra.get("mySqlVersion") as String}")
     implementation("me.paulschwarz:spring-dotenv:${rootProject.extra.get("dotEnvVersion") as String}")
-    implementation("net.rakugakibox.spring.boot:orika-spring-boot-starter:${rootProject.extra.get("orikaMapperVersion") as String}")
+    implementation("ma.glasnost.orika:orika-core:${rootProject.extra.get("orikaMapperVersion") as String}")
     implementation("com.fasterxml.jackson.core:jackson-databind:${rootProject.extra.get("xmlBinderVersion") as String}")
 
     implementation("pl.miloszgilga:jmpsl-auth:${rootProject.extra.get("jmpslVersion") as String}")
