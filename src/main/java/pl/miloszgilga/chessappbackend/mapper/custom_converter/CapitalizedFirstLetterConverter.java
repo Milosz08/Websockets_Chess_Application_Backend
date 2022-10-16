@@ -23,7 +23,7 @@ import ma.glasnost.orika.metadata.Type;
 
 import org.springframework.stereotype.Component;
 
-import pl.miloszgilga.chessappbackend.mapper.*;
+import pl.miloszgilga.lib.jmpsl.util.mapper.*;
 import pl.miloszgilga.lib.jmpsl.util.StringUtil;
 
 import static pl.miloszgilga.chessappbackend.mapper.Converter.CAPITALIZED_FIRST_LETTER;
@@ -31,7 +31,7 @@ import static pl.miloszgilga.chessappbackend.mapper.Converter.CAPITALIZED_FIRST_
 //----------------------------------------------------------------------------------------------------------------------
 
 @Component
-@InjectableMappingConverter
+@MappingConverter
 public class CapitalizedFirstLetterConverter extends CustomConverter<String, String> implements IReflectConverter {
 
     @Override

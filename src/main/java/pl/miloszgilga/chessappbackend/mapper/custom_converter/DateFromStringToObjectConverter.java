@@ -22,17 +22,18 @@ import ma.glasnost.orika.*;
 import ma.glasnost.orika.metadata.Type;
 
 import java.util.Date;
+
 import org.springframework.stereotype.Component;
 
+import pl.miloszgilga.lib.jmpsl.util.mapper.*;
 import pl.miloszgilga.lib.jmpsl.util.TimeUtil;
-import pl.miloszgilga.chessappbackend.mapper.*;
 
 import static pl.miloszgilga.chessappbackend.mapper.Converter.DATE_FROM_STRING_TO_OBJECT;
 
 //----------------------------------------------------------------------------------------------------------------------
 
 @Component
-@InjectableMappingConverter
+@MappingConverter
 public class DateFromStringToObjectConverter extends CustomConverter<String, Date> implements IReflectConverter {
 
     @Override

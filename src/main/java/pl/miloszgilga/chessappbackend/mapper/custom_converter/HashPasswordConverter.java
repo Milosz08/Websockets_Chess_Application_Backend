@@ -22,16 +22,16 @@ import ma.glasnost.orika.*;
 import ma.glasnost.orika.metadata.Type;
 
 import org.springframework.stereotype.Component;
-import org.springframework.security.crypto.password.PasswordEncoder;
 
-import pl.miloszgilga.chessappbackend.mapper.*;
+import pl.miloszgilga.lib.jmpsl.util.mapper.*;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import static pl.miloszgilga.chessappbackend.mapper.Converter.HASH_PASSWORD;
 
 //----------------------------------------------------------------------------------------------------------------------
 
 @Component
-@InjectableMappingConverter
+@MappingConverter
 public class HashPasswordConverter extends CustomConverter<String, String> implements IReflectConverter {
 
     private final PasswordEncoder passwordEncoder;

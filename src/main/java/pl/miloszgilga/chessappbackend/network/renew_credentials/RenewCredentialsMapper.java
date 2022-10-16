@@ -24,7 +24,8 @@ import ma.glasnost.orika.MapperFactory;
 import org.springframework.stereotype.Component;
 import org.springframework.context.annotation.Primary;
 
-import pl.miloszgilga.chessappbackend.mapper.InjectableMappingFacade;
+import pl.miloszgilga.lib.jmpsl.util.mapper.MappingFacade;
+
 import pl.miloszgilga.chessappbackend.network.auth.domain.LocalUserModel;
 import pl.miloszgilga.chessappbackend.network.renew_credentials.dto.ChangePasswordUserDetailsResDto;
 import pl.miloszgilga.chessappbackend.network.renew_credentials.mapper.UserToChangePasswordUserDetailsCustomizer;
@@ -41,7 +42,7 @@ public class RenewCredentialsMapper {
 
     //------------------------------------------------------------------------------------------------------------------
 
-    @InjectableMappingFacade
+    @MappingFacade
     public void renewCredentialsAutoMapperFacadeImplementation() {
         mapperFactory.classMap(LocalUserModel.class, ChangePasswordUserDetailsResDto.class)
                 .field("id", "userId")

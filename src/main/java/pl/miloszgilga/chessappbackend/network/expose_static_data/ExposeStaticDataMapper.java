@@ -24,7 +24,8 @@ import ma.glasnost.orika.MapperFactory;
 import org.springframework.stereotype.Component;
 import org.springframework.context.annotation.Primary;
 
-import pl.miloszgilga.chessappbackend.mapper.InjectableMappingFacade;
+import pl.miloszgilga.lib.jmpsl.util.mapper.MappingFacade;
+
 import pl.miloszgilga.chessappbackend.network.auth.domain.LocalUserModel;
 import pl.miloszgilga.chessappbackend.network.expose_static_data.dto.RememberAccountResDto;
 import pl.miloszgilga.chessappbackend.network.expose_static_data.mapper.UserToRememberAccountCustomizer;
@@ -41,7 +42,7 @@ public class ExposeStaticDataMapper {
 
     //------------------------------------------------------------------------------------------------------------------
 
-    @InjectableMappingFacade
+    @MappingFacade
     public void exposeStaticDataAutoMapperFacadeImplementation() {
         mapperFactory.classMap(LocalUserModel.class, RememberAccountResDto.class)
                 .field("id", "userId")

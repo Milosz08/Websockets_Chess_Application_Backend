@@ -24,14 +24,14 @@ import ma.glasnost.orika.metadata.Type;
 import java.util.Locale;
 import org.springframework.stereotype.Component;
 
-import pl.miloszgilga.chessappbackend.mapper.*;
+import pl.miloszgilga.lib.jmpsl.util.mapper.*;
 
 import static pl.miloszgilga.chessappbackend.mapper.Converter.CHANGE_ALL_LETTERS_TO_LOWER;
 
 //----------------------------------------------------------------------------------------------------------------------
 
 @Component
-@InjectableMappingConverter
+@MappingConverter
 public class ChangeAllLetterToLowerConverter extends CustomConverter<String, String> implements IReflectConverter {
 
     //------------------------------------------------------------------------------------------------------------------

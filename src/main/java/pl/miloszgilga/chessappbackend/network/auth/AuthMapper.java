@@ -24,10 +24,11 @@ import ma.glasnost.orika.MapperFactory;
 import org.springframework.stereotype.Component;
 import org.springframework.context.annotation.Primary;
 
+import pl.miloszgilga.lib.jmpsl.util.mapper.MappingFacade;
+
 import pl.miloszgilga.chessappbackend.network.auth.dto.*;
 import pl.miloszgilga.chessappbackend.network.auth.mapper.*;
 import pl.miloszgilga.chessappbackend.network.auth.domain.*;
-import pl.miloszgilga.chessappbackend.mapper.InjectableMappingFacade;
 import pl.miloszgilga.chessappbackend.oauth.dto.OAuth2RegistrationData;
 
 import static pl.miloszgilga.chessappbackend.mapper.Converter.*;
@@ -50,7 +51,7 @@ public class AuthMapper {
 
     //------------------------------------------------------------------------------------------------------------------
 
-    @InjectableMappingFacade
+    @MappingFacade
     public void authAutoMapperFacadeImplementation() {
         mapperFactory.classMap(SignupViaLocalReqDto.class, LocalUserModel.class)
                 .fieldMap("nickname").converter(CHANGE_ALL_LETTERS_TO_LOWER.getName()).add()
