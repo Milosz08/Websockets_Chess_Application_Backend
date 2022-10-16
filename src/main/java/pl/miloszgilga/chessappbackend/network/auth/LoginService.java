@@ -138,8 +138,11 @@ public class LoginService implements ILoginService {
     @Override
     @Transactional
     public void logout(final Long userId) {
-        final Optional<RefreshTokenModel> refreshTokenModel = refreshTokenRepository.findRefreshTokenByUserId(userId);
-        refreshTokenModel.ifPresent(refreshTokenRepository::delete);
+        final Optional<RefreshTokenModel> refreshTokenModel = refreshTokenRepository.findRefreshTokenByUserIdAndNotNullable(userId);
+        refreshTokenModel.ifPresent(token -> {
+            token.setRefreshToken(null);
+            refreshTokenRepository.save(token);
+        });
         SecurityContextHolder.getContext().setAuthentication(null);
         LOGGER.info("User with id {} was successfully logout.", userId);
     }
@@ -153,7 +156,7 @@ public class LoginService implements ILoginService {
             LOGGER.error("Attempt to extract refresh token with malformed expired bearer token. Token {}", token);
             throw new TokenException.JwtMalformedTokenException("Expired jwt token is malformed. Try again with another.");
         });
-        final RefreshTokenModel refreshToken = refreshTokenRepository.findRefreshTokenByUserId(userId).orElseThrow(() -> {
+        final RefreshTokenModel refreshToken = refreshTokenRepository.findRefreshTokenByUserIdAndNotNullable(userId).orElseThrow(() -> {
             LOGGER.error("Attempt to extract refresh token from non existing token. User id {}", userId);
             throw new TokenException.RefreshTokenNotExistException("Unable to find refresh token for provided user.");
         });
