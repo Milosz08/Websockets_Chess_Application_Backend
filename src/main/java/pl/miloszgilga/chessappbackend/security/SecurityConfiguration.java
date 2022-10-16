@@ -31,6 +31,8 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 
+import pl.miloszgilga.lib.jmpsl.auth.filter.MiddlewareExceptionFilter;
+
 import pl.miloszgilga.chessappbackend.oauth.*;
 import pl.miloszgilga.chessappbackend.filter.*;
 import pl.miloszgilga.chessappbackend.oauth.resolver.*;
@@ -48,7 +50,7 @@ public class SecurityConfiguration {
     private final SecurityHelper securityHelper;
     private final AuthenticationRestEntryPoint restEntryPoint;
     private final JwtTokenAuthenticationFilter authenticationFilter;
-    private final MiddlewareExceptionsFilter middlewareExceptionsFilter;
+    private final MiddlewareExceptionFilter middlewareExceptionFilter;
 
     private final AppOidcUserService appOidcUserService;
     private final AppOAuth2UserService appOAuth2UserService;
@@ -74,11 +76,11 @@ public class SecurityConfiguration {
 
     public SecurityConfiguration(EnvironmentVars environment, JwtTokenAuthenticationFilter authFilter,
                                  AuthenticationRestEntryPoint restPoint, AppOidcUserService oidc,
-                                 MiddlewareExceptionsFilter exFilter, AppOAuth2UserService oauth2,
+                                 MiddlewareExceptionFilter middlewareExceptionFilter, AppOAuth2UserService oauth2,
                                  SecurityHelper security, OAuth2AuthSuccessfulResolver successfulResolver,
                                  OAuth2AuthFailureResolver failureResolver) {
         this.environment = environment;
-        this.middlewareExceptionsFilter = exFilter;
+        this.middlewareExceptionFilter = middlewareExceptionFilter;
         this.securityHelper = security;
         this.authenticationFilter = authFilter;
         this.restEntryPoint = restPoint;
@@ -95,7 +97,7 @@ public class SecurityConfiguration {
         enableH2ConsoleForDevelopment(http);
 
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
-                .addFilterBefore(middlewareExceptionsFilter, LogoutFilter.class)
+                .addFilterBefore(middlewareExceptionFilter, LogoutFilter.class)
                 .csrf().disable()
                 .formLogin().disable()
                 .httpBasic().disable()

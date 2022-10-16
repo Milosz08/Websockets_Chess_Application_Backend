@@ -19,6 +19,7 @@
 package pl.miloszgilga.chessappbackend.exception.custom;
 
 import org.springframework.http.HttpStatus;
+import pl.miloszgilga.lib.jmpsl.util.exception.*;
 
 //----------------------------------------------------------------------------------------------------------------------
 
@@ -40,7 +41,7 @@ public class AuthException {
 
     //------------------------------------------------------------------------------------------------------------------
 
-    public static class OAuth2AuthenticationProcessingException extends BasicAuthenticationException {
+    public static class OAuth2AuthenticationProcessingException extends BasicAuthServerException {
         public OAuth2AuthenticationProcessingException(String message, Object... args) {
             super(HttpStatus.NOT_IMPLEMENTED, message, args);
         }
@@ -48,7 +49,7 @@ public class AuthException {
 
     //------------------------------------------------------------------------------------------------------------------
 
-    public static class OAuth2CredentialsSupplierMalformedException extends BasicAuthenticationException {
+    public static class OAuth2CredentialsSupplierMalformedException extends BasicAuthServerException {
         public OAuth2CredentialsSupplierMalformedException(String message, Object... args) {
             super(HttpStatus.UNAUTHORIZED, message, args);
         }
@@ -56,7 +57,7 @@ public class AuthException {
 
     //------------------------------------------------------------------------------------------------------------------
 
-    public static class OAuth2NotSupportedUriException extends BasicAuthenticationException {
+    public static class OAuth2NotSupportedUriException extends BasicAuthServerException {
         public OAuth2NotSupportedUriException(String message, Object... args) {
             super(HttpStatus.BAD_REQUEST, message, args);
         }
@@ -64,7 +65,7 @@ public class AuthException {
 
     //------------------------------------------------------------------------------------------------------------------
 
-    public static class AccountAlreadyExistException extends BasicAuthenticationException {
+    public static class AccountAlreadyExistException extends BasicAuthServerException {
         public AccountAlreadyExistException(String message, Object... args) {
             super(HttpStatus.BAD_REQUEST, message, args);
         }

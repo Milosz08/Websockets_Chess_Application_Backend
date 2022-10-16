@@ -29,10 +29,8 @@ import org.springframework.http.converter.HttpMessageNotReadableException;
 import java.util.*;
 import javax.servlet.http.*;
 
-import pl.miloszgilga.lib.jmpsl.util.TimeUtil;
 import pl.miloszgilga.lib.jmpsl.util.StringUtil;
-
-import pl.miloszgilga.chessappbackend.exception.custom.BasicServerException;
+import pl.miloszgilga.lib.jmpsl.util.exception.*;
 
 //----------------------------------------------------------------------------------------------------------------------
 
@@ -51,66 +49,50 @@ public class ExceptionListener {
 
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     @ExceptionHandler(HttpMessageNotReadableException.class)
-    public NotReadableExceptionRes handleNotReadableException(HttpMessageNotReadableException ex, HttpServletRequest req) {
-        final ServerExceptionRes res = basicExceptionRes(HttpStatus.INTERNAL_SERVER_ERROR, req);
-        return new NotReadableExceptionRes(res, ex.getMessage());
+    public NotReadableExceptionResDto handleNotReadableException(HttpMessageNotReadableException ex, HttpServletRequest req) {
+        return new NotReadableExceptionResDto(ServerExceptionResDto.generate(HttpStatus.INTERNAL_SERVER_ERROR, req),
+                ex.getMessage());
     }
 
     //------------------------------------------------------------------------------------------------------------------
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public InvalidDtoExceptionRes handleInvalidArgument(MethodArgumentNotValidException ex, HttpServletRequest req) {
+    public InvalidDtoExceptionResDto handleInvalidArgument(MethodArgumentNotValidException ex, HttpServletRequest req) {
         final List<String> errors = new ArrayList<>();
         for (final FieldError error : ex.getBindingResult().getFieldErrors()) {
             errors.add(error.getDefaultMessage());
         }
-        final ServerExceptionRes res = basicExceptionRes(HttpStatus.BAD_REQUEST, req);
-        return new InvalidDtoExceptionRes(res, errors);
+        return new InvalidDtoExceptionResDto(ServerExceptionResDto.generate(HttpStatus.BAD_REQUEST, req), errors);
     }
 
     //------------------------------------------------------------------------------------------------------------------
 
     @ExceptionHandler(BasicServerException.class)
-    public BasicDataExceptionRes handleBasicServerException(BasicServerException ex, HttpServletRequest req,
-                                                            HttpServletResponse res) {
-        final HttpStatus status = ex.getStatus();
-        final var resData = basicExceptionRes(status, req);
-        res.setStatus(status.value());
-        return new BasicDataExceptionRes(resData, ex.getMessage());
+    public InvalidDtoExceptionResDto handleBasicServerException(BasicServerException ex, HttpServletRequest req,
+                                                                HttpServletResponse res) {
+        res.setStatus(ex.getStatus().value());
+        return new InvalidDtoExceptionResDto(ServerExceptionResDto.generate(ex.getStatus(), req), ex.getMessage());
     }
 
     //------------------------------------------------------------------------------------------------------------------
 
     @ExceptionHandler(AuthenticationException.class)
-    public BasicDataExceptionRes handleAuthenticationException(AuthenticationException ex, HttpServletRequest req,
+    public InvalidDtoExceptionResDto handleAuthenticationException(AuthenticationException ex, HttpServletRequest req,
                                                                HttpServletResponse res) {
-        final var resData = basicExceptionRes(HttpStatus.UNAUTHORIZED, req);
         res.setStatus(HttpStatus.UNAUTHORIZED.value());
-        return new BasicDataExceptionRes(resData, mappingAuthorizationExceptionMessages(ex.getMessage()));
+        return new InvalidDtoExceptionResDto(ServerExceptionResDto.generate(HttpStatus.UNAUTHORIZED, req),
+                mappingAuthorizationExceptionMessages(ex.getMessage()));
     }
 
     //------------------------------------------------------------------------------------------------------------------
 
     @ExceptionHandler(Exception.class)
-    public BasicDataExceptionRes handleRuntimeException(Exception ex, HttpServletRequest req,
+    public InvalidDtoExceptionResDto handleRuntimeException(Exception ex, HttpServletRequest req,
                                                                HttpServletResponse res) {
-        final var resData = basicExceptionRes(HttpStatus.BAD_REQUEST, req);
         res.setStatus(HttpStatus.BAD_REQUEST.value());
-        final String messageWithDot = StringUtil.addDot(ex.getMessage());
-        return new BasicDataExceptionRes(resData, mappingAuthorizationExceptionMessages(messageWithDot));
-    }
-
-    //------------------------------------------------------------------------------------------------------------------
-
-    private ServerExceptionRes basicExceptionRes(HttpStatus status, HttpServletRequest req) {
-        return ServerExceptionRes.builder()
-                .path(req.getServletPath())
-                .method(req.getMethod())
-                .statusCode(status.value())
-                .statusText(status.name())
-                .servletTimestampUTC(TimeUtil.serializedUTC())
-                .build();
+        return new InvalidDtoExceptionResDto(ServerExceptionResDto.generate(HttpStatus.BAD_REQUEST, req),
+                mappingAuthorizationExceptionMessages(StringUtil.addDot(ex.getMessage())));
     }
 
     //------------------------------------------------------------------------------------------------------------------

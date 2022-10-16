@@ -19,6 +19,7 @@
 package pl.miloszgilga.chessappbackend.exception.custom;
 
 import org.springframework.http.HttpStatus;
+import pl.miloszgilga.lib.jmpsl.util.exception.BasicServerException;
 
 //----------------------------------------------------------------------------------------------------------------------
 

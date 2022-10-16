@@ -19,12 +19,13 @@
 package pl.miloszgilga.chessappbackend.exception.custom;
 
 import org.springframework.http.HttpStatus;
+import pl.miloszgilga.lib.jmpsl.util.exception.BasicAuthServerException;
 
 //----------------------------------------------------------------------------------------------------------------------
 
 public class TokenException {
 
-    public static class JwtMalformedTokenException extends BasicAuthenticationException {
+    public static class JwtMalformedTokenException extends BasicAuthServerException {
         public JwtMalformedTokenException(String message, Object... args) {
             super(HttpStatus.UNAUTHORIZED, message, args);
         }
@@ -32,7 +33,7 @@ public class TokenException {
 
     //------------------------------------------------------------------------------------------------------------------
 
-    public static class JwtTokenExpiredException extends BasicAuthenticationException {
+    public static class JwtTokenExpiredException extends BasicAuthServerException {
         public JwtTokenExpiredException(String message, Object... args) {
             super(HttpStatus.UNAUTHORIZED, message, args);
         }
@@ -40,7 +41,7 @@ public class TokenException {
 
     //------------------------------------------------------------------------------------------------------------------
 
-    public static class OtaTokenExpiredException extends BasicAuthenticationException {
+    public static class OtaTokenExpiredException extends BasicAuthServerException {
         public OtaTokenExpiredException(String message, Object... args) {
             super(HttpStatus.UNAUTHORIZED, message, args);
         }
@@ -48,7 +49,7 @@ public class TokenException {
 
     //------------------------------------------------------------------------------------------------------------------
 
-    public static class OtaTokenNotExistException extends BasicAuthenticationException {
+    public static class OtaTokenNotExistException extends BasicAuthServerException {
         public OtaTokenNotExistException(String message, Object... args) {
             super(HttpStatus.NOT_FOUND, message, args);
         }
@@ -56,7 +57,7 @@ public class TokenException {
 
     //------------------------------------------------------------------------------------------------------------------
 
-    public static class RefreshTokenNotExistException extends BasicAuthenticationException {
+    public static class RefreshTokenNotExistException extends BasicAuthServerException {
         public RefreshTokenNotExistException(String message, Object... args) {
             super(HttpStatus.NOT_FOUND, message, args);
         }
