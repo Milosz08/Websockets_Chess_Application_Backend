@@ -28,16 +28,16 @@ spring:
         driver-class-name: org.h2.Driver
     mail:
         protocol: smtp
-        port: 465
-        host: ${env.PROD_SMTP_MAIL_AGENT}
-        username: ${env.PROD_SMTP_MAIL_USERNAME}
-        password: ${env.PROD_SMTP_MAIL_PASSWORD}
+        port: 25
+        host: localhost
+        username: noreply-dev@localhost
+        password: admin
         properties:
-            smtp.starttls.required: true
+            smtp.starttls.required: false
             mail.smtp:
-                ssl.enable: true
+                ssl.enable: false
                 auth: true
-                starttls.enable: true
+                starttls.enable: false
     security.oauth2.client.registration:
         google:
             clientId: ${env.DEV_OAUTH2_GOOGLE_CLIENT_ID}
