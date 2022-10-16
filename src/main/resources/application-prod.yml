@@ -10,6 +10,8 @@ jmpsl:
         jwt:
             secret: ${env.PROD_JWT_KEY}
             issuer: ${env.PROD_FRONTEND_WITH_JWT_ISSUER}
+        cors:
+            client: ${env.PROD_FRONTEND_CORS_AGENT}
 
 spring:
     h2.console.enabled: false
