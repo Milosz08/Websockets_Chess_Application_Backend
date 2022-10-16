@@ -26,8 +26,8 @@ import javax.validation.*;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import pl.miloszgilga.chessappbackend.loader.CountryPropertiesLoader;
 import pl.miloszgilga.chessappbackend.validator.annotation.ValidateCountry;
-import pl.miloszgilga.chessappbackend.loader.country_data.CountryPropertiesLoader;
 
 //----------------------------------------------------------------------------------------------------------------------
 
