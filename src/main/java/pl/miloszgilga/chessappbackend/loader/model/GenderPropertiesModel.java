@@ -2,7 +2,7 @@
  * Copyright (c) 2022 by MILOSZ GILGA <https://miloszgilga.pl>
  *
  * File name: GenderPropertiesModel.java
- * Last modified: 15/09/2022, 20:20
+ * Last modified: 20/09/2022, 03:03
  * Project name: chess-app-backend
  *
  * Licensed under the MIT license; you may not use this file except in compliance with the License.
@@ -16,18 +16,18 @@
  * COPIES OR SUBSTANTIAL PORTIONS OF THE SOFTWARE.
  */
 
-package pl.miloszgilga.chessappbackend.loader.gender_data;
+package pl.miloszgilga.chessappbackend.loader.model;
 
 import lombok.Data;
 
 import java.util.List;
 
 import pl.miloszgilga.chessappbackend.dto.SimpleTupleDto;
-import pl.miloszgilga.chessappbackend.loader.LoaderModel;
+import pl.miloszgilga.lib.jmpsl.util.loader.IStaticJsonLoaderModel;
 
 //----------------------------------------------------------------------------------------------------------------------
 
 @Data
-public class GenderPropertiesModel implements LoaderModel {
+public class GenderPropertiesModel implements IStaticJsonLoaderModel {
     private List<SimpleTupleDto<String>> genders;
 }

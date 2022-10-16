@@ -26,10 +26,9 @@ import java.util.stream.*;
 
 import pl.miloszgilga.lib.jmpsl.util.TimeUtil;
 
+import pl.miloszgilga.chessappbackend.loader.*;
+import pl.miloszgilga.chessappbackend.loader.model.*;
 import pl.miloszgilga.chessappbackend.dto.SimpleTupleDto;
-import pl.miloszgilga.chessappbackend.loader.gender_data.*;
-import pl.miloszgilga.chessappbackend.loader.country_data.*;
-import pl.miloszgilga.chessappbackend.loader.calendar_data.*;
 
 import pl.miloszgilga.chessappbackend.network.expose_static_data.dto.*;
 import pl.miloszgilga.chessappbackend.network.auth.domain.LocalUserModel;

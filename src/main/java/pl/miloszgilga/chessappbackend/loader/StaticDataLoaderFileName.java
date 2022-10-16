@@ -18,14 +18,13 @@
 
 package pl.miloszgilga.chessappbackend.loader;
 
-import lombok.Getter;
 import lombok.AllArgsConstructor;
+import pl.miloszgilga.lib.jmpsl.util.loader.IStaticJsonLoaderFiles;
 
 //----------------------------------------------------------------------------------------------------------------------
 
-@Getter
 @AllArgsConstructor
-public enum StaticDataLoaderFileName {
+public enum StaticDataLoaderFileName implements IStaticJsonLoaderFiles {
     CALENDAR_STATIC_DATA("calendar-static-data.json"),
     GENDER_STATIC_DATA("gender-static-data.json"),
     COUNTRY_STATIC_DATA("country-static-data.json");
@@ -33,4 +32,11 @@ public enum StaticDataLoaderFileName {
     //------------------------------------------------------------------------------------------------------------------
 
     private final String fileName;
+
+    //------------------------------------------------------------------------------------------------------------------
+
+    @Override
+    public String getFileName() {
+        return fileName;
+    }
 }

@@ -2,7 +2,7 @@
  * Copyright (c) 2022 by MILOSZ GILGA <https://miloszgilga.pl>
  *
  * File name: GenderPropertiesLoader.java
- * Last modified: 15/09/2022, 20:20
+ * Last modified: 02/10/2022, 21:22
  * Project name: chess-app-backend
  *
  * Licensed under the MIT license; you may not use this file except in compliance with the License.
@@ -16,11 +16,13 @@
  * COPIES OR SUBSTANTIAL PORTIONS OF THE SOFTWARE.
  */
 
-package pl.miloszgilga.chessappbackend.loader.gender_data;
+package pl.miloszgilga.chessappbackend.loader;
 
 import org.springframework.stereotype.Component;
 
-import pl.miloszgilga.chessappbackend.loader.StaticDataLoader;
+import pl.miloszgilga.lib.jmpsl.util.loader.StaticJsonFileLoader;
+import pl.miloszgilga.chessappbackend.loader.model.GenderPropertiesModel;
+
 import static pl.miloszgilga.chessappbackend.loader.StaticDataLoaderFileName.GENDER_STATIC_DATA;
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -28,12 +30,12 @@ import static pl.miloszgilga.chessappbackend.loader.StaticDataLoaderFileName.GEN
 @Component
 public class GenderPropertiesLoader {
 
-    private final StaticDataLoader<GenderPropertiesModel> loader;
+    private final StaticJsonFileLoader<GenderPropertiesModel> loader;
 
     //------------------------------------------------------------------------------------------------------------------
 
     public GenderPropertiesLoader() {
-        this.loader = new StaticDataLoader<>(GENDER_STATIC_DATA, GenderPropertiesModel.class);
+        this.loader = new StaticJsonFileLoader<>(GENDER_STATIC_DATA, GenderPropertiesModel.class);
     }
 
     //------------------------------------------------------------------------------------------------------------------

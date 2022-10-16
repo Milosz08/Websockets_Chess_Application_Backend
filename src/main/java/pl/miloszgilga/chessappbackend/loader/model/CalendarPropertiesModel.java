@@ -1,8 +1,8 @@
 /*
  * Copyright (c) 2022 by MILOSZ GILGA <https://miloszgilga.pl>
  *
- * File name: CountryPropertiesModel.java
- * Last modified: 16/09/2022, 15:22
+ * File name: CalendarPropertiesModel.java
+ * Last modified: 20/09/2022, 03:04
  * Project name: chess-app-backend
  *
  * Licensed under the MIT license; you may not use this file except in compliance with the License.
@@ -16,16 +16,16 @@
  * COPIES OR SUBSTANTIAL PORTIONS OF THE SOFTWARE.
  */
 
-package pl.miloszgilga.chessappbackend.loader.country_data;
+package pl.miloszgilga.chessappbackend.loader.model;
 
 import lombok.Data;
 import java.util.List;
 
-import pl.miloszgilga.chessappbackend.loader.LoaderModel;
+import pl.miloszgilga.lib.jmpsl.util.loader.IStaticJsonLoaderModel;
 
 //----------------------------------------------------------------------------------------------------------------------
 
 @Data
-public class CountryPropertiesModel implements LoaderModel {
-    private List<String> countries;
+public class CalendarPropertiesModel implements IStaticJsonLoaderModel {
+    private List<String> monthsShort;
 }
