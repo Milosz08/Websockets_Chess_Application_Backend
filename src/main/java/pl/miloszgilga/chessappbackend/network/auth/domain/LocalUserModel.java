@@ -22,14 +22,17 @@ import lombok.*;
 
 import java.util.*;
 import java.io.Serializable;
+import java.util.stream.Collectors;
 
 import javax.persistence.*;
 
-import static javax.persistence.FetchType.LAZY;
 import static javax.persistence.CascadeType.*;
+import static javax.persistence.FetchType.LAZY;
 
+import pl.miloszgilga.lib.jmpsl.oauth2.OAuth2Supplier;
+import pl.miloszgilga.lib.jmpsl.oauth2.OAuth2SupplierPersistenceEnumConverter;
+import pl.miloszgilga.lib.jmpsl.security.user.IAuthUserModel;
 import pl.miloszgilga.chessappbackend.audit.AuditableEntity;
-import pl.miloszgilga.chessappbackend.oauth.CredentialsSupplier;
 import pl.miloszgilga.chessappbackend.network.ota_token.domain.OtaTokenModel;
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -38,7 +41,7 @@ import pl.miloszgilga.chessappbackend.network.ota_token.domain.OtaTokenModel;
 @Table(name = "LOCAL_USER")
 @Getter @Setter
 @NoArgsConstructor
-public class LocalUserModel extends AuditableEntity implements Serializable {
+public class LocalUserModel extends AuditableEntity implements Serializable, IAuthUserModel {
     private static final long serialVersionUID = 1L;
 
     @Column(name = "NICKNAME")              private String nickname;
@@ -46,7 +49,10 @@ public class LocalUserModel extends AuditableEntity implements Serializable {
     @Column(name = "LAST_NAME")             private String lastName;
     @Column(name = "EMAIL_ADDRESS")         private String emailAddress;
     @Column(name = "PASSWORD")              private String password;
-    @Column(name = "CREDENTIALS_SUPPLIER")  private CredentialsSupplier credentialsSupplier;
+
+    @Convert(converter = OAuth2SupplierPersistenceEnumConverter.class)
+    @Column(name = "CREDENTIALS_SUPPLIER")  private OAuth2Supplier oAuth2Supplier;
+
     @Column(name = "SUPPLIED_USER_ID")      private String supplierUserId;
     @Column(name = "IS_ACTIVATED")          private Boolean isActivated;
     @Column(name = "IS_BLOCKED")            private Boolean isBlocked;
@@ -96,5 +102,32 @@ public class LocalUserModel extends AuditableEntity implements Serializable {
                 ", isActivated=" + isActivated +
                 ", isBlocked=" + isBlocked +
                 "} ";
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+
+    @Override
+    public String getAuthUsername() {
+        return nickname;
+    }
+
+    @Override
+    public String getAuthPassword() {
+        return password;
+    }
+
+    @Override
+    public Set<String> getAuthRoles() {
+        return roles.stream().map(r -> r.getRoleName().getRoleName()).collect(Collectors.toSet());
+    }
+
+    @Override
+    public boolean isAccountEnabled() {
+        return isActivated;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return !isBlocked;
     }
 }

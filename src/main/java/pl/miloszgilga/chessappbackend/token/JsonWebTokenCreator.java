@@ -27,9 +27,10 @@ import org.springframework.security.core.Authentication;
 import java.util.Date;
 
 import pl.miloszgilga.lib.jmpsl.util.TimeUtil;
-import pl.miloszgilga.lib.jmpsl.auth.jwt.JwtServlet;
+import pl.miloszgilga.lib.jmpsl.security.jwt.JwtServlet;
+import pl.miloszgilga.lib.jmpsl.oauth2.user.OAuth2UserExtender;
+import pl.miloszgilga.lib.jmpsl.oauth2.resolver.IOAuth2TokenGenerator;
 
-import pl.miloszgilga.chessappbackend.oauth.AuthUser;
 import pl.miloszgilga.chessappbackend.config.EnvironmentVars;
 import pl.miloszgilga.chessappbackend.security.LocalUserRole;
 import pl.miloszgilga.chessappbackend.network.auth.domain.LocalUserModel;
@@ -39,7 +40,7 @@ import static pl.miloszgilga.chessappbackend.token.JwtClaim.*;
 //----------------------------------------------------------------------------------------------------------------------
 
 @Component
-public class JsonWebTokenCreator {
+public class JsonWebTokenCreator implements IOAuth2TokenGenerator {
 
     private final JwtServlet jwtServlet;
     private final EnvironmentVars environment;
@@ -67,13 +68,6 @@ public class JsonWebTokenCreator {
 
     public String createAcitivateServiceViaEmailToken(LocalUserModel userModel, String otaToken) {
         return createAcitivateServiceViaEmailToken(userModel.getEmailAddress(), userModel.getId(), otaToken);
-    }
-
-    //------------------------------------------------------------------------------------------------------------------
-
-    public String createUserCredentialsToken(Authentication authentication) {
-        final AuthUser localAuthUser = (AuthUser) authentication.getPrincipal();
-        return createUserCredentialsToken(localAuthUser.getUserModel());
     }
 
     //------------------------------------------------------------------------------------------------------------------
@@ -111,5 +105,13 @@ public class JsonWebTokenCreator {
         claims.put(EMAIL.getClaimName(), email);
         claims.put(IS_EXPIRED.getClaimName(), false);
         return jwtServlet.generateToken("non-expired-unsubscribe-newsletter-token", claims);
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+
+    @Override
+    public String generateToken(Authentication auth) {
+        final OAuth2UserExtender localAuthUser = (OAuth2UserExtender) auth.getPrincipal();
+        return createUserCredentialsToken((LocalUserModel) localAuthUser.getUserModel());
     }
 }

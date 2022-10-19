@@ -21,10 +21,9 @@ package pl.miloszgilga.chessappbackend.security;
 import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.*;
 
+import org.springframework.core.env.Environment;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.web.authentication.logout.LogoutFilter;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -32,12 +31,15 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 
-import pl.miloszgilga.lib.jmpsl.auth.filter.MiddlewareExceptionFilter;
+import pl.miloszgilga.lib.jmpsl.oauth2.*;
+import pl.miloszgilga.lib.jmpsl.security.*;
+import pl.miloszgilga.lib.jmpsl.oauth2.service.*;
+import pl.miloszgilga.lib.jmpsl.oauth2.resolver.*;
+import pl.miloszgilga.lib.jmpsl.security.filter.MiddlewareExceptionFilter;
 
-import pl.miloszgilga.chessappbackend.oauth.*;
 import pl.miloszgilga.chessappbackend.filter.*;
-import pl.miloszgilga.chessappbackend.oauth.resolver.*;
-import pl.miloszgilga.chessappbackend.config.EnvironmentVars;
+import pl.miloszgilga.chessappbackend.token.JsonWebTokenCreator;
+import pl.miloszgilga.chessappbackend.network.auth.SignupService;
 
 import static pl.miloszgilga.chessappbackend.config.ApplicationEndpoints.*;
 
@@ -48,16 +50,15 @@ import static pl.miloszgilga.chessappbackend.config.ApplicationEndpoints.*;
 @AllArgsConstructor
 public class SecurityConfiguration {
 
-    private final EnvironmentVars environment;
-    private final SecurityHelper securityHelper;
-    private final AuthenticationRestEntryPoint restEntryPoint;
+    private final Environment env;
+    private final SignupService signupService;
+    private final JsonWebTokenCreator tokenCreator;
+
+    private final OAuth2OnFailureResolver oAuth2OnFailureResolver;
     private final JwtTokenAuthenticationFilter authenticationFilter;
     private final MiddlewareExceptionFilter middlewareExceptionFilter;
-
-    private final AppOidcUserService appOidcUserService;
-    private final AppOAuth2UserService appOAuth2UserService;
-    private final OAuth2AuthFailureResolver oAuth2AuthFailureResolver;
-    private final OAuth2AuthSuccessfulResolver oAuth2AuthSuccessfulResolver;
+    private final CookieOAuth2ReqRepository cookieOAuth2ReqRepository;
+    private final AuthResolverForRestEntryPoint resolverForRestEntryPoint;
 
     //------------------------------------------------------------------------------------------------------------------
 
@@ -78,7 +79,7 @@ public class SecurityConfiguration {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        enableH2ConsoleForDevelopment(http);
+        SecurityUtil.enableH2ConsoleForDev(http);
 
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
                 .addFilterBefore(middlewareExceptionFilter, LogoutFilter.class)
@@ -86,7 +87,7 @@ public class SecurityConfiguration {
                 .formLogin().disable()
                 .httpBasic().disable()
                 .exceptionHandling()
-                    .authenticationEntryPoint(restEntryPoint)
+                    .authenticationEntryPoint(resolverForRestEntryPoint)
                     .and()
                 .authorizeRequests()
                     .antMatchers(DISABLE_PATHS_FOR_JWT_FILTERING).permitAll()
@@ -94,37 +95,23 @@ public class SecurityConfiguration {
                     .and()
                 .oauth2Login()
                     .authorizationEndpoint()
-                        .authorizationRequestRepository(cookieOAuth2ReqRepository())
+                        .authorizationRequestRepository(cookieOAuth2ReqRepository)
                         .and()
                     .redirectionEndpoint()
                         .and()
                     .userInfoEndpoint()
-                        .oidcUserService(appOidcUserService)
-                        .userService(appOAuth2UserService)
+                        .oidcUserService(new AppOidcUserService(signupService))
+                        .userService(new AppOAuth2UserService(env, signupService))
                         .and()
                     .tokenEndpoint()
-                        .accessTokenResponseClient(securityHelper.authTokenCodeResponseToTheClient())
+                        .accessTokenResponseClient(OAuth2Util.auth2AccessTokenResponseClient())
                         .and()
-                    .successHandler(oAuth2AuthSuccessfulResolver)
-                    .failureHandler(oAuth2AuthFailureResolver)
+                    .successHandler(oAuth2OnSuccessfulResolver())
+                    .failureHandler(oAuth2OnFailureResolver)
                     .and()
                 .addFilterBefore(authenticationFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
-    }
-
-    //------------------------------------------------------------------------------------------------------------------
-
-    @Bean
-    public CookieOAuth2ReqRepository cookieOAuth2ReqRepository() {
-        return new CookieOAuth2ReqRepository(environment);
-    }
-
-    //------------------------------------------------------------------------------------------------------------------
-
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder(environment.getPasswordEncoderStrength());
     }
 
     //------------------------------------------------------------------------------------------------------------------
@@ -137,13 +124,8 @@ public class SecurityConfiguration {
 
     //------------------------------------------------------------------------------------------------------------------
 
-    private void enableH2ConsoleForDevelopment(HttpSecurity http) throws Exception {
-        if (!environment.getApplicationMode().equals(ApplicationMode.DEV.getModeName())) return;
-        http.authorizeRequests()
-                .antMatchers("/h2-console/**").permitAll()
-                    .and()
-                .csrf().ignoringAntMatchers("/h2-console/**")
-                    .and()
-                .headers().frameOptions().sameOrigin();
+    @Bean
+    public OAuth2OnSuccessfulResolver oAuth2OnSuccessfulResolver() {
+        return new OAuth2OnSuccessfulResolver(env, tokenCreator);
     }
 }

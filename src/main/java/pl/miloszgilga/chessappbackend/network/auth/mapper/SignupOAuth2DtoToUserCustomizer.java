@@ -24,43 +24,40 @@ import ma.glasnost.orika.*;
 import org.springframework.stereotype.Component;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import pl.miloszgilga.lib.jmpsl.oauth2.user.*;
 import pl.miloszgilga.lib.jmpsl.util.RndSeqGenerator;
+import pl.miloszgilga.lib.jmpsl.oauth2.service.OAuth2RegistrationDataDto;
 
-import pl.miloszgilga.chessappbackend.oauth.user_info.*;
 import pl.miloszgilga.chessappbackend.config.EnvironmentVars;
 import pl.miloszgilga.chessappbackend.utils.StringManipulator;
 import pl.miloszgilga.chessappbackend.network.auth.AuthServiceHelper;
-import pl.miloszgilga.chessappbackend.oauth.dto.OAuth2RegistrationData;
 import pl.miloszgilga.chessappbackend.network.auth.domain.LocalUserModel;
 
 //----------------------------------------------------------------------------------------------------------------------
 
 @Component
-public class SignupOAuth2DtoToUserCustomizer extends CustomMapper<OAuth2RegistrationData, LocalUserModel> {
+public class SignupOAuth2DtoToUserCustomizer extends CustomMapper<OAuth2RegistrationDataDto, LocalUserModel> {
 
     private final AuthServiceHelper helper;
     private final EnvironmentVars environment;
     private final StringManipulator manipulator;
     private final PasswordEncoder passwordEncoder;
-    private final OAuth2UserInfoFactory userInfoFactory;
 
     //------------------------------------------------------------------------------------------------------------------
 
     public SignupOAuth2DtoToUserCustomizer(AuthServiceHelper helper, EnvironmentVars environment,
-                                           StringManipulator manipulator, PasswordEncoder passwordEncoder,
-                                           OAuth2UserInfoFactory userInfoFactory) {
+                                           StringManipulator manipulator, PasswordEncoder passwordEncoder) {
         this.helper = helper;
         this.environment = environment;
         this.manipulator = manipulator;
         this.passwordEncoder = passwordEncoder;
-        this.userInfoFactory = userInfoFactory;
     }
 
     //------------------------------------------------------------------------------------------------------------------
 
     @Override
-    public void mapAtoB(OAuth2RegistrationData data, LocalUserModel userModel, MappingContext context) {
-        final OAuth2UserInfo userInfo = userInfoFactory.getOAuth2UserInfo(data.getSupplier(), data.getAttributes());
+    public void mapAtoB(OAuth2RegistrationDataDto data, LocalUserModel userModel, MappingContext context) {
+        final OAuth2UserInfoBase userInfo = OAuth2UserInfoFactory.getInstance(data.getSupplier(), data.getAttributes());
         final Pair<String, String> userExtractedData = manipulator.extractUserDataFromUsername(userInfo.getUsername());
         final String nickname = userInfo.getUsername().toLowerCase().replaceAll(" ", "");
         userModel.setNickname(RndSeqGenerator.addEndRndSeq(nickname));
@@ -68,7 +65,7 @@ public class SignupOAuth2DtoToUserCustomizer extends CustomMapper<OAuth2Registra
         userModel.setLastName(userExtractedData.getValue1());
         userModel.setEmailAddress(userInfo.getEmailAddress());
         userModel.setPassword(passwordEncoder.encode(environment.getOauth2PasswordReplacer()));
-        userModel.setCredentialsSupplier(data.getSupplier());
+        userModel.setOAuth2Supplier(data.getSupplier());
         userModel.setSupplierUserId(userInfo.getId());
         userModel.setIsActivated(false);
         userModel.setIsBlocked(false);

@@ -30,51 +30,47 @@ import java.util.Optional;
 import javax.transaction.Transactional;
 
 import pl.miloszgilga.chessappbackend.dto.*;
-import pl.miloszgilga.chessappbackend.oauth.*;
-import pl.miloszgilga.chessappbackend.oauth.user_info.*;
 import pl.miloszgilga.chessappbackend.exception.custom.*;
 import pl.miloszgilga.chessappbackend.mail.IMailOutService;
 import pl.miloszgilga.chessappbackend.utils.StringManipulator;
 import pl.miloszgilga.chessappbackend.token.JsonWebTokenCreator;
-import pl.miloszgilga.chessappbackend.oauth.dto.OAuth2RegistrationData;
 
 import pl.miloszgilga.chessappbackend.network.auth.dto.*;
 import pl.miloszgilga.chessappbackend.network.auth.domain.*;
 import pl.miloszgilga.chessappbackend.network.ota_token.domain.*;
 
-import static pl.miloszgilga.chessappbackend.oauth.CredentialsSupplier.LOCAL;
+import pl.miloszgilga.lib.jmpsl.oauth2.*;
+import pl.miloszgilga.lib.jmpsl.oauth2.user.*;
+import pl.miloszgilga.lib.jmpsl.oauth2.service.*;
+
 import static pl.miloszgilga.chessappbackend.token.OtaTokenType.ACTIVATE_ACCOUNT;
+import static pl.miloszgilga.lib.jmpsl.oauth2.OAuth2Supplier.LOCAL;
 
 //----------------------------------------------------------------------------------------------------------------------
 
 @Service
-public class SignupService implements ISignupService {
+public class SignupService implements ISignupService, IOAuth2LoaderService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(SignupService.class);
 
     private final AuthServiceHelper helper;
     private final MapperFacade mapperFacade;
-    private final AuthUserBuilder userBuilder;
     private final StringManipulator manipulator;
     private final IMailOutService mailOutService;
     private final JsonWebTokenCreator tokenCreator;
-    private final OAuth2UserInfoFactory userInfoFactory;
     private final IOtaTokenRepository otaTokenRepository;
     private final ILocalUserRepository localUserRepository;
 
     //------------------------------------------------------------------------------------------------------------------
 
-    SignupService(AuthUserBuilder userBuilder, MapperFacade mapperFacade, AuthServiceHelper helper,
-                  StringManipulator manipulator, IMailOutService mailOutService, JsonWebTokenCreator tokenCreator,
-                  OAuth2UserInfoFactory userInfoFactory, IOtaTokenRepository otaTokenRepository,
+    SignupService(MapperFacade mapperFacade, AuthServiceHelper helper, StringManipulator manipulator,
+                  IMailOutService mailOutService, JsonWebTokenCreator tokenCreator, IOtaTokenRepository otaTokenRepository,
                   ILocalUserRepository localUserRepository) {
         this.helper = helper;
-        this.userBuilder = userBuilder;
         this.mapperFacade = mapperFacade;
         this.manipulator = manipulator;
         this.mailOutService = mailOutService;
         this.tokenCreator = tokenCreator;
-        this.userInfoFactory = userInfoFactory;
         this.otaTokenRepository = otaTokenRepository;
         this.localUserRepository = localUserRepository;
     }
@@ -158,9 +154,9 @@ public class SignupService implements ISignupService {
 
     @Override
     @Transactional
-    public AuthUser registrationProcessingFactory(final OAuth2RegistrationData data) {
-        final OAuth2UserInfo userInfo = userInfoFactory.getOAuth2UserInfo(data.getSupplier(), data.getAttributes());
-        final String supplierName = data.getSupplier().getName();
+    public OAuth2UserExtender registrationProcessingFactory(final OAuth2RegistrationDataDto data) {
+        final OAuth2UserInfoBase userInfo = OAuth2UserInfoFactory.getInstance(data.getSupplier(), data.getAttributes());
+        final String supplierName = data.getSupplier().getSupplierName();
         if (userInfo.getUsername().equals("") || userInfo.getEmailAddress().equals("")) {
             throw new AuthException.OAuth2CredentialsSupplierMalformedException(
                     "Unable to authenticate via %s provider. Select other authentication method.", supplierName);
