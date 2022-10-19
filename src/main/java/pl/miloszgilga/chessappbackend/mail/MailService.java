@@ -18,33 +18,23 @@
 
 package pl.miloszgilga.chessappbackend.mail;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
+import org.slf4j.*;
 import org.javatuples.Pair;
-import freemarker.template.*;
 
-import org.springframework.mail.javamail.*;
 import org.springframework.stereotype.Service;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.web.util.UriComponentsBuilder;
-import org.springframework.ui.freemarker.FreeMarkerTemplateUtils;
 
 import java.util.*;
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
-
-import javax.mail.MessagingException;
-import javax.mail.internet.MimeMessage;
 
 import pl.miloszgilga.chessappbackend.config.EnvironmentVars;
 import pl.miloszgilga.chessappbackend.token.JsonWebTokenCreator;
-import pl.miloszgilga.chessappbackend.exception.custom.EmailException;
 
+import pl.miloszgilga.lib.jmpsl.mail.*;
 import pl.miloszgilga.lib.jmpsl.util.TimeUtil;
 
-import static pl.miloszgilga.chessappbackend.config.ApplicationEndpoints.NEWSLETTER_EMAIL_ENDPOINT;
-import static pl.miloszgilga.chessappbackend.config.ApplicationEndpoints.OTA_TOKEN_ENDPOINT;
+import static pl.miloszgilga.chessappbackend.config.ApplicationEndpoints.*;
 import static pl.miloszgilga.chessappbackend.config.RedirectEndpoints.NEWSLETTER_UNSUBSCRIBE_VIA_LINK;
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -55,55 +45,14 @@ class MailService {
     private static final Logger LOGGER = LoggerFactory.getLogger(MailService.class);
     private static final String APP_LOGO = "static/gfx/app-logo.png";
 
-    private final JavaMailSender sender;
     private final JsonWebTokenCreator creator;
     private final EnvironmentVars environment;
-    private final Configuration freemakerConfig;
 
     //------------------------------------------------------------------------------------------------------------------
 
-    public MailService(JavaMailSender sender, JsonWebTokenCreator creator, EnvironmentVars environment,
-                       Configuration freemakerConfig) {
-        this.sender = sender;
+    public MailService(JsonWebTokenCreator creator, EnvironmentVars environment) {
         this.creator = creator;
         this.environment = environment;
-        this.freemakerConfig = freemakerConfig;
-    }
-
-    //------------------------------------------------------------------------------------------------------------------
-
-    void generalEmailSender(MailRequestDto request, Map<String, Object> model, MailTemplate template) {
-        final MimeMessage mimeMessage = sender.createMimeMessage();
-        try {
-            final var helper = new MimeMessageHelper(mimeMessage, MimeMessageHelper.MULTIPART_MODE_MIXED_RELATED,
-                    StandardCharsets.UTF_8.name());
-
-            final Template mailTemplate = freemakerConfig.getTemplate(template.getTemplateName());
-            String parsedHTML = FreeMarkerTemplateUtils.processTemplateIntoString(mailTemplate, model);
-
-            for (String client : request.getSendTo()) {
-                helper.setTo(client);
-            }
-            helper.setText(parsedHTML, true);
-            helper.addInline("app-logo.png", new ClassPathResource(APP_LOGO).getFile());
-            helper.setSubject(request.getMessageSubject());
-            helper.setFrom(request.getSendFrom());
-
-            sender.send(mimeMessage);
-            LOGGER.info("Email message from template {} was successfully send. Request parameters: {}",
-                    template.getTemplateName(), request);
-
-        } catch (MessagingException | IOException ex) {
-            LOGGER.error("Unexpected issue on sending email. Request parameters: {}", request);
-            throw new EmailException.EmailSenderException("Unable connect to SMTP mail server. Try again later.");
-        } catch (TemplateException ex) {
-            LOGGER.error("Email sender malfunction: template {} is not valid or not exist. Request parameters: {}",
-                    template.getTemplateName(), request);
-            throw new EmailException.EmailSenderException("Unable connect to SMTP mail server. Try again later.");
-        } catch (Exception ex) {
-            LOGGER.error("Email sender malfunction: {}", ex.getMessage());
-            throw new EmailException.EmailSenderException("Unable connect to SMTP mail server. Try again later.");
-        }
     }
 
     //------------------------------------------------------------------------------------------------------------------
@@ -116,9 +65,19 @@ class MailService {
         parameters.put("mailHelpdeskAgent", environment.getMailHelpdeskAgent() + "@" + environment.getFrontendName());
         parameters.put("applicationLink", environment.getFrontEndUrl());
         parameters.put("applicationName", environment.getFrontendName());
-        final var request = new MailRequestDto(List.of(sender), environment.getServerMailClient(), title);
-        final Map<String, Object> extendsParameters = new HashMap<>(parameters);
-        return new Pair<>(request, extendsParameters);
+        try {
+            final var request = MailRequestDto.builder()
+                    .sendTo(Set.of(sender))
+                    .sendFrom(environment.getServerMailClient())
+                    .messageSubject(title)
+                    .attachments(new ArrayList<>())
+                    .inlineResources(List.of(new ResourceDto("app-logo.png", new ClassPathResource(APP_LOGO).getFile())))
+                    .build();
+            return new Pair<>(request, parameters);
+        } catch (IOException ex) {
+            LOGGER.error("Unable to find inline email resource. {}", ex.getMessage());
+            throw new MailException.UnableToSendEmailException();
+        }
     }
 
     //------------------------------------------------------------------------------------------------------------------
@@ -140,5 +99,11 @@ class MailService {
                 .fromPath(environment.getFrontEndUrl() + environment.getChangePasswordRedirectUri())
                 .queryParam("token", bearer)
                 .toUriString();
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+
+    String generateMailTitle(Long id, String reason, String userName, String token) {
+        return String.format("(%s) Chess Online: %s for %s (%s)", id, reason, userName, token);
     }
 }

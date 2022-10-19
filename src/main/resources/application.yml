@@ -23,6 +23,11 @@ jmpsl:
     security:
         ota:
             length: 10
+    mail:
+        freemarker-templates-dir: classpath:/templates
+    oauth2:
+        cookie-expired-minutes: 3
+        available-suppliers: google,facebook
 
 logging:
     pattern:

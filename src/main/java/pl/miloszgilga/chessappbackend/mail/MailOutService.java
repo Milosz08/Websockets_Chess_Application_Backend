@@ -23,6 +23,8 @@ import org.springframework.stereotype.Service;
 
 import java.util.Map;
 
+import pl.miloszgilga.lib.jmpsl.mail.*;
+
 import pl.miloszgilga.chessappbackend.utils.StringManipulator;
 import pl.miloszgilga.chessappbackend.network.auth.domain.LocalUserModel;
 
@@ -37,12 +39,14 @@ public class MailOutService implements IMailOutService {
 
     private final MailService mailService;
     private final StringManipulator manipulator;
+    private final ServletMailService servletMailService;
 
     //------------------------------------------------------------------------------------------------------------------
 
-    public MailOutService(MailService mailService, StringManipulator manipulator) {
+    public MailOutService(MailService mailService, StringManipulator manipulator, ServletMailService servletMailService) {
         this.mailService = mailService;
         this.manipulator = manipulator;
+        this.servletMailService = servletMailService;
     }
 
     //------------------------------------------------------------------------------------------------------------------
@@ -50,13 +54,13 @@ public class MailOutService implements IMailOutService {
     @Override
     public void unsubscribeNewsletter(Long id, String userName, String email, String bearer, String otaToken) {
         final Pair<MailRequestDto, Map<String, Object>> basicMailData = mailService.generateBasicMailParameters(
-                String.format("(%s) Chess Online: unsubscribe newsletter for %s (%s)", id, userName, otaToken), email);
+                mailService.generateMailTitle(id, "Unsubscribe newsletter", userName, otaToken), email);
         final Map<String, Object> parameters = basicMailData.getValue1();
         parameters.put("userName", userName);
         parameters.put("emailAddress", email);
         parameters.put("otaToken", otaToken);
         parameters.put("bearerButtonLink", mailService.otaTokenBearerPath(bearer, NEWSLETTER_UNSUBSCRIBE_VIA_LINK));
-        mailService.generalEmailSender(basicMailData.getValue0(), parameters, UNSUBSCRIBE_NEWSLETTER);
+        servletMailService.sendEmail(basicMailData.getValue0(), parameters, UNSUBSCRIBE_NEWSLETTER);
     }
 
     //------------------------------------------------------------------------------------------------------------------
@@ -64,14 +68,14 @@ public class MailOutService implements IMailOutService {
     @Override
     public void activateAccount(Long id, String email, LocalUserModel userModel, String bearer, String otaToken) {
         final Pair<MailRequestDto, Map<String, Object>> basicMailData = mailService.generateBasicMailParameters(
-                String.format("(%s) Chess Online: Activate account for %s (%s)", id,
-                        manipulator.generateFullName(userModel), otaToken), email);
+                mailService.generateMailTitle(id, "Activate account", manipulator.generateFullName(userModel), otaToken),
+                email);
         final Map<String, Object> parameters = basicMailData.getValue1();
         parameters.put("userName", userModel.getFirstName());
         parameters.put("emailAddress", userModel.getEmailAddress());
         parameters.put("otaToken", otaToken);
         parameters.put("bearerButtonLink", mailService.otaTokenBearerPath(bearer, ACTIVATE_ACCOUNT_VIA_LINK));
-        mailService.generalEmailSender(basicMailData.getValue0(), parameters, ACTIVATE_ACCOUNT);
+        servletMailService.sendEmail(basicMailData.getValue0(), parameters, ACTIVATE_ACCOUNT);
     }
 
     //------------------------------------------------------------------------------------------------------------------
@@ -79,13 +83,13 @@ public class MailOutService implements IMailOutService {
     @Override
     public void changePassword(Long id, String email, LocalUserModel userModel, String bearer, String otaToken) {
         final Pair<MailRequestDto, Map<String, Object>> basicMailData = mailService.generateBasicMailParameters(
-                String.format("(%s) Chess Online: Change password for %s (%s)", id,
-                        manipulator.generateFullName(userModel), otaToken), email);
+                mailService.generateMailTitle(id, "Change password", manipulator.generateFullName(userModel), otaToken),
+                email);
         final Map<String, Object> parameters = basicMailData.getValue1();
         parameters.put("userName", userModel.getFirstName());
         parameters.put("emailAddress", email);
         parameters.put("otaToken", otaToken);
         parameters.put("bearerButtonLink", mailService.otaTokenChangePasswordPath(bearer));
-        mailService.generalEmailSender(basicMailData.getValue0(), parameters, CHANGE_PASSWORD);
+        servletMailService.sendEmail(basicMailData.getValue0(), parameters, CHANGE_PASSWORD);
     }
 }

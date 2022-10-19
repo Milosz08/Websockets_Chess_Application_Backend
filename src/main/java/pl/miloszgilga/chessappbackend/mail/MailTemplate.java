@@ -19,12 +19,12 @@
 package pl.miloszgilga.chessappbackend.mail;
 
 import lombok.*;
+import pl.miloszgilga.lib.jmpsl.mail.IMailEnumeratedTemplate;
 
 //----------------------------------------------------------------------------------------------------------------------
 
-@Getter
 @AllArgsConstructor
-enum MailTemplate {
+enum MailTemplate implements IMailEnumeratedTemplate {
     UNSUBSCRIBE_NEWSLETTER("unsubscribe-newsletter.template.ftl"),
     ACTIVATE_ACCOUNT("activate-account.template.ftl"),
     CHANGE_PASSWORD("change-password.template.ftl");
@@ -32,4 +32,9 @@ enum MailTemplate {
     //------------------------------------------------------------------------------------------------------------------
 
     private final String templateName;
+
+    @Override
+    public String getTemplateName() {
+        return templateName;
+    }
 }
