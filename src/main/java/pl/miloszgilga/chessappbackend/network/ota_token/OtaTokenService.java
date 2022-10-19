@@ -108,7 +108,7 @@ class OtaTokenService implements IOtaTokenService {
         final TokenLinkValidationData data = TokenLinkValidationData.builder()
                 .bearer(bearer)
                 .type(ACTIVATE_ACCOUNT)
-                .redirectUri(environment.getActivateAccountRedirectUri())
+                .redirectUri(environment.getFrontEndUrl() + environment.getActivateAccountRedirectUri())
                 .successMessage("Your account is successful activated. Now you can login via pressing the login button below.")
                 .failureMessage("Unable to activate account with passed token. Token probaby is malformed.")
                 .build();

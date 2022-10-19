@@ -143,7 +143,8 @@ class NewsletterEmailService implements INewsletterEmailService {
             queryMessage = ex.getMessage();
             ifError = true;
         }
-        return ServletPathUtil.redirectMessageUri(queryMessage, environment.getUnsubscribeNewsletterUri(), ifError);
+        return ServletPathUtil.redirectMessageUri(queryMessage, environment.getFrontEndUrl() +
+                environment.getUnsubscribeNewsletterUri(), ifError);
     }
 
     //------------------------------------------------------------------------------------------------------------------
