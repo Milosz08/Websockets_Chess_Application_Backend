@@ -41,14 +41,6 @@ public class EmailException {
 
     //------------------------------------------------------------------------------------------------------------------
 
-    public static class EmailSenderException extends BasicServerException {
-        public EmailSenderException(String message, Object... args) {
-            super(HttpStatus.SERVICE_UNAVAILABLE, message, args);
-        }
-    }
-
-    //------------------------------------------------------------------------------------------------------------------
-
     public static class EmailAndSecondEmailIdenticalException extends BasicServerException {
         public EmailAndSecondEmailIdenticalException(String message, Object... args) {
             super(HttpStatus.BAD_REQUEST, message, args);

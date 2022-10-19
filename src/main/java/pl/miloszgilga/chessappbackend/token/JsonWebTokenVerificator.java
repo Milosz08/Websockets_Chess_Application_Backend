@@ -22,7 +22,7 @@ import io.jsonwebtoken.*;
 import java.util.Optional;
 
 import org.springframework.stereotype.Component;
-import pl.miloszgilga.lib.jmpsl.auth.jwt.JwtServlet;
+import pl.miloszgilga.lib.jmpsl.security.jwt.JwtServlet;
 
 import pl.miloszgilga.chessappbackend.token.dto.*;
 import pl.miloszgilga.chessappbackend.exception.custom.TokenException;

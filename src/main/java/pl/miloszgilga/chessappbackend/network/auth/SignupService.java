@@ -95,7 +95,7 @@ public class SignupService implements ISignupService {
 
         LOGGER.info("Create new user in database via LOCAL interface. User data: {}", userModel);
         final SuccessedAttemptToFinishSignupResDto resDto = SuccessedAttemptToFinishSignupResDto.builder()
-                .authSupplier(LOCAL.getName())
+                .authSupplier(LOCAL.getSupplierName())
                 .jwtToken(tokenCreator.createUserCredentialsToken(userModel))
                 .isDataFilled(true)
                 .responseMessage("Your account was successfuly created, but not activated.")
@@ -114,7 +114,7 @@ public class SignupService implements ISignupService {
             helper.sendEmailMessageForActivateAccount(userModel, ACTIVATE_ACCOUNT);
         }
         final SuccessedAttemptToFinishSignupResDto resDto = SuccessedAttemptToFinishSignupResDto.builder()
-                .authSupplier(userModel.getCredentialsSupplier().getName())
+                .authSupplier(userModel.getOAuth2Supplier().getSupplierName())
                 .responseMessage("Your account has already filled with additional data, but not activated.")
                 .isDataFilled(userModel.getLocalUserDetails().getIsDataFilled())
                 .build();
@@ -130,7 +130,7 @@ public class SignupService implements ISignupService {
         final LocalUserModel userModel = helper.checkIfAccountIsAlreadyActivated(userId);
         final SuccessedAttemptToFinishSignupResDto resDto = SuccessedAttemptToFinishSignupResDto.builder()
                 .jwtToken(tokenCreator.createUserCredentialsToken(userModel))
-                .authSupplier(LOCAL.getName())
+                .authSupplier(LOCAL.getSupplierName())
                 .responseMessage("Before you will be using, please activate your account.")
                 .isDataFilled(true)
                 .build();
@@ -166,7 +166,9 @@ public class SignupService implements ISignupService {
                     "Unable to authenticate via %s provider. Select other authentication method.", supplierName);
         }
         final Optional<LocalUserModel> user = localUserRepository.findUserByEmailAddress(userInfo.getEmailAddress());
-        if (user.isEmpty()) return registerNewUserViaOAuth2(data, supplierName);
+        if (user.isEmpty()) {
+            return registerNewUserViaOAuth2(data, supplierName);
+        }
         return updateAlreadyExistUserViaOAuth2(data, user.get());
     }
 
@@ -196,22 +198,22 @@ public class SignupService implements ISignupService {
     //------------------------------------------------------------------------------------------------------------------
 
     @Transactional
-    AuthUser registerNewUserViaOAuth2(final OAuth2RegistrationData data, final String supplierName) {
+    OAuth2UserExtender registerNewUserViaOAuth2(final OAuth2RegistrationDataDto data, final String supplierName) {
         final LocalUserModel userModel = mapperFacade.map(data, LocalUserModel.class);
         final LocalUserDetailsModel userDetailsModel = mapperFacade.map(data, LocalUserDetailsModel.class);
         userDetailsModel.setLocalUser(userModel);
         userModel.setLocalUserDetails(userDetailsModel);
         localUserRepository.save(userModel);
         LOGGER.info("Create new user via {} OAuth2 provider. User data: {}", supplierName, userModel);
-        return userBuilder.build(userModel, data);
+        return OAuth2Util.fabricateUser(userModel, data);
     }
 
     //------------------------------------------------------------------------------------------------------------------
 
     @Transactional
-    AuthUser updateAlreadyExistUserViaOAuth2(final OAuth2RegistrationData data, final LocalUserModel foundUser) {
-        final OAuth2UserInfo userInfo = userInfoFactory.getOAuth2UserInfo(data.getSupplier(), data.getAttributes());
-        final CredentialsSupplier supplier = foundUser.getCredentialsSupplier();
+    OAuth2UserExtender updateAlreadyExistUserViaOAuth2(final OAuth2RegistrationDataDto data, final LocalUserModel foundUser) {
+        final OAuth2UserInfoBase userInfo = OAuth2UserInfoFactory.getInstance(data.getSupplier(), data.getAttributes());
+        final OAuth2Supplier supplier = foundUser.getOAuth2Supplier();
         final LocalUserDetailsModel userDetails = foundUser.getLocalUserDetails();
         if (!supplier.equals(data.getSupplier()) || supplier.equals(LOCAL)) {
             LOGGER.error("Attempt to create already existing user via OAuth2. Email: {}", foundUser.getEmailAddress());
@@ -225,7 +227,7 @@ public class SignupService implements ISignupService {
         userDetails.setPhotoEmbedLink(userInfo.getUserImageUrl().isEmpty() ? null : userInfo.getUserImageUrl());
 
         localUserRepository.save(foundUser);
-        LOGGER.info("Update user via {} OAuth2 provider. User data: {}", data.getSupplier().getName(), foundUser);
-        return userBuilder.build(foundUser, data);
+        LOGGER.info("Update user via {} OAuth2 provider. User data: {}", data.getSupplier().getSupplierName(), foundUser);
+        return OAuth2Util.fabricateUser(foundUser, data);
     }
 }

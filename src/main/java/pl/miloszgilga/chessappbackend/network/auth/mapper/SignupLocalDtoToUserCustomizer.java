@@ -25,7 +25,7 @@ import pl.miloszgilga.chessappbackend.network.auth.AuthServiceHelper;
 import pl.miloszgilga.chessappbackend.network.auth.domain.LocalUserModel;
 import pl.miloszgilga.chessappbackend.network.auth.dto.SignupViaLocalReqDto;
 
-import static pl.miloszgilga.chessappbackend.oauth.CredentialsSupplier.LOCAL;
+import static pl.miloszgilga.lib.jmpsl.oauth2.OAuth2Supplier.LOCAL;
 
 //----------------------------------------------------------------------------------------------------------------------
 
@@ -44,7 +44,7 @@ public class SignupLocalDtoToUserCustomizer extends CustomMapper<SignupViaLocalR
 
     @Override
     public void mapAtoB(SignupViaLocalReqDto reqDto, LocalUserModel userModel, MappingContext context) {
-        userModel.setCredentialsSupplier(LOCAL);
+        userModel.setOAuth2Supplier(LOCAL);
         userModel.setIsActivated(false);
         userModel.setIsBlocked(false);
         userModel.setRoles(helper.findAndGenerateUserRole());

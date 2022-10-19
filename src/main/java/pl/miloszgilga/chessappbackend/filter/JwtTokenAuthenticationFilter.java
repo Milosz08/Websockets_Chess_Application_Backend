@@ -34,9 +34,9 @@ import javax.servlet.http.*;
 import java.util.Arrays;
 import java.io.IOException;
 
-import pl.miloszgilga.lib.jmpsl.auth.jwt.JwtServlet;
-import pl.miloszgilga.lib.jmpsl.auth.jwt.JwtValidationType;
-import static pl.miloszgilga.lib.jmpsl.auth.jwt.JwtValidationType.EXPIRED;
+import pl.miloszgilga.lib.jmpsl.security.jwt.JwtServlet;
+import pl.miloszgilga.lib.jmpsl.security.jwt.JwtValidationType;
+import static pl.miloszgilga.lib.jmpsl.security.jwt.JwtValidationType.EXPIRED;
 
 import pl.miloszgilga.chessappbackend.token.JsonWebTokenVerificator;
 import pl.miloszgilga.chessappbackend.security.AuthUserDetailService;

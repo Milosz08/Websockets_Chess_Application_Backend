@@ -21,8 +21,7 @@ package pl.miloszgilga.chessappbackend.network.auth;
 import org.javatuples.Pair;
 import ma.glasnost.orika.MapperFacade;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.slf4j.*;
 
 import org.springframework.stereotype.Service;
 import org.springframework.security.authentication.*;
@@ -33,16 +32,16 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import java.util.*;
 import javax.transaction.Transactional;
 
-import pl.miloszgilga.lib.jmpsl.auth.jwt.JwtServlet;
+import pl.miloszgilga.lib.jmpsl.security.jwt.JwtServlet;
+import pl.miloszgilga.lib.jmpsl.oauth2.user.OAuth2UserExtender;
+import static pl.miloszgilga.lib.jmpsl.oauth2.OAuth2Supplier.LOCAL;
 
 import pl.miloszgilga.chessappbackend.token.*;
-import pl.miloszgilga.chessappbackend.oauth.AuthUser;
 import pl.miloszgilga.chessappbackend.network.auth.dto.*;
 import pl.miloszgilga.chessappbackend.exception.custom.*;
 import pl.miloszgilga.chessappbackend.network.auth.domain.*;
 
 import static pl.miloszgilga.chessappbackend.token.JwtClaim.USER_ID;
-import static pl.miloszgilga.chessappbackend.oauth.CredentialsSupplier.LOCAL;
 
 //----------------------------------------------------------------------------------------------------------------------
 
@@ -94,17 +93,17 @@ public class LoginService implements ILoginService {
         }
         final var userCredentials = new UsernamePasswordAuthenticationToken(req.getUsernameEmail(), req.getPassword());
         final Authentication authentication = manager.authenticate(userCredentials);
-        final AuthUser authUser = (AuthUser) authentication.getPrincipal();
-        final LocalUserModel userModel = authUser.getUserModel();
+        final OAuth2UserExtender authUser = (OAuth2UserExtender) authentication.getPrincipal();
+        final LocalUserModel userModel = (LocalUserModel) authUser.getUserModel();
         final SuccessedLoginResDto res = mapperFacade.map(userModel, SuccessedLoginResDto.class);
-        if (!userModel.getCredentialsSupplier().equals(LOCAL)) {
+        if (!userModel.getOAuth2Supplier().equals(LOCAL)) {
             LOGGER.error("Attempt to log in on OAuth2 account provider via local account login form. Req: {}", req);
             throw new AuthException.DifferentAuthenticationProviderException("This account is not managed locally. " +
                     "Try login via outside supplier.");
         }
         SecurityContextHolder.getContext().setAuthentication(authentication);
         LOGGER.info("User with email: {} successfuly logged via {} credentials supplier.", userModel.getEmailAddress(),
-                userModel.getCredentialsSupplier());
+                userModel.getOAuth2Supplier());
         return res;
     }
 

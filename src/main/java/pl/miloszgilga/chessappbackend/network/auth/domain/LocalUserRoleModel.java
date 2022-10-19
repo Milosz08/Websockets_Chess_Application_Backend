@@ -19,11 +19,7 @@
 package pl.miloszgilga.chessappbackend.network.auth.domain;
 
 import lombok.*;
-
-import javax.persistence.Table;
-import javax.persistence.Entity;
-import javax.persistence.Column;
-import javax.persistence.ManyToMany;
+import javax.persistence.*;
 
 import java.util.Set;
 import java.io.Serializable;

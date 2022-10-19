@@ -24,7 +24,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import javax.servlet.http.HttpServletRequest;
 
-import pl.miloszgilga.lib.jmpsl.auth.jwt.JwtServlet;
+import pl.miloszgilga.lib.jmpsl.security.jwt.JwtServlet;
 
 import pl.miloszgilga.chessappbackend.dto.*;
 import pl.miloszgilga.chessappbackend.network.renew_credentials.dto.*;

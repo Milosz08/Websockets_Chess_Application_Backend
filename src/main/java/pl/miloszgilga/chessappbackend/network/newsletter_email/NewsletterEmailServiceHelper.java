@@ -27,8 +27,8 @@ import java.util.Date;
 import java.util.Optional;
 import javax.transaction.Transactional;
 
-import pl.miloszgilga.lib.jmpsl.auth.OtaToken;
 import pl.miloszgilga.lib.jmpsl.util.TimeUtil;
+import pl.miloszgilga.lib.jmpsl.security.OtaToken;
 
 import pl.miloszgilga.chessappbackend.exception.custom.*;
 import pl.miloszgilga.chessappbackend.network.auth.domain.*;

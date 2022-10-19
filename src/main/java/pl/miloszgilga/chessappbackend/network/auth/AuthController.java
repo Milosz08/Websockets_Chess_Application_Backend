@@ -24,12 +24,13 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import javax.servlet.http.HttpServletRequest;
 
-import pl.miloszgilga.lib.jmpsl.auth.jwt.JwtServlet;
+import pl.miloszgilga.lib.jmpsl.security.jwt.JwtServlet;
+import pl.miloszgilga.lib.jmpsl.security.user.CurrentUser;
+import pl.miloszgilga.lib.jmpsl.oauth2.user.OAuth2UserExtender;
 
 import pl.miloszgilga.chessappbackend.dto.*;
-import pl.miloszgilga.chessappbackend.oauth.AuthUser;
 import pl.miloszgilga.chessappbackend.network.auth.dto.*;
-import pl.miloszgilga.chessappbackend.security.CurrentUser;
+import pl.miloszgilga.chessappbackend.network.auth.domain.LocalUserModel;
 
 import static pl.miloszgilga.chessappbackend.config.ApplicationEndpoints.*;
 
@@ -61,8 +62,9 @@ class AuthController {
     //------------------------------------------------------------------------------------------------------------------
 
     @PostMapping(LOGIN_VIA_OAUTH2)
-    ResponseEntity<SuccessedLoginResDto> loginViaOAuth2(@CurrentUser AuthUser user) {
-        return new ResponseEntity<>(loginService.loginViaOAuth2(user.getUserModel().getId()), HttpStatus.OK);
+    ResponseEntity<SuccessedLoginResDto> loginViaOAuth2(@CurrentUser OAuth2UserExtender user) {
+        final Long userId = ((LocalUserModel) user.getUserModel()).getId();
+        return new ResponseEntity<>(loginService.loginViaOAuth2(userId), HttpStatus.OK);
     }
 
     //------------------------------------------------------------------------------------------------------------------
@@ -75,15 +77,16 @@ class AuthController {
     //------------------------------------------------------------------------------------------------------------------
 
     @PostMapping(ATTEMPT_ACTIVATE_ACCOUNT)
-    ResponseEntity<SuccessedAttemptToFinishSignupResDto> attemptActivateAccount(@CurrentUser AuthUser user) {
-        return new ResponseEntity<>(signupService.attemptToActivateAccount(user.getUserModel().getId()), HttpStatus.OK);
+    ResponseEntity<SuccessedAttemptToFinishSignupResDto> attemptActivateAccount(@CurrentUser OAuth2UserExtender user) {
+        final Long userId = ((LocalUserModel) user.getUserModel()).getId();
+        return new ResponseEntity<>(signupService.attemptToActivateAccount(userId), HttpStatus.OK);
     }
 
     //------------------------------------------------------------------------------------------------------------------
 
     @DeleteMapping(LOGOUT)
-    ResponseEntity<Void> logout(@CurrentUser AuthUser user) {
-        loginService.logout(user.getUserModel().getId());
+    ResponseEntity<Void> logout(@CurrentUser OAuth2UserExtender user) {
+        loginService.logout(((LocalUserModel) user.getUserModel()).getId());
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
@@ -105,16 +108,18 @@ class AuthController {
     //------------------------------------------------------------------------------------------------------------------
 
     @PostMapping(ATTEMPT_FINISH_SIGNUP_VIA_OAUTH2)
-    ResponseEntity<SuccessedAttemptToFinishSignupResDto> attemptToFinishSignup(@CurrentUser AuthUser user) {
-        return new ResponseEntity<>(signupService.attemptToFinishSignup(user.getUserModel().getId()), HttpStatus.OK);
+    ResponseEntity<SuccessedAttemptToFinishSignupResDto> attemptToFinishSignup(@CurrentUser OAuth2UserExtender user) {
+        final Long userId = ((LocalUserModel) user.getUserModel()).getId();
+        return new ResponseEntity<>(signupService.attemptToFinishSignup(userId), HttpStatus.OK);
     }
 
     //------------------------------------------------------------------------------------------------------------------
 
     @PostMapping(FINISH_SIGNUP_VIA_OAUTH2)
     ResponseEntity<SimpleServerMessageDto> finishSignup(@Valid @RequestBody FinishSignupReqDto req,
-                                                        @CurrentUser AuthUser user) {
-        return new ResponseEntity<>(signupService.finishSignup(req, user.getUserModel().getId()), HttpStatus.OK);
+                                                        @CurrentUser OAuth2UserExtender user) {
+        final Long userId = ((LocalUserModel) user.getUserModel()).getId();
+        return new ResponseEntity<>(signupService.finishSignup(req, userId), HttpStatus.OK);
     }
 
     //------------------------------------------------------------------------------------------------------------------

@@ -24,8 +24,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.context.annotation.Primary;
 import org.springframework.beans.factory.annotation.Value;
 
-import java.util.List;
-
 //----------------------------------------------------------------------------------------------------------------------
 
 @Getter
@@ -35,22 +33,14 @@ import java.util.List;
 public class EnvironmentVars {
     @Value("${config.base-url}")                                                        private String baseUrl;
     @Value("${authorization.one-time-access-token.token-expired-minutes}")              private Integer otaTokenExpiredMinutes;
-    @Value("${spring.profiles.active}")                                                 private String applicationMode;
     @Value("${config.frontend-cors-url}")                                               private String frontEndUrl;
     @Value("${spring.mail.username}")                                                   private String serverMailClient;
     @Value("${config.frontend-name}")                                                   private String frontendName;
     @Value("${config.mail-helpdesk-agent}")                                             private String mailHelpdeskAgent;
     @Value("${config.cors-max-age-seconds}")                                            private Integer corsMaxAgeSeconds;
-    @Value("${config.authorization.password-encoder-strength}")                         private Integer passwordEncoderStrength;
     @Value("${authorization.bearer-token.token-expired-minutes}")                       private Integer bearerTokenExpiredMinutes;
     @Value("${oauth2-custom.token-secret}")                                             private String oauth2TokenSecret;
     @Value("${oauth2-custom.token-expiration-hours}")                                   private Integer oauth2TokenExpirationHours;
-    @Value("${oauth2-custom.redirect-uris}")                                            private List<String> oauth2RedirectUris;
-    @Value("${authorization.oauth2-custom.session-remember-cookie-name}")               private String oauth2SessionRememberCookieName;
-    @Value("${authorization.oauth2-custom.base-redirect-uri-cookie-name}")              private String oauth2BaseRedirectUriCookieName;
-    @Value("${authorization.oauth2-custom.after-login-redirect-uri-cookie-name}")       private String oauth2AfterLoginRedirectUriCookieName;
-    @Value("${authorization.oauth2-custom.after-signup-redirect-uri-cookie-name}")      private String oauth2AfterSignupRedirectUriCookieName;
-    @Value("${authorization.oauth2-custom.cookie-expired-minutes}")                     private Integer oauth2CookieExpiredMinutes;
     @Value("${authorization.refresh-token.token-expired-months}")                       private Integer refreshTokenExpiredMonths;
     @Value("${authorization.oauth2-custom.password-replacer}")                          private String oauth2PasswordReplacer;
     @Value("${config.redirects.change-password-uri}")                                   private String changePasswordRedirectUri;

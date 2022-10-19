@@ -62,7 +62,7 @@ public class UserToSuccessedLoginResDtoCustomizer extends CustomMapper<LocalUser
         resDto.setActivated(userModel.getIsActivated());
         resDto.setFullName(userModel.getFirstName() + " " + userModel.getLastName());
         resDto.setInitials(StringUtil.initials(userModel.getFirstName(), userModel.getLastName()));
-        resDto.setCredentialsSupplier(userModel.getCredentialsSupplier().getName());
+        resDto.setCredentialsSupplier(userModel.getOAuth2Supplier().getSupplierName());
     }
 
     //------------------------------------------------------------------------------------------------------------------

@@ -18,8 +18,7 @@
 
 package pl.miloszgilga.chessappbackend.security;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.slf4j.*;
 
 import org.springframework.stereotype.Service;
 import org.springframework.security.core.userdetails.*;
@@ -28,7 +27,9 @@ import javax.transaction.Transactional;
 
 import java.util.Optional;
 
-import pl.miloszgilga.chessappbackend.oauth.AuthUser;
+import pl.miloszgilga.lib.jmpsl.oauth2.OAuth2Util;
+import pl.miloszgilga.lib.jmpsl.oauth2.user.OAuth2UserExtender;
+
 import pl.miloszgilga.chessappbackend.network.auth.domain.*;
 import pl.miloszgilga.chessappbackend.exception.custom.AuthException;
 import pl.miloszgilga.chessappbackend.token.dto.UserVerficationClaims;
@@ -41,40 +42,39 @@ public class AuthUserDetailService implements UserDetailsService {
     private static final Logger LOGGER = LoggerFactory.getLogger(AuthUserDetailService.class);
 
     private final ILocalUserRepository repository;
-    private final SecurityHelper securityHelper;
 
     //------------------------------------------------------------------------------------------------------------------
 
-    public AuthUserDetailService(ILocalUserRepository repository, SecurityHelper securityHelper) {
+    public AuthUserDetailService(ILocalUserRepository repository) {
         this.repository = repository;
-        this.securityHelper = securityHelper;
     }
 
     //------------------------------------------------------------------------------------------------------------------
 
     @Override
     @Transactional
-    public AuthUser loadUserByUsername(String emailOrNickname) throws UsernameNotFoundException {
+    public OAuth2UserExtender loadUserByUsername(String emailOrNickname) throws UsernameNotFoundException {
         final Optional<LocalUserModel> foundUserByEmail = repository.findUserByEmailAddress(emailOrNickname);
         if (foundUserByEmail.isPresent()) {
-            return securityHelper.generateSecurityUserByModelData(foundUserByEmail.get());
+            return OAuth2Util.fabricateUser(foundUserByEmail.get(), foundUserByEmail.get().getOAuth2Supplier());
         }
         final Optional<LocalUserModel> foundUserByNickname = repository.findUserByNickname(emailOrNickname);
         if (foundUserByNickname.isEmpty()) {
             LOGGER.error("Unable to load user with credentials data (nickname/email): {}", emailOrNickname);
             throw new UsernameNotFoundException("Unable to load user via UserDetailsService class.");
         }
-        return securityHelper.generateSecurityUserByModelData(foundUserByNickname.get());
+        return OAuth2Util.fabricateUser(foundUserByNickname.get(), foundUserByNickname.get().getOAuth2Supplier());
     }
 
     //------------------------------------------------------------------------------------------------------------------
 
     @Transactional
-    public AuthUser loadUserByNicknameEmailAndId(UserVerficationClaims cred) {
+    public OAuth2UserExtender loadUserByNicknameEmailAndId(UserVerficationClaims cred) {
         final Optional<LocalUserModel> foundUserByCredentials = repository
                 .findUserByEmailAddressNicknameAndId(cred.getEmailAddress(), cred.getNickname(), cred.getId());
         if (foundUserByCredentials.isPresent()) {
-            return securityHelper.generateSecurityUserByModelData(foundUserByCredentials.get());
+            final LocalUserModel user = foundUserByCredentials.get();
+            return OAuth2Util.fabricateUser(user, user.getOAuth2Supplier());
         }
         LOGGER.error("Unable to load user with credentials data: {}", cred);
         throw new AuthException.UserNotFoundException("User was not found based on the data provided.");

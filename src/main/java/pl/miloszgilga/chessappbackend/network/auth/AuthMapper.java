@@ -25,11 +25,11 @@ import org.springframework.stereotype.Component;
 import org.springframework.context.annotation.Primary;
 
 import pl.miloszgilga.lib.jmpsl.util.mapper.MappingFacade;
+import pl.miloszgilga.lib.jmpsl.oauth2.service.OAuth2RegistrationDataDto;
 
 import pl.miloszgilga.chessappbackend.network.auth.dto.*;
 import pl.miloszgilga.chessappbackend.network.auth.mapper.*;
 import pl.miloszgilga.chessappbackend.network.auth.domain.*;
-import pl.miloszgilga.chessappbackend.oauth.dto.OAuth2RegistrationData;
 
 import static pl.miloszgilga.chessappbackend.mapper.Converter.*;
 
@@ -78,12 +78,12 @@ public class AuthMapper {
                 .byDefault()
                 .register();
 
-        mapperFactory.classMap(OAuth2RegistrationData.class, LocalUserModel.class)
+        mapperFactory.classMap(OAuth2RegistrationDataDto.class, LocalUserModel.class)
                 .customize(signupOAuth2DtoToUserCustomizer)
                 .byDefault()
                 .register();
 
-        mapperFactory.classMap(OAuth2RegistrationData.class, LocalUserDetailsModel.class)
+        mapperFactory.classMap(OAuth2RegistrationDataDto.class, LocalUserDetailsModel.class)
                 .customize(signupOAuth2DtoToUserDetailsCustomizer)
                 .byDefault()
                 .register();

@@ -29,6 +29,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import java.util.Date;
 import javax.transaction.Transactional;
 
+import static pl.miloszgilga.lib.jmpsl.oauth2.OAuth2Supplier.LOCAL;
+
 import pl.miloszgilga.chessappbackend.token.*;
 import pl.miloszgilga.chessappbackend.exception.custom.*;
 import pl.miloszgilga.chessappbackend.mail.IMailOutService;
@@ -40,7 +42,6 @@ import pl.miloszgilga.chessappbackend.network.auth.domain.*;
 import pl.miloszgilga.chessappbackend.network.ota_token.domain.*;
 import pl.miloszgilga.chessappbackend.network.renew_credentials.dto.*;
 
-import static pl.miloszgilga.chessappbackend.oauth.CredentialsSupplier.LOCAL;
 import static pl.miloszgilga.chessappbackend.token.OtaTokenType.RESET_PASSWORD;
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -87,9 +88,9 @@ class RenewCredentialsService implements IRenewCredentialsService {
             LOGGER.error("Attempt to change password for not existing user. Nickname or email: {}", nickEmail);
             throw new AuthException.UserNotFoundException("User with passed nickname/email does not exist.");
         });
-        if (!user.getCredentialsSupplier().equals(LOCAL)) {
+        if (!user.getOAuth2Supplier().equals(LOCAL)) {
             LOGGER.warn("Attempt to change password in account which managed via external {} service. Account: {}",
-                    user.getCredentialsSupplier().getName(), user);
+                    user.getOAuth2Supplier().getSupplierName(), user);
             throw new AuthException.ChangePasswordProhibitedActionException(
                     "Changing password in accounts managed via external service is not supported.");
         }

@@ -2,16 +2,17 @@ config:
     base-url: ${env.PROD_BASE_URL}
     frontend-cors-url: ${env.PROD_FRONTEND_CORS_AGENT}
     frontend-name: ${env.PROD_FRONTEND_WITH_JWT_ISSUER}
-    authorization:
-        password-encoder-strength: 10
 
 jmpsl:
-    auth:
+    security:
+        password-encoder-strength: 10
         jwt:
             secret: ${env.PROD_JWT_KEY}
             issuer: ${env.PROD_FRONTEND_WITH_JWT_ISSUER}
         cors:
             client: ${env.PROD_FRONTEND_CORS_AGENT}
+    oauth2:
+        redirect-uris: ${env.PROD_FRONTEND_CORS_AGENT}/oauth2/redirect,myandroidapp://oauth2/redirect,myiosapp://oauth2/redirect
 
 spring:
     h2.console.enabled: false
@@ -46,7 +47,6 @@ spring:
 oauth2-custom:
     token-secret: ${env.PROD_OAUTH2_TOKEN_SECRET}
     token-expiration-hours: 12
-    redirect-uris: ${env.PROD_FRONTEND_CORS_AGENT}/oauth2/redirect,myandroidapp://oauth2/redirect,myiosapp://oauth2/redirect
 
 logging:
     file.name: prod-logs/chessappbackend.log

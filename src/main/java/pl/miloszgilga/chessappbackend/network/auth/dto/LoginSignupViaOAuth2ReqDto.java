@@ -19,9 +19,9 @@
 package pl.miloszgilga.chessappbackend.network.auth.dto;
 
 import lombok.Data;
-import javax.validation.constraints.NotBlank;
+import pl.miloszgilga.lib.jmpsl.oauth2.validator.ValidateOAuth2Supplier;
 
-import pl.miloszgilga.chessappbackend.validator.annotation.ValidateOAuth2Supplier;
+import javax.validation.constraints.NotBlank;
 
 //----------------------------------------------------------------------------------------------------------------------
 

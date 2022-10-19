@@ -18,33 +18,22 @@
 
 package pl.miloszgilga.chessappbackend.network.auth.mapper;
 
-import ma.glasnost.orika.CustomMapper;
-import ma.glasnost.orika.MappingContext;
-
+import ma.glasnost.orika.*;
 import org.springframework.stereotype.Component;
 
-import pl.miloszgilga.chessappbackend.oauth.user_info.*;
-import pl.miloszgilga.chessappbackend.oauth.dto.OAuth2RegistrationData;
+import pl.miloszgilga.lib.jmpsl.oauth2.user.*;
+import pl.miloszgilga.lib.jmpsl.oauth2.service.OAuth2RegistrationDataDto;
+
 import pl.miloszgilga.chessappbackend.network.auth.domain.LocalUserDetailsModel;
 
 //----------------------------------------------------------------------------------------------------------------------
 
 @Component
-public class SignupOAuth2DtoToUserDetailsCustomizer extends CustomMapper<OAuth2RegistrationData, LocalUserDetailsModel> {
-
-    private final OAuth2UserInfoFactory userInfoFactory;
-
-    //------------------------------------------------------------------------------------------------------------------
-
-    public SignupOAuth2DtoToUserDetailsCustomizer(OAuth2UserInfoFactory userInfoFactory) {
-        this.userInfoFactory = userInfoFactory;
-    }
-
-    //------------------------------------------------------------------------------------------------------------------
+public class SignupOAuth2DtoToUserDetailsCustomizer extends CustomMapper<OAuth2RegistrationDataDto, LocalUserDetailsModel> {
 
     @Override
-    public void mapAtoB(OAuth2RegistrationData data, LocalUserDetailsModel detModel, MappingContext context) {
-        final OAuth2UserInfo userInfo = userInfoFactory.getOAuth2UserInfo(data.getSupplier(), data.getAttributes());
+    public void mapAtoB(OAuth2RegistrationDataDto data, LocalUserDetailsModel detModel, MappingContext context) {
+        final OAuth2UserInfoBase userInfo = OAuth2UserInfoFactory.getInstance(data.getSupplier(), data.getAttributes());
         detModel.setHasPhoto(!userInfo.getUserImageUrl().isEmpty());
         detModel.setHasNewsletterAccept(detModel.getHasNewsletterAccept() != null && detModel.getHasNewsletterAccept());
         detModel.setIsDataFilled(detModel.getIsDataFilled() != null && detModel.getIsDataFilled());

@@ -50,8 +50,10 @@ dependencies {
     implementation("ma.glasnost.orika:orika-core:${rootProject.extra.get("orikaMapperVersion") as String}")
     implementation("com.fasterxml.jackson.core:jackson-databind:${rootProject.extra.get("xmlBinderVersion") as String}")
 
-    implementation("pl.miloszgilga:jmpsl-auth:${rootProject.extra.get("jmpslVersion") as String}")
+    implementation("pl.miloszgilga:jmpsl-security:${rootProject.extra.get("jmpslVersion") as String}")
     implementation("pl.miloszgilga:jmpsl-util:${rootProject.extra.get("jmpslVersion") as String}")
+    implementation("pl.miloszgilga:jmpsl-oauth2:${rootProject.extra.get("jmpslVersion") as String}")
+    implementation("pl.miloszgilga:jmpsl-communication:${rootProject.extra.get("jmpslVersion") as String}")
 
     implementation("org.springframework.boot:spring-boot-starter-web:${rootProject.extra.get("springVersion") as String}")
     implementation("org.springframework.boot:spring-boot-starter-mail:${rootProject.extra.get("springVersion") as String}")

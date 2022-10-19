@@ -2,19 +2,20 @@ config:
     base-url: http://localhost:9595
     frontend-cors-url: http://localhost:4200
     frontend-name: localhost
-    authorization:
-        password-encoder-strength: 4
 
 server:
     port: 9595
 
 jmpsl:
-    auth:
+    security:
+        password-encoder-strength: 4
         jwt:
             secret: daw94289vndq98198nkejfnkaendwef93892fnskjdenfkjeiwefibiu32983fnskjdfn
             issuer: localhost
         cors:
             client: http://localhost:4200
+    oauth2:
+        redirect-uris: http://localhost:4200/oauth2/redirect,myandroidapp://oauth2/redirect,myiosapp://oauth2/redirect
 
 spring:
     devtools.livereload.port: 35731
@@ -49,7 +50,6 @@ spring:
 oauth2-custom:
     token-secret: ${env.DEV_OAUTH2_TOKEN_SECRET}
     token-expiration-hours: 24
-    redirect-uris: http://localhost:4200/oauth2/redirect,myandroidapp://oauth2/redirect,myiosapp://oauth2/redirect
 
 logging:
     level:

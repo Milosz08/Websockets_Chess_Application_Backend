@@ -18,6 +18,7 @@
 
 package pl.miloszgilga.chessappbackend.security;
 
+import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.*;
 
 import org.springframework.security.web.SecurityFilterChain;
@@ -44,6 +45,7 @@ import static pl.miloszgilga.chessappbackend.config.ApplicationEndpoints.*;
 
 @Configuration
 @EnableWebSecurity
+@AllArgsConstructor
 public class SecurityConfiguration {
 
     private final EnvironmentVars environment;
@@ -71,24 +73,6 @@ public class SecurityConfiguration {
             RENEW_CREDETIALS_LOCAL + "/**",
             EXPOSE_STATIC_DATA_ENDPOINT + "/**",
     };
-
-    //------------------------------------------------------------------------------------------------------------------
-
-    public SecurityConfiguration(EnvironmentVars environment, JwtTokenAuthenticationFilter authFilter,
-                                 AuthenticationRestEntryPoint restPoint, AppOidcUserService oidc,
-                                 MiddlewareExceptionFilter middlewareExceptionFilter, AppOAuth2UserService oauth2,
-                                 SecurityHelper security, OAuth2AuthSuccessfulResolver successfulResolver,
-                                 OAuth2AuthFailureResolver failureResolver) {
-        this.environment = environment;
-        this.middlewareExceptionFilter = middlewareExceptionFilter;
-        this.securityHelper = security;
-        this.authenticationFilter = authFilter;
-        this.restEntryPoint = restPoint;
-        this.appOidcUserService = oidc;
-        this.appOAuth2UserService = oauth2;
-        this.oAuth2AuthFailureResolver = failureResolver;
-        this.oAuth2AuthSuccessfulResolver = successfulResolver;
-    }
 
     //------------------------------------------------------------------------------------------------------------------
 

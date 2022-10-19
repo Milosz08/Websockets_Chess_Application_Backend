@@ -20,7 +20,7 @@ spring:
         user-info-uri: https://graph.facebook.com/me?fields=id,name,email,picture
 
 jmpsl:
-    auth:
+    security:
         ota:
             length: 10
 
@@ -37,8 +37,8 @@ config:
     cors-max-age-seconds: 3600
     redirects:
         change-password-uri: /auth/change-password
-        activate-account-uri: /activate-account/
-        unsubscribe-newsletter-uri: /unsubscribe-newsletter/
+        activate-account-uri: /activate-account
+        unsubscribe-newsletter-uri: /unsubscribe-newsletter
 
 authorization:
     one-time-access-token:
@@ -48,9 +48,4 @@ authorization:
     refresh-token:
         token-expired-months: 3
     oauth2-custom:
-        session-remember-cookie-name: oauth2_auth_request
-        base-redirect-uri-cookie-name: base_uri
-        after-login-redirect-uri-cookie-name: after_login_uri
-        after-signup-redirect-uri-cookie-name: after_signup_uri
-        cookie-expired-minutes: 3
         password-replacer: ${env.DEV_PROD_OAUTH2_PASSWORD_REPLACER}
