@@ -27,6 +27,7 @@ import javax.validation.Valid;
 
 import pl.miloszgilga.chessappbackend.dto.*;
 import pl.miloszgilga.chessappbackend.network.newsletter_email.dto.*;
+import pl.miloszgilga.lib.jmpsl.security.excluder.ControllerSecurityPathExclude;
 
 import static pl.miloszgilga.chessappbackend.config.ApplicationEndpoints.*;
 import static pl.miloszgilga.chessappbackend.config.RedirectEndpoints.NEWSLETTER_UNSUBSCRIBE_VIA_LINK;
@@ -34,6 +35,7 @@ import static pl.miloszgilga.chessappbackend.config.RedirectEndpoints.NEWSLETTER
 //----------------------------------------------------------------------------------------------------------------------
 
 @RestController
+@ControllerSecurityPathExclude
 @RequestMapping(NEWSLETTER_EMAIL_ENDPOINT)
 class NewsletterEmailController {
 

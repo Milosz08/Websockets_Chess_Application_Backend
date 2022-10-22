@@ -31,19 +31,17 @@ import org.springframework.security.web.authentication.WebAuthenticationDetailsS
 import javax.servlet.*;
 import javax.servlet.http.*;
 
-import java.util.Arrays;
 import java.io.IOException;
 
 import pl.miloszgilga.lib.jmpsl.security.jwt.JwtServlet;
 import pl.miloszgilga.lib.jmpsl.security.jwt.JwtValidationType;
+import pl.miloszgilga.lib.jmpsl.security.excluder.SecurityPathExcluder;
 import static pl.miloszgilga.lib.jmpsl.security.jwt.JwtValidationType.EXPIRED;
 
 import pl.miloszgilga.chessappbackend.token.JsonWebTokenVerificator;
 import pl.miloszgilga.chessappbackend.security.AuthUserDetailService;
 import pl.miloszgilga.chessappbackend.exception.custom.TokenException;
 import pl.miloszgilga.chessappbackend.token.dto.UserVerficationClaims;
-
-import static pl.miloszgilga.chessappbackend.security.SecurityConfiguration.DISABLE_PATHS_FOR_JWT_FILTERING;
 
 //----------------------------------------------------------------------------------------------------------------------
 
@@ -53,14 +51,16 @@ public class JwtTokenAuthenticationFilter extends OncePerRequestFilter {
     private final JwtServlet jwtServlet;
     private final JsonWebTokenVerificator verificator;
     private final AuthUserDetailService userDetailService;
+    private final SecurityPathExcluder securityPathExcluder;
 
     //------------------------------------------------------------------------------------------------------------------
 
     public JwtTokenAuthenticationFilter(JwtServlet jwtServlet, AuthUserDetailService userDetailService,
-                                        JsonWebTokenVerificator verificator) {
+                                        JsonWebTokenVerificator verificator, SecurityPathExcluder securityPathExcluder) {
         this.jwtServlet = jwtServlet;
         this.verificator = verificator;
         this.userDetailService = userDetailService;
+        this.securityPathExcluder = securityPathExcluder;
     }
 
     //------------------------------------------------------------------------------------------------------------------
@@ -89,7 +89,6 @@ public class JwtTokenAuthenticationFilter extends OncePerRequestFilter {
 
     @Override
     protected boolean shouldNotFilter(HttpServletRequest req) {
-        final AntPathMatcher matcher = new AntPathMatcher();
-        return Arrays.stream(DISABLE_PATHS_FOR_JWT_FILTERING).anyMatch(p -> matcher.match(p, req.getServletPath()));
+        return securityPathExcluder.excludePathFromJwtFilter(req);
     }
 }

@@ -27,6 +27,7 @@ import javax.servlet.http.HttpServletRequest;
 import pl.miloszgilga.lib.jmpsl.security.jwt.JwtServlet;
 import pl.miloszgilga.lib.jmpsl.security.user.CurrentUser;
 import pl.miloszgilga.lib.jmpsl.oauth2.user.OAuth2UserExtender;
+import pl.miloszgilga.lib.jmpsl.security.excluder.MethodSecurityPathExclude;
 
 import pl.miloszgilga.chessappbackend.dto.*;
 import pl.miloszgilga.chessappbackend.network.auth.dto.*;
@@ -54,6 +55,7 @@ class AuthController {
 
     //------------------------------------------------------------------------------------------------------------------
 
+    @MethodSecurityPathExclude
     @PostMapping(LOGIN_VIA_LOCAL)
     ResponseEntity<SuccessedLoginResDto> loginViaLocal(@Valid @RequestBody LoginViaLocalReqDto req) {
         return new ResponseEntity<>(loginService.loginViaLocal(req), HttpStatus.OK);
@@ -69,6 +71,7 @@ class AuthController {
 
     //------------------------------------------------------------------------------------------------------------------
 
+    @MethodSecurityPathExclude
     @PostMapping(AUTO_LOGIN)
     ResponseEntity<SuccessedLoginResDto> autoLogin(@Valid @RequestBody AutoLoginReqDto req) {
         return new ResponseEntity<>(loginService.autoLogin(req), HttpStatus.OK);
@@ -92,6 +95,7 @@ class AuthController {
 
     //------------------------------------------------------------------------------------------------------------------
 
+    @MethodSecurityPathExclude
     @PostMapping(REFRESH_TOKEN)
     ResponseEntity<RefreshTokenResDto> refreshToken(HttpServletRequest req) {
         final String token = jwtServlet.extractToken(req);
@@ -100,6 +104,7 @@ class AuthController {
 
     //------------------------------------------------------------------------------------------------------------------
 
+    @MethodSecurityPathExclude
     @PostMapping(SIGNUP_VIA_LOCAL)
     ResponseEntity<SuccessedAttemptToFinishSignupResDto> signupViaLocal(@Valid @RequestBody SignupViaLocalReqDto req) {
         return new ResponseEntity<>(signupService.signupViaLocal(req), HttpStatus.CREATED);
@@ -124,6 +129,7 @@ class AuthController {
 
     //------------------------------------------------------------------------------------------------------------------
 
+    @MethodSecurityPathExclude
     @PostMapping(ATTEMPT_FINISH_SIGNUP_RESEND_EMAIL)
     ResponseEntity<SimpleServerMessageDto> resendEmailVerificationLink(@Valid @RequestBody ResendEmailMessageReqDto req) {
         return new ResponseEntity<>(signupService.resendVerificationEmailLink(req), HttpStatus.OK);

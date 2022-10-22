@@ -21,6 +21,7 @@ spring:
 
 jmpsl:
     security:
+        oauth2-active: true
         ota:
             length: 10
     mail:

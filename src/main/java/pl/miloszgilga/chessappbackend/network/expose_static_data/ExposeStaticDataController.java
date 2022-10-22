@@ -18,19 +18,21 @@
 
 package pl.miloszgilga.chessappbackend.network.expose_static_data;
 
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Set;
 import javax.validation.Valid;
 
 import pl.miloszgilga.chessappbackend.network.expose_static_data.dto.*;
+import pl.miloszgilga.lib.jmpsl.security.excluder.ControllerSecurityPathExclude;
+
 import static pl.miloszgilga.chessappbackend.config.ApplicationEndpoints.*;
 
 //----------------------------------------------------------------------------------------------------------------------
 
 @RestController
+@ControllerSecurityPathExclude
 @RequestMapping(EXPOSE_STATIC_DATA_ENDPOINT)
 class ExposeStaticDataController {
 

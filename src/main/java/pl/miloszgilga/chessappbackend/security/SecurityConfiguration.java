@@ -35,13 +35,12 @@ import pl.miloszgilga.lib.jmpsl.oauth2.*;
 import pl.miloszgilga.lib.jmpsl.security.*;
 import pl.miloszgilga.lib.jmpsl.oauth2.service.*;
 import pl.miloszgilga.lib.jmpsl.oauth2.resolver.*;
+import pl.miloszgilga.lib.jmpsl.security.excluder.SecurityPathExcluder;
 import pl.miloszgilga.lib.jmpsl.security.filter.MiddlewareExceptionFilter;
 
 import pl.miloszgilga.chessappbackend.filter.*;
 import pl.miloszgilga.chessappbackend.token.JsonWebTokenCreator;
 import pl.miloszgilga.chessappbackend.network.auth.SignupService;
-
-import static pl.miloszgilga.chessappbackend.config.ApplicationEndpoints.*;
 
 //----------------------------------------------------------------------------------------------------------------------
 
@@ -54,26 +53,12 @@ public class SecurityConfiguration {
     private final SignupService signupService;
     private final JsonWebTokenCreator tokenCreator;
 
+    private final SecurityPathExcluder securityPathExcluder;
     private final OAuth2OnFailureResolver oAuth2OnFailureResolver;
     private final JwtTokenAuthenticationFilter authenticationFilter;
     private final MiddlewareExceptionFilter middlewareExceptionFilter;
     private final CookieOAuth2ReqRepository cookieOAuth2ReqRepository;
     private final AuthResolverForRestEntryPoint resolverForRestEntryPoint;
-
-    //------------------------------------------------------------------------------------------------------------------
-
-    public static final String[] DISABLE_PATHS_FOR_JWT_FILTERING = {
-            "/", "/error", "/oauth2/**", "/h2-console/**",
-            NEWSLETTER_EMAIL_ENDPOINT + "/**",
-            AUTH_ENDPOINT + LOGIN_VIA_LOCAL + "/**",
-            AUTH_ENDPOINT + SIGNUP_VIA_LOCAL + "/**",
-            AUTH_ENDPOINT + AUTO_LOGIN + "/**",
-            AUTH_ENDPOINT + REFRESH_TOKEN + "/**",
-            AUTH_ENDPOINT + ATTEMPT_FINISH_SIGNUP_RESEND_EMAIL + "/**",
-            OTA_TOKEN_ENDPOINT + "/**",
-            RENEW_CREDETIALS_LOCAL + "/**",
-            EXPOSE_STATIC_DATA_ENDPOINT + "/**",
-    };
 
     //------------------------------------------------------------------------------------------------------------------
 
@@ -87,27 +72,25 @@ public class SecurityConfiguration {
                 .formLogin().disable()
                 .httpBasic().disable()
                 .exceptionHandling()
-                    .authenticationEntryPoint(resolverForRestEntryPoint)
-                    .and()
-                .authorizeRequests()
-                    .antMatchers(DISABLE_PATHS_FOR_JWT_FILTERING).permitAll()
-                    .anyRequest().authenticated()
-                    .and()
-                .oauth2Login()
-                    .authorizationEndpoint()
-                        .authorizationRequestRepository(cookieOAuth2ReqRepository)
-                        .and()
+                    .authenticationEntryPoint(resolverForRestEntryPoint);
+
+        http = securityPathExcluder.loadExcludedPathFromSpringSecurityContext(http);
+
+        http.oauth2Login()
+                .authorizationEndpoint()
+                    .authorizationRequestRepository(cookieOAuth2ReqRepository)
+                .and()
                     .redirectionEndpoint()
-                        .and()
+                .and()
                     .userInfoEndpoint()
                         .oidcUserService(new AppOidcUserService(signupService))
                         .userService(new AppOAuth2UserService(env, signupService))
-                        .and()
+                    .and()
                     .tokenEndpoint()
                         .accessTokenResponseClient(OAuth2Util.auth2AccessTokenResponseClient())
-                        .and()
-                    .successHandler(oAuth2OnSuccessfulResolver())
-                    .failureHandler(oAuth2OnFailureResolver)
+                    .and()
+                        .successHandler(oAuth2OnSuccessfulResolver())
+                        .failureHandler(oAuth2OnFailureResolver)
                     .and()
                 .addFilterBefore(authenticationFilter, UsernamePasswordAuthenticationFilter.class);
 

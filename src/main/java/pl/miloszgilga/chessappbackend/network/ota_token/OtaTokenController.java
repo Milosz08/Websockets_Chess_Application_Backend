@@ -27,12 +27,15 @@ import java.net.URI;
 import pl.miloszgilga.chessappbackend.network.ota_token.dto.*;
 import pl.miloszgilga.chessappbackend.dto.SimpleServerMessageDto;
 
+import pl.miloszgilga.lib.jmpsl.security.excluder.ControllerSecurityPathExclude;
+
 import static pl.miloszgilga.chessappbackend.config.RedirectEndpoints.*;
 import static pl.miloszgilga.chessappbackend.config.ApplicationEndpoints.*;
 
 //----------------------------------------------------------------------------------------------------------------------
 
 @RestController
+@ControllerSecurityPathExclude
 @RequestMapping(OTA_TOKEN_ENDPOINT)
 class OtaTokenController {
 

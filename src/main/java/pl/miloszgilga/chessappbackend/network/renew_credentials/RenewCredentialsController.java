@@ -25,6 +25,7 @@ import javax.validation.Valid;
 import javax.servlet.http.HttpServletRequest;
 
 import pl.miloszgilga.lib.jmpsl.security.jwt.JwtServlet;
+import pl.miloszgilga.lib.jmpsl.security.excluder.ControllerSecurityPathExclude;
 
 import pl.miloszgilga.chessappbackend.dto.*;
 import pl.miloszgilga.chessappbackend.network.renew_credentials.dto.*;
@@ -34,6 +35,7 @@ import static pl.miloszgilga.chessappbackend.config.ApplicationEndpoints.*;
 //----------------------------------------------------------------------------------------------------------------------
 
 @RestController
+@ControllerSecurityPathExclude
 @RequestMapping(RENEW_CREDETIALS_LOCAL)
 class RenewCredentialsController {
 
