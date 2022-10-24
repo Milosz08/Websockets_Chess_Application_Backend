@@ -45,7 +45,7 @@ public class UserNicknameAndIdExistingValidator
 
     @Override
     public boolean isValid(RememberAccountsDataReqDto accounts, ConstraintValidatorContext context) {
-        for (RememberAccountReqDto user : accounts.getAccounts()) {
+        for (final RememberAccountReqDto user : accounts.getAccounts()) {
             if (!repository.checkIfUserByIdAndNicknameExist(user.getUserId(), user.getUserLogin())) {
                 LOGGER.error("User with id: {} and nickname: {} does not exist.", user.getUserId(), user.getUserLogin());
                 return false;

@@ -27,7 +27,7 @@ public class TokenException {
 
     public static class JwtMalformedTokenException extends BasicAuthServerException {
         public JwtMalformedTokenException(String message, Object... args) {
-            super(HttpStatus.UNAUTHORIZED, message, args);
+            super(HttpStatus.BAD_REQUEST, message, args);
         }
     }
 
@@ -35,7 +35,7 @@ public class TokenException {
 
     public static class JwtTokenExpiredException extends BasicAuthServerException {
         public JwtTokenExpiredException(String message, Object... args) {
-            super(HttpStatus.UNAUTHORIZED, message, args);
+                super(HttpStatus.BAD_REQUEST, message, args);
         }
     }
 

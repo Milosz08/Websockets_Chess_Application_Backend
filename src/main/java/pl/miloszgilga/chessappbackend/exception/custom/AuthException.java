@@ -41,25 +41,9 @@ public class AuthException {
 
     //------------------------------------------------------------------------------------------------------------------
 
-    public static class OAuth2AuthenticationProcessingException extends BasicAuthServerException {
-        public OAuth2AuthenticationProcessingException(String message, Object... args) {
-            super(HttpStatus.NOT_IMPLEMENTED, message, args);
-        }
-    }
-
-    //------------------------------------------------------------------------------------------------------------------
-
     public static class OAuth2CredentialsSupplierMalformedException extends BasicAuthServerException {
         public OAuth2CredentialsSupplierMalformedException(String message, Object... args) {
             super(HttpStatus.UNAUTHORIZED, message, args);
-        }
-    }
-
-    //------------------------------------------------------------------------------------------------------------------
-
-    public static class OAuth2NotSupportedUriException extends BasicAuthServerException {
-        public OAuth2NotSupportedUriException(String message, Object... args) {
-            super(HttpStatus.BAD_REQUEST, message, args);
         }
     }
 
@@ -91,7 +75,7 @@ public class AuthException {
 
     public static class SessionIsNotStartedException extends BasicServerException {
         public SessionIsNotStartedException(String message, Object... args) {
-            super(HttpStatus.UNAUTHORIZED, message, args);
+            super(HttpStatus.BAD_REQUEST, message, args);
         }
     }
 

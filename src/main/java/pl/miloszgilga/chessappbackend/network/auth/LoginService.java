@@ -89,6 +89,7 @@ public class LoginService implements ILoginService {
             LOGGER.info("User with email: {} attempt to login on not activated account.", user.getEmailAddress());
             return SuccessedLoginResDto.builder()
                     .jwtToken(tokenCreator.createUserCredentialsToken(user))
+                    .isActivated(false)
                     .build();
         }
         final var userCredentials = new UsernamePasswordAuthenticationToken(req.getUsernameEmail(), req.getPassword());
@@ -126,7 +127,7 @@ public class LoginService implements ILoginService {
                 .findUserByMatchedRefreshToken(req.getRefreshToken())
                 .orElseThrow(() -> {
                     LOGGER.error("Attempt to auto login user with no initialized session before. Bearer: {}", req);
-                    throw new AuthException.SessionIsNotStartedException("Session expired. Please login again.");
+                    throw new AuthException.SessionIsNotStartedException("Unable to auto login. Please login again.");
                 });
         LOGGER.info("User with email: {} was logged automatically. User data: {}", userModel.getEmailAddress(), userModel);
         return mapperFacade.map(userModel, SuccessedLoginResDto.class);
