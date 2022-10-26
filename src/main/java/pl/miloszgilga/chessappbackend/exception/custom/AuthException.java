@@ -33,6 +33,14 @@ public class AuthException {
 
     //------------------------------------------------------------------------------------------------------------------
 
+    public static class NotSupportedSupplierException extends BasicServerException {
+        public NotSupportedSupplierException(String message, Object... args) {
+            super(HttpStatus.BAD_REQUEST, message, args);
+        }
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+
     public static class RoleNotFoundException extends BasicServerException {
         public RoleNotFoundException(String message, Object... args) {
             super(HttpStatus.NOT_FOUND, message, args);
