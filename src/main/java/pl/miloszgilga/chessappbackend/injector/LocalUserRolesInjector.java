@@ -24,6 +24,8 @@ import org.springframework.stereotype.Component;
 import java.util.Set;
 import java.util.stream.*;
 
+import javax.transaction.Transactional;
+
 import pl.miloszgilga.chessappbackend.network.auth.domain.*;
 import pl.miloszgilga.chessappbackend.security.LocalUserRole;
 
@@ -47,6 +49,7 @@ class LocalUserRolesInjector implements ApplicationRunner {
     //------------------------------------------------------------------------------------------------------------------
 
     @Override
+    @Transactional
     public void run(ApplicationArguments args) {
         if (userRoles.isEmpty()) return;
         for (String roleName : userRoles) {

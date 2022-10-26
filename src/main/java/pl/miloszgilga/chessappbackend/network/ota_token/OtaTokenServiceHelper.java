@@ -18,9 +18,7 @@
 
 package pl.miloszgilga.chessappbackend.network.ota_token;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
+import org.slf4j.*;
 import org.springframework.stereotype.Component;
 
 import java.net.URI;
@@ -30,10 +28,8 @@ import javax.transaction.Transactional;
 
 import pl.miloszgilga.lib.jmpsl.util.ServletPathUtil;
 
-import pl.miloszgilga.chessappbackend.token.OtaTokenType;
+import pl.miloszgilga.chessappbackend.exception.custom.*;
 import pl.miloszgilga.chessappbackend.token.JsonWebTokenVerificator;
-import pl.miloszgilga.chessappbackend.exception.custom.AuthException;
-import pl.miloszgilga.chessappbackend.exception.custom.TokenException;
 import pl.miloszgilga.chessappbackend.token.dto.ActivateServiceViaEmailTokenClaims;
 import pl.miloszgilga.chessappbackend.network.ota_token.dto.OtaTokenMultipleEmailsReqDto;
 
@@ -60,7 +56,7 @@ class OtaTokenServiceHelper {
     //------------------------------------------------------------------------------------------------------------------
 
     @Transactional
-    URI checkBearerTokenFromLinkWithOtaToken(final TokenLinkValidationData data, final boolean isAccountActivation) {
+    URI checkBearerTokenFromLinkWithOtaToken(final TokenLinkValidationData data) {
         String queryMessage;
         boolean ifError = false;
         try {
@@ -74,7 +70,7 @@ class OtaTokenServiceHelper {
                         throw new TokenException.JwtMalformedTokenException(data.getFailureMessage());
                     });
             otaToken.setAlreadyUsed(true);
-            if (isAccountActivation) otaToken.getLocalUser().setIsActivated(true);
+            otaToken.getLocalUser().setIsActivated(true);
             queryMessage = data.getSuccessMessage();
         } catch (Exception ex) {
             queryMessage = ex.getMessage();
@@ -88,9 +84,9 @@ class OtaTokenServiceHelper {
     //------------------------------------------------------------------------------------------------------------------
 
     @Transactional
-    OtaTokenModel findTokenBasedEmailsAndTokenAndCompare(final OtaTokenMultipleEmailsReqDto req, final OtaTokenType tokenType) {
+    OtaTokenModel findTokenBasedEmailsAndTokenAndCompare(final OtaTokenMultipleEmailsReqDto req) {
         return req.getEmailAddresses().stream().map(e -> otaTokenRepository
-            .findTokenByUserEmailOrSecondEmailAddress(e, tokenType, req.getToken())
+            .findTokenByUserEmailOrSecondEmailAddress(e, ACTIVATE_ACCOUNT, req.getToken())
             .orElseThrow(() -> {
                 LOGGER.error("Attempt to activate account with non existing token. Emails: {}", req.getEmailAddresses());
                 throw new AuthException.UserNotFoundException("Unable to find OTA token. Please try again.");

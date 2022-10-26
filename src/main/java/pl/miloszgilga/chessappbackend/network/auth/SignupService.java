@@ -87,7 +87,7 @@ public class SignupService implements ISignupService, IOAuth2LoaderService {
         userDetailsModel.setLocalUser(userModel);
         helper.addUserToNewsletter(userModel, req.getHasNewsletterAccept());
         localUserRepository.save(userModel);
-        helper.sendEmailMessageForActivateAccount(userModel, ACTIVATE_ACCOUNT);
+        helper.sendEmailMessageForActivateAccount(userModel);
 
         LOGGER.info("Create new user in database via LOCAL interface. User data: {}", userModel);
         final SuccessedAttemptToFinishSignupResDto resDto = SuccessedAttemptToFinishSignupResDto.builder()
@@ -107,7 +107,7 @@ public class SignupService implements ISignupService, IOAuth2LoaderService {
     public SuccessedAttemptToFinishSignupResDto attemptToFinishSignup(final Long userId) {
         final LocalUserModel userModel = helper.checkIfAccountIsAlreadyActivated(userId);
         if (!userModel.getIsActivated() && userModel.getLocalUserDetails().getIsDataFilled()) {
-            helper.sendEmailMessageForActivateAccount(userModel, ACTIVATE_ACCOUNT);
+            helper.sendEmailMessageForActivateAccount(userModel);
         }
         final SuccessedAttemptToFinishSignupResDto resDto = SuccessedAttemptToFinishSignupResDto.builder()
                 .authSupplier(userModel.getOAuth2Supplier().getSupplierName())
@@ -130,7 +130,7 @@ public class SignupService implements ISignupService, IOAuth2LoaderService {
                 .responseMessage("Before you will be using, please activate your account.")
                 .isDataFilled(true)
                 .build();
-        helper.sendEmailMessageForActivateAccount(userModel, ACTIVATE_ACCOUNT);
+        helper.sendEmailMessageForActivateAccount(userModel);
         mapperFacade.map(userModel, resDto);
         return resDto;
     }
@@ -157,7 +157,7 @@ public class SignupService implements ISignupService, IOAuth2LoaderService {
     public OAuth2UserExtender registrationProcessingFactory(final OAuth2RegistrationDataDto data) {
         final OAuth2UserInfoBase userInfo = OAuth2UserInfoFactory.getInstance(data.getSupplier(), data.getAttributes());
         final String supplierName = data.getSupplier().getSupplierName();
-        if (userInfo.getUsername().equals("") || userInfo.getEmailAddress().equals("")) {
+        if (userInfo.getUsername().isEmpty() || userInfo.getEmailAddress().isEmpty()) {
             throw new AuthException.OAuth2CredentialsSupplierMalformedException(
                     "Unable to authenticate via %s provider. Select other authentication method.", supplierName);
         }

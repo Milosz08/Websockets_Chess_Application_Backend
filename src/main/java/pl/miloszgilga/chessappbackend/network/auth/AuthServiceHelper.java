@@ -18,12 +18,12 @@
 
 package pl.miloszgilga.chessappbackend.network.auth;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
+import org.slf4j.*;
 import org.springframework.stereotype.Component;
 
 import java.util.*;
+import static java.util.Objects.isNull;
+
 import javax.transaction.Transactional;
 
 import pl.miloszgilga.lib.jmpsl.util.TimeUtil;
@@ -83,7 +83,7 @@ public class AuthServiceHelper {
 
     @Transactional
     LocalUserModel findUserAndReturnUserData(Long userId) {
-        if (userId == null) {
+        if (isNull(userId)) {
             LOGGER.error("Passed user ID is null. Nulls in indexes are strictly prohibited.");
             throw new AuthException.UserNotFoundException("Unable to load user data. Try again later.");
         }
@@ -95,13 +95,13 @@ public class AuthServiceHelper {
 
     //------------------------------------------------------------------------------------------------------------------
 
-    void sendEmailMessageForActivateAccount(LocalUserModel user, OtaTokenType tokenType) {
+    void sendEmailMessageForActivateAccount(LocalUserModel user) {
         final Optional<OtaTokenModel> findOtaToken = user.getOtaTokens().stream()
                 .filter(t -> !t.getAlreadyUsed() && TimeUtil.isExpired(t.getExpirationDate())
                         && t.getUsedFor().equals(ACTIVATE_ACCOUNT))
                 .findFirst();
         if (user.getIsActivated() || findOtaToken.isPresent()) return;
-        final String otaToken = otaTokenUserService.generateAndSaveUserOtaToken(tokenType, user);
+        final String otaToken = otaTokenUserService.generateAndSaveUserOtaToken(ACTIVATE_ACCOUNT, user);
         final String token = tokenCreator.createAcitivateServiceViaEmailToken(user, otaToken);
         mailOutService.activateAccount(user.getId(), user.getEmailAddress(), user, token, otaToken);
     }

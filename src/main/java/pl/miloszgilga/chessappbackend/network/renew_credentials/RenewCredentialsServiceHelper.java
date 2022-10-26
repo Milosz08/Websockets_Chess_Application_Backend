@@ -18,14 +18,13 @@
 
 package pl.miloszgilga.chessappbackend.network.renew_credentials;
 
+import org.slf4j.*;
+import org.springframework.stereotype.Component;
+
 import java.util.*;
 import java.util.stream.Collectors;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import javax.transaction.Transactional;
-import org.springframework.stereotype.Component;
 
 import pl.miloszgilga.lib.jmpsl.util.StringUtil;
 
@@ -34,6 +33,8 @@ import pl.miloszgilga.chessappbackend.token.JsonWebTokenVerificator;
 import pl.miloszgilga.chessappbackend.exception.custom.AuthException;
 import pl.miloszgilga.chessappbackend.network.auth.dto.EmailHashWithNormalDto;
 import pl.miloszgilga.chessappbackend.token.dto.ActivateServiceViaEmailTokenClaims;
+
+import static java.util.Objects.isNull;
 
 //----------------------------------------------------------------------------------------------------------------------
 
@@ -57,7 +58,7 @@ class RenewCredentialsServiceHelper {
     Set<String> extractUserEmails(LocalUserModel userModel) {
         final Set<String> emailAddresses = new HashSet<>();
         emailAddresses.add(userModel.getEmailAddress());
-        if (userModel.getLocalUserDetails().getSecondEmailAddress() != null) {
+        if (!isNull(userModel.getLocalUserDetails().getSecondEmailAddress())) {
             emailAddresses.add(userModel.getLocalUserDetails().getSecondEmailAddress());
         }
         return emailAddresses;

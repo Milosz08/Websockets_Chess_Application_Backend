@@ -18,9 +18,7 @@
 
 package pl.miloszgilga.chessappbackend.network.ota_token;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
+import org.slf4j.*;
 import org.springframework.stereotype.Service;
 
 import java.net.URI;
@@ -85,7 +83,7 @@ class OtaTokenService implements IOtaTokenService {
     @Override
     @Transactional
     public SimpleServerMessageDto activateAccount(final OtaTokenMultipleEmailsReqDto req) {
-        final OtaTokenModel tokenModel = helper.findTokenBasedEmailsAndTokenAndCompare(req, ACTIVATE_ACCOUNT);
+        final OtaTokenModel tokenModel = helper.findTokenBasedEmailsAndTokenAndCompare(req);
         final LocalUserModel localUserModel = tokenModel.getLocalUser();
         if (localUserModel.getIsActivated()) {
             LOGGER.warn("Attempt to re-activate account. Account activation data: {}", req);
@@ -112,6 +110,6 @@ class OtaTokenService implements IOtaTokenService {
                 .successMessage("Your account is successful activated. Now you can login via pressing the login button below.")
                 .failureMessage("Unable to activate account with passed token. Token probaby is malformed.")
                 .build();
-        return helper.checkBearerTokenFromLinkWithOtaToken(data, true);
+        return helper.checkBearerTokenFromLinkWithOtaToken(data);
     }
 }
