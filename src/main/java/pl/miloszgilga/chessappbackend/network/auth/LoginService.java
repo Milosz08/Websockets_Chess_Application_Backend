@@ -139,10 +139,7 @@ public class LoginService implements ILoginService {
     @Transactional
     public void logout(final Long userId) {
         final Optional<RefreshTokenModel> refreshTokenModel = refreshTokenRepository.findRefreshTokenByUserIdAndNotNullable(userId);
-        refreshTokenModel.ifPresent(token -> {
-            token.setRefreshToken(null);
-            refreshTokenRepository.save(token);
-        });
+        refreshTokenModel.ifPresent(token -> token.setRefreshToken(null));
         SecurityContextHolder.getContext().setAuthentication(null);
         LOGGER.info("User with id {} was successfully logout.", userId);
     }
@@ -166,7 +163,6 @@ public class LoginService implements ILoginService {
             finalRefreshToken = regeneratedToken.getValue0();
             refreshToken.setRefreshToken(regeneratedToken.getValue0());
             refreshToken.setExpiredAt(regeneratedToken.getValue1());
-            refreshTokenRepository.save(refreshToken);
         }
         return RefreshTokenResDto.builder()
                 .token(tokenCreator.createUserCredentialsToken(refreshToken.getLocalUser()))

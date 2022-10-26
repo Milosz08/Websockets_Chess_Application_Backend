@@ -45,18 +45,15 @@ class OtaTokenService implements IOtaTokenService {
     private final EnvironmentVars environment;
     private final OtaTokenServiceHelper helper;
     private final JsonWebTokenCreator tokenCreator;
-    private final ILocalUserRepository userRepository;
     private final IOtaTokenRepository otaTokenRepository;
 
     //------------------------------------------------------------------------------------------------------------------
 
     OtaTokenService(EnvironmentVars environment, OtaTokenServiceHelper helper,
-                    JsonWebTokenCreator tokenCreator, ILocalUserRepository userRepository,
-                    IOtaTokenRepository otaTokenRepository) {
+                    JsonWebTokenCreator tokenCreator, IOtaTokenRepository otaTokenRepository) {
         this.environment = environment;
         this.helper = helper;
         this.tokenCreator = tokenCreator;
-        this.userRepository = userRepository;
         this.otaTokenRepository = otaTokenRepository;
     }
 
@@ -91,7 +88,6 @@ class OtaTokenService implements IOtaTokenService {
         }
         if (helper.verifyOtaTokenDetailsAndSetAlreadyUsed(tokenModel)) {
             localUserModel.setIsActivated(true);
-            userRepository.save(localUserModel);
         }
         LOGGER.info("Successfuly activated user account via OTA token form. Activation data: {}", req);
         return new SimpleServerMessageDto("Your account is successful activated. Now you can login via pressing " +

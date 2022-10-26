@@ -144,8 +144,7 @@ public class SignupService implements ISignupService, IOAuth2LoaderService {
         mapperFacade.map(req, validateUser.getLocalUserDetails());
         validateUser.getLocalUserDetails().setIsDataFilled(true);
         helper.addUserToNewsletter(validateUser, req.getNewsletterAccept());
-        localUserRepository.save(validateUser);
-        helper.sendEmailMessageForActivateAccount(validateUser, ACTIVATE_ACCOUNT);
+        helper.sendEmailMessageForActivateAccount(validateUser);
         LOGGER.info("Update new user data in database via OAUTH2 interface. User data: {}", req);
         return new SimpleServerMessageDto("Your account details information has been successfully updated.");
     }
@@ -222,7 +221,6 @@ public class SignupService implements ISignupService, IOAuth2LoaderService {
         userDetails.setHasPhoto(!userInfo.getUserImageUrl().isEmpty());
         userDetails.setPhotoEmbedLink(userInfo.getUserImageUrl().isEmpty() ? null : userInfo.getUserImageUrl());
 
-        localUserRepository.save(foundUser);
         LOGGER.info("Update user via {} OAuth2 provider. User data: {}", data.getSupplier().getSupplierName(), foundUser);
         return OAuth2Util.fabricateUser(foundUser, data);
     }

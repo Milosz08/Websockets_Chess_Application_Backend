@@ -120,10 +120,7 @@ class RenewCredentialsService implements IRenewCredentialsService {
 
         otaTokenRepository
                 .findTokenBasedValueAndUsed(claims.getOtaToken(), RESET_PASSWORD)
-                .ifPresent(otaTokenModel -> {
-                    otaTokenModel.setAlreadyUsed(true);
-                    otaTokenRepository.save(otaTokenModel);
-                });
+                .ifPresent(otaTokenModel -> otaTokenModel.setAlreadyUsed(true));
 
         return mapperFacade.map(user, ChangePasswordUserDetailsResDto.class);
     }
@@ -145,7 +142,6 @@ class RenewCredentialsService implements IRenewCredentialsService {
                     "type different password.");
         }
         user.setPassword(passwordEncoder.encode(req.getPassword()));
-        localUserRepository.save(user);
         LOGGER.info("Successful change forgotten password for user {}", user);
         return new SimpleServerMessageDto("Your password has been successfully changed. You can proceed to login " +
                 "using the button below.");

@@ -36,6 +36,8 @@ import pl.miloszgilga.chessappbackend.network.ota_token.dto.OtaTokenMultipleEmai
 import pl.miloszgilga.chessappbackend.network.ota_token.domain.*;
 import pl.miloszgilga.chessappbackend.network.ota_token.dto.TokenLinkValidationData;
 
+import static pl.miloszgilga.chessappbackend.token.OtaTokenType.ACTIVATE_ACCOUNT;
+
 //----------------------------------------------------------------------------------------------------------------------
 
 @Component
