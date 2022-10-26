@@ -59,4 +59,9 @@ public class ApplicationEndpoints {
     public static final String OTA_TOKEN_ENDPOINT = BASIC_ENDPOINT + "ota-token";
     public static final String CHANGE_PASSWORD = "/change-password";
     public static final String ACTIVATE_ACCOUNT = "/activate-account";
+
+    public static final String USER_IMAGE_ENDPOINT = BASIC_ENDPOINT + "user-image";
+    public static final String USER_IMAGES_ALL = "/images-all";
+    public static final String AVATAR = "/avatar";
+    public static final String BANNER = "/banner";
 }
