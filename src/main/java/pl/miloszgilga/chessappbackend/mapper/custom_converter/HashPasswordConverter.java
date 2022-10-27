@@ -22,9 +22,10 @@ import ma.glasnost.orika.*;
 import ma.glasnost.orika.metadata.Type;
 
 import org.springframework.stereotype.Component;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import pl.miloszgilga.lib.jmpsl.util.mapper.*;
-import org.springframework.security.crypto.password.PasswordEncoder;
+import pl.miloszgilga.lib.jmpsl.util.mapper.converter.ImmediatelyLoadConverter;
 
 import static pl.miloszgilga.chessappbackend.mapper.Converter.HASH_PASSWORD;
 
@@ -32,6 +33,7 @@ import static pl.miloszgilga.chessappbackend.mapper.Converter.HASH_PASSWORD;
 
 @Component
 @MappingConverter
+@ImmediatelyLoadConverter
 public class HashPasswordConverter extends CustomConverter<String, String> implements IReflectConverter {
 
     private final PasswordEncoder passwordEncoder;

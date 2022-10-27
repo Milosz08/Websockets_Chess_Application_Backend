@@ -25,11 +25,7 @@ import lombok.*;
 @Getter
 @AllArgsConstructor
 public enum Converter {
-    DATE_FROM_STRING_TO_OBJECT("date-from-string-to-object"),
-    HASH_PASSWORD("hash-password"),
-    CAPITALIZED_FIRST_LETTER("capitalized-first-letter"),
-    CHANGE_ALL_LETTERS_TO_LOWER("change-all-letters-to-lower"),
-    INSERT_NULL_IF_STRING_IS_EMPTY("unsert-null-if-string-is-empty");
+    HASH_PASSWORD("hash-password");
 
     //------------------------------------------------------------------------------------------------------------------
 
