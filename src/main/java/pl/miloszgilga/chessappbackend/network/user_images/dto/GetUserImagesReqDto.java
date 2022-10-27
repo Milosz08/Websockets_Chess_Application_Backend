@@ -16,7 +16,7 @@
  *  COPIES OR SUBSTANTIAL PORTIONS OF THE SOFTWARE.
  */
 
-package pl.miloszgilga.chessappbackend.network.user_image.dto;
+package pl.miloszgilga.chessappbackend.network.user_images.dto;
 
 import lombok.Data;
 import javax.validation.constraints.NotBlank;

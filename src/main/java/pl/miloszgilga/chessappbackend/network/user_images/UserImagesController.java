@@ -16,7 +16,7 @@
  *  COPIES OR SUBSTANTIAL PORTIONS OF THE SOFTWARE.
  */
 
-package pl.miloszgilga.chessappbackend.network.user_image;
+package pl.miloszgilga.chessappbackend.network.user_images;
 
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
@@ -28,7 +28,7 @@ import pl.miloszgilga.lib.jmpsl.security.user.CurrentUser;
 import pl.miloszgilga.lib.jmpsl.oauth2.user.OAuth2UserExtender;
 import pl.miloszgilga.lib.jmpsl.security.excluder.MethodSecurityPathExclude;
 
-import pl.miloszgilga.chessappbackend.network.user_image.dto.*;
+import pl.miloszgilga.chessappbackend.network.user_images.dto.*;
 import pl.miloszgilga.chessappbackend.dto.SimpleServerMessageDto;
 import pl.miloszgilga.chessappbackend.aspect.AspectCheckAuthSupplier;
 import pl.miloszgilga.chessappbackend.network.auth.domain.LocalUserModel;
@@ -39,15 +39,15 @@ import static pl.miloszgilga.chessappbackend.config.ApplicationEndpoints.*;
 
 @RestController
 @RequestMapping(USER_IMAGE_ENDPOINT)
-class UserImageController {
+class UserImagesController {
 
-    private final IUserImageService service;
+    private final IUserImagesService service;
     private final IUserAvatarService avatarService;
     private final IUserBannerService bannerService;
 
     //------------------------------------------------------------------------------------------------------------------
 
-    UserImageController(IUserImageService service, IUserAvatarService avatarService, IUserBannerService bannerService) {
+    UserImagesController(IUserImagesService service, IUserAvatarService avatarService, IUserBannerService bannerService) {
         this.service = service;
         this.avatarService = avatarService;
         this.bannerService = bannerService;

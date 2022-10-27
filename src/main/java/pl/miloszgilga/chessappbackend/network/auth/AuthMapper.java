@@ -78,33 +78,32 @@ public class AuthMapper {
                 .field("localUserDetails.isDataFilled", "isDataFilled")
                 .field("emailAddress", "userPrimaryEmailAddress")
                 .customize(userToAttemptSignupResDtoCustomizer)
-                .byDefault()
-                .register();
+                .byDefault().register();
 
         mapperFactory.classMap(OAuth2RegistrationDataDto.class, LocalUserModel.class)
                 .customize(signupOAuth2DtoToUserCustomizer)
-                .byDefault()
-                .register();
+                .byDefault().register();
 
         mapperFactory.classMap(OAuth2RegistrationDataDto.class, LocalUserDetailsModel.class)
                 .customize(signupOAuth2DtoToUserDetailsCustomizer)
-                .byDefault()
-                .register();
+                .byDefault().register();
 
         mapperFactory.classMap(FinishSignupReqDto.class, LocalUserDetailsModel.class)
                 .exclude("gender")
                 .customize(filledSignupDataToUserDetailsCustomizer)
                 .fieldMap("birthDate").converter(DATE_FROM_STRING_TO_OBJECT.getName()).add()
                 .field("countryName", "country")
-                .byDefault()
-                .register();
+                .byDefault().register();
+
+        mapperFactory.classMap(OAuth2RegistrationDataDto.class, LocalUserImagesModel.class)
+                .customize(signupOAuth2DtoToUserImagesCustomizer)
+                .byDefault().register();
 
         mapperFactory.classMap(LocalUserModel.class, SuccessedLoginResDto.class)
                 .field("id", "userId")
                 .field("localUserImages.hasAvatarImage", "ifHasPhoto")
                 .field("localUserImages.avatarImage", "photoUrl")
                 .customize(userToSuccessedLoginResDtoCustomizer)
-                .byDefault()
-                .register();
+                .byDefault().register();
     }
 }

@@ -1,8 +1,8 @@
 /*
  * Copyright (c) 2022 by MILOSZ GILGA <https://miloszgilga.pl>
  *
- *  File name: GetUserImagesResDto.java
- *  Last modified: 26/10/2022, 09:50
+ *  File name: IUserBannerService.java
+ *  Last modified: 26/10/2022, 11:51
  *  Project name: chess-app-backend
  *
  *  Licensed under the MIT license; you may not use this file except in compliance with the License.
@@ -16,18 +16,15 @@
  *  COPIES OR SUBSTANTIAL PORTIONS OF THE SOFTWARE.
  */
 
-package pl.miloszgilga.chessappbackend.network.user_image.dto;
+package pl.miloszgilga.chessappbackend.network.user_images;
 
-import lombok.*;
+import org.springframework.web.multipart.MultipartFile;
+import pl.miloszgilga.chessappbackend.dto.SimpleServerMessageDto;
 
 //----------------------------------------------------------------------------------------------------------------------
 
-@Data
-@Builder
-@AllArgsConstructor
-public class GetUserImagesResDto {
-    private String avatarUri;
-    private boolean isAvatarNotDefault;
-    private String bannerUri;
-    private boolean isBannerNotDefault;
+interface IUserBannerService {
+    SimpleServerMessageDto addUserBanner(final MultipartFile image, final Long userId);
+    SimpleServerMessageDto updateUserBanner(final MultipartFile image, final Long userId);
+    SimpleServerMessageDto deleteUserBanner(final Long userId);
 }

@@ -16,7 +16,7 @@
  *  COPIES OR SUBSTANTIAL PORTIONS OF THE SOFTWARE.
  */
 
-package pl.miloszgilga.chessappbackend.network.user_image;
+package pl.miloszgilga.chessappbackend.network.user_images;
 
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;

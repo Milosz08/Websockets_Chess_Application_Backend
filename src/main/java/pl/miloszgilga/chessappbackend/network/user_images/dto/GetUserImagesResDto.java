@@ -1,8 +1,8 @@
 /*
  * Copyright (c) 2022 by MILOSZ GILGA <https://miloszgilga.pl>
  *
- *  File name: IUserImageService.java
- *  Last modified: 26/10/2022, 09:44
+ *  File name: GetUserImagesResDto.java
+ *  Last modified: 26/10/2022, 09:50
  *  Project name: chess-app-backend
  *
  *  Licensed under the MIT license; you may not use this file except in compliance with the License.
@@ -16,12 +16,19 @@
  *  COPIES OR SUBSTANTIAL PORTIONS OF THE SOFTWARE.
  */
 
-package pl.miloszgilga.chessappbackend.network.user_image;
+package pl.miloszgilga.chessappbackend.network.user_images.dto;
 
-import pl.miloszgilga.chessappbackend.network.user_image.dto.*;
+import lombok.*;
 
 //----------------------------------------------------------------------------------------------------------------------
 
-interface IUserImageService {
-    GetUserImagesResDto getUserImages(final GetUserImagesReqDto req);
+@Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+public class GetUserImagesResDto {
+    private String avatarUri;
+    private boolean isAvatarNotDefault;
+    private String bannerUri;
+    private boolean isBannerNotDefault;
 }
