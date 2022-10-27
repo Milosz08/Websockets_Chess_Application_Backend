@@ -36,6 +36,5 @@ public class SignupLocalDtoToUserDetailsCustomizer extends CustomMapper<SignupVi
     public void mapAtoB(SignupViaLocalReqDto reqDto, LocalUserDetailsModel userDetailsModel, MappingContext context) {
         userDetailsModel.setGender(UserGenderSpecific.findGenderByString(reqDto.getGender()));
         userDetailsModel.setIsDataFilled(true);
-        userDetailsModel.setHasPhoto(false);
     }
 }

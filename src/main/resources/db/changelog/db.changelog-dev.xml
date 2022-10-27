@@ -22,6 +22,7 @@
     <include file="migrations/2022-10-migrations/V14__2022-10-02__change-newsletter-name-varchar-length.xml" relativeToChangelogFile="true"/>
     <include file="migrations/2022-10-migrations/V15__2022-10-10__add-onetomany-relation-in-newsletter-tables.xml" relativeToChangelogFile="true"/>
     <include file="migrations/2022-10-migrations/V16__2022-10-16__change-refresh-token-column-to-nullable.xml" relativeToChangelogFile="true"/>
+    <include file="migrations/2022-10-migrations/V17__2022-10-27__split-user-images-to-separate-relation.xml" relativeToChangelogFile="true"/>
 
     <!-- Auto filled data -->
 

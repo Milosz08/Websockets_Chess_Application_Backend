@@ -47,8 +47,8 @@ public class ExposeStaticDataMapper {
         mapperFactory.classMap(LocalUserModel.class, RememberAccountResDto.class)
                 .field("id", "userId")
                 .field("nickname", "userLogin")
-                .field("localUserDetails.hasPhoto", "ifHasPhoto")
-                .field("localUserDetails.photoEmbedLink", "photoUri")
+                .field("localUserImages.hasAvatarImage", "ifHasPhoto")
+                .field("localUserImages.avatarImage", "photoUri")
                 .customize(userToRememberAccountCustomizer)
                 .byDefault()
                 .register();

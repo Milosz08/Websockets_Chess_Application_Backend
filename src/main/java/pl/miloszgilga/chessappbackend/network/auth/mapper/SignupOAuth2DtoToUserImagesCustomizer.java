@@ -1,8 +1,8 @@
 /*
  * Copyright (c) 2022 by MILOSZ GILGA <https://miloszgilga.pl>
  *
- * File name: SignupOAuth2DtoToUserDetailsCustomizer.java
- * Last modified: 28/09/2022, 11:49
+ * File name: SignupOAuth2DtoToUserImagesCustomizer.java
+ * Last modified: 27/10/2022, 03:02
  * Project name: chess-app-backend
  *
  * Licensed under the MIT license; you may not use this file except in compliance with the License.
@@ -21,17 +21,21 @@ package pl.miloszgilga.chessappbackend.network.auth.mapper;
 import ma.glasnost.orika.*;
 import org.springframework.stereotype.Component;
 
+import pl.miloszgilga.lib.jmpsl.oauth2.user.*;
 import pl.miloszgilga.lib.jmpsl.oauth2.service.OAuth2RegistrationDataDto;
-import pl.miloszgilga.chessappbackend.network.auth.domain.LocalUserDetailsModel;
+import pl.miloszgilga.chessappbackend.network.user_images.domain.LocalUserImagesModel;
 
 //----------------------------------------------------------------------------------------------------------------------
 
 @Component
-public class SignupOAuth2DtoToUserDetailsCustomizer extends CustomMapper<OAuth2RegistrationDataDto, LocalUserDetailsModel> {
+public class SignupOAuth2DtoToUserImagesCustomizer extends CustomMapper<OAuth2RegistrationDataDto, LocalUserImagesModel> {
 
     @Override
-    public void mapAtoB(OAuth2RegistrationDataDto data, LocalUserDetailsModel detModel, MappingContext context) {
-        detModel.setHasNewsletterAccept(detModel.getHasNewsletterAccept() != null && detModel.getHasNewsletterAccept());
-        detModel.setIsDataFilled(detModel.getIsDataFilled() != null && detModel.getIsDataFilled());
+    public void mapAtoB(OAuth2RegistrationDataDto dto, LocalUserImagesModel userImages, MappingContext context) {
+        final OAuth2UserInfoBase userInfo = OAuth2UserInfoFactory.getInstance(dto.getSupplier(), dto.getAttributes());
+        userImages.setHasAvatarImage(userInfo.getUserImageUrl().isBlank());
+        if (userInfo.getUserImageUrl().isEmpty()) return;
+        userImages.setAvatarImage(userInfo.getUserImageUrl());
+        userImages.setHasBannerImage(false);
     }
 }

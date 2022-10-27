@@ -29,11 +29,12 @@ import javax.persistence.*;
 import static javax.persistence.CascadeType.*;
 import static javax.persistence.FetchType.LAZY;
 
-import pl.miloszgilga.lib.jmpsl.oauth2.OAuth2Supplier;
-import pl.miloszgilga.lib.jmpsl.oauth2.OAuth2SupplierPersistenceEnumConverter;
+import pl.miloszgilga.lib.jmpsl.oauth2.*;
 import pl.miloszgilga.lib.jmpsl.security.user.IAuthUserModel;
+
 import pl.miloszgilga.chessappbackend.audit.AuditableEntity;
 import pl.miloszgilga.chessappbackend.network.ota_token.domain.OtaTokenModel;
+import pl.miloszgilga.chessappbackend.network.user_images.domain.LocalUserImagesModel;
 
 //----------------------------------------------------------------------------------------------------------------------
 
@@ -57,16 +58,19 @@ public class LocalUserModel extends AuditableEntity implements Serializable, IAu
     @Column(name = "IS_ACTIVATED")          private Boolean isActivated;
     @Column(name = "IS_BLOCKED")            private Boolean isBlocked;
 
-    @OneToOne(fetch = LAZY, mappedBy = "localUser", cascade = { PERSIST, MERGE })
+    @OneToOne(fetch = LAZY, mappedBy = "localUser", cascade = { PERSIST, MERGE, REMOVE })
     private RefreshTokenModel refreshToken;
 
     @OneToMany(fetch = LAZY, mappedBy = "localUser", cascade = { PERSIST, MERGE })
     private Set<OtaTokenModel> otaTokens = new HashSet<>();
 
-    @OneToOne(fetch = LAZY, mappedBy = "localUser", cascade = { PERSIST, MERGE })
+    @OneToOne(fetch = LAZY, mappedBy = "localUser", cascade = { PERSIST, MERGE, REMOVE })
     private LocalUserDetailsModel localUserDetails;
 
-    @ManyToMany(cascade = { PERSIST, MERGE }, fetch = LAZY)
+    @OneToOne(fetch = LAZY, mappedBy = "localUser", cascade = { PERSIST, MERGE, REMOVE })
+    private LocalUserImagesModel localUserImages;
+
+    @ManyToMany(fetch = LAZY, cascade = { PERSIST, MERGE, REMOVE })
     @JoinTable(name = "LOCAL_USER_ROLE_BINDING",
             joinColumns = { @JoinColumn(name = "LOCAL_USER_ID") },
             inverseJoinColumns = { @JoinColumn(name = "LOCAL_USER_ROLE_ID") })

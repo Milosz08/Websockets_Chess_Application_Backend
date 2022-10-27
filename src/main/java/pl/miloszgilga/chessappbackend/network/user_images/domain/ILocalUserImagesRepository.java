@@ -1,8 +1,8 @@
 /*
  * Copyright (c) 2022 by MILOSZ GILGA <https://miloszgilga.pl>
  *
- * File name: SignupOAuth2DtoToUserDetailsCustomizer.java
- * Last modified: 28/09/2022, 11:49
+ * File name: ILocalUserImagesRepository.java
+ * Last modified: 27/10/2022, 02:45
  * Project name: chess-app-backend
  *
  * Licensed under the MIT license; you may not use this file except in compliance with the License.
@@ -16,22 +16,20 @@
  * COPIES OR SUBSTANTIAL PORTIONS OF THE SOFTWARE.
  */
 
-package pl.miloszgilga.chessappbackend.network.auth.mapper;
+package pl.miloszgilga.chessappbackend.network.user_images.domain;
 
-import ma.glasnost.orika.*;
-import org.springframework.stereotype.Component;
+import org.springframework.data.jpa.repository.*;
+import org.springframework.stereotype.Repository;
+import org.springframework.data.repository.query.Param;
 
-import pl.miloszgilga.lib.jmpsl.oauth2.service.OAuth2RegistrationDataDto;
-import pl.miloszgilga.chessappbackend.network.auth.domain.LocalUserDetailsModel;
+import java.util.Optional;
 
 //----------------------------------------------------------------------------------------------------------------------
 
-@Component
-public class SignupOAuth2DtoToUserDetailsCustomizer extends CustomMapper<OAuth2RegistrationDataDto, LocalUserDetailsModel> {
+@Repository
+public interface ILocalUserImagesRepository extends JpaRepository<LocalUserImagesModel, Long> {
 
-    @Override
-    public void mapAtoB(OAuth2RegistrationDataDto data, LocalUserDetailsModel detModel, MappingContext context) {
-        detModel.setHasNewsletterAccept(detModel.getHasNewsletterAccept() != null && detModel.getHasNewsletterAccept());
-        detModel.setIsDataFilled(detModel.getIsDataFilled() != null && detModel.getIsDataFilled());
-    }
+    @Query(value = "SELECT m FROM LocalUserImagesModel m INNER JOIN m.localUser u " +
+            "WHERE u.nickname=:nickname")
+    Optional<LocalUserImagesModel> findUserImagesByNickname(@Param("nickname") String nickname);
 }

@@ -45,8 +45,6 @@ public class LocalUserDetailsModel extends AuditableEntity implements Serializab
     @Column(name = "BIRTH_DATE")            private Date birthDate;
     @Column(name = "COUNTRY")               private String country;
     @Column(name = "GENDER")                private UserGenderSpecific gender;
-    @Column(name = "HAS_PHOTO")             private Boolean hasPhoto;
-    @Column(name = "PHOTO_EMBED_LINK")      private String photoEmbedLink;
     @Column(name = "HAS_NEWSLETTER_ACCEPT") private Boolean hasNewsletterAccept;
     @Column(name = "IS_DATA_FILLED")        private Boolean isDataFilled;
 
@@ -57,13 +55,11 @@ public class LocalUserDetailsModel extends AuditableEntity implements Serializab
     //------------------------------------------------------------------------------------------------------------------
 
     public LocalUserDetailsModel(String secondEmailAddress, Date birthDate, String country, UserGenderSpecific gender,
-                                 Boolean hasPhoto, String photoEmbedLink, Boolean hasNewsletterAccept, Boolean isDataFilled) {
+                                 Boolean hasNewsletterAccept, Boolean isDataFilled) {
         this.secondEmailAddress = secondEmailAddress;
         this.birthDate = birthDate;
         this.country = country;
         this.gender = gender;
-        this.hasPhoto = hasPhoto;
-        this.photoEmbedLink = photoEmbedLink;
         this.hasNewsletterAccept = hasNewsletterAccept;
         this.isDataFilled = isDataFilled;
     }
@@ -77,8 +73,6 @@ public class LocalUserDetailsModel extends AuditableEntity implements Serializab
                 ", birthDate=" + birthDate +
                 ", country='" + country + '\'' +
                 ", gender=" + gender +
-                ", hasPhoto=" + hasPhoto +
-                ", photoEmbedLink='" + photoEmbedLink + '\'' +
                 ", hasNewsletterAccept=" + hasNewsletterAccept +
                 ", isDataFilled=" + isDataFilled +
                 "} " + super.toString();

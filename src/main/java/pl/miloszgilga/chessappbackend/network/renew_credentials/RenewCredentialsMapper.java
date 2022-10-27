@@ -46,8 +46,8 @@ public class RenewCredentialsMapper {
     public void renewCredentialsAutoMapperFacadeImplementation() {
         mapperFactory.classMap(LocalUserModel.class, ChangePasswordUserDetailsResDto.class)
                 .field("id", "userId")
-                .field("localUserDetails.hasPhoto", "ifHasPhoto")
-                .field("localUserDetails.photoEmbedLink", "photoUrl")
+                .field("localUserImages.hasAvatarImage", "ifHasPhoto")
+                .field("localUserImages.avatarImage", "photoUrl")
                 .customize(userToChangePasswordUserDetailsCustomizer)
                 .byDefault()
                 .register();

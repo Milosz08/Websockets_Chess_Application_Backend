@@ -26,12 +26,14 @@ import org.springframework.context.annotation.Primary;
 
 import pl.miloszgilga.lib.jmpsl.util.mapper.MappingFacade;
 import pl.miloszgilga.lib.jmpsl.oauth2.service.OAuth2RegistrationDataDto;
+import pl.miloszgilga.chessappbackend.network.user_images.domain.LocalUserImagesModel;
 
 import pl.miloszgilga.chessappbackend.network.auth.dto.*;
 import pl.miloszgilga.chessappbackend.network.auth.mapper.*;
 import pl.miloszgilga.chessappbackend.network.auth.domain.*;
 
-import static pl.miloszgilga.chessappbackend.mapper.Converter.*;
+import static pl.miloszgilga.lib.jmpsl.util.mapper.converter.Converter.*;
+import static pl.miloszgilga.chessappbackend.mapper.Converter.HASH_PASSWORD;
 
 //----------------------------------------------------------------------------------------------------------------------
 
@@ -44,6 +46,7 @@ public class AuthMapper {
     private final SignupLocalDtoToUserCustomizer signupLocalDtoToUserCustomizer;
     private final SignupLocalDtoToUserDetailsCustomizer signupLocalDtoToUserDetailsCustomizer;
     private final UserToAttemptSignupResDtoCustomizer userToAttemptSignupResDtoCustomizer;
+    private final SignupOAuth2DtoToUserImagesCustomizer signupOAuth2DtoToUserImagesCustomizer;
     private final SignupOAuth2DtoToUserCustomizer signupOAuth2DtoToUserCustomizer;
     private final SignupOAuth2DtoToUserDetailsCustomizer signupOAuth2DtoToUserDetailsCustomizer;
     private final UserToSuccessedLoginResDtoCustomizer userToSuccessedLoginResDtoCustomizer;
@@ -71,7 +74,7 @@ public class AuthMapper {
                 .byDefault().register();
 
         mapperFactory.classMap(LocalUserModel.class, SuccessedAttemptToFinishSignupResDto.class)
-                .field("localUserDetails.photoEmbedLink", "photoUrl")
+                .field("localUserImages.avatarImage", "photoUrl")
                 .field("localUserDetails.isDataFilled", "isDataFilled")
                 .field("emailAddress", "userPrimaryEmailAddress")
                 .customize(userToAttemptSignupResDtoCustomizer)
@@ -98,8 +101,8 @@ public class AuthMapper {
 
         mapperFactory.classMap(LocalUserModel.class, SuccessedLoginResDto.class)
                 .field("id", "userId")
-                .field("localUserDetails.hasPhoto", "ifHasPhoto")
-                .field("localUserDetails.photoEmbedLink", "photoUrl")
+                .field("localUserImages.hasAvatarImage", "ifHasPhoto")
+                .field("localUserImages.avatarImage", "photoUrl")
                 .customize(userToSuccessedLoginResDtoCustomizer)
                 .byDefault()
                 .register();

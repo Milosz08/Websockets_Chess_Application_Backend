@@ -18,15 +18,11 @@
 
 package pl.miloszgilga.chessappbackend.network.auth;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
+import org.slf4j.*;
 import ma.glasnost.orika.MapperFacade;
-
 import org.springframework.stereotype.Service;
 
-import java.util.Date;
-import java.util.Optional;
+import java.util.*;
 import javax.transaction.Transactional;
 
 import pl.miloszgilga.chessappbackend.dto.*;
@@ -43,8 +39,10 @@ import pl.miloszgilga.lib.jmpsl.oauth2.*;
 import pl.miloszgilga.lib.jmpsl.oauth2.user.*;
 import pl.miloszgilga.lib.jmpsl.oauth2.service.*;
 
-import static pl.miloszgilga.chessappbackend.token.OtaTokenType.ACTIVATE_ACCOUNT;
+import pl.miloszgilga.chessappbackend.network.user_images.domain.LocalUserImagesModel;
+
 import static pl.miloszgilga.lib.jmpsl.oauth2.OAuth2Supplier.LOCAL;
+import static pl.miloszgilga.chessappbackend.token.OtaTokenType.ACTIVATE_ACCOUNT;
 
 //----------------------------------------------------------------------------------------------------------------------
 
@@ -82,9 +80,13 @@ public class SignupService implements ISignupService, IOAuth2LoaderService {
     public SuccessedAttemptToFinishSignupResDto signupViaLocal(final SignupViaLocalReqDto req) {
         final LocalUserModel userModel = mapperFacade.map(req, LocalUserModel.class);
         final LocalUserDetailsModel userDetailsModel = mapperFacade.map(req, LocalUserDetailsModel.class);
+        final LocalUserImagesModel userImagesModel = LocalUserImagesModel.builder()
+                .hasBannerImage(false).hasAvatarImage(false).build();
 
         userModel.setLocalUserDetails(userDetailsModel);
+        userModel.setLocalUserImages(userImagesModel);
         userDetailsModel.setLocalUser(userModel);
+        userImagesModel.setLocalUser(userModel);
         helper.addUserToNewsletter(userModel, req.getHasNewsletterAccept());
         localUserRepository.save(userModel);
         helper.sendEmailMessageForActivateAccount(userModel);
@@ -196,8 +198,11 @@ public class SignupService implements ISignupService, IOAuth2LoaderService {
     OAuth2UserExtender registerNewUserViaOAuth2(final OAuth2RegistrationDataDto data, final String supplierName) {
         final LocalUserModel userModel = mapperFacade.map(data, LocalUserModel.class);
         final LocalUserDetailsModel userDetailsModel = mapperFacade.map(data, LocalUserDetailsModel.class);
+        final LocalUserImagesModel userImagesModel = mapperFacade.map(data, LocalUserImagesModel.class);
         userDetailsModel.setLocalUser(userModel);
+        userImagesModel.setLocalUser(userModel);
         userModel.setLocalUserDetails(userDetailsModel);
+        userModel.setLocalUserImages(userImagesModel);
         localUserRepository.save(userModel);
         LOGGER.info("Create new user via {} OAuth2 provider. User data: {}", supplierName, userModel);
         return OAuth2Util.fabricateUser(userModel, data);
@@ -209,7 +214,6 @@ public class SignupService implements ISignupService, IOAuth2LoaderService {
     OAuth2UserExtender updateAlreadyExistUserViaOAuth2(final OAuth2RegistrationDataDto data, final LocalUserModel foundUser) {
         final OAuth2UserInfoBase userInfo = OAuth2UserInfoFactory.getInstance(data.getSupplier(), data.getAttributes());
         final OAuth2Supplier supplier = foundUser.getOAuth2Supplier();
-        final LocalUserDetailsModel userDetails = foundUser.getLocalUserDetails();
         if (!supplier.equals(data.getSupplier()) || supplier.equals(LOCAL)) {
             LOGGER.error("Attempt to create already existing user via OAuth2. Email: {}", foundUser.getEmailAddress());
             throw new AuthException.AccountAlreadyExistException("Account with email %s is already registered.",
@@ -218,8 +222,8 @@ public class SignupService implements ISignupService, IOAuth2LoaderService {
 
         foundUser.setFirstName(manipulator.extractUserDataFromUsername(userInfo.getUsername()).getValue0());
         foundUser.setLastName(manipulator.extractUserDataFromUsername(userInfo.getUsername()).getValue1());
-        userDetails.setHasPhoto(!userInfo.getUserImageUrl().isEmpty());
-        userDetails.setPhotoEmbedLink(userInfo.getUserImageUrl().isEmpty() ? null : userInfo.getUserImageUrl());
+        foundUser.getLocalUserImages().setHasAvatarImage(!userInfo.getUserImageUrl().isEmpty());
+        foundUser.getLocalUserImages().setAvatarImage(userInfo.getUserImageUrl().isEmpty() ? null : userInfo.getUserImageUrl());
 
         LOGGER.info("Update user via {} OAuth2 provider. User data: {}", data.getSupplier().getSupplierName(), foundUser);
         return OAuth2Util.fabricateUser(foundUser, data);
