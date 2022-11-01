@@ -29,7 +29,5 @@ import lombok.*;
 public class ChangePasswordUserDetailsResDto {
     private String fullName;
     private Long userId;
-    private String initials;
-    private boolean ifHasPhoto;
     private String photoUrl;
 }

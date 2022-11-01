@@ -30,8 +30,6 @@ public class SuccessedLoginResDto {
     private Long userId;
     private String nickname;
     private String fullName;
-    private String initials;
-    private boolean ifHasPhoto;
     private String credentialsSupplier;
     private String photoUrl;
     private String jwtToken;

@@ -25,9 +25,7 @@ import lombok.Data;
 @Data
 public class RememberAccountResDto {
     private Long userId;
-    private String initials;
     private String fullName;
-    private boolean ifHasPhoto;
     private String photoUri;
     private String userLogin;
 }

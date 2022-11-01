@@ -21,8 +21,6 @@ package pl.miloszgilga.chessappbackend.network.expose_static_data.mapper;
 import ma.glasnost.orika.*;
 import org.springframework.stereotype.Component;
 
-import pl.miloszgilga.lib.jmpsl.util.StringUtil;
-
 import pl.miloszgilga.chessappbackend.utils.StringManipulator;
 import pl.miloszgilga.chessappbackend.network.auth.domain.LocalUserModel;
 import pl.miloszgilga.chessappbackend.network.expose_static_data.dto.RememberAccountResDto;
@@ -44,7 +42,6 @@ public class UserToRememberAccountCustomizer extends CustomMapper<LocalUserModel
 
     @Override
     public void mapAtoB(LocalUserModel userModel, RememberAccountResDto rememberAccountResDto, MappingContext context) {
-        rememberAccountResDto.setInitials(StringUtil.initials(userModel.getFirstName(), userModel.getLastName()));
         rememberAccountResDto.setFullName(manipulator.generateFullName(userModel));
     }
 }

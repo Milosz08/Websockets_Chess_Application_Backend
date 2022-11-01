@@ -101,7 +101,6 @@ public class AuthMapper {
 
         mapperFactory.classMap(LocalUserModel.class, SuccessedLoginResDto.class)
                 .field("id", "userId")
-                .field("localUserImages.hasAvatarImage", "ifHasPhoto")
                 .field("localUserImages.avatarImage", "photoUrl")
                 .customize(userToSuccessedLoginResDtoCustomizer)
                 .byDefault().register();
