@@ -10,6 +10,8 @@ log in and track statistics of your games.
 See live application at: [chess.miloszgilga.pl](https://chess.miloszgilga.pl/)<br>
 See frontend (client layer): [Websockets Chess Application Frontend](https://github.com/Milosz08/Websockets_Chess_Application_Frontend)
 
+> NOTE! This project requires the latest version of the [JMPS library](https://github.com/Milosz08/JMPS_Library). At the moment, the library is in the testing phase and is not available in maven central, but can be attached to the project using Maven Local. For more information, [go here](https://github.com/Milosz08/JMPS_Library).
+
 ## Table of content
 * [Clone and install](#clone-and-install)
 * [Prepare development configuration](#prepare-development-configuration)
