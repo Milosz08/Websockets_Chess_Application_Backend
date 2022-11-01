@@ -14,6 +14,7 @@ See frontend (client layer): [Websockets Chess Application Frontend](https://git
 * [Clone and install](#clone-and-install)
 * [Prepare development configuration](#prepare-development-configuration)
 * [Prepare production configuration](#prepare-production-configuration)
+* [Generate OpenSSH key](#generate-openssh-key)
 * [Author](#author)
 * [Project status](#project-status)
 * [License](#license)
@@ -67,8 +68,9 @@ to `127.0.0.1`.
 11. Return to XAMPP control panel, and start Mercury via `Start` button.
 > NOTE: For more info about XAMPP Mercury SMTP server configuration, go 
 > [under this link](https://www.c-sharpcorner.com/UploadFile/c8aa13/send-mail-on-local-host-via-mercury-with-xampp/).
-12. Create `.env` file or add environment server variables (file must be located in root application directory).
-13. Fill in the content shown below:
+12. Create simple static resources server on your local machine (ex. via VirtualBox) and generate OpenSSH public and private key with `known_hosts.dat` file via [this tutorial](#generate-openssh-key).
+13. Create `.env` file or add environment server variables (file must be located in root application directory).
+14. Fill in the content shown below:
 ```properties
 # OAuth2 authentication tokens
 DEV_OAUTH2_GOOGLE_CLIENT_SECRET         = xxxxx -> <your-google-client-secret>
@@ -79,8 +81,14 @@ DEV_OAUTH2_FACEBOOK_CLIENT_ID           = xxxxx -> <your-facebook-client-id>
 # OAuth2 authentication miscs
 DEV_OAUTH2_TOKEN_SECRET                 = xxxxx -> ex. [[G879789N9QVWC897V0F094NMODF]]
 DEV_PROD_OAUTH2_PASSWORD_REPLACER       = xxxxx -> ex. [[5m2vFmwfi7]]
+
+# SSH/SFTP connection info
+DEV_PROD_SSH_SOCKET_HOST                = xxxxx -> ex. [[192.168.100.9]]
+DEV_PROD_SSH_SOCKET_LOGIN               = xxxxx
+DEV_PROD_ROOT_SERVER_PATH               = xxxxx -> ex. /path/to/static/resources/directory
+DEV_PROD_SFTP_SERVER_URL                = xxxxx -> static resources server, ex. [[https://cdn.exampledomain.pl]]
 ```
-14. Run Java application with `--dev` switch. Application should be available on `http://127.0.0.1:9595/javabean/app/v1`.
+15. Run Java application with `--dev` switch. Application should be available on `http://127.0.0.1:9595/javabean/app/v1`.
 > NOTE: If you do not use any switch, the application will not start correctly.
 
 <a name="prepare-production-configuration"></a>
@@ -88,8 +96,10 @@ DEV_PROD_OAUTH2_PASSWORD_REPLACER       = xxxxx -> ex. [[5m2vFmwfi7]]
 
 1. Prepare the relational database server and the SMTP mail server (log-in details should be entered according to the 
 instructions below). Also check that both servers provide an SSL encrypted connection.
-2. Create `.env` file or add environment server variables (file must be located in root application directory).
-3. Fill in the content shown below:
+In addition, prepare a static file server (pseudo CDN), such as S3, and make sure it has support for RSS authentication (public and private key).
+2. Generate OpenSSH public and private key with `known_hosts.dat` file via [this tutorial](#generate-openssh-key).
+3. Create `.env` file or add environment server variables (file must be located in root application directory).
+4. Fill in the content shown below:
 ```properties
 # JWT and CORS policy
 PROD_BASE_URL                           = xxxxx -> ex. [[https://api.exampledomain.pl/]]
@@ -116,11 +126,34 @@ PROD_OAUTH2_FACEBOOK_CLIENT_ID          = xxxxx -> <your-facebook-client-id>
 # OAuth2 authentication miscs
 PROD_OAUTH2_TOKEN_SECRET                = xxxxx -> ex. [[9B8VWI3JHJ3KOHO5O9OQODNNV89]]
 DEV_PROD_OAUTH2_PASSWORD_REPLACER       = xxxxx -> ex. [[5m2vFmwfi7]]
+
+# SSH/SFTP connection info
+DEV_PROD_SSH_SOCKET_HOST                = xxxxx -> ex. [[192.168.100.9]]
+DEV_PROD_SSH_SOCKET_LOGIN               = xxxxx
+DEV_PROD_ROOT_SERVER_PATH               = xxxxx -> ex. /path/to/static/resources/directory
+DEV_PROD_SFTP_SERVER_URL                = xxxxx -> static resources server, ex. [[https://cdn.exampledomain.pl]]
 ```
-4. Rest of values you can change in `application.properties`, `application-dev.properties` or `application-prod.properties`
+5. Rest of values you can change in `application.properties`, `application-dev.properties` or `application-prod.properties`
    accordingly for the selected server mode.
-5. To run application in production mode, use `--prod` switch.
+6. To run application in production mode, use `--prod` switch.
 > NOTE: If you do not use any switch, the application will not start correctly.
+
+<a name="generate-openssh-key"></a>
+## Generate OpenSSH key
+1. Go to project directory.
+2. Generate `known_hosts.dat` file via following command, where `login` is your login into SSH/SFTP server service and `server` is the server address, ex. 192.168.100.9:
+```
+$ ssh -o HostKeyAlgorithms=ssh-ed25519 -o UserKnownHostsFile=known_hosts.dat login@server
+```
+3. Generate private and public key via OpenSSH (don't change anythink, set to default)
+```
+$ ssh-keygen -t rsa
+```
+4. Move public key to your SSH/SFTP server, where `login` is your login to server and `server` is the server address:
+```
+$ ssh-copy-id -i ~/.ssh/id_rsa.pub login@server
+```
+5. Move public and private key into ROOT project directory.
 
 <a name="author"></a>
 ## Author
