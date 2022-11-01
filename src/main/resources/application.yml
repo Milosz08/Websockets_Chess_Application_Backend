@@ -29,6 +29,25 @@ jmpsl:
     oauth2:
         cookie-expired-minutes: 3
         available-suppliers: google,facebook
+    file:
+        ssh:
+            socket-host: ${env.DEV_PROD_SSH_SOCKET_HOST}
+            socket-login: ${env.DEV_PROD_SSH_SOCKET_LOGIN}
+            known-hosts-file-name: known_hosts.dat
+            user-private-key-file-name: id_rsa
+        sftp:
+            server-url: ${env.DEV_PROD_SFTP_SERVER_URL}
+        basic-external-server-path: ${env.DEV_PROD_ROOT_SERVER_PATH}
+        app-external-server-path: chess-app-static-resources
+        hash-code:
+            separator: "-"
+            count-of-sequences: 4
+            sequence-length: 5
+    gfx:
+        user-gfx:
+            preferred-font-link: static/font/noto-serif-v21-latin-regular.ttf
+            preferred-font-name: Noto Serif
+            static-images-content-path: images
 
 logging:
     file:

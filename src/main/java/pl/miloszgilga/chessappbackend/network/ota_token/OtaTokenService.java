@@ -19,6 +19,7 @@
 package pl.miloszgilga.chessappbackend.network.ota_token;
 
 import org.slf4j.*;
+import org.javatuples.Pair;
 import org.springframework.stereotype.Service;
 
 import java.net.URI;
@@ -88,6 +89,7 @@ class OtaTokenService implements IOtaTokenService {
         }
         if (helper.verifyOtaTokenDetailsAndSetAlreadyUsed(tokenModel)) {
             localUserModel.setIsActivated(true);
+            helper.generateAndSaveInitialUserImage(localUserModel);
         }
         LOGGER.info("Successfuly activated user account via OTA token form. Activation data: {}", req);
         return new SimpleServerMessageDto("Your account is successful activated. Now you can login via pressing " +
@@ -106,6 +108,8 @@ class OtaTokenService implements IOtaTokenService {
                 .successMessage("Your account is successful activated. Now you can login via pressing the login button below.")
                 .failureMessage("Unable to activate account with passed token. Token probaby is malformed.")
                 .build();
-        return helper.checkBearerTokenFromLinkWithOtaToken(data);
+        final Pair<URI, LocalUserModel> validationResult = helper.checkBearerTokenFromLinkWithOtaToken(data);
+        helper.generateAndSaveInitialUserImage(validationResult.getValue1());
+        return validationResult.getValue0();
     }
 }

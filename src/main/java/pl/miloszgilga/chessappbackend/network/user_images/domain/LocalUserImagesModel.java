@@ -44,6 +44,8 @@ public class LocalUserImagesModel extends AuditableEntity implements Serializabl
     @Column(name = "AVATAR_IMAGE_REFER_LINK")         private String avatarImage;
     @Column(name = "HAS_BANNER_IMAGE")                private Boolean hasBannerImage;
     @Column(name = "BANNER_IMAGE_REFER_LINK")         private String bannerImage;
+    @Column(name = "USER_HASH_CODE")                  private String userHashCode;
+    @Column(name = "DEF_AVATAR_COLOR")                private String defAvatarColor;
 
     @OneToOne(cascade = { PERSIST, MERGE }, fetch = LAZY)
     @JoinColumn(name = "LOCAL_USER_ID", referencedColumnName = "ID")
@@ -51,11 +53,14 @@ public class LocalUserImagesModel extends AuditableEntity implements Serializabl
 
     //------------------------------------------------------------------------------------------------------------------
 
-    LocalUserImagesModel(Boolean hasAvatarImage, String avatarImage, Boolean hasBannerImage, String bannerImage) {
+    LocalUserImagesModel(Boolean hasAvatarImage, String avatarImage, Boolean hasBannerImage, String bannerImage,
+                         String userHashCode, String defAvatarColor) {
         this.hasAvatarImage = hasAvatarImage;
         this.avatarImage = avatarImage;
         this.hasBannerImage = hasBannerImage;
         this.bannerImage = bannerImage;
+        this.userHashCode = userHashCode;
+        this.defAvatarColor = defAvatarColor;
     }
 
     //------------------------------------------------------------------------------------------------------------------
@@ -67,6 +72,8 @@ public class LocalUserImagesModel extends AuditableEntity implements Serializabl
                 ", avatarImage='" + avatarImage + '\'' +
                 ", hasBannerImage=" + hasBannerImage +
                 ", bannerImage='" + bannerImage + '\'' +
+                ", userHashCode='" + userHashCode + '\'' +
+                ", defAvatarColor='" + defAvatarColor + '\'' +
                 ", userId='" + localUser.getId() + '\'' +
                 "} " + super.toString();
     }

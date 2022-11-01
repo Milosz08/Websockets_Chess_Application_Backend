@@ -54,6 +54,8 @@ dependencies {
     implementation("pl.miloszgilga:jmpsl-util:${rootProject.extra.get("jmpslVersion") as String}")
     implementation("pl.miloszgilga:jmpsl-oauth2:${rootProject.extra.get("jmpslVersion") as String}")
     implementation("pl.miloszgilga:jmpsl-communication:${rootProject.extra.get("jmpslVersion") as String}")
+    implementation("pl.miloszgilga:jmpsl-file:${rootProject.extra.get("jmpslVersion") as String}")
+    implementation("pl.miloszgilga:jmpsl-gfx:${rootProject.extra.get("jmpslVersion") as String}")
 
     implementation("org.springframework.boot:spring-boot-starter-web:${rootProject.extra.get("springVersion") as String}")
     implementation("org.springframework.boot:spring-boot-starter-mail:${rootProject.extra.get("springVersion") as String}")

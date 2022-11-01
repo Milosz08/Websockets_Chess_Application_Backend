@@ -19,6 +19,7 @@
 package pl.miloszgilga.chessappbackend.network.ota_token;
 
 import org.slf4j.*;
+import org.javatuples.Pair;
 import org.springframework.stereotype.Component;
 
 import java.net.URI;
@@ -26,16 +27,22 @@ import java.util.Date;
 import java.util.stream.Collectors;
 import javax.transaction.Transactional;
 
-import pl.miloszgilga.lib.jmpsl.util.ServletPathUtil;
+import pl.miloszgilga.lib.jmpsl.util.*;
+import pl.miloszgilga.lib.jmpsl.gfx.sender.*;
+import pl.miloszgilga.lib.jmpsl.gfx.generator.*;
 
 import pl.miloszgilga.chessappbackend.exception.custom.*;
 import pl.miloszgilga.chessappbackend.token.JsonWebTokenVerificator;
+import pl.miloszgilga.chessappbackend.network.auth.domain.LocalUserModel;
 import pl.miloszgilga.chessappbackend.token.dto.ActivateServiceViaEmailTokenClaims;
-import pl.miloszgilga.chessappbackend.network.ota_token.dto.OtaTokenMultipleEmailsReqDto;
 
+import pl.miloszgilga.chessappbackend.network.ota_token.dto.*;
 import pl.miloszgilga.chessappbackend.network.ota_token.domain.*;
-import pl.miloszgilga.chessappbackend.network.ota_token.dto.TokenLinkValidationData;
+import pl.miloszgilga.chessappbackend.network.user_images.domain.LocalUserImagesModel;
 
+import static pl.miloszgilga.lib.jmpsl.gfx.GfxUtil.convertRgbToHex;
+import static pl.miloszgilga.lib.jmpsl.oauth2.OAuth2Supplier.LOCAL;
+import static pl.miloszgilga.chessappbackend.utils.ImageUniquePrefix.AVATAR;
 import static pl.miloszgilga.chessappbackend.token.OtaTokenType.ACTIVATE_ACCOUNT;
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -45,12 +52,15 @@ class OtaTokenServiceHelper {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(OtaTokenServiceHelper.class);
 
+    private final UserImageSftpSender imageSftpSender;
     private final IOtaTokenRepository otaTokenRepository;
     private final JsonWebTokenVerificator tokenVerificator;
 
     //------------------------------------------------------------------------------------------------------------------
 
-    OtaTokenServiceHelper(IOtaTokenRepository otaTokenRepository, JsonWebTokenVerificator tokenVerificator) {
+    OtaTokenServiceHelper(UserImageSftpSender imageSftpSender, IOtaTokenRepository otaTokenRepository,
+                          JsonWebTokenVerificator tokenVerificator) {
+        this.imageSftpSender = imageSftpSender;
         this.otaTokenRepository = otaTokenRepository;
         this.tokenVerificator = tokenVerificator;
     }
@@ -58,8 +68,9 @@ class OtaTokenServiceHelper {
     //------------------------------------------------------------------------------------------------------------------
 
     @Transactional
-    URI checkBearerTokenFromLinkWithOtaToken(final TokenLinkValidationData data) {
+    Pair<URI, LocalUserModel> checkBearerTokenFromLinkWithOtaToken(final TokenLinkValidationData data) {
         String queryMessage;
+        LocalUserModel userModel = null;
         boolean ifError = false;
         try {
             final ActivateServiceViaEmailTokenClaims claims = tokenVerificator.validateActivatingServiceViaEmail(
@@ -73,6 +84,7 @@ class OtaTokenServiceHelper {
                     });
             otaToken.setAlreadyUsed(true);
             otaToken.getLocalUser().setIsActivated(true);
+            userModel = otaToken.getLocalUser();
             queryMessage = data.getSuccessMessage();
         } catch (Exception ex) {
             queryMessage = ex.getMessage();
@@ -80,7 +92,7 @@ class OtaTokenServiceHelper {
         }
         LOGGER.info("Successed activate service: {} via bearer token: {}. Redirect to: {}.",
                 data.getType(), data.getBearer(), data.getRedirectUri());
-        return ServletPathUtil.redirectMessageUri(queryMessage, data.getRedirectUri(), ifError);
+        return new Pair<>(ServletPathUtil.redirectMessageUri(queryMessage, data.getRedirectUri(), ifError), userModel);
     }
 
     //------------------------------------------------------------------------------------------------------------------
@@ -107,5 +119,25 @@ class OtaTokenServiceHelper {
         }
         tokenModel.setAlreadyUsed(true);
         return true;
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+
+    @Transactional
+    void generateAndSaveInitialUserImage(final LocalUserModel userModel) {
+        if (!userModel.getOAuth2Supplier().equals(LOCAL)) return;
+        final BufferedImageGeneratorPayload payload = BufferedImageGeneratorPayload.builder()
+                .id(userModel.getId())
+                .imageUniquePrefix(AVATAR.getImagePrefixName())
+                .size(200).fontSize(80)
+                .initials(StringUtil.initialsAsCharsArray(userModel.getFirstName(), userModel.getLastName()))
+                .build();
+        final BufferedImageGeneratorRes response = imageSftpSender.generateAndSaveDefaultUserImage(payload);
+        final LocalUserImagesModel userImagesModel = userModel.getLocalUserImages();
+        userImagesModel.setUserHashCode(response.getBufferedImageRes().getUserHashCode());
+        userImagesModel.setHasAvatarImage(true);
+        userImagesModel.setAvatarImage(response.getBufferedImageRes().getLocation());
+        userImagesModel.setDefAvatarColor(convertRgbToHex(response.getGenerateImageBackground()));
+        LOGGER.info("Successful saved user default image data. Data: {}", userImagesModel);
     }
 }
