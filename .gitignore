@@ -8,6 +8,9 @@ h2-db.trace.db
 doc/
 prod-logs/
 .env
+id_rsa
+id_rsa.pub
+known_hosts.dat
 
 .apt_generated
 .classpath
