@@ -20,7 +20,7 @@ package pl.miloszgilga.chessappbackend.loader;
 
 import org.springframework.stereotype.Component;
 
-import pl.miloszgilga.lib.jmpsl.util.loader.StaticJsonFileLoader;
+import pl.miloszgilga.lib.jmpsl.core.loader.StaticJsonFileLoader;
 import pl.miloszgilga.chessappbackend.loader.model.CalendarPropertiesModel;
 
 import static pl.miloszgilga.chessappbackend.loader.StaticDataLoaderFileName.CALENDAR_STATIC_DATA;

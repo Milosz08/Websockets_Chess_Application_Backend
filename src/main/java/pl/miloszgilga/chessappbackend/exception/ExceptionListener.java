@@ -29,8 +29,8 @@ import org.springframework.http.converter.HttpMessageNotReadableException;
 import java.util.*;
 import javax.servlet.http.*;
 
-import pl.miloszgilga.lib.jmpsl.util.StringUtil;
-import pl.miloszgilga.lib.jmpsl.util.exception.*;
+import pl.miloszgilga.lib.jmpsl.core.StringUtil;
+import pl.miloszgilga.lib.jmpsl.core.exception.*;
 
 //----------------------------------------------------------------------------------------------------------------------
 

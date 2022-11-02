@@ -21,7 +21,7 @@ package pl.miloszgilga.chessappbackend.utils;
 import org.javatuples.Pair;
 import org.springframework.stereotype.Component;
 
-import pl.miloszgilga.lib.jmpsl.util.StringUtil;
+import pl.miloszgilga.lib.jmpsl.core.StringUtil;
 import pl.miloszgilga.chessappbackend.network.auth.domain.LocalUserModel;
 
 //----------------------------------------------------------------------------------------------------------------------

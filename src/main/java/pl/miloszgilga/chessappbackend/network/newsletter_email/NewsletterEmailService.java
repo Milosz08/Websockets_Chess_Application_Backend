@@ -29,8 +29,8 @@ import java.net.URI;
 import java.util.Date;
 import javax.transaction.Transactional;
 
-import pl.miloszgilga.lib.jmpsl.util.StringUtil;
-import pl.miloszgilga.lib.jmpsl.util.ServletPathUtil;
+import pl.miloszgilga.lib.jmpsl.core.StringUtil;
+import pl.miloszgilga.lib.jmpsl.core.ServletPathUtil;
 
 import pl.miloszgilga.chessappbackend.dto.*;
 import pl.miloszgilga.chessappbackend.token.*;

@@ -24,8 +24,8 @@ import ma.glasnost.orika.metadata.Type;
 import org.springframework.stereotype.Component;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import pl.miloszgilga.lib.jmpsl.util.mapper.*;
-import pl.miloszgilga.lib.jmpsl.util.mapper.converter.ImmediatelyLoadConverter;
+import pl.miloszgilga.lib.jmpsl.core.mapper.*;
+import pl.miloszgilga.lib.jmpsl.core.mapper.converter.ImmediatelyLoadConverter;
 
 import static pl.miloszgilga.chessappbackend.mapper.Converter.HASH_PASSWORD;
 

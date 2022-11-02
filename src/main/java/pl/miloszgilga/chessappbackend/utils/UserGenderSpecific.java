@@ -21,7 +21,7 @@ package pl.miloszgilga.chessappbackend.utils;
 import lombok.*;
 import java.util.stream.Stream;
 
-import pl.miloszgilga.lib.jmpsl.util.converter.IBasicEnumConverter;
+import pl.miloszgilga.lib.jmpsl.core.converter.IBasicEnumConverter;
 
 //----------------------------------------------------------------------------------------------------------------------
 

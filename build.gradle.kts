@@ -51,7 +51,7 @@ dependencies {
     implementation("com.fasterxml.jackson.core:jackson-databind:${rootProject.extra.get("xmlBinderVersion") as String}")
 
     implementation("pl.miloszgilga:jmpsl-security:${rootProject.extra.get("jmpslVersion") as String}")
-    implementation("pl.miloszgilga:jmpsl-util:${rootProject.extra.get("jmpslVersion") as String}")
+    implementation("pl.miloszgilga:jmpsl-core:${rootProject.extra.get("jmpslVersion") as String}")
     implementation("pl.miloszgilga:jmpsl-oauth2:${rootProject.extra.get("jmpslVersion") as String}")
     implementation("pl.miloszgilga:jmpsl-communication:${rootProject.extra.get("jmpslVersion") as String}")
     implementation("pl.miloszgilga:jmpsl-file:${rootProject.extra.get("jmpslVersion") as String}")

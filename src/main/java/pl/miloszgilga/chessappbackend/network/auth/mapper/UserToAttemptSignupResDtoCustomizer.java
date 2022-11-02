@@ -23,7 +23,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.*;
 
-import pl.miloszgilga.lib.jmpsl.util.StringUtil;
+import pl.miloszgilga.lib.jmpsl.core.StringUtil;
 
 import pl.miloszgilga.chessappbackend.network.auth.dto.*;
 import pl.miloszgilga.chessappbackend.network.auth.domain.LocalUserModel;

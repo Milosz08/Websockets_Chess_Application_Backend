@@ -26,7 +26,7 @@ import static java.util.Objects.isNull;
 
 import javax.transaction.Transactional;
 
-import pl.miloszgilga.lib.jmpsl.util.TimeUtil;
+import pl.miloszgilga.lib.jmpsl.core.TimeUtil;
 
 import pl.miloszgilga.chessappbackend.token.*;
 import pl.miloszgilga.chessappbackend.mail.IMailOutService;

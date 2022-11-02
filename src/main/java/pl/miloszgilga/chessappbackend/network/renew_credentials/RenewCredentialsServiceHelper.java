@@ -26,7 +26,7 @@ import java.util.stream.Collectors;
 
 import javax.transaction.Transactional;
 
-import pl.miloszgilga.lib.jmpsl.util.StringUtil;
+import pl.miloszgilga.lib.jmpsl.core.StringUtil;
 
 import pl.miloszgilga.chessappbackend.network.auth.domain.*;
 import pl.miloszgilga.chessappbackend.token.JsonWebTokenVerificator;

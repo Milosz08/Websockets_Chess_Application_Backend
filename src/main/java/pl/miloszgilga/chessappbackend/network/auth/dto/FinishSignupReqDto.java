@@ -21,7 +21,7 @@ package pl.miloszgilga.chessappbackend.network.auth.dto;
 import lombok.Data;
 
 import javax.validation.constraints.*;
-import pl.miloszgilga.lib.jmpsl.util.validator.*;
+import pl.miloszgilga.lib.jmpsl.core.validator.*;
 
 import pl.miloszgilga.chessappbackend.validator.annotation.*;
 import pl.miloszgilga.chessappbackend.utils.UserGenderSpecific;

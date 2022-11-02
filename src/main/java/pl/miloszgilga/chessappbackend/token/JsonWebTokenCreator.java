@@ -26,7 +26,7 @@ import org.springframework.security.core.Authentication;
 
 import java.util.Date;
 
-import pl.miloszgilga.lib.jmpsl.util.TimeUtil;
+import pl.miloszgilga.lib.jmpsl.core.TimeUtil;
 import pl.miloszgilga.lib.jmpsl.security.jwt.JwtServlet;
 import pl.miloszgilga.lib.jmpsl.oauth2.user.OAuth2UserExtender;
 import pl.miloszgilga.lib.jmpsl.oauth2.resolver.IOAuth2TokenGenerator;

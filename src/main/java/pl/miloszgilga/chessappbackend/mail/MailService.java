@@ -32,7 +32,7 @@ import pl.miloszgilga.chessappbackend.config.EnvironmentVars;
 import pl.miloszgilga.chessappbackend.token.JsonWebTokenCreator;
 
 import pl.miloszgilga.lib.jmpsl.mail.*;
-import pl.miloszgilga.lib.jmpsl.util.TimeUtil;
+import pl.miloszgilga.lib.jmpsl.core.TimeUtil;
 
 import static pl.miloszgilga.chessappbackend.config.ApplicationEndpoints.*;
 import static pl.miloszgilga.chessappbackend.config.RedirectEndpoints.NEWSLETTER_UNSUBSCRIBE_VIA_LINK;

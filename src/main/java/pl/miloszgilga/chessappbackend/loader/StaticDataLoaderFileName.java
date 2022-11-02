@@ -19,7 +19,7 @@
 package pl.miloszgilga.chessappbackend.loader;
 
 import lombok.AllArgsConstructor;
-import pl.miloszgilga.lib.jmpsl.util.loader.IStaticJsonLoaderFiles;
+import pl.miloszgilga.lib.jmpsl.core.loader.IStaticJsonLoaderFiles;
 
 //----------------------------------------------------------------------------------------------------------------------
 

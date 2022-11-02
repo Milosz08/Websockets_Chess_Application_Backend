@@ -24,7 +24,7 @@ import ma.glasnost.orika.MapperFactory;
 import org.springframework.stereotype.Component;
 import org.springframework.context.annotation.Primary;
 
-import pl.miloszgilga.lib.jmpsl.util.mapper.MappingFacade;
+import pl.miloszgilga.lib.jmpsl.core.mapper.MappingFacade;
 
 import pl.miloszgilga.chessappbackend.network.user_images.dto.GetUserImagesResDto;
 import pl.miloszgilga.chessappbackend.network.user_images.domain.LocalUserImagesModel;

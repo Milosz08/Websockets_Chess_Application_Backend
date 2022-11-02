@@ -24,7 +24,7 @@ import ma.glasnost.orika.MapperFactory;
 import org.springframework.stereotype.Component;
 import org.springframework.context.annotation.Primary;
 
-import pl.miloszgilga.lib.jmpsl.util.mapper.MappingFacade;
+import pl.miloszgilga.lib.jmpsl.core.mapper.MappingFacade;
 import pl.miloszgilga.lib.jmpsl.oauth2.service.OAuth2RegistrationDataDto;
 import pl.miloszgilga.chessappbackend.network.user_images.domain.LocalUserImagesModel;
 
@@ -32,7 +32,7 @@ import pl.miloszgilga.chessappbackend.network.auth.dto.*;
 import pl.miloszgilga.chessappbackend.network.auth.mapper.*;
 import pl.miloszgilga.chessappbackend.network.auth.domain.*;
 
-import static pl.miloszgilga.lib.jmpsl.util.mapper.converter.Converter.*;
+import static pl.miloszgilga.lib.jmpsl.core.mapper.converter.Converter.*;
 import static pl.miloszgilga.chessappbackend.mapper.Converter.HASH_PASSWORD;
 
 //----------------------------------------------------------------------------------------------------------------------

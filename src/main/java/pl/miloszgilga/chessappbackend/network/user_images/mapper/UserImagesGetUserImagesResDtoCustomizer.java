@@ -21,12 +21,12 @@ package pl.miloszgilga.chessappbackend.network.user_images.mapper;
 import ma.glasnost.orika.*;
 import org.springframework.stereotype.Component;
 
-import pl.miloszgilga.lib.jmpsl.util.StringUtil;
+import pl.miloszgilga.lib.jmpsl.core.StringUtil;
 
 import pl.miloszgilga.chessappbackend.network.user_images.dto.GetUserImagesResDto;
 import pl.miloszgilga.chessappbackend.network.user_images.domain.LocalUserImagesModel;
 
-import static pl.miloszgilga.lib.jmpsl.util.StringUtil.ifNullDefault;
+import static pl.miloszgilga.lib.jmpsl.core.StringUtil.ifNullDefault;
 
 //----------------------------------------------------------------------------------------------------------------------
 

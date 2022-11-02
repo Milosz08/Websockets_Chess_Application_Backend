@@ -24,7 +24,7 @@ import org.springframework.stereotype.Service;
 import java.util.*;
 import java.util.stream.*;
 
-import pl.miloszgilga.lib.jmpsl.util.TimeUtil;
+import pl.miloszgilga.lib.jmpsl.core.TimeUtil;
 
 import pl.miloszgilga.chessappbackend.loader.*;
 import pl.miloszgilga.chessappbackend.loader.model.*;

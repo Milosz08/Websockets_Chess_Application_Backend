@@ -21,7 +21,7 @@ package pl.miloszgilga.chessappbackend.converter;
 import javax.persistence.Converter;
 
 import pl.miloszgilga.chessappbackend.utils.UserGenderSpecific;
-import pl.miloszgilga.lib.jmpsl.util.converter.BasicEnumConverter;
+import pl.miloszgilga.lib.jmpsl.core.converter.BasicEnumConverter;
 
 //----------------------------------------------------------------------------------------------------------------------
 

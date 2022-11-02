@@ -25,7 +25,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import pl.miloszgilga.lib.jmpsl.oauth2.user.*;
-import pl.miloszgilga.lib.jmpsl.util.RndSeqGenerator;
+import pl.miloszgilga.lib.jmpsl.core.RndSeqGenerator;
 import pl.miloszgilga.lib.jmpsl.oauth2.service.OAuth2RegistrationDataDto;
 
 import pl.miloszgilga.chessappbackend.config.EnvironmentVars;

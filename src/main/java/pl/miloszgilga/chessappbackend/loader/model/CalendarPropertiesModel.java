@@ -21,7 +21,7 @@ package pl.miloszgilga.chessappbackend.loader.model;
 import lombok.Data;
 import java.util.List;
 
-import pl.miloszgilga.lib.jmpsl.util.loader.IStaticJsonLoaderModel;
+import pl.miloszgilga.lib.jmpsl.core.loader.IStaticJsonLoaderModel;
 
 //----------------------------------------------------------------------------------------------------------------------
 

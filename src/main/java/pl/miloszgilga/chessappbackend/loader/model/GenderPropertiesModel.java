@@ -23,7 +23,7 @@ import lombok.Data;
 import java.util.List;
 
 import pl.miloszgilga.chessappbackend.dto.SimpleTupleDto;
-import pl.miloszgilga.lib.jmpsl.util.loader.IStaticJsonLoaderModel;
+import pl.miloszgilga.lib.jmpsl.core.loader.IStaticJsonLoaderModel;
 
 //----------------------------------------------------------------------------------------------------------------------
 

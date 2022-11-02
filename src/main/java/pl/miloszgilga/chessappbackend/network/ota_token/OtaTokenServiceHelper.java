@@ -27,7 +27,7 @@ import java.util.Date;
 import java.util.stream.Collectors;
 import javax.transaction.Transactional;
 
-import pl.miloszgilga.lib.jmpsl.util.*;
+import pl.miloszgilga.lib.jmpsl.core.*;
 import pl.miloszgilga.lib.jmpsl.gfx.sender.*;
 import pl.miloszgilga.lib.jmpsl.gfx.generator.*;
 

@@ -24,7 +24,7 @@ import org.slf4j.LoggerFactory;
 import javax.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
-import pl.miloszgilga.lib.jmpsl.util.TimeUtil;
+import pl.miloszgilga.lib.jmpsl.core.TimeUtil;
 import pl.miloszgilga.lib.jmpsl.security.OtaToken;
 
 import pl.miloszgilga.chessappbackend.config.EnvironmentVars;

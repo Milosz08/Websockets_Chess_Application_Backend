@@ -23,10 +23,10 @@ import java.util.Set;
 import org.springframework.stereotype.Component;
 import org.springframework.context.annotation.Primary;
 
-import pl.miloszgilga.lib.jmpsl.util.mapper.converter.*;
-import pl.miloszgilga.lib.jmpsl.util.mapper.converter.Converter;
+import pl.miloszgilga.lib.jmpsl.core.mapper.converter.*;
+import pl.miloszgilga.lib.jmpsl.core.mapper.converter.Converter;
 
-import static pl.miloszgilga.lib.jmpsl.util.mapper.converter.Converter.*;
+import static pl.miloszgilga.lib.jmpsl.core.mapper.converter.Converter.*;
 
 //----------------------------------------------------------------------------------------------------------------------
 

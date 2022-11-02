@@ -20,7 +20,7 @@ package pl.miloszgilga.chessappbackend.loader;
 
 import org.springframework.stereotype.Component;
 
-import pl.miloszgilga.lib.jmpsl.util.loader.StaticJsonFileLoader;
+import pl.miloszgilga.lib.jmpsl.core.loader.StaticJsonFileLoader;
 import pl.miloszgilga.chessappbackend.loader.model.GenderPropertiesModel;
 
 import static pl.miloszgilga.chessappbackend.loader.StaticDataLoaderFileName.GENDER_STATIC_DATA;
