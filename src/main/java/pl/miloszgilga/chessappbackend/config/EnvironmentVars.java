@@ -31,19 +31,19 @@ import org.springframework.beans.factory.annotation.Value;
 @Component
 @NoArgsConstructor
 public class EnvironmentVars {
-    @Value("${config.base-url}")                                                        private String baseUrl;
-    @Value("${authorization.one-time-access-token.token-expired-minutes}")              private Integer otaTokenExpiredMinutes;
-    @Value("${config.frontend-cors-url}")                                               private String frontEndUrl;
-    @Value("${spring.mail.username}")                                                   private String serverMailClient;
-    @Value("${config.frontend-name}")                                                   private String frontendName;
-    @Value("${config.mail-helpdesk-agent}")                                             private String mailHelpdeskAgent;
-    @Value("${config.cors-max-age-seconds}")                                            private Integer corsMaxAgeSeconds;
-    @Value("${authorization.bearer-token.token-expired-minutes}")                       private Integer bearerTokenExpiredMinutes;
-    @Value("${oauth2-custom.token-secret}")                                             private String oauth2TokenSecret;
-    @Value("${oauth2-custom.token-expiration-hours}")                                   private Integer oauth2TokenExpirationHours;
-    @Value("${authorization.refresh-token.token-expired-months}")                       private Integer refreshTokenExpiredMonths;
-    @Value("${authorization.oauth2-custom.password-replacer}")                          private String oauth2PasswordReplacer;
-    @Value("${config.redirects.change-password-uri}")                                   private String changePasswordRedirectUri;
-    @Value("${config.redirects.activate-account-uri}")                                  private String activateAccountRedirectUri;
-    @Value("${config.redirects.unsubscribe-newsletter-uri}")                            private String unsubscribeNewsletterUri;
+    @Value("${config.base-url}")                                             private String baseUrl;
+    @Value("${authorization.one-time-access-token.token-expired-minutes}")   private Integer otaTokenExpiredMinutes;
+    @Value("${config.frontend-cors-url}")                                    private String frontEndUrl;
+    @Value("${spring.mail.username}")                                        private String serverMailClient;
+    @Value("${config.frontend-name}")                                        private String frontendName;
+    @Value("${config.mail-helpdesk-agent}")                                  private String mailHelpdeskAgent;
+    @Value("${config.cors-max-age-seconds}")                                 private Integer corsMaxAgeSeconds;
+    @Value("${authorization.bearer-token.token-expired-minutes}")            private Integer bearerTokenExpiredMinutes;
+    @Value("${oauth2-custom.token-secret}")                                  private String oauth2TokenSecret;
+    @Value("${oauth2-custom.token-expiration-hours}")                        private Integer oauth2TokenExpirationHours;
+    @Value("${authorization.refresh-token.token-expired-months}")            private Integer refreshTokenExpiredMonths;
+    @Value("${authorization.oauth2-custom.password-replacer}")               private String oauth2PasswordReplacer;
+    @Value("${config.redirects.change-password-uri}")                        private String changePasswordRedirectUri;
+    @Value("${config.redirects.activate-account-uri}")                       private String activateAccountRedirectUri;
+    @Value("${config.redirects.unsubscribe-newsletter-uri}")                 private String unsubscribeNewsletterUri;
 }
