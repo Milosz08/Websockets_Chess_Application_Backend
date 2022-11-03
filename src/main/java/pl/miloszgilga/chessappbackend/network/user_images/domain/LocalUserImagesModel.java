@@ -40,12 +40,12 @@ import pl.miloszgilga.chessappbackend.network.auth.domain.LocalUserModel;
 public class LocalUserImagesModel extends AuditableEntity implements Serializable {
     private static final long serialVersionUID = 1L;
 
-    @Column(name = "HAS_AVATAR_IMAGE")                private Boolean hasAvatarImage;
-    @Column(name = "AVATAR_IMAGE_REFER_LINK")         private String avatarImage;
+    @Column(name = "HAS_PROFILE_IMAGE")               private Boolean hasProfileImage;
+    @Column(name = "PROFILE_IMAGE_REFER_LINK")        private String profileImage;
     @Column(name = "HAS_BANNER_IMAGE")                private Boolean hasBannerImage;
     @Column(name = "BANNER_IMAGE_REFER_LINK")         private String bannerImage;
     @Column(name = "USER_HASH_CODE")                  private String userHashCode;
-    @Column(name = "DEF_AVATAR_COLOR")                private String defAvatarColor;
+    @Column(name = "DEF_PROFILE_IMAGE_COLOR")         private String defProfileImageColor;
 
     @OneToOne(cascade = { PERSIST, MERGE }, fetch = LAZY)
     @JoinColumn(name = "LOCAL_USER_ID", referencedColumnName = "ID")
@@ -53,14 +53,14 @@ public class LocalUserImagesModel extends AuditableEntity implements Serializabl
 
     //------------------------------------------------------------------------------------------------------------------
 
-    LocalUserImagesModel(Boolean hasAvatarImage, String avatarImage, Boolean hasBannerImage, String bannerImage,
-                         String userHashCode, String defAvatarColor) {
-        this.hasAvatarImage = hasAvatarImage;
-        this.avatarImage = avatarImage;
+    LocalUserImagesModel(Boolean hasProfileImage, String profileImage, Boolean hasBannerImage, String bannerImage,
+                         String userHashCode, String defProfileImageColor) {
+        this.hasProfileImage = hasProfileImage;
+        this.profileImage = profileImage;
         this.hasBannerImage = hasBannerImage;
         this.bannerImage = bannerImage;
         this.userHashCode = userHashCode;
-        this.defAvatarColor = defAvatarColor;
+        this.defProfileImageColor = defProfileImageColor;
     }
 
     //------------------------------------------------------------------------------------------------------------------
@@ -68,12 +68,12 @@ public class LocalUserImagesModel extends AuditableEntity implements Serializabl
     @Override
     public String toString() {
         return "LocalUserImagesModel{" +
-                "hasAvatarImage=" + hasAvatarImage +
-                ", avatarImage='" + avatarImage + '\'' +
+                "hasProfileImage=" + hasProfileImage +
+                ", profileImage='" + profileImage + '\'' +
                 ", hasBannerImage=" + hasBannerImage +
                 ", bannerImage='" + bannerImage + '\'' +
                 ", userHashCode='" + userHashCode + '\'' +
-                ", defAvatarColor='" + defAvatarColor + '\'' +
+                ", defProfileImageColor='" + defProfileImageColor + '\'' +
                 ", userId='" + localUser.getId() + '\'' +
                 "} " + super.toString();
     }

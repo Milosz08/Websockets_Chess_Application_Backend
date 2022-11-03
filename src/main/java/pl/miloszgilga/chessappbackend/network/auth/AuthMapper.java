@@ -74,7 +74,7 @@ public class AuthMapper {
                 .byDefault().register();
 
         mapperFactory.classMap(LocalUserModel.class, SuccessedAttemptToFinishSignupResDto.class)
-                .field("localUserImages.avatarImage", "photoUrl")
+                .field("localUserImages.profileImage", "photoUrl")
                 .field("localUserDetails.isDataFilled", "isDataFilled")
                 .field("emailAddress", "userPrimaryEmailAddress")
                 .customize(userToAttemptSignupResDtoCustomizer)
@@ -101,7 +101,7 @@ public class AuthMapper {
 
         mapperFactory.classMap(LocalUserModel.class, SuccessedLoginResDto.class)
                 .field("id", "userId")
-                .field("localUserImages.avatarImage", "photoUrl")
+                .field("localUserImages.profileImage", "photoUrl")
                 .customize(userToSuccessedLoginResDtoCustomizer)
                 .byDefault().register();
     }

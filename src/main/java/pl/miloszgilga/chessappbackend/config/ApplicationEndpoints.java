@@ -62,6 +62,6 @@ public class ApplicationEndpoints {
 
     public static final String USER_IMAGE_ENDPOINT = BASIC_ENDPOINT + "user-image";
     public static final String USER_IMAGES_ALL = "/images-all";
-    public static final String AVATAR = "/avatar";
+    public static final String PROFILE = "/profile";
     public static final String BANNER = "/banner";
 }

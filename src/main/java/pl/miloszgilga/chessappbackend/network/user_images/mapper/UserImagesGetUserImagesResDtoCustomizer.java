@@ -36,6 +36,6 @@ public class UserImagesGetUserImagesResDtoCustomizer extends CustomMapper<LocalU
     @Override
     public void mapAtoB(LocalUserImagesModel userImages, GetUserImagesResDto dto, MappingContext context) {
         dto.setBannerUri(ifNullDefault(userImages.getBannerImage(), StringUtil.EMPTY));
-        dto.setAvatarUri(ifNullDefault(userImages.getAvatarImage(), StringUtil.EMPTY));
+        dto.setProfileUri(ifNullDefault(userImages.getProfileImage(), StringUtil.EMPTY));
     }
 }

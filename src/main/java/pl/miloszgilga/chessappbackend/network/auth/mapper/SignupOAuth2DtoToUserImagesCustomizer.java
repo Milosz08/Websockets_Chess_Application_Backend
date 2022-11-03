@@ -33,9 +33,9 @@ public class SignupOAuth2DtoToUserImagesCustomizer extends CustomMapper<OAuth2Re
     @Override
     public void mapAtoB(OAuth2RegistrationDataDto dto, LocalUserImagesModel userImages, MappingContext context) {
         final OAuth2UserInfoBase userInfo = OAuth2UserInfoFactory.getInstance(dto.getSupplier(), dto.getAttributes());
-        userImages.setHasAvatarImage(userInfo.getUserImageUrl().isBlank());
+        userImages.setHasProfileImage(userInfo.getUserImageUrl().isBlank());
         if (userInfo.getUserImageUrl().isEmpty()) return;
-        userImages.setAvatarImage(userInfo.getUserImageUrl());
+        userImages.setProfileImage(userInfo.getUserImageUrl());
         userImages.setHasBannerImage(false);
     }
 }

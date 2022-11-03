@@ -135,9 +135,8 @@ class OtaTokenServiceHelper {
         final BufferedImageGeneratorRes response = imageSftpSender.generateAndSaveDefaultUserImage(payload);
         final LocalUserImagesModel userImagesModel = userModel.getLocalUserImages();
         userImagesModel.setUserHashCode(response.getBufferedImageRes().getUserHashCode());
-        userImagesModel.setHasAvatarImage(true);
-        userImagesModel.setAvatarImage(response.getBufferedImageRes().getLocation());
-        userImagesModel.setDefAvatarColor(convertRgbToHex(response.getGenerateImageBackground()));
+        userImagesModel.setProfileImage(response.getBufferedImageRes().getLocation());
+        userImagesModel.setDefProfileImageColor(convertRgbToHex(response.getGenerateImageBackground()));
         LOGGER.info("Successful saved user default image data. Data: {}", userImagesModel);
     }
 }

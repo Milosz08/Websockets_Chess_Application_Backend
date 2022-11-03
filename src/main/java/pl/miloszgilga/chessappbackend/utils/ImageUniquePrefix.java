@@ -25,7 +25,7 @@ import lombok.*;
 @Getter
 @AllArgsConstructor
 public enum ImageUniquePrefix {
-    AVATAR("avatar"),
+    PROFILE("profile"),
     BANNER("banner");
 
     private final String imagePrefixName;

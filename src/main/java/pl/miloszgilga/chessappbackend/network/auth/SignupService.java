@@ -81,7 +81,7 @@ public class SignupService implements ISignupService, IOAuth2LoaderService {
         final LocalUserModel userModel = mapperFacade.map(req, LocalUserModel.class);
         final LocalUserDetailsModel userDetailsModel = mapperFacade.map(req, LocalUserDetailsModel.class);
         final LocalUserImagesModel userImagesModel = LocalUserImagesModel.builder()
-                .hasBannerImage(false).hasAvatarImage(false).build();
+                .hasBannerImage(false).hasProfileImage(false).build();
 
         userModel.setLocalUserDetails(userDetailsModel);
         userModel.setLocalUserImages(userImagesModel);

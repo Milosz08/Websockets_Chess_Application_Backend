@@ -25,6 +25,7 @@
     <include file="migrations/2022-10-migrations/V17__2022-10-27__split-user-images-to-separate-relation.xml" relativeToChangelogFile="true"/>
     
     <include file="migrations/2022-11-migrations/V18__2022-11-01__add-user-hash-code-column.xml" relativeToChangelogFile="true"/>
+    <include file="migrations/2022-11-migrations/V19__2022-11-02__change-avatar-to-profile.xml" relativeToChangelogFile="true"/>
 
     <!-- Auto filled data -->
 
