@@ -27,8 +27,7 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 public class GetUserImagesResDto {
-    private String avatarUri;
-    private boolean isAvatarNotDefault;
+    private String profileUri;
     private String bannerUri;
-    private boolean isBannerNotDefault;
+    private boolean bannerNotDefault;
 }

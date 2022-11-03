@@ -45,7 +45,6 @@ public class UserImagesMapper {
     @MappingFacade
     public void userImagesAutoMapperFacadeImplementation() {
         mapperFactory.classMap(LocalUserImagesModel.class, GetUserImagesResDto.class)
-                .field("hasAvatarImage", "avatarNotDefault")
                 .field("hasBannerImage", "bannerNotDefault")
                 .customize(userImagesGetUserImagesResDtoCustomizer)
                 .byDefault().register();
