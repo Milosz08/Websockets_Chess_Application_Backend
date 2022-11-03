@@ -32,6 +32,7 @@ import pl.miloszgilga.lib.jmpsl.gfx.sender.*;
 import pl.miloszgilga.lib.jmpsl.gfx.generator.*;
 
 import pl.miloszgilga.chessappbackend.exception.custom.*;
+import pl.miloszgilga.chessappbackend.config.EnvironmentVars;
 import pl.miloszgilga.chessappbackend.token.JsonWebTokenVerificator;
 import pl.miloszgilga.chessappbackend.network.auth.domain.LocalUserModel;
 import pl.miloszgilga.chessappbackend.token.dto.ActivateServiceViaEmailTokenClaims;
@@ -42,7 +43,9 @@ import pl.miloszgilga.chessappbackend.network.user_images.domain.LocalUserImages
 
 import static pl.miloszgilga.lib.jmpsl.gfx.GfxUtil.convertRgbToHex;
 import static pl.miloszgilga.lib.jmpsl.oauth2.OAuth2Supplier.LOCAL;
-import static pl.miloszgilga.chessappbackend.utils.ImageUniquePrefix.AVATAR;
+import static pl.miloszgilga.lib.jmpsl.core.StringUtil.initialsAsCharsArray;
+
+import static pl.miloszgilga.chessappbackend.utils.ImageUniquePrefix.PROFILE;
 import static pl.miloszgilga.chessappbackend.token.OtaTokenType.ACTIVATE_ACCOUNT;
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -52,15 +55,17 @@ class OtaTokenServiceHelper {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(OtaTokenServiceHelper.class);
 
-    private final UserImageSftpSender imageSftpSender;
+    private final EnvironmentVars environment;
+    private final UserImageSftpService imageSftpService;
     private final IOtaTokenRepository otaTokenRepository;
     private final JsonWebTokenVerificator tokenVerificator;
 
     //------------------------------------------------------------------------------------------------------------------
 
-    OtaTokenServiceHelper(UserImageSftpSender imageSftpSender, IOtaTokenRepository otaTokenRepository,
-                          JsonWebTokenVerificator tokenVerificator) {
-        this.imageSftpSender = imageSftpSender;
+    OtaTokenServiceHelper(EnvironmentVars environment, UserImageSftpService imageSftpService,
+                          IOtaTokenRepository otaTokenRepository, JsonWebTokenVerificator tokenVerificator) {
+        this.environment = environment;
+        this.imageSftpService = imageSftpService;
         this.otaTokenRepository = otaTokenRepository;
         this.tokenVerificator = tokenVerificator;
     }
@@ -128,11 +133,12 @@ class OtaTokenServiceHelper {
         if (!userModel.getOAuth2Supplier().equals(LOCAL)) return;
         final BufferedImageGeneratorPayload payload = BufferedImageGeneratorPayload.builder()
                 .id(userModel.getId())
-                .imageUniquePrefix(AVATAR.getImagePrefixName())
-                .size(200).fontSize(80)
-                .initials(StringUtil.initialsAsCharsArray(userModel.getFirstName(), userModel.getLastName()))
+                .imageUniquePrefix(PROFILE.getImagePrefixName())
+                .fontSize(environment.getUserProfileImageFontSize())
+                .size(environment.getUserProfileImageSize())
+                .initials(initialsAsCharsArray(userModel.getFirstName(), userModel.getLastName()))
                 .build();
-        final BufferedImageGeneratorRes response = imageSftpSender.generateAndSaveDefaultUserImage(payload);
+        final BufferedImageGeneratorRes response = imageSftpService.generateAndSaveDefaultUserImage(payload);
         final LocalUserImagesModel userImagesModel = userModel.getLocalUserImages();
         userImagesModel.setUserHashCode(response.getBufferedImageRes().getUserHashCode());
         userImagesModel.setProfileImage(response.getBufferedImageRes().getLocation());
