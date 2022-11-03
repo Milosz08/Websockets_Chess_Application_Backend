@@ -46,11 +46,9 @@ spring:
         facebook:
             clientId: ${env.DEV_OAUTH2_FACEBOOK_CLIENT_ID}
             clientSecret: ${env.DEV_OAUTH2_FACEBOOK_CLIENT_SECRET}
+    jpa:
+        show-sql: true
 
 oauth2-custom:
     token-secret: ${env.DEV_OAUTH2_TOKEN_SECRET}
     token-expiration-hours: 24
-
-logging:
-    level:
-        org.hibernate.sql: DEBUG
