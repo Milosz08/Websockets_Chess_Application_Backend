@@ -42,72 +42,53 @@ import static pl.miloszgilga.chessappbackend.config.ApplicationEndpoints.*;
 class UserImagesController {
 
     private final IUserImagesService service;
-    private final IUserAvatarService avatarService;
-    private final IUserBannerService bannerService;
+    private final IUserBannerImageService bannerImageService;
+    private final IUserProfileImageService profileImageService;
 
     //------------------------------------------------------------------------------------------------------------------
 
-    UserImagesController(IUserImagesService service, IUserAvatarService avatarService, IUserBannerService bannerService) {
+    UserImagesController(IUserImagesService service, IUserProfileImageService profileImageService,
+                         IUserBannerImageService bannerImageService) {
         this.service = service;
-        this.avatarService = avatarService;
-        this.bannerService = bannerService;
+        this.profileImageService = profileImageService;
+        this.bannerImageService = bannerImageService;
     }
 
     //------------------------------------------------------------------------------------------------------------------
 
     @GetMapping(USER_IMAGES_ALL)
-    @MethodSecurityPathExclude()
+    @MethodSecurityPathExclude
     ResponseEntity<GetUserImagesResDto> getUserImages(@Valid @RequestBody GetUserImagesReqDto req) {
         return new ResponseEntity<>(service.getUserImages(req), HttpStatus.OK);
     }
 
     //------------------------------------------------------------------------------------------------------------------
 
-    @PostMapping(AVATAR)
+    @PostMapping(PROFILE)
     @AspectCheckAuthSupplier(suppliedFor = { "local" })
-    ResponseEntity<SimpleServerMessageDto> addUserAvatar(@RequestParam("file") MultipartFile image,
-                                                         @CurrentUser OAuth2UserExtender user) {
+    ResponseEntity<UpdatedImageResDto> setUserProfileImage(@RequestParam("file") MultipartFile image,
+                                                           @CurrentUser OAuth2UserExtender user) {
         final Long userId = ((LocalUserModel) user.getUserModel()).getId();
-        return new ResponseEntity<>(avatarService.addUserAvatar(image, userId), HttpStatus.CREATED);
+        return new ResponseEntity<>(profileImageService.setUserProfileImage(image, userId), HttpStatus.CREATED);
     }
 
     //------------------------------------------------------------------------------------------------------------------
 
-    @PutMapping(AVATAR)
+    @DeleteMapping(PROFILE)
     @AspectCheckAuthSupplier(suppliedFor = { "local" })
-    ResponseEntity<SimpleServerMessageDto> updateUserAvatar(@RequestParam("file") MultipartFile image,
-                                                            @CurrentUser OAuth2UserExtender user) {
+    ResponseEntity<UpdatedImageResDto> deleteUserAvatar(@CurrentUser OAuth2UserExtender user) {
         final Long userId = ((LocalUserModel) user.getUserModel()).getId();
-        return new ResponseEntity<>(avatarService.updateUserAvatar(image, userId), HttpStatus.OK);
-    }
-
-    //------------------------------------------------------------------------------------------------------------------
-
-    @DeleteMapping(AVATAR)
-    @AspectCheckAuthSupplier(suppliedFor = { "local" })
-    ResponseEntity<SimpleServerMessageDto> deleteUserAvatar(@CurrentUser OAuth2UserExtender user) {
-        final Long userId = ((LocalUserModel) user.getUserModel()).getId();
-        return new ResponseEntity<>(avatarService.deleteUserAvatar(userId), HttpStatus.OK);
+        return new ResponseEntity<>(profileImageService.deleteUserProfileImage(userId), HttpStatus.OK);
     }
 
     //------------------------------------------------------------------------------------------------------------------
 
     @PostMapping(BANNER)
     @AspectCheckAuthSupplier(suppliedFor = { "local" })
-    ResponseEntity<SimpleServerMessageDto> addUserBanner(@RequestParam("file") MultipartFile image,
+    ResponseEntity<UpdatedImageResDto> addUserBanner(@RequestParam("file") MultipartFile image,
                                                          @CurrentUser OAuth2UserExtender user) {
         final Long userId = ((LocalUserModel) user.getUserModel()).getId();
-        return new ResponseEntity<>(bannerService.addUserBanner(image, userId), HttpStatus.CREATED);
-    }
-
-    //------------------------------------------------------------------------------------------------------------------
-
-    @PutMapping(BANNER)
-    @AspectCheckAuthSupplier(suppliedFor = { "local" })
-    ResponseEntity<SimpleServerMessageDto> updateUserBanner(@RequestParam("file") MultipartFile image,
-                                                            @CurrentUser OAuth2UserExtender user) {
-        final Long userId = ((LocalUserModel) user.getUserModel()).getId();
-        return new ResponseEntity<>(bannerService.updateUserBanner(image, userId), HttpStatus.OK);
+        return new ResponseEntity<>(bannerImageService.setUserBanner(image, userId), HttpStatus.CREATED);
     }
 
     //------------------------------------------------------------------------------------------------------------------
@@ -116,6 +97,6 @@ class UserImagesController {
     @AspectCheckAuthSupplier(suppliedFor = { "local" })
     ResponseEntity<SimpleServerMessageDto> deleteUserBanner(@CurrentUser OAuth2UserExtender user) {
         final Long userId = ((LocalUserModel) user.getUserModel()).getId();
-        return new ResponseEntity<>(bannerService.deleteUserBanner(userId), HttpStatus.OK);
+        return new ResponseEntity<>(bannerImageService.deleteUserBanner(userId), HttpStatus.OK);
     }
 }

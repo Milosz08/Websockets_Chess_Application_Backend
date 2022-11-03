@@ -32,4 +32,9 @@ public interface ILocalUserImagesRepository extends JpaRepository<LocalUserImage
     @Query(value = "SELECT m FROM LocalUserImagesModel m INNER JOIN m.localUser u " +
             "WHERE u.nickname=:nickname")
     Optional<LocalUserImagesModel> findUserImagesByNickname(@Param("nickname") String nickname);
+
+    //------------------------------------------------------------------------------------------------------------------
+
+    @Query(value = "SELECT m FROM LocalUserImagesModel m INNER JOIN m.localUser u WHERE u.id=:userId")
+    Optional<LocalUserImagesModel> findUserImagesByUserId(@Param("userId") Long userId);
 }

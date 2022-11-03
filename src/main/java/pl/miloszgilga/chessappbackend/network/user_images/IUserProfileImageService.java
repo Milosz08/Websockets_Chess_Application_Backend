@@ -1,7 +1,7 @@
 /*
  * Copyright (c) 2022 by MILOSZ GILGA <https://miloszgilga.pl>
  *
- *  File name: IUserBannerService.java
+ *  File name: IUserAvatarService.java
  *  Last modified: 26/10/2022, 11:51
  *  Project name: chess-app-backend
  *
@@ -19,12 +19,11 @@
 package pl.miloszgilga.chessappbackend.network.user_images;
 
 import org.springframework.web.multipart.MultipartFile;
-import pl.miloszgilga.chessappbackend.dto.SimpleServerMessageDto;
+import pl.miloszgilga.chessappbackend.network.user_images.dto.UpdatedImageResDto;
 
 //----------------------------------------------------------------------------------------------------------------------
 
-interface IUserBannerService {
-    SimpleServerMessageDto addUserBanner(final MultipartFile image, final Long userId);
-    SimpleServerMessageDto updateUserBanner(final MultipartFile image, final Long userId);
-    SimpleServerMessageDto deleteUserBanner(final Long userId);
+interface IUserProfileImageService {
+    UpdatedImageResDto setUserProfileImage(final MultipartFile file, final Long userId);
+    UpdatedImageResDto deleteUserProfileImage(final Long userId);
 }
