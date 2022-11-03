@@ -28,6 +28,7 @@ import javax.transaction.Transactional;
 import pl.miloszgilga.chessappbackend.dto.*;
 import pl.miloszgilga.chessappbackend.exception.custom.*;
 import pl.miloszgilga.chessappbackend.mail.IMailOutService;
+import pl.miloszgilga.chessappbackend.config.EnvironmentVars;
 import pl.miloszgilga.chessappbackend.utils.StringManipulator;
 import pl.miloszgilga.chessappbackend.token.JsonWebTokenCreator;
 
@@ -37,11 +38,16 @@ import pl.miloszgilga.chessappbackend.network.ota_token.domain.*;
 
 import pl.miloszgilga.lib.jmpsl.oauth2.*;
 import pl.miloszgilga.lib.jmpsl.oauth2.user.*;
+import pl.miloszgilga.lib.jmpsl.gfx.generator.*;
 import pl.miloszgilga.lib.jmpsl.oauth2.service.*;
+import pl.miloszgilga.lib.jmpsl.gfx.sender.UserImageSftpService;
 
 import pl.miloszgilga.chessappbackend.network.user_images.domain.LocalUserImagesModel;
 
 import static pl.miloszgilga.lib.jmpsl.oauth2.OAuth2Supplier.LOCAL;
+import static pl.miloszgilga.lib.jmpsl.core.StringUtil.initialsAsCharsArray;
+
+import static pl.miloszgilga.chessappbackend.utils.ImageUniquePrefix.PROFILE;
 import static pl.miloszgilga.chessappbackend.token.OtaTokenType.ACTIVATE_ACCOUNT;
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -53,22 +59,26 @@ public class SignupService implements ISignupService, IOAuth2LoaderService {
 
     private final AuthServiceHelper helper;
     private final MapperFacade mapperFacade;
+    private final EnvironmentVars environment;
     private final StringManipulator manipulator;
     private final IMailOutService mailOutService;
     private final JsonWebTokenCreator tokenCreator;
+    private final UserImageSftpService imageSftpService;
     private final IOtaTokenRepository otaTokenRepository;
     private final ILocalUserRepository localUserRepository;
 
     //------------------------------------------------------------------------------------------------------------------
 
-    SignupService(MapperFacade mapperFacade, AuthServiceHelper helper, StringManipulator manipulator,
-                  IMailOutService mailOutService, JsonWebTokenCreator tokenCreator, IOtaTokenRepository otaTokenRepository,
-                  ILocalUserRepository localUserRepository) {
+    SignupService(MapperFacade mapperFacade, AuthServiceHelper helper, EnvironmentVars environment, StringManipulator manipulator,
+                  IMailOutService mailOutService, JsonWebTokenCreator tokenCreator, UserImageSftpService imageSftpService,
+                  IOtaTokenRepository otaTokenRepository, ILocalUserRepository localUserRepository) {
         this.helper = helper;
         this.mapperFacade = mapperFacade;
+        this.environment = environment;
         this.manipulator = manipulator;
         this.mailOutService = mailOutService;
         this.tokenCreator = tokenCreator;
+        this.imageSftpService = imageSftpService;
         this.otaTokenRepository = otaTokenRepository;
         this.localUserRepository = localUserRepository;
     }
@@ -222,8 +232,20 @@ public class SignupService implements ISignupService, IOAuth2LoaderService {
 
         foundUser.setFirstName(manipulator.extractUserDataFromUsername(userInfo.getUsername()).getValue0());
         foundUser.setLastName(manipulator.extractUserDataFromUsername(userInfo.getUsername()).getValue1());
-        foundUser.getLocalUserImages().setHasAvatarImage(!userInfo.getUserImageUrl().isEmpty());
-        foundUser.getLocalUserImages().setAvatarImage(userInfo.getUserImageUrl().isEmpty() ? null : userInfo.getUserImageUrl());
+        String userProfileImageLocaltion = userInfo.getUserImageUrl();
+        if (userInfo.getUserImageUrl().isEmpty()) {
+            final BufferedImageGeneratorPayload payload = BufferedImageGeneratorPayload.builder()
+                    .id(foundUser.getId())
+                    .imageUniquePrefix(PROFILE.getImagePrefixName())
+                    .fontSize(environment.getUserProfileImageFontSize())
+                    .size(environment.getUserProfileImageSize())
+                    .initials(initialsAsCharsArray(foundUser.getFirstName(), foundUser.getLastName()))
+                    .build();
+            final BufferedImageGeneratorRes response = imageSftpService.generateAndSaveDefaultUserImage(payload);
+            foundUser.getLocalUserImages().setHasProfileImage(true);
+            userProfileImageLocaltion = response.getBufferedImageRes().getLocation();
+        }
+        foundUser.getLocalUserImages().setProfileImage(userProfileImageLocaltion);
 
         LOGGER.info("Update user via {} OAuth2 provider. User data: {}", data.getSupplier().getSupplierName(), foundUser);
         return OAuth2Util.fabricateUser(foundUser, data);
