@@ -46,4 +46,8 @@ public class EnvironmentVars {
     @Value("${config.redirects.change-password-uri}")                        private String changePasswordRedirectUri;
     @Value("${config.redirects.activate-account-uri}")                       private String activateAccountRedirectUri;
     @Value("${config.redirects.unsubscribe-newsletter-uri}")                 private String unsubscribeNewsletterUri;
+    @Value("${config.profile-image.size-px}")                                private Integer userProfileImageSize;
+    @Value("${config.profile-image.font-size-px}")                           private Integer userProfileImageFontSize;
+    @Value("${config.banner-image.size-width-px}")                           private Integer userBannerImageWidth;
+    @Value("${config.banner-image.size-height-px}")                          private Integer userBannerImageHeight;
 }

@@ -61,6 +61,12 @@ config:
         change-password-uri: /auth/change-password
         activate-account-uri: /activate-account
         unsubscribe-newsletter-uri: /unsubscribe-newsletter
+    profile-image:
+        size-px: 200
+        font-size-px: 80
+    banner-image:
+        size-width-px: 2500
+        size-height-px: 320
 
 authorization:
     one-time-access-token:
