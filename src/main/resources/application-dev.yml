@@ -47,7 +47,7 @@ spring:
             clientId: ${env.DEV_OAUTH2_FACEBOOK_CLIENT_ID}
             clientSecret: ${env.DEV_OAUTH2_FACEBOOK_CLIENT_SECRET}
     jpa:
-        show-sql: true
+        show-sql: false
 
 oauth2-custom:
     token-secret: ${env.DEV_OAUTH2_TOKEN_SECRET}
