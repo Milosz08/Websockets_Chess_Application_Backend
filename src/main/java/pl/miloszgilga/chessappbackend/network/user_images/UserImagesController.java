@@ -84,7 +84,6 @@ class UserImagesController {
     //------------------------------------------------------------------------------------------------------------------
 
     @PostMapping(BANNER)
-    @AspectCheckAuthSupplier(suppliedFor = { "local" })
     ResponseEntity<UpdatedImageResDto> addUserBanner(@RequestParam("file") MultipartFile image,
                                                          @CurrentUser OAuth2UserExtender user) {
         final Long userId = ((LocalUserModel) user.getUserModel()).getId();
@@ -94,7 +93,6 @@ class UserImagesController {
     //------------------------------------------------------------------------------------------------------------------
 
     @DeleteMapping(BANNER)
-    @AspectCheckAuthSupplier(suppliedFor = { "local" })
     ResponseEntity<SimpleServerMessageDto> deleteUserBanner(@CurrentUser OAuth2UserExtender user) {
         final Long userId = ((LocalUserModel) user.getUserModel()).getId();
         return new ResponseEntity<>(bannerImageService.deleteUserBanner(userId), HttpStatus.OK);
