@@ -64,7 +64,7 @@ public class SecurityConfiguration {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        SecurityUtil.enableH2ConsoleForDev(http);
+        SecurityUtil.enableH2ConsoleForDev(http, env);
 
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
                 .addFilterBefore(middlewareExceptionFilter, LogoutFilter.class)
