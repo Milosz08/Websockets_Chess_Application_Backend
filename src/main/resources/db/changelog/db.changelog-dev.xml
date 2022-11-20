@@ -26,6 +26,7 @@
     
     <include file="migrations/2022-11-migrations/V18__2022-11-01__add-user-hash-code-column.xml" relativeToChangelogFile="true"/>
     <include file="migrations/2022-11-migrations/V19__2022-11-02__change-avatar-to-profile.xml" relativeToChangelogFile="true"/>
+    <include file="migrations/2022-11-migrations/V20__2022-11-20__remove-unused-image-boolean-columns.xml" relativeToChangelogFile="true"/>
 
     <!-- Auto filled data -->
     <include file="assertions/001_DML_insert_roles_data.sql" relativeToChangelogFile="true"/>

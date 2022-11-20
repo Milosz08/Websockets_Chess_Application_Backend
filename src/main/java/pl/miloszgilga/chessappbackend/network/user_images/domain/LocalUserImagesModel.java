@@ -40,9 +40,7 @@ import pl.miloszgilga.chessappbackend.network.auth.domain.LocalUserModel;
 public class LocalUserImagesModel extends AuditableEntity implements Serializable {
     private static final long serialVersionUID = 1L;
 
-    @Column(name = "HAS_PROFILE_IMAGE")               private Boolean hasProfileImage;
     @Column(name = "PROFILE_IMAGE_REFER_LINK")        private String profileImage;
-    @Column(name = "HAS_BANNER_IMAGE")                private Boolean hasBannerImage;
     @Column(name = "BANNER_IMAGE_REFER_LINK")         private String bannerImage;
     @Column(name = "USER_HASH_CODE")                  private String userHashCode;
     @Column(name = "DEF_PROFILE_IMAGE_COLOR")         private String defProfileImageColor;
@@ -53,11 +51,8 @@ public class LocalUserImagesModel extends AuditableEntity implements Serializabl
 
     //------------------------------------------------------------------------------------------------------------------
 
-    LocalUserImagesModel(Boolean hasProfileImage, String profileImage, Boolean hasBannerImage, String bannerImage,
-                         String userHashCode, String defProfileImageColor) {
-        this.hasProfileImage = hasProfileImage;
+    LocalUserImagesModel(String profileImage, String bannerImage, String userHashCode, String defProfileImageColor) {
         this.profileImage = profileImage;
-        this.hasBannerImage = hasBannerImage;
         this.bannerImage = bannerImage;
         this.userHashCode = userHashCode;
         this.defProfileImageColor = defProfileImageColor;
@@ -68,9 +63,7 @@ public class LocalUserImagesModel extends AuditableEntity implements Serializabl
     @Override
     public String toString() {
         return "LocalUserImagesModel{" +
-                "hasProfileImage=" + hasProfileImage +
-                ", profileImage='" + profileImage + '\'' +
-                ", hasBannerImage=" + hasBannerImage +
+                "profileImage='" + profileImage + '\'' +
                 ", bannerImage='" + bannerImage + '\'' +
                 ", userHashCode='" + userHashCode + '\'' +
                 ", defProfileImageColor='" + defProfileImageColor + '\'' +

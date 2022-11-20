@@ -34,6 +34,7 @@ import pl.miloszgilga.chessappbackend.exception.custom.AuthException;
 import pl.miloszgilga.chessappbackend.exception.custom.ImageException.*;
 import pl.miloszgilga.chessappbackend.network.user_images.dto.UpdatedImageResDto;
 
+import static java.util.Objects.isNull;
 import static pl.miloszgilga.lib.jmpsl.file.FileUtil.*;
 import static pl.miloszgilga.lib.jmpsl.file.ContentType.*;
 
@@ -85,7 +86,6 @@ class UserBannerImageService implements IUserBannerImageService {
             throw new UnableToSetImageException("Uploaded image is malformed or corrupted. Try again.");
         }
         final BufferedImageRes responsePayload = userImageSftpService.saveUserImage(imageSenderPayload);
-        imagesModel.setHasBannerImage(true);
         imagesModel.setBannerImage(responsePayload.getLocation());
         return new UpdatedImageResDto(responsePayload.getLocation(), "Your banner image was successfully updated.");
     }
@@ -99,7 +99,7 @@ class UserBannerImageService implements IUserBannerImageService {
             LOGGER.error("Attempt to remove user banner image from not existing user. User id: {}", userId);
             throw new AuthException.UserNotFoundException("Unable to load user data. Try again later.");
         });
-        if (!imagesModel.getHasBannerImage()) {
+        if (!isNull(imagesModel.getBannerImage())) {
             LOGGER.error("Attempt to delete non existing banner image. User images data: {}", imagesModel);
             throw new CustomUserBannerImageNotFoundException("Unable to delete banner image. Before deleting your " +
                     "banner image, check if banner image is acually set.");
@@ -110,7 +110,6 @@ class UserBannerImageService implements IUserBannerImageService {
                 .id(userId)
                 .build();
         userImageSftpService.deleteUserImage(payload);
-        imagesModel.setHasBannerImage(false);
         imagesModel.setBannerImage(null);
         return new SimpleServerMessageDto("Your banner image was successfully deleted.");
     }

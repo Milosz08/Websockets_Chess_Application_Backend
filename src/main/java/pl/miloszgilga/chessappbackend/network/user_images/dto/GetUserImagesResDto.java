@@ -29,5 +29,4 @@ import lombok.*;
 public class GetUserImagesResDto {
     private String profileUri;
     private String bannerUri;
-    private boolean bannerNotDefault;
 }

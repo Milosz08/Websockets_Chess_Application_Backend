@@ -90,8 +90,7 @@ public class SignupService implements ISignupService, IOAuth2LoaderService {
     public SuccessedAttemptToFinishSignupResDto signupViaLocal(final SignupViaLocalReqDto req) {
         final LocalUserModel userModel = mapperFacade.map(req, LocalUserModel.class);
         final LocalUserDetailsModel userDetailsModel = mapperFacade.map(req, LocalUserDetailsModel.class);
-        final LocalUserImagesModel userImagesModel = LocalUserImagesModel.builder()
-                .hasBannerImage(false).hasProfileImage(false).build();
+        final LocalUserImagesModel userImagesModel = new LocalUserImagesModel();
 
         userModel.setLocalUserDetails(userDetailsModel);
         userModel.setLocalUserImages(userImagesModel);
@@ -242,7 +241,6 @@ public class SignupService implements ISignupService, IOAuth2LoaderService {
                     .initials(initialsAsCharsArray(foundUser.getFirstName(), foundUser.getLastName()))
                     .build();
             final BufferedImageGeneratorRes response = imageSftpService.generateAndSaveDefaultUserImage(payload);
-            foundUser.getLocalUserImages().setHasProfileImage(true);
             userProfileImageLocaltion = response.getBufferedImageRes().getLocation();
         }
         foundUser.getLocalUserImages().setProfileImage(userProfileImageLocaltion);
