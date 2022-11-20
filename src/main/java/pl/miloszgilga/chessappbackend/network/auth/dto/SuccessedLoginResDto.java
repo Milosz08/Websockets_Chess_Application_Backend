@@ -32,6 +32,7 @@ public class SuccessedLoginResDto {
     private String fullName;
     private String credentialsSupplier;
     private String photoUrl;
+    private String bannerUrl;
     private String jwtToken;
     private String refreshToken;
     private boolean isActivated;

@@ -33,6 +33,8 @@ import pl.miloszgilga.chessappbackend.network.auth.domain.*;
 import pl.miloszgilga.chessappbackend.token.JsonWebTokenCreator;
 import pl.miloszgilga.chessappbackend.network.auth.dto.SuccessedLoginResDto;
 
+import static pl.miloszgilga.lib.jmpsl.core.StringUtil.*;
+
 //----------------------------------------------------------------------------------------------------------------------
 
 @Component
@@ -60,6 +62,7 @@ public class UserToSuccessedLoginResDtoCustomizer extends CustomMapper<LocalUser
         resDto.setActivated(userModel.getIsActivated());
         resDto.setFullName(userModel.getFirstName() + " " + userModel.getLastName());
         resDto.setCredentialsSupplier(userModel.getOAuth2Supplier().getSupplierName());
+        resDto.setBannerUrl(ifNullDefault(userModel.getLocalUserImages().getBannerImage(), EMPTY));
     }
 
     //------------------------------------------------------------------------------------------------------------------
