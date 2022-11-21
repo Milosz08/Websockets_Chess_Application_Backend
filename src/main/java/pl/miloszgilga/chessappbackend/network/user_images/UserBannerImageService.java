@@ -23,9 +23,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-
 import javax.transaction.Transactional;
+
 import pl.miloszgilga.lib.jmpsl.gfx.sender.*;
+import pl.miloszgilga.lib.jmpsl.oauth2.OAuth2Supplier;
 
 import pl.miloszgilga.chessappbackend.config.EnvironmentVars;
 import pl.miloszgilga.chessappbackend.dto.SimpleServerMessageDto;
@@ -86,6 +87,9 @@ class UserBannerImageService implements IUserBannerImageService {
             throw new UnableToSetImageException("Uploaded image is malformed or corrupted. Try again.");
         }
         final BufferedImageRes responsePayload = userImageSftpService.saveUserImage(imageSenderPayload);
+        if (!imagesModel.getLocalUser().getOAuth2Supplier().equals(OAuth2Supplier.LOCAL)) {
+            imagesModel.setUserHashCode(responsePayload.getUserHashCode());
+        }
         imagesModel.setBannerImage(responsePayload.getLocation());
         return new UpdatedImageResDto(responsePayload.getLocation(), "Your banner image was successfully updated.");
     }
