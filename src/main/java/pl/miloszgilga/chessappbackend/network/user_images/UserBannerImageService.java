@@ -103,7 +103,7 @@ class UserBannerImageService implements IUserBannerImageService {
             LOGGER.error("Attempt to remove user banner image from not existing user. User id: {}", userId);
             throw new AuthException.UserNotFoundException("Unable to load user data. Try again later.");
         });
-        if (!isNull(imagesModel.getBannerImage())) {
+        if (isNull(imagesModel.getBannerImage())) {
             LOGGER.error("Attempt to delete non existing banner image. User images data: {}", imagesModel);
             throw new CustomUserBannerImageNotFoundException("Unable to delete banner image. Before deleting your " +
                     "banner image, check if banner image is acually set.");

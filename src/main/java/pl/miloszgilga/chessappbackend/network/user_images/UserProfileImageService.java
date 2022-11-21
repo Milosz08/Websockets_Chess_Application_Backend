@@ -37,7 +37,6 @@ import pl.miloszgilga.chessappbackend.network.auth.domain.LocalUserModel;
 import pl.miloszgilga.chessappbackend.network.user_images.dto.UpdatedImageResDto;
 import pl.miloszgilga.chessappbackend.exception.custom.AuthException.UserNotFoundException;
 
-import static java.util.Objects.isNull;
 import static pl.miloszgilga.lib.jmpsl.file.FileUtil.*;
 import static pl.miloszgilga.lib.jmpsl.file.ContentType.*;
 
@@ -102,11 +101,6 @@ class UserProfileImageService implements IUserProfileImageService {
             LOGGER.error("Attempt to delete custom profile image from not existing user. User id: {}", userId);
             throw new UserNotFoundException("Unable to load user data. Try again later.");
         });
-        if (!isNull(imagesModel.getProfileImage())) {
-            LOGGER.error("Attempt to delete default user profile image. User images data: {}", imagesModel);
-            throw new CustomUserProfileImageNotFoundException("Unable to delete profile image. Before deleting " +
-                    "your profile image, check if your image is not default.");
-        }
         final LocalUserModel userModel = imagesModel.getLocalUser();
         final BufferedImageGeneratorPayload payload = BufferedImageGeneratorPayload.builder()
                 .imageUniquePrefix(PROFILE.getImagePrefixName())
