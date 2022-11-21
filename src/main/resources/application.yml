@@ -18,6 +18,10 @@ spring:
         locale: en_US
     security.oauth2.client.provider.facebook:
         user-info-uri: https://graph.facebook.com/me?fields=id,name,email,picture
+    servlet:
+        multipart:
+            max-file-size: 5MB
+            max-request-size: 5MB
 
 jmpsl:
     security:
@@ -65,8 +69,8 @@ config:
         size-px: 200
         font-size-px: 80
     banner-image:
-        size-width-px: 2500
-        size-height-px: 320
+        size-width-px: 1240
+        size-height-px: 310
 
 authorization:
     one-time-access-token:
