@@ -66,7 +66,7 @@ class UserImagesController {
 
     @PostMapping(PROFILE)
     @AspectCheckAuthSupplier(suppliedFor = { "local" })
-    ResponseEntity<UpdatedImageResDto> setUserProfileImage(@RequestParam("file") MultipartFile image,
+    ResponseEntity<UpdatedImageResDto> setUserProfileImage(@RequestParam("image") MultipartFile image,
                                                            @CurrentUser OAuth2UserExtender user) {
         final Long userId = ((LocalUserModel) user.getUserModel()).getId();
         return new ResponseEntity<>(profileImageService.setUserProfileImage(image, userId), HttpStatus.CREATED);
@@ -84,7 +84,7 @@ class UserImagesController {
     //------------------------------------------------------------------------------------------------------------------
 
     @PostMapping(BANNER)
-    ResponseEntity<UpdatedImageResDto> addUserBanner(@RequestParam("file") MultipartFile image,
+    ResponseEntity<UpdatedImageResDto> addUserBanner(@RequestParam("image") MultipartFile image,
                                                          @CurrentUser OAuth2UserExtender user) {
         final Long userId = ((LocalUserModel) user.getUserModel()).getId();
         return new ResponseEntity<>(bannerImageService.setUserBanner(image, userId), HttpStatus.CREATED);
