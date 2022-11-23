@@ -33,4 +33,9 @@ public interface ILocalUserDetailsRepository extends JpaRepository<LocalUserDeta
             "WHERE m.hasNewsletterAccept=true " +
             "AND u.emailAddress=:emailAddress")
     Optional<LocalUserDetailsModel> findDetailsByUserEmail(@Param("emailAddress") String emailAddress);
+
+    //------------------------------------------------------------------------------------------------------------------
+
+    @Query(value = "SELECT m FROM LocalUserDetailsModel m INNER JOIN m.localUser u WHERE u.id=:userId")
+    Optional<LocalUserDetailsModel> findDetailsByUserId(@Param("userId") Long userId);
 }

@@ -47,6 +47,7 @@ public class LocalUserDetailsModel extends AuditableEntity implements Serializab
     @Column(name = "GENDER")                private UserGenderSpecific gender;
     @Column(name = "HAS_NEWSLETTER_ACCEPT") private Boolean hasNewsletterAccept;
     @Column(name = "IS_DATA_FILLED")        private Boolean isDataFilled;
+    @Column(name = "ACCOUNT_DESCRIPTION")   private String accountDescription;
 
     @OneToOne(cascade = { PERSIST, MERGE }, fetch = LAZY)
     @JoinColumn(name = "LOCAL_USER_ID", referencedColumnName = "ID")
@@ -55,13 +56,14 @@ public class LocalUserDetailsModel extends AuditableEntity implements Serializab
     //------------------------------------------------------------------------------------------------------------------
 
     public LocalUserDetailsModel(String secondEmailAddress, Date birthDate, String country, UserGenderSpecific gender,
-                                 Boolean hasNewsletterAccept, Boolean isDataFilled) {
+                                 Boolean hasNewsletterAccept, Boolean isDataFilled, String accountDescription) {
         this.secondEmailAddress = secondEmailAddress;
         this.birthDate = birthDate;
         this.country = country;
         this.gender = gender;
         this.hasNewsletterAccept = hasNewsletterAccept;
         this.isDataFilled = isDataFilled;
+        this.accountDescription = accountDescription;
     }
 
     //------------------------------------------------------------------------------------------------------------------
@@ -75,6 +77,7 @@ public class LocalUserDetailsModel extends AuditableEntity implements Serializab
                 ", gender=" + gender +
                 ", hasNewsletterAccept=" + hasNewsletterAccept +
                 ", isDataFilled=" + isDataFilled +
+                ", accountDescription=" + accountDescription +
                 "} " + super.toString();
     }
 }
