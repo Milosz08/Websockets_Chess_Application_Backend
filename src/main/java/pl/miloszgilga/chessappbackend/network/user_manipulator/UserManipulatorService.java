@@ -66,7 +66,12 @@ class UserManipulatorService implements IUserManipulatorService {
             LOGGER.error("Attempt to get user account description from non-existing user. User id: {}", userId);
             throw new UserNotFoundException("User was not found based on provided data.");
         });
-        foundUserDetails.setAccountDescription(onBlankNull(req.getDescription()));
+        if (req.getDescription().isEmpty()) {
+            foundUserDetails.setAccountDescription(null);
+        } else {
+            final String parsedNewLinesToHtmlCode = req.getDescription().replaceAll("(\r\n|\n)", "<br>");
+            foundUserDetails.setAccountDescription(parsedNewLinesToHtmlCode);
+        }
         return new SimpleServerMessageDto("Successful set account description.");
     }
 }
