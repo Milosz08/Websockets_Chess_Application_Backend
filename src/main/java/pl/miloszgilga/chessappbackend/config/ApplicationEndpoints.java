@@ -65,6 +65,6 @@ public class ApplicationEndpoints {
     public static final String PROFILE = "/profile";
     public static final String BANNER = "/banner";
 
-    public static final String USER_MANIPULATOR_ENDPOINT = BASIC_ENDPOINT + "user-manipulator";
+    public static final String USER_DESCRIPTION_ENDPOINT = BASIC_ENDPOINT + "user-description";
     public static final String LOGGED_ACCOUNT_DESCRIPTION = "/description";
 }

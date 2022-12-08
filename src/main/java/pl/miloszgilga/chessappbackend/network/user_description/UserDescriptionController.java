@@ -16,7 +16,7 @@
  * COPIES OR SUBSTANTIAL PORTIONS OF THE SOFTWARE.
  */
 
-package pl.miloszgilga.chessappbackend.network.user_manipulator;
+package pl.miloszgilga.chessappbackend.network.user_description;
 
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
@@ -27,7 +27,7 @@ import pl.miloszgilga.lib.jmpsl.security.user.CurrentUser;
 import pl.miloszgilga.lib.jmpsl.oauth2.user.OAuth2UserExtender;
 
 import pl.miloszgilga.chessappbackend.dto.SimpleServerMessageDto;
-import pl.miloszgilga.chessappbackend.network.user_manipulator.dto.*;
+import pl.miloszgilga.chessappbackend.network.user_description.dto.*;
 import pl.miloszgilga.chessappbackend.network.auth.domain.LocalUserModel;
 
 import static pl.miloszgilga.chessappbackend.config.ApplicationEndpoints.*;
@@ -35,14 +35,14 @@ import static pl.miloszgilga.chessappbackend.config.ApplicationEndpoints.*;
 //----------------------------------------------------------------------------------------------------------------------
 
 @RestController
-@RequestMapping(USER_MANIPULATOR_ENDPOINT)
-class UserManipulatorController {
+@RequestMapping(USER_DESCRIPTION_ENDPOINT)
+class UserDescriptionController {
 
-    private final IUserManipulatorService service;
+    private final IUserDescriptionService service;
 
     //------------------------------------------------------------------------------------------------------------------
 
-    UserManipulatorController(IUserManipulatorService service) {
+    UserDescriptionController(IUserDescriptionService service) {
         this.service = service;
     }
 

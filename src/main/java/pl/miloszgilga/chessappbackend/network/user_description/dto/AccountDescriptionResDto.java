@@ -16,7 +16,7 @@
  * COPIES OR SUBSTANTIAL PORTIONS OF THE SOFTWARE.
  */
 
-package pl.miloszgilga.chessappbackend.network.user_manipulator.dto;
+package pl.miloszgilga.chessappbackend.network.user_description.dto;
 
 import lombok.*;
 

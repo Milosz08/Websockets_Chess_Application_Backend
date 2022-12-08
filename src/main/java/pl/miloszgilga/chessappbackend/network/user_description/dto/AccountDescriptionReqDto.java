@@ -1,8 +1,8 @@
 /*
  * Copyright (c) 2022 by MILOSZ GILGA <https://miloszgilga.pl>
  *
- * File name: IUserManipulatorService.java
- * Last modified: 23.11.2022, 01:48
+ * File name: UserDescriptionReq.java
+ * Last modified: 23.11.2022, 01:51
  * Project name: chess-app-backend
  *
  * Licensed under the MIT license; you may not use this file except in compliance with the License.
@@ -16,14 +16,16 @@
  * COPIES OR SUBSTANTIAL PORTIONS OF THE SOFTWARE.
  */
 
-package pl.miloszgilga.chessappbackend.network.user_manipulator;
+package pl.miloszgilga.chessappbackend.network.user_description.dto;
 
-import pl.miloszgilga.chessappbackend.dto.SimpleServerMessageDto;
-import pl.miloszgilga.chessappbackend.network.user_manipulator.dto.*;
+import lombok.Data;
+import javax.validation.constraints.NotNull;
 
 //----------------------------------------------------------------------------------------------------------------------
 
-interface IUserManipulatorService {
-    AccountDescriptionResDto getLoggedUserAccountDescription(final Long userId);
-    SimpleServerMessageDto setLoggerUserAccountDescription(final AccountDescriptionReqDto req, final Long userId);
+@Data
+public class AccountDescriptionReqDto {
+
+    @NotNull(message = "{jpa.validator.userAccountDescription.notNull}")
+    private String description;
 }
