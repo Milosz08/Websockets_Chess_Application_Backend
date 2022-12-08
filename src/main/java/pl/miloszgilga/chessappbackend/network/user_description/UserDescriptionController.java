@@ -62,4 +62,12 @@ class UserDescriptionController {
         final Long userId = ((LocalUserModel) user.getUserModel()).getId();
         return new ResponseEntity<>(service.setLoggerUserAccountDescription(req, userId), HttpStatus.OK);
     }
+
+    //------------------------------------------------------------------------------------------------------------------
+
+    @DeleteMapping(LOGGED_ACCOUNT_DESCRIPTION)
+    ResponseEntity<SimpleServerMessageDto> removeLoggedUserAccount(@CurrentUser OAuth2UserExtender user) {
+        final Long userId = ((LocalUserModel) user.getUserModel()).getId();
+        return new ResponseEntity<>(service.removeLoggedUserAccountDescription(userId), HttpStatus.OK);
+    }
 }

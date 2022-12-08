@@ -75,4 +75,18 @@ class UserDescriptionService implements IUserDescriptionService {
         LOGGER.info("Description for user with id {} was successfully updated.", userId);
         return new SimpleServerMessageDto("Successful set account description.");
     }
+
+    //------------------------------------------------------------------------------------------------------------------
+
+    @Override
+    @Transactional
+    public SimpleServerMessageDto removeLoggedUserAccountDescription(Long userId) {
+        final LocalUserDetailsModel foundUserDetails = repository.findDetailsByUserId(userId).orElseThrow(() -> {
+            LOGGER.error("Attempt to get user account description from non-existing user. User id: {}", userId);
+            throw new UserNotFoundException("User was not found based on provided data.");
+        });
+        foundUserDetails.setAccountDescription(null);
+        LOGGER.info("Description for user with id {} was successfully removed.", userId);
+        return new SimpleServerMessageDto("Successful removed account description.");
+    }
 }

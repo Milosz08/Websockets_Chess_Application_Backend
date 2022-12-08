@@ -26,4 +26,5 @@ import pl.miloszgilga.chessappbackend.network.user_description.dto.*;
 interface IUserDescriptionService {
     AccountDescriptionResDto getLoggedUserAccountDescription(final Long userId);
     SimpleServerMessageDto setLoggerUserAccountDescription(final AccountDescriptionReqDto req, final Long userId);
+    SimpleServerMessageDto removeLoggedUserAccountDescription(final Long userId);
 }
