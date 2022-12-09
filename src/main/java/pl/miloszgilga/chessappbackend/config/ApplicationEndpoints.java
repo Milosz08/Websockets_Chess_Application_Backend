@@ -67,4 +67,7 @@ public class ApplicationEndpoints {
 
     public static final String USER_DESCRIPTION_ENDPOINT = BASIC_ENDPOINT + "user-description";
     public static final String LOGGED_ACCOUNT_DESCRIPTION = "/description";
+
+    public static final String USER_SETTINGS_DATA = BASIC_ENDPOINT + "user-settings";
+    public static final String PERSONAL_SETTINGS_DATA = "/personal-settings-data";
 }
