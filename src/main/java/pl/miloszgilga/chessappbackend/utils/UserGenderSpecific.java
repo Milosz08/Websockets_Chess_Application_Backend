@@ -19,8 +19,12 @@
 package pl.miloszgilga.chessappbackend.utils;
 
 import lombok.*;
-import java.util.stream.Stream;
 
+import java.util.Comparator;
+import java.util.Set;
+import java.util.stream.*;
+
+import pl.miloszgilga.chessappbackend.dto.SimpleTupleDto;
 import pl.miloszgilga.lib.jmpsl.core.converter.IBasicEnumConverter;
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -28,21 +32,39 @@ import pl.miloszgilga.lib.jmpsl.core.converter.IBasicEnumConverter;
 @Getter
 @AllArgsConstructor
 public enum UserGenderSpecific implements IBasicEnumConverter {
-    MALE("male"),
-    FEMALE("female"),
-    OTHER("other");
+    MALE(1, "male", "I am a men"),
+    FEMALE(2, "female", "I am a women"),
+    OTHER(3, "other", "I identify as another gender");
 
     //------------------------------------------------------------------------------------------------------------------
 
+    private final int seqNumber;
     private final String gender;
+    private final String alias;
 
     //------------------------------------------------------------------------------------------------------------------
 
     public static UserGenderSpecific findGenderByString(final String gender) {
         return Stream.of(UserGenderSpecific.values())
-                .filter(r -> r.getGender().equals(gender))
+                .filter(g -> g.getGender().equals(gender))
                 .findFirst()
                 .orElse(UserGenderSpecific.OTHER);
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+
+    public static SimpleTupleDto<String> findGenderAndReturnTuple(final String gender) {
+        final UserGenderSpecific foundGender = UserGenderSpecific.findGenderByString(gender);
+        return new SimpleTupleDto<>(foundGender.gender, foundGender.alias);
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+
+    public static Set<SimpleTupleDto<String>> getAllGendersInTuples() {
+        return Stream.of(UserGenderSpecific.values())
+                .sorted(Comparator.comparingInt(o -> o.seqNumber))
+                .map(g -> new SimpleTupleDto<>(g.gender, g.alias))
+                .collect(Collectors.toSet());
     }
 
     //------------------------------------------------------------------------------------------------------------------

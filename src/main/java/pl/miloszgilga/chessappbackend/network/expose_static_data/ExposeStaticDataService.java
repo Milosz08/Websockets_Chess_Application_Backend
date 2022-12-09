@@ -22,13 +22,16 @@ import ma.glasnost.orika.MapperFacade;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
+import java.time.Month;
 import java.util.stream.*;
+import java.time.format.TextStyle;
 
 import pl.miloszgilga.lib.jmpsl.core.TimeUtil;
 
 import pl.miloszgilga.chessappbackend.loader.*;
 import pl.miloszgilga.chessappbackend.loader.model.*;
 import pl.miloszgilga.chessappbackend.dto.SimpleTupleDto;
+import pl.miloszgilga.chessappbackend.utils.UserGenderSpecific;
 
 import pl.miloszgilga.chessappbackend.network.expose_static_data.dto.*;
 import pl.miloszgilga.chessappbackend.network.auth.domain.LocalUserModel;
@@ -40,19 +43,14 @@ import pl.miloszgilga.chessappbackend.network.auth.domain.ILocalUserRepository;
 class ExposeStaticDataService implements IExposeStaticDataService {
 
     private final MapperFacade mapperFacade;
-    private final GenderPropertiesLoader genderLoader;
     private final CountryPropertiesLoader countryLoader;
-    private final CalendarPropertiesLoader calendarLoader;
     private final ILocalUserRepository localUserRepository;
 
     //------------------------------------------------------------------------------------------------------------------
 
-    ExposeStaticDataService(MapperFacade mapperFacade, GenderPropertiesLoader genderLoader,
-                            CalendarPropertiesLoader calendarLoader, CountryPropertiesLoader countryLoader,
+    ExposeStaticDataService(MapperFacade mapperFacade, CountryPropertiesLoader countryLoader,
                             ILocalUserRepository localUserRepository) {
         this.mapperFacade = mapperFacade;
-        this.genderLoader = genderLoader;
-        this.calendarLoader = calendarLoader;
         this.countryLoader = countryLoader;
         this.localUserRepository = localUserRepository;
     }
@@ -61,10 +59,9 @@ class ExposeStaticDataService implements IExposeStaticDataService {
 
     @Override
     public SignupCalendarDataResDto getSignupCalendarData() {
-        final CalendarPropertiesModel loadedData = calendarLoader.getLoadedData();
         return new SignupCalendarDataResDto(
                 generateData(1, 32, d -> String.format("%01d", d)),
-                generateData(1, loadedData.getMonthsShort().size() + 1, m -> loadedData.getMonthsShort().get(m - 1)),
+                generateData(1, 13, m -> Month.of(m).getDisplayName(TextStyle.SHORT, Locale.ENGLISH)),
                 generateData(1900, TimeUtil.currYearMinusAcceptableAge(10), Integer::toString)
         );
     }
@@ -73,8 +70,7 @@ class ExposeStaticDataService implements IExposeStaticDataService {
 
     @Override
     public SignupGenderDataResDto getSignupGenderData() {
-        final GenderPropertiesModel loadedData = genderLoader.getLoadedData();
-        return new SignupGenderDataResDto(loadedData.getGenders());
+        return new SignupGenderDataResDto(UserGenderSpecific.getAllGendersInTuples());
     }
 
     //------------------------------------------------------------------------------------------------------------------
@@ -83,7 +79,7 @@ class ExposeStaticDataService implements IExposeStaticDataService {
     public SignupCountryDataResDto getSignupCountryData() {
         final CountryPropertiesModel loadedData = countryLoader.getLoadedData();
         final List<SimpleTupleDto<String>> allCountryNames = loadedData.getCountries().stream()
-                .map(x -> new SimpleTupleDto<>(x.toLowerCase(Locale.ROOT), x))
+                .map(x -> new SimpleTupleDto<>(x, x))
                 .sorted()
                 .collect(Collectors.toList());
         return new SignupCountryDataResDto(allCountryNames);

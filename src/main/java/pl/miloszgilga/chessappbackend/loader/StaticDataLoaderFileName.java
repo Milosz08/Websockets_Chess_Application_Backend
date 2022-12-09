@@ -25,8 +25,6 @@ import pl.miloszgilga.lib.jmpsl.core.loader.IStaticJsonLoaderFiles;
 
 @AllArgsConstructor
 public enum StaticDataLoaderFileName implements IStaticJsonLoaderFiles {
-    CALENDAR_STATIC_DATA("calendar-static-data.json"),
-    GENDER_STATIC_DATA("gender-static-data.json"),
     COUNTRY_STATIC_DATA("country-static-data.json");
 
     //------------------------------------------------------------------------------------------------------------------
