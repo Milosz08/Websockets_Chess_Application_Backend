@@ -19,7 +19,7 @@
 package pl.miloszgilga.chessappbackend.network.expose_static_data.dto;
 
 import lombok.*;
-import java.util.List;
+import java.util.Set;
 
 import pl.miloszgilga.chessappbackend.dto.SimpleTupleDto;
 
@@ -28,5 +28,5 @@ import pl.miloszgilga.chessappbackend.dto.SimpleTupleDto;
 @Data
 @AllArgsConstructor
 public class SignupGenderDataResDto {
-    private List<SimpleTupleDto<String>> genders;
+    private Set<SimpleTupleDto<String>> genders;
 }

@@ -32,13 +32,13 @@ public class UserToChangePasswordUserDetailsCustomizer extends CustomMapper<Loca
 
     private final StringManipulator manipulator;
 
-    //----------------------------------------------------------------------------------------------------------------------
+    //------------------------------------------------------------------------------------------------------------------
 
     public UserToChangePasswordUserDetailsCustomizer(StringManipulator manipulator) {
         this.manipulator = manipulator;
     }
 
-    //----------------------------------------------------------------------------------------------------------------------
+    //------------------------------------------------------------------------------------------------------------------
 
     @Override
     public void mapAtoB(LocalUserModel userModel, ChangePasswordUserDetailsResDto resDto, MappingContext context) {
