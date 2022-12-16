@@ -25,8 +25,8 @@ import org.springframework.context.annotation.Primary;
 
 import pl.miloszgilga.lib.jmpsl.core.mapper.MappingFacade;
 
+import pl.miloszgilga.chessappbackend.network.user_settings_data.dto.*;
 import pl.miloszgilga.chessappbackend.network.auth.domain.LocalUserModel;
-import pl.miloszgilga.chessappbackend.network.user_settings_data.dto.PersonalUserDataResDto;
 import pl.miloszgilga.chessappbackend.network.user_settings_data.mapper.UserToPersonalUserDataCustomizer;
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -46,6 +46,8 @@ public class UserSettingsDataMapper {
         mapperFactory.classMap(LocalUserModel.class, PersonalUserDataResDto.class)
                 .field("localUserDetails.hasNewsletterAccept", "hasNewsletterAccept")
                 .customize(userToPersonalUserDataCustomizer)
+                .byDefault().register();
+        mapperFactory.classMap(LocalUserModel.class, ModifyFirstLastNameResDto.class)
                 .byDefault().register();
     }
 }

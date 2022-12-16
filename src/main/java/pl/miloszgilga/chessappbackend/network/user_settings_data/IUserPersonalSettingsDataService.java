@@ -18,10 +18,19 @@
 
 package pl.miloszgilga.chessappbackend.network.user_settings_data;
 
-import pl.miloszgilga.chessappbackend.network.user_settings_data.dto.PersonalUserDataResDto;
+import pl.miloszgilga.chessappbackend.dto.SimpleServerMessageDto;
+import pl.miloszgilga.chessappbackend.network.user_settings_data.dto.*;
 
 //----------------------------------------------------------------------------------------------------------------------
 
 interface IUserPersonalSettingsDataService {
     PersonalUserDataResDto getPersonalUserSettingsData(final Long userId);
+    ModifyFirstLastNameResDto modifyFirstLastName(final Long userId, final ModifyFirstLastNameReqDto req);
+    SimpleServerMessageDto deleteFirstLastName(final Long userId);
+    ModifyGenderResDto modifyGender(final Long userId, final ModifyGenderReqDto req);
+    SimpleServerMessageDto deleteGender(final Long userId);
+    ModifyCountryResDto modifyCountry(final Long userId, final ModifyCountryReqDto req);
+    SimpleServerMessageDto deleteCountry(final Long userId);
+    ModifyBirthDateResDto modifyBirthDate(final Long userId, final ModifyBirthDateReqDto req);
+    SimpleServerMessageDto deleteBirthDate(final Long userId);
 }

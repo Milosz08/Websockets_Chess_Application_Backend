@@ -70,4 +70,8 @@ public class ApplicationEndpoints {
 
     public static final String USER_SETTINGS_DATA = BASIC_ENDPOINT + "user-settings";
     public static final String PERSONAL_SETTINGS_DATA = "/personal-settings-data";
+    public static final String FIRST_LAST_NAME = "first-last-name";
+    public static final String GENDER = "gender";
+    public static final String COUNTRY = "country";
+    public static final String BIRTH_DATE = "birth-date";
 }

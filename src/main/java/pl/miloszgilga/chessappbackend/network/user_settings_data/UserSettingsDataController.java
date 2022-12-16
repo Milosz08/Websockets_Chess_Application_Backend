@@ -21,11 +21,14 @@ package pl.miloszgilga.chessappbackend.network.user_settings_data;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+
 import pl.miloszgilga.lib.jmpsl.security.user.CurrentUser;
 import pl.miloszgilga.lib.jmpsl.oauth2.user.OAuth2UserExtender;
 
+import pl.miloszgilga.chessappbackend.dto.SimpleServerMessageDto;
+import pl.miloszgilga.chessappbackend.network.user_settings_data.dto.*;
 import pl.miloszgilga.chessappbackend.network.auth.domain.LocalUserModel;
-import pl.miloszgilga.chessappbackend.network.user_settings_data.dto.PersonalUserDataResDto;
 
 import static pl.miloszgilga.chessappbackend.config.ApplicationEndpoints.*;
 
@@ -49,5 +52,73 @@ public class UserSettingsDataController {
     ResponseEntity<PersonalUserDataResDto> getPersonalUserSettingsData(@CurrentUser OAuth2UserExtender user) {
         final Long userId = ((LocalUserModel) user.getUserModel()).getId();
         return new ResponseEntity<>(personalSettingsDataService.getPersonalUserSettingsData(userId), HttpStatus.OK);
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+
+    @PutMapping(FIRST_LAST_NAME)
+    ResponseEntity<ModifyFirstLastNameResDto> modifyFirstLastName(@CurrentUser OAuth2UserExtender user,
+                                                                  @Valid @RequestBody ModifyFirstLastNameReqDto dto) {
+        final Long userId = ((LocalUserModel) user.getUserModel()).getId();
+        return new ResponseEntity<>(personalSettingsDataService.modifyFirstLastName(userId, dto), HttpStatus.OK);
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+
+    @DeleteMapping(FIRST_LAST_NAME)
+    ResponseEntity<SimpleServerMessageDto> deleteFirstLastName(@CurrentUser OAuth2UserExtender user) {
+        final Long userId = ((LocalUserModel) user.getUserModel()).getId();
+        return new ResponseEntity<>(personalSettingsDataService.deleteFirstLastName(userId), HttpStatus.OK);
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+
+    @PutMapping(GENDER)
+    ResponseEntity<ModifyGenderResDto> modifyGender(@CurrentUser OAuth2UserExtender user,
+                                                    @Valid @RequestBody ModifyGenderReqDto dto) {
+        final Long userId = ((LocalUserModel) user.getUserModel()).getId();
+        return new ResponseEntity<>(personalSettingsDataService.modifyGender(userId, dto), HttpStatus.OK);
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+
+    @DeleteMapping(GENDER)
+    ResponseEntity<SimpleServerMessageDto> deleteGender(@CurrentUser OAuth2UserExtender user) {
+        final Long userId = ((LocalUserModel) user.getUserModel()).getId();
+        return new ResponseEntity<>(personalSettingsDataService.deleteGender(userId), HttpStatus.OK);
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+
+    @PutMapping(COUNTRY)
+    ResponseEntity<ModifyCountryResDto> modifyCountry(@CurrentUser OAuth2UserExtender user,
+                                                      @Valid @RequestBody ModifyCountryReqDto dto) {
+        final Long userId = ((LocalUserModel) user.getUserModel()).getId();
+        return new ResponseEntity<>(personalSettingsDataService.modifyCountry(userId, dto), HttpStatus.OK);
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+
+    @DeleteMapping(COUNTRY)
+    ResponseEntity<SimpleServerMessageDto> deleteCountry(@CurrentUser OAuth2UserExtender user) {
+        final Long userId = ((LocalUserModel) user.getUserModel()).getId();
+        return new ResponseEntity<>(personalSettingsDataService.deleteCountry(userId), HttpStatus.OK);
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+
+    @PutMapping(BIRTH_DATE)
+    ResponseEntity<ModifyBirthDateResDto> modifyBirthDate(@CurrentUser OAuth2UserExtender user,
+                                                          @Valid @RequestBody ModifyBirthDateReqDto req) {
+        final Long userId = ((LocalUserModel) user.getUserModel()).getId();
+        return new ResponseEntity<>(personalSettingsDataService.modifyBirthDate(userId, req), HttpStatus.OK);
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+
+    @DeleteMapping(BIRTH_DATE)
+    ResponseEntity<SimpleServerMessageDto> deleteBirthDate(@CurrentUser OAuth2UserExtender user) {
+        final Long userId = ((LocalUserModel) user.getUserModel()).getId();
+        return new ResponseEntity<>(personalSettingsDataService.deleteBirthDate(userId), HttpStatus.OK);
     }
 }
